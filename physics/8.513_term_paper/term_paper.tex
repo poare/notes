@@ -1,0 +1,158 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = .5in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{tikz-cd}
+
+\usepackage{slashed}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{8.513 Term Paper: Symmetry and Topology in Lattice QCD}
+\author{Patrick Oare}
+\date{December 10th, 2019}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+\section{Introduction}
+
+Quantum Chromodynamics (QCD) is the theory of the strong nuclear force. It is a $SU(3)$ gauge theory coupled to 6 flavors of 
+fermions, which are known as the quarks. At low energies, the coupling of QCD is reasonably large and perturbation theory cannot 
+be applied to the theory, which means physics must be extracted by non-perturbative means. One such way to do this is to formulate 
+QCD as a \textbf{lattice gauge theory} by discretizing spacetime-- the advantage of this is that the path integral becomes a finite 
+(albeit large) dimensional integral which can be evaluated numerically using computers. Although lattice QCD is used primarily 
+as a calculational tool for full QCD observables, the theory by itself has many interesting properties. In this paper, I will discuss 
+the details of such a theory and consider the role of topology in studying lattice gauge theories. 
+
+We will begin by making some initial definitions: denote our spacetime lattice with spacing $a$ by $\Lambda$, and Wick rotate to 
+imaginary time so that $\Lambda$ is a Euclidean lattice\footnote{We must Wick rotate so that the Boltzmann factor of $e^{iS}$ in the 
+path integral becomes a valid probability density $e^{-S}$, in order to perform any computations at all.}. In the full theory 
+of QCD, the dynamical fields in the path integral are the quark fields $\psi_f$ and gluon fields $A_\mu$. When we 
+discretize QCD, we will still work with the quark fields, but instead of directly working with the gauge fields $A_\mu$ we will work 
+\textbf{link fields} $U_\mu(n)$ which transform in the following way under a gauge transformation $\Omega : \Lambda\rightarrow 
+SU(3)$:
+\begin{equation}
+	U_\mu(n)\xrightarrow{\Omega(n)}\Omega(n) U_\mu(n)\Omega(n + \hat{\mu})^\dagger
+\end{equation}
+Here $\hat{\mu}$ is the unit vector in the $\mu$ direction, and $n\in\Lambda$ denotes a site in the lattice. The link fields can be taken 
+to be $U_\mu(n) = \exp(ia A_\mu(n))$, so are intimately related to the gauge field, and take values (as they must) in $SU(3)$. 
+With this transformation law, the link fields act as a connection between the fibers at different points in $\Lambda$:
+\begin{equation}
+	U_\mu(n)\psi(n + \hat{\mu})\xrightarrow{\Omega} \Omega(n) U_\mu(n)\psi(n + \hat{\mu})
+\end{equation}
+This transformation means that $U_\mu(n)\psi(n + \hat\mu)$ is valued in the fiber at point $n$, and so can directly be compared with 
+$\psi(n)$. This allows us to add and subtract fermion fields at different points in a gauge invariant way, and so define a covariant derivative. 
+
+We may now write down a first pass at a fermion action, which will be equivalent to $\slashed D + m$ upon taking the continuum limit. 
+The direct discretization of this action is thus:
+\begin{align}
+	S_f^0[\psi_f, \bar\psi_f, U] &= a^4\sum_{n\in\Lambda}\sum_f \bar\psi_f(n)\left(\gamma^\mu\frac{U_\mu(n)\psi_f(n + \hat\mu) - U_{-\mu}(n)\psi_f(n - \hat\mu)}{2a} - m_f\psi_f(n)\right) 
+	\\
+	&= a^4\sum_{n, m\in\Lambda}\sum_f \bar\psi_f(n)_{\alpha}^a D_{f}^0(n | m)_{\alpha\beta}^{ab}\psi_f(m)_{\beta}^b~
+	\label{eq:naive_action}
+\end{align}
+where we have defined the \textbf{Dirac operator} $D_{\alpha\beta}^{ab}(n | m)$ to be:
+\begin{equation}
+	D_f^0(n | m)_{\alpha\beta}^{ab} := (\gamma^\mu)_{\alpha\beta} \left(\frac{U_\mu(n)^{ab} \delta_{n + \hat\mu, m} - U_{-\mu}(n)^{ab} \delta_{n - \hat{\mu}, m}}{2a}\right) 
+	+ m_f\delta_{\alpha\beta}\delta^{ab}\delta_{nm}
+\end{equation}
+Note the Greek indices $\alpha, \beta$ are in Dirac space, and the Latin indices $a, b$ are in color space. The Dirac operator 
+is one of the fundamental objects we will study later when considering the role of topology in lattice QCD, and is the discretized 
+version of $i\slashed D - m$ in Euclidean space. 
+
+However, there is a slight problem with the action in Equation~\ref{eq:naive_action}. Because we are working on a lattice, the 
+Fourier transform $\tilde D^0(p)$ of the Dirac operator $D^0(n | m)$ has extra unphysical poles at the edges of the Brillioun zone. 
+These extra poles are known in the literature as \textbf{doublers}, and must be eliminated by adjusting the action. We do this by 
+adding a corresponding Wilson term to the Dirac operator, so that the full Dirac operator and action now become:
+\begin{equation}
+	D_f^W(n | m)_{\alpha\beta}^{ab} := \left(m_f + \frac{4}{a}\right)\delta_{\alpha\beta}\delta^{ab}\delta_{nm} - \frac{1}{2a}\sum_{\mu = \pm 1}^{\pm 4} (1 - \gamma^\mu)_{\alpha
+	\beta} U_\mu(n)^{ab}\delta_{n + \hat{\mu}, m}~
+	\label{eq:dirac_operator}
+\end{equation}
+\begin{equation}
+	S_f[\psi, \bar\psi, U] = a^4\sum_{n, m\in\Lambda}\sum_f \bar\psi_f(n)_{\alpha}^a D_f^W(n | m)_{\alpha\beta}^{ab}\psi_f(m)_{\beta}^b
+\end{equation}
+We will soon see that the Wilson term makes it much more difficult to deal with chiral symmetry on the lattice than in the continuum, 
+and is responsible for many of the interesting topological properties of lattice gauge theories as compared to their continuum counterparts. 
+
+For completeness we will record the glue action as well:
+\begin{equation}
+	S_{g}[U] = \frac{2}{g^2}\sum_{n\in\Lambda}\sum_{\mu < \nu}\mathbb Re\; tr\{1 - U_{\mu\nu}(n)\}
+\end{equation}
+where $U_{\mu\nu}(n) := U_\mu(n) U_\nu(n + \hat\mu) U_{-\mu}(n + \hat\mu + \hat\nu) U_{-\nu}(n + \hat\nu)$ is known as a \textbf{plaquette}, 
+and performs parallel transport around a closed loop. The partition function for the full theory of lattice QCD is thus:
+\begin{equation}
+	Z = \int D\psi D\bar\psi D U e^{-S_f - S_g}
+\end{equation}
+where the measures $D\psi, D\bar\psi, DU$ now contain only a finite amount of of sites to be integrated over. 
+
+\section{Chiral Symmetry and the Ginsparg-Wilson Relation}
+
+Chiral symmetry in standard QCD is realized by taking the approximations that the light quarks are massless. Let $D_{cont} := \gamma^\mu D_\mu + m$ be the continuum 
+Dirac operator in Euclidean space. Then for a massless fermion described by $\mathcal L = \bar\psi D_{cont}\psi$, the Lagrangian is invariant under:
+\begin{equation}
+	\psi\mapsto \exp(i\theta\gamma_5)\psi
+\end{equation}
+because of the anticommutation relation $\{D_{cont}, \gamma_5\}$. This is the core of chiral symmetry in the continuum because it allows us to split our Lagrangian 
+into two pieces with definite chirality:
+\begin{equation}
+	\mathcal L\supset \bar\psi_L D_{cont}\psi_L + \bar\psi_R D_{cont}\psi_R
+\end{equation}
+and rotate $\psi_L$ and $\psi_R$ separately, giving the chiral symmetry $SU(N_f)_L\times SU(N_f)_R$, where $N_f$ is the number of (approximately) massless quarks. 
+
+Upon discretization, the relation $\{D, \gamma_5\} = 0$ falls apart because of the Wilson term. Even if we assume our lattice quarks are massless, the piece proportional to 
+$1_{\alpha\beta}$ does not anticommute with $\gamma_5$ (just as a mass term does not because it is proportional to $1_{\alpha\beta}$). More generally, it was shown by 
+Nielson and Ninomiya \cite{nogo} that \textit{any attempt} to remove the doublers from a lattice regularized theory would result in such a breaking of this anticommutation 
+relation, and thus the essence of chiral symmetry in lattice theories must be reformulated. 
+
+In 1998, Luscher \cite{luscher} proposed an alternative symmetry on the lattice that acts as chiral symmetry, and indeed goes into chiral symmetry in the continuum 
+limit $a\rightarrow 0$. The modified anticommutation relation is known as the \textbf{Ginsparg-Wilson equation}:
+\begin{equation}
+	\gamma_5 D + D\gamma_5 = aD\gamma_5 D
+\end{equation}
+Although this is not satisfied by the Wilson-Dirac operator in Equation~\ref{eq:dirac_operator}, it is satisfied by a different class of Dirac operators on the lattice. One in 
+particular was defined by Neuberger \cite{neuberger} and is known as the \textbf{overlap operator}:
+\begin{equation}
+	D := 
+\end{equation}
+
+\section{The Index Theorem and Topological Charge}
+
+%next section is up for grabs
+
+\newpage
+\begin{thebibliography}{99}
+
+	\bibitem{nogo}
+	A No-Go Theorem For Regularizing Chiral Fermions TODO
+	
+	\bibitem{luscher}
+	Luscher
+	
+	\bibitem{neuberger}
+	Neuberger
+
+\end{thebibliography}
+
+\end{document}
