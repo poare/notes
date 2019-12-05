@@ -1,0 +1,262 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{float}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Math 250A Lecture Recaps (Rings)}
+\author{Patrick Oare}
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section{9/19 (Rings)}
+
+\begin{itemize}
+
+	\item A \textbf{ring} is a triple $(R, +, \cdot)$ consisting of a set $R$ and two binary operations on $R$, \textbf{addition} and \textbf{multiplication}, 
+	such that:
+		
+		\begin{enumerate}
+		
+			\item $(R, +)$ is an abelian group with identity $0$ and inverse $-a$.
+			
+			\item $\cdot$ associates.
+			
+			\item $\cdot$ distributes over $+$, i.e. $a(b + c) = ab + ac$.
+		
+		\end{enumerate}
+		
+	If multiplication has an identity $1$, then we say the ring has \textbf{unity}. If multiplication commutes, we say the ring is \textbf{commutative}. 
+	
+	\item Analogy between groups and rings:
+	
+	\begin{table}[H]
+	\centering
+		\begin{tabular}{ | c | c |}
+			\hline
+			Groups & Rings \\
+			\hline
+			Set $S$ & Vector space, basis $S$ \\
+			\hline
+			Symmetric Group $S_n$ & $M_{m\times n}(K)$ \\
+			\hline
+			Group Actions & Actions of rings on $K_n$ \\
+			\hline
+			Disjoint union, direct product & Vector space addition, tensor product \\
+			\hline
+			Normal subgroups & Ideals \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\item \textbf{Burnside Ring}: TODO
+	
+	\item \textbf{Group Ring}: The group ring is defined on the base set $R[G]$, where $R[G]$ is the set of all formal $R$-linear combinations of the 
+	elements of the group $G$. Addition is defined componentwise, and we define:
+	$$
+		(\sum_{x\in G}a_xx)\cdot(\sum_{y\in G}b_yy) := \sum_{x, y\in G}a_xb_yxy = \sum_{z\in G}(\sum_{xy = z}a_xb_y)z
+	$$
+	The multiplication is a convolution of ring elements. Furthermore, we can define the obvious scalar multiplication on elements of $R[G]$, and so 
+	make it into a $R$-module, and hence an $R$-algebra.
+	
+	An example is to take $G := V_4$, the Klein 4-group. If we form the group ring $\mathbb C[G]$, we have a 4 dimensional vector space over 
+	$\mathbb C$. It also forms an algebra as we can internally multiply elements. Let $4e_1 := 1 + a + b + c$, $4e_2 := 1 + a - b - c$, $4e_3 = 1 - a 
+	+ b - c$, and $4e_4 := 1 - a - b + c$. Then $e_ie_j = \delta_{ij}$, so these four elements are \textbf{idempotents} ($e^2 = e$, $e\in Z(R)$). If 
+	$e$ is an idempotent in $R$, then $R = eR \bigoplus (1 - e) R$, and if it splits as a product then $(1, 0)$ is an idempotent, so a ring splits as a 
+	product iff it has an idempotent.
+	
+	\item \textbf{Ideals} are subsets of $R$ that function as normal subgroups; we can quotient by them. An ideal is:
+		
+		\begin{enumerate}
+		
+			\item A subgroup under $+$.
+			
+			\item Closed under $\cdot$ from \textbf{all} elements in the ring.
+		
+		\end{enumerate}
+	
+	We may quotient rings additively by ideals and have a well defined addition and multiplication. Ideals correspond bijectively with the kernels of ring 
+	homomorphisms. If $S\subset R$ is any subset, then we can form the smallest ideal containing $S$:
+	$$
+		(S) = \{\sum_{i = 1}^nr_is_it_i\in R : s_i\in S, r_i, t_i\in R\}
+	$$
+	
+	\item \textbf{Generator and Relations}:
+	
+	Form the free ring on $S$. For commutative, we first form the free commutative monoid on $S$. If $S = \{x, y, z\}$, then the free 
+	commutative monoid on $S$ is the set $\{x^{n_1}y^{n_2}z^{n_3} : n_i\in\mathbb Z\}$. The free commutative ring is:
+	$$
+		\{\sum_{a, b, c\geq 0}n_{abc}x^ay^bz^c\}
+	$$
+	where $n_{abc}\in R$. For non-commutative rings, just take all words on the set to be the free monoid, and the free ring is the group ring of this 
+	free monoid.
+	
+	\item Construction of coproduct/pushout in $Rng$. We can construct the coproduct as follows: Assume $A, B$ are disjoint. Form the free ring on 
+	$A\times B$, $F = F(A\cup B)$. Quotient out by an ideal to force the map from $A$ to $F$ to be a homomorphism-- quotient by the smallest ideal 
+	with $f(a + b) - f(a) - f(b)$, $f(ab) - f(a) - f(b)$ for all $a, b$ in the ring. Do the same with all necessary relations, and then you have a coproduct.
+
+\end{itemize}
+
+\section{9/26 (Unique Factorization)}
+
+\begin{itemize}
+
+	\item \textbf{Domains}: A \textbf{domain} is a ring with no nonzero zero divisors. An \textbf{integral domain} is a commutative domain with $0\neq 
+	1$. A \textbf{Euclidean Domain} is an integral domain $R$ with a norm $|\cdot| : R\rightarrow\mathbb Z_{\geq 0}$ such that for $a$ and $b\neq 
+	0$, there are $r, q\in R$ such that $a = bq + r$ with $|r| < |b|$. A \textbf{Principal Ideal Domain} is an integral domain in which every ideal is 
+	\textbf{principal}, i.e. generated by one element $(a)$. A \textbf{Unique Factorization Domain} is an integral domain where every element has a 
+	unique (up to unit and permutation) factorization into irreducible elements.
+	
+	$\mathbb Z$ is a PID because the GCD exists. 
+	
+	\item Every Euclidean Domain is a PID.
+	
+	Sketch of proof: Take the element $a$ of smallest norm (need not be unique) in the ideal $I$. Then $I = (a)$, as you can Euclidean divide by $a$ 
+	with a remainder that must be $0$.
+	
+	The converse is not true: A PID that is not Euclidean is $\mathbb Z[\frac{1 + \sqrt{-19}}{2}]$
+	
+	\item \textbf{Irreducible elements}: Let $a\in R$. $a$ is \textbf{irreducible} if $a\neq 0$ or a unit and $a = bc\implies b\in R^*$ or $c\in R^*$. $a$ is 
+	\textbf{prime} if $a|bc\implies a|b$ or $a|c$. 
+	
+	\item Every PID is a UFD. 
+	
+	Sketch of proof: Given $a\in R$, set $a = bc$ with $c$ irreducible dividing $a$. If $b$ is irreducible, stop. If not, continue on forever. This cannot 
+	last forever because we have an ascending chain of ideals. However, note that a PID is \textbf{Noetherian}, i.e. there is no infinite strictly 
+	increasing chain of ideals $I_1\subset I_2\subset ...$. To show uniqueness, we show that \textbf{in a PID, irreducibles are prime}. You should 
+	know how to do this proof. To complete the proof, we can essentially pair off $p_i$'s and $p_j$'s because they are prime.
+	
+	\item \textbf{Gaussian Integers}:
+	
+	The Gaussian integers $\mathbb Z[i]$ are Euclidean; they are a square lattice in $\mathbb C$. If we use the norm $|a + bi| := a^2 + b^2$, then 
+	the problem is equivalent to finding $r, q\in \mathbb Z[i]$ with $\frac{a}{b} = q + \frac{r}{b}$ with $|\frac{r}{b}| < 1$. This holds because the unit 
+	balls centered on the lattice cover $\mathbb C$.
+	
+	We also have unique factorization in $\mathbb Z[i]$. If $a + bi$ is prime in $\mathbb Z[i]$, then $(a + bi)(a - bi) = a^2 + b^2$ is prime in $\mathbb 
+	Z$. This is not an iff; $2$ and $5$ are not prime in the Gaussian integers, but 3 is. The factorizations in $\mathbb Z[i]$ are the same as the 
+	number of ways we can write the number as $a^2 + b^2$.
+	
+	The smallest quadratic integer subring of $\mathbb C$ that is not Euclidean is $\mathbb Z[\sqrt{-3}]$, and this is not a UFD, as $2 \times 2 = 
+	(1 + \sqrt{3}i)(1 - \sqrt{3}i)$. $2$ is an irreducible because $|2| = 2$ cannot be divided. The only units are $\pm 1$. The ideals of this ring are 
+	$z\mapsto az$, which multiplies $|z|$ by $|a|$ and rotates $z$ by $arg(a)$. Non-principal ideals are diamond lattices, not rectangular lattices.
+	
+	\item UFDs need not be PIDs: $\mathbb Z[x]$ is a UFD, and $(2, x)\subset \mathbb Z[x]$ is a non-principal ideal.
+	
+	\item Any prime $p\in\mathbb Z$, $p > 0$, $p\equiv 1 \mod 4$ is the sum of 2 squares.
+	
+	Let $p\equiv 1\mod 4$. Then $G := (\mathbb Z/p\mathbb Z)^*$ is cyclic of order $p - 1$, and $p - 1 = 4n$ for $n\in \mathbb Z$. $G$ has an 
+	element of order 2, which is $-1$. Let $g$ be a generator for $G$, so $g^{4n} = 1$. Then $g^{2n} = -1$ as it has order 2 and $-1$ is the unique 
+	element of order $2$, so $-1$ is a square mod p, thus $-1 = a^2 - kp\implies kp = a^2 + 1$. Viewing this in $R := \mathbb Z[i]$, $kp = (a + i)
+	(a - i)$ in $R$. These are irreducibles, so $p$ does not divide either of them, and thus $p$ is not prime in $\mathbb Z[i]$, so $p = (x + iy)(x - iy)
+	\implies p = x^2 + y^2$.
+	
+	https://math.stackexchange.com/questions/594/how-do-you-prove-that-a-prime-is-the-sum-of-two-squares-iff-it-is-congruent-to-1
+
+\end{itemize}
+
+\section{9/28 (Localization)}
+
+Let $R$ be a commutative ring.
+
+\begin{itemize}
+
+	\item \textbf{Types of Ideals}: Let $I$ be an ideal of $R$. $I$ is \textbf{maximal} if $R / I$ is a field, and \textbf{prime} if $R / I$ is an integral 
+	domain.
+	
+	We see that maximal ideals must be prime. An equivalent definition of prime is $ab\in I\implies a\in I$ or $b\in I$. If $F$ is a field, then $F / \{0\}$
+	is a field, so $\{0\}$ is a maximal ideal. Thus $F$ has no proper nontrivial ideals.
+	
+	Prime ideals differ from maximal ideals (in a lot of common examples, prime ideals are just all maximal ideals plus the trivial ideal) significantly in 
+	$\mathbb C[x, y]$. The maximal ideals are $(x - a, y - b)$, while the prime ideals are these ideals and also ideals of the form $(f)$ for any 
+	irreducible $f$. These irreducible $(f)$'s correspond to irreducible curves in the plane.
+	
+	\textbf{Zorn's Lemma}: We need some definitions. A \textbf{partially ordered set} $S$ is a set $S$ with a \textbf{partial order} $\leq$ such that if 
+	$a\leq b$ and $b\leq c$, then $a\leq c$. It is not necessary for $a\leq b$ or $b \leq a$ for each $a, b\in S$ for a poset (i.e. set inclusion). A set 
+	is \textbf{totally ordered} if it is partially ordered and for all $a, b\in S$, either $a\leq b$ or $b\leq a$. The lemma states that if a set $S$ has:
+	\begin{enumerate}
+	
+		\item A partial order $\leq$.
+	
+		\item $S\neq \emptyset$.
+		
+		\item The property that given any totally ordered subset $T\subset S$, then $T$ has an upper bound.
+	
+	\end{enumerate}
+	Then $S$ has a \textbf{maximal element}, i.e. an element $a\in S$ such that no element $b\in S$ satisfies $a < b$.
+	
+	\item Every proper ideal is contained within a maximal ideal.
+	
+	Reasoning: Let $I$ be an ideal. The set of ideals containing $I$ under inclusion form a poset that satisfies the properties of Zorn's Lemma. Then, 
+	this set has a maximal element, which is a maximal ideal.
+	
+	\item The \textbf{nilradical} of $R$ is the set of all nilpotent elements of $R$, i.e. it is 
+	$$
+		\eta(R) := \{x\in R : x^n = 0, n\in \mathbb N\}
+	$$
+	Then the nilradical is the intersection of all the prime ideals of $R$, which we will denote by $P$.
+	
+	For the forward containment, $x^n = 0\in p$ for any prime ideal $p$. As $p$ is prime, we can easily induct and show $x\in p$. Thus, we have $
+	\eta(R)\subset P$. Conversely, we wish to show $P\subset \eta(R)$, or that $\eta(R)^C\subset P^C$. Suppose $x$ is not nilpotent. We want to 
+	find a prime ideal not containing $x$. Let $M := \{1, x, x^2, ...\}$ ($0\not\in M$ as $x$ is not nilpotent). Let $S$ be the set of ideals disjoint from 
+	$M$. Then $S$ is a poset by $\subset$, and $S\neq \emptyset$ as $\{0\}\in S$. As before, any totally ordered subset has an upper bound, so $S$ 
+	has a maximal element $I$. Suppose $a, b\in R$ are not contained in $I$. Then $I\subset (I, a)$ is strict, and so $(I, a)\cap M \neq \emptyset$ as 
+	$I$ is maximal with respect to this. So, $x^n = i_1 + sa$. Similar for $(I, b)$, so $x^m = i_2 + tb$. Then $x^{m + n} = i_1i_2 + i_2tb + i_2sa + stab
+	$, so $(I, ab)$ contains $x^{n + m}$. But then $a\not\in I$ and $b\not\in I\implies ab\not\in I$, so $I$ is prime, and $x\not\in M$, so we are done.
+	
+	\item \textbf{Localization}: Let $S\subset R$ be a multiplicative subset (so $S$ is closed under $\cdot$ and $1\in S$) not containing $0$. We may 
+	\textbf{localize} the ring by $S$ and construct a universal ring $R$ may be embedded in, in which all the elements of $S$ are units. We define 
+	an equivalence relation $\equiv$ on $R\times S$ by:
+	$$
+		(r_1, s_1) \equiv (r_2, s_2) \iff \exists t\in S s.t. t(r_1s_2 - r_2s_1) = 0
+	$$
+	We may quotient by this equivalence relation, and we denote:
+	$$
+		R[S^{-1}] := R\times S / \equiv
+	$$
+	We denote the cosets of $\equiv$ by fractions, so $\frac{r}{s} := (r, s)/\equiv$. We make $R[S^{-1}]$ into a ring by defining:
+	$$
+		\frac{r_1}{s_1} + \frac{r_2}{s_2} := \frac{r_1s_2 + r_2s_1}{s_1s_2}
+	$$
+	and
+	$$
+		\frac{r_1}{s_1}\cdot\frac{r_2}{s_2} := \frac{r_1r_2}{s_1s_2}
+	$$
+	Then $R[S^{-1}]$ is a ring, and we have a canonical homomorphism:
+	$$
+		\iota: r\mapsto \frac{r}{1}
+	$$
+	This is an embedding iff $S$ has no zero divisors. Furthermore, the images of all elements of $S$ are invertible in this new ring. $R[S^{-1}]$ has 
+	the universal property that if $X$ is any ring with a homomorphism $\phi: R\rightarrow X$ that sends all elements of $S$ to units in $x$, then 
+	$\phi$ factors uniquely through $R[S^{-1}]$, i.e. $\exists !\Phi : R[S^{-1}]\rightarrow X$ such that 
+	$$
+		\phi = \Phi\circ\iota
+	$$
+	
+	\item Localizing is a way to study specific prime ideals of a ring. We can think of it as "getting rid of unnecessary information" that comes from 
+	the elements that we do not wish to study. For example, take $R = \mathbb Z$, where we are interested in $2$. For 
+	$S$ to be multiplicatively closed, we take $S = p^C$ where $p$ is a prime ideal. So, we take $p = (2)$ and localize by inverting all elements of 
+	$\mathbb Z$ not in $(2)$. We get a ring:
+	$$
+		\mathbb Z_{(2)} = \{\frac{a}{b} : a\in\mathbb Z, b \textnormal{ odd}\}
+	$$
+	The units of this rings are all rationals $\frac{a}{b}$ with $b$ odd. We can see that 2 is a prime element of this ring, and any element can be 
+	written as $2^n$ times a unit. Thus, this ring is a UFD with one irreducible element $2$. We see that localizing by a prime ideal kills off the other 
+	primes in the ring that we are not interested in.
+
+\end{itemize}
+
+\end{document}  

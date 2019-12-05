@@ -1,0 +1,342 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}{Example}[section]
+
+\graphicspath{{/Users/theoares/Desktop/Math\ 142/notes}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Topological Manifolds}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+Topological manifolds are an interesting topic of study. In these notes, we focus on the algebraic properties of these manifolds rather than the differential properties 
+of the manifolds. The main goal will be to classify all $0$, $1$, and $2$ manifolds up to homeomorphism.
+
+\section{Definitions}
+
+	We begin with the definition of a manifold; however, we need to define the notion of a second-countable topological space first:
+	
+	\begin{definition}[Second-Countable]
+		A space $X$ is second-countable if it has a countable base.
+	\end{definition}
+	
+	Now we may define a manifold:
+	
+	\begin{definition}[Manifold]
+		A \textbf{manifold of dimension $n$} is a second countable Hausdorff space $X$ such that $\forall x\in X$, there is an open neighborhood $U_x\ni x$ 
+		and a homeomorphism $\phi : U_x\rightarrow \mathbb R^n$. Such a subset and map $(U_x, \phi)$ is called a \textbf{chart}. 
+	\end{definition}
+	
+	We include second-countable and Hausdorff in the definition to exclude strange spaces from being manifolds, including the ``long line" and the line with two 
+	origins. 
+	
+	This definition of a manifold only includes spaces which we would considered open, i.e. they have no boundary. We now generalize this to include spaces with 
+	boundary.
+	
+	\begin{definition}[Manifold with Boundary]
+		An \textbf{$n$-manifold with boundary} is a topological space $X$ such that:
+		\begin{enumerate}
+			\item $X$ is Hausdorff and second-countable.
+			\item $\forall x\in X$, there is an open neighborhood $U_x\ni x$ and a homeomorphism $\phi : U_x\rightarrow\mathbb R^n$ or a homeomorphism 
+			$\phi : U_x\rightarrow\mathbb R^n_+$, where $\mathbb R^n_+ = \{(x_1, ..., x_n) : x_n\geq 0\}$.
+		\end{enumerate}
+	\end{definition}
+	
+	Now we may talk about two subsets of a manifold $X$, the \textbf{interior} and the \textbf{boundary} of $X$.
+	
+	\begin{definition}[Interior]
+		The \textbf{interior} of $X$ is:
+		$$
+			int(X) = \{x\in X : \exists\textnormal{ a chart $(U_x, \phi)$ around $x$ with $U_x\cong\mathbb R^n$.}\}
+		$$
+	\end{definition}
+	
+	\begin{definition}[Boundary]
+		The \textbf{boundary} of $X$ is:
+		$$
+			\partial X = X\setminus int(X) = \{x\in X : \exists\textnormal{ a chart $(U_x, \phi)$ around $x$ and $\phi(x)\in\mathbb R^n_+$.}\}
+		$$
+	\end{definition}
+	
+	\begin{definition}[Closed Manifold]
+		A manifold $X$ is \textbf{closed} if it is compact and $\partial X = \emptyset$.
+	\end{definition}
+	
+	For some examples of manifolds:
+	
+		\begin{itemize}
+		
+		\item $\mathbb R^n$ and $S^n$ are $n$-manifolds.
+		
+		\item Any open subset $U\subseteq X$ of an $n$-manifold is an $n$-manifold.
+		
+		\item If $X$ and $Y$ are $n$-manifolds, then $X\times Y$ is an $n + m$ manifold.
+		
+		\item If $X$ is an $n$-manifold with boundary, then $\partial X$ is an $(n - 1)$-manifold. For example, $B^n$ is an $n$-manifold with boundary $S^{n - 1} 
+		= \partial B^n$, which is an $n - 1$ manifold.
+		
+		\item We can attach manifolds along a boundary. If $X, Y$ are $n$-manifolds with boundary and $f : \partial X\rightarrow\partial Y$ is a homeomorphism, 
+		then $X\cup_f Y$ is an $n$-manifold.
+		
+	\end{itemize}
+	
+	This next example is quite important, so we give it a definition. It is an operation that joins two manifolds together called the \textbf{connected sum}.
+	
+	\begin{definition}[Connected Sum]
+		Let $X, Y$ be two $n$-manifolds. Choose $x\in X, y\in Y$ and charts $(U_x, \phi)$ and $(V_y, \psi)$ of $x$ and $y$, and pick $U\subseteq U_x$, $V
+		\subseteq V_y$ such that $U\cong_\phi B^n$ and $V\cong_\psi B^n$. Let $X' = X\setminus int(U)$ and $Y' = Y\setminus int(V)$, and choose a 
+		homeomorphism $f : \partial Y'\rightarrow\partial X'$. We define the \textbf{connected sum} of $X$ and $Y$ to be the manifold $X\# Y$ given by:
+		$$
+			X\# Y := X'\cup_f Y'
+		$$
+	\end{definition}
+	
+	If $X$ and $Y$ are path-connected, then the connected sum is a well defined manifold, i.e. it does not depend on the choice of $x$ and $y$.
+	
+	Next, we will turn to the classification of $0$, $1$, and $2$ manifolds. We will aim to classify all closed and connected 0, 1, and 2 manifolds up to 
+	homeomorphism. This will ultimately allow us to prove the following theorem for $n = 0, 1, 2$ dimensions:
+	
+	\begin{theorem}[Generalized Poincare Conjecture]
+		If $X$ is a closed, connected $n$-manifold and $X$ is homotopy equivalent to $S^n$, then $X$ is homeomorphic to $S^n$.
+	\end{theorem}
+
+\section{0-Manifolds}
+
+	If $X$ is a 0 manifold, there is not much interesting we can say about it. Given $x\in X$, we have a chart $(\phi, U_x)$ where $\phi : U_x\rightarrow \mathbb 
+	R^0 = \{0\}$ is a homeomorphism, so because $\phi$ is a bijection, $U_x = \{x\}$. But then every subset of $X$ is open, so $X$ must be a discrete space. 
+	Conversely, every discrete space which is second countable (discrete spaces are automatically Hausdorff) is a 0 manifold, so \textbf{$X$ is a 0 manifold if 
+	and only if it is a second countable discrete topological space}. This implies that connected $0$ manifolds are homeomorphic to the one-point space $\{*\}$, 
+	which can never be homotopy equivalent to $S^0$, and thus proves the Generalized Poincare Conjecture in $n = 0$ dimensions.
+
+\section{1-Manifolds}
+
+	We will begin with the classification, and then cite the tools used to prove the theorem.
+	
+	\begin{theorem}[Classification of connected 1-manifolds]
+		If $X$ is a connected 1-manifold (perhaps with boundary), then $X$ is homeomorphic to one of:
+		\begin{enumerate}
+			\item $\mathbb R$
+			\item $S^1$
+			\item $[0, 1]$
+			\item $[0, 1)$
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{corollary}[Generalized Poincare, $n$ = 1]
+		If $X$ is a connected and closed 1-manifold, then $X\cong S^1$.
+	\end{corollary}
+	
+	The corollary is immediate from the classification theorem. The easiest way to prove this classification is to prove a lemma, which we will state.
+	
+	\begin{lemma}
+		Let $X$ be a connected 1-manifold. If $(U, \phi)$ and $(V, \psi)$ are charts on $X$ and $U, V\cong\mathbb R$, then $U\cap V$ has at most 2 connected 
+		components.
+	\end{lemma}
+	
+\section{Free Products and Abelianization}
+
+	Before we proceed with the classification of 2-manifolds, it is important to develop some group theory which will help us to classify 2-manifolds (especially 
+	when we consider the uniqueness of the decomposition). Let $G = \langle a_1, ..., a_n | r_1 = 1, ..., r_m = 1\rangle$ and $G' = \langle b_1, ..., b_{n'} | s_1 = 
+	1, ..., s_{m'} = 1\rangle$ be two groups. We define:
+	
+	\begin{definition}[Free Product]
+		The \textbf{free product} of $G$ and $G'$ is the group $G*G'$ given by:
+		$$
+			G*G' := \langle a_1, ..., a_n, b_1, ..., b_{n'} | r_1 = 1, ..., r_m = 1, s_1 = 1, ..., s_{m'} = 1\rangle
+		$$
+	\end{definition}
+	
+	The best way to visualize the free product is to be the group on all letters from $G$ and $G'$ in which the group operation is concatenation and all words 
+	are reduced via inverses and the relations on the group. We don't impose any additional relations on the structure of $G*G'$ by taking the free product; 
+	in particular, we cannot commute letters from different groups because we don't have any relations that say they commute. 
+	
+	\begin{definition}[Free Group]
+		Let $n\in\mathbb N$. The \textbf{free group on $n$ generators} is the group:
+		$$
+			F_n := \langle a_1, ..., a_n\rangle
+		$$
+	\end{definition}
+	
+	This is the group on $n$ generators with no relations, and it can also be constructed by $F_1 = \mathbb Z$ and $F_{n + 1} = F_n * \mathbb Z$ for all $n\in 
+	\mathbb N$. 
+	
+	Free groups will be very helpful for describing fundamental groups of surfaces, but they are difficult to work with, primarily because they and their quotients 
+	are not necessarily Abelian. In particular, it is hard to tell when two presentations of non-Abelian groups actually correspond to different groups, so we wish 
+	to force these groups to be Abelian. This process is known as \textbf{Abelianization}.
+	
+	\begin{definition}[Abelianization]
+		Let $G$ be a group, and let $N$ be its \textbf{commutator subgroup}, i.e. $N$ is the normal closure of $\{ghg^{-1}h^{-1} : g, h\in G\}$. Then we 
+		define its \textbf{Abelianization} to be the group $Ab(G) := G / N$.
+	\end{definition} 
+	
+	By quotienting out the commutator subgroup of $G$, we have necessarily forced an additional relation on it; that of $gh = hg$. This is best seen as what 
+	Abelianizing does to a presentation of $G$. If we have a presentation of $G$ as before, then a presentation of $Ab(G)$ is given by:
+	$$
+		Ab(G) = \langle a_1, ..., a_n | r_1 = 1, ..., r_m = 1, a_1a_2 = a_2a_1, ..., a_1a_n = a_na_1, ..., a_{n - 1}a_n = a_na_{n - 1}\rangle
+	$$
+	
+	We essentially keep the original presentation but add additional relations to the group forcing all its elements to commute. There is a nice relation between 
+	free products and direct products when groups are Abelianized; it is easiest to think of direct products as the ``abelian" version of free products. This is 
+	reflected in the Abelianization of the free group on $n$ generators, which is:
+	$$
+		Ab(F_n)\cong\mathbb Z^n
+	$$
+	 
+	 It is also evident for two arbitrary groups $G, H$, in that:
+	 $$
+	 	Ab(G*H) \cong Ab(G)\times Ab(H)
+	 $$
+	
+	As one final fact for this section, if $G \cong G'$, then $Ab(G)\cong Ab(G')$. However, the converse is not true at all; this is apparent because $Ab(F_2)\cong 
+	\mathbb Z^2 = Ab(\mathbb Z^2)$, but obviously $F_2$ and $\mathbb Z^2$ are not isomorphic groups.
+	
+
+\section{2-Manifolds (Surfaces)}
+
+	2-manifolds are the most interesting types that we will study; the classification is long and quite involved, but the proofs are not as tedius as those for the 
+	1-manifolds, so I will include them whenever possible. 
+	
+	\begin{definition}[Surface]
+		A \textbf{surface} is a 2-manifold with or without boundary.
+	\end{definition}
+	
+	Note that if $S$ is a compact surface with non-zero boundary, then $\partial S$ is a compact 1-manifold without boundary, and thus by our previous 
+	classification $\partial S\cong S^1\sqcup ...\sqcup S^1$. So, given any compact surface $S$, we may glue on copies of $D^2$ via an attaching map to each 
+	copy of $S^1$ in the boundary of $S$, and we may form a 2-manifold $\tilde S$ which is compact and has no boundary. Thus, we will restrict our study of 
+	2-manifolds to closed manifolds, i.e. 2-manifolds which are compact and connected. We will now begin our classification, and we will start with the theorem:
+	
+	\begin{theorem}[Classification of 2-manifolds]
+		Let $S$ be a closed, connected surface. Then:
+		$$
+			S\cong S^2\# T^2\# ...\# T^2\#\mathbb RP^2\# ...\#\mathbb RP^2
+		$$
+		where there are $n, m\in\mathbb Z_{\geq 0}$ copies of $T^2$ and $\mathbb RP^2$, respectively.
+	\end{theorem}
+	
+	\subsection{Existence and Cellular Decompositions}
+	
+	We will now attempt to simplify our study of surfaces by restricting it to studying polygons which correspond to the surface in some way, called a \textbf{cellular 
+	decomposition} of $S$. For a rigorous definition, check the class notes. It can be shown that every cellular decomposition is equivalent to one with a single 
+	polygon, so we may restrict our cellular decomposition to one polygon with identified edges. Given a cellular decomposition of a surface, we may describe it by 
+	a \textbf{word} with letters representing the orientation of each edge. We will say the surface is equal to this word by abuse of notation. \textbf{Words are 
+	equivalent up to cyclic permutation}, i.e. if a surface $S$ is described by $abcb^{-1}a^{-1}c^{-1}$, then it can also be described by the word $cb^{-1}a^{-1}c^{-1}
+	ab$. Some simple examples of this are:
+	\begin{itemize}
+		\item $S^2 = aa^{-1}$.
+		\item $\mathbb RP^2 = aa$.
+		\item $T^2 = aba^{-1}b^{-1}$.
+	\end{itemize}
+	
+	These become apparent upon drawing out the cellular decompositions of these surfaces, which I will include when I have time. We will now state a collection 
+	of lemmas which will allow us to reduce a cellular decomposition into something we recognize. These lemmas will essentially allow us to reduce a word by 
+	representing the corresponding space as a connect sum of two simpler spaces which are described by subwords of the original.
+	
+	\begin{lemma}[S]
+		If $S\cong Xaa^{-1}$ and $X\neq\emptyset$, then $S\cong X$.
+	\end{lemma}
+	
+	This lemma allows us to simplify inverse letters that are next to one another, assuming the rest of the word is non-trivial. If there are no other letters in the word, 
+	then we cannot do this, and the surface is instead homeomorphic to $S^2$. 
+	
+	\begin{lemma}[P1]
+		If $S = Xaa$, then $S\cong\mathbb RP^2\#X$. 
+	\end{lemma}
+	
+	\begin{lemma}[T1]
+		If $S = Xaba^{-1}b^{-1}$, then $S\cong T^2\#X$. 
+	\end{lemma}
+	
+	\begin{lemma}[P2]
+		If $S = XaYa$ and $X, Y\neq\emptyset$, then $S = bbXY^{-1}$. 
+	\end{lemma}
+	
+	\begin{lemma}[T2]
+		If $S = WaXbYa^{-1}Zb^{-1}$, then $S\cong T^2\# S_1$, where $S_1 = ZYXW$. 
+	\end{lemma}
+	
+	A brief note on inverse words: you can take an inverse of a word by flipping the order and taking individual inverses of letters. This is also equivalent to reading 
+	the word in the other direction starting at the same base point; either way will give you the same inverse word. We may use these lemmas to prove that 
+	$$
+		T^2\#\mathbb RP^2\cong \mathbb RP^2\#\mathbb RP^2\#\mathbb RP^2
+	$$
+	and that:
+	$$
+		K\cong\mathbb RP^2\#\mathbb RP^2
+	$$
+	where $K$ is the Klein bottle. Now, the existence of a decomposition of $S$ into a connect sum of a sphere, projective planes, and tori can be proven by 
+	just stripping off the correct words from its cellular decomposition. 
+	
+	
+	\subsection{Uniqueness and Seifert-van Kampen}
+	
+	The next question to ask is if the $n$ and $m$ values in the decomposition are unique, which we will eventually prove. We define:
+	
+	\begin{definition}[Genus]
+		Let:
+		$$
+			S_g := T^2\# ... \# T^2 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+			N_g := \mathbb RP^2\# ... \#\mathbb RP^2
+		$$
+		where in each case, $g$ copies of each surface are connect summed together. $g$ is called the \textbf{genus} of the surface.
+	\end{definition}
+	
+	We will now state the Seifert-van Kampen theorem, which we will use to finish the classification of surfaces theorem.
+	
+	\begin{theorem}[Seifert-van Kampen]
+		Let $X = A\cup B$ with $A, B$ open and path-connected, $A\cap B$ path-connected, and $p\in A\cap B$. Let $\iota_A : A\cap B\rightarrow A$ and 
+		$\iota_B : A\cap B\rightarrow B$ be the inclusion maps. Then:
+		$$
+			\pi_1(X, p)\cong\pi_1(A, p) * \pi_1(B, p) / N
+		$$
+		where $N\triangleleft\pi_1(A, p) * \pi_1(B, p)$ is the normal closure of $\{(\iota_A)_*(g)[(\iota_B)_*(g)]^{-1} : g\in \pi_1(A\cap B, p)\}$.
+	\end{theorem}
+	
+	We need to quotient by $N$ to enforce relations on the new fundamental group and avoid double counting loops in the intersection $A\cap B$. The Seifert-van 
+	Kampen theorem can be used to compute the fundamental group of $X_n$, the one-point union on $n$ circles. It is easiest to use when $A\cap B$ is 
+	contractible, because then we don't need to enforce any relations on $\pi_1(A, p) * \pi_1(B, p)$. We can do something similar to compute the fundamental 
+	group of $S_g$ and $N_g$. These are:
+	$$
+		\pi_1(S_g)\cong\langle a_1, ..., a_{2g} | a_1a_2a_1^{-1}a_2^{-1}...a_{2g - 1}a_{2g}a_{2g-1}^{-1}a_{2g}^{-1} = 1\rangle
+	$$
+	$$
+		\pi_1(N_g)\cong\langle a_1, ..., a_g | a_1^2a_2^2...a_g^2 = 1\rangle
+	$$
+	
+	To show these are distinct, we can Abelianize them. For $S_g$, this allows us to commute the $a_i$ past one another in the single relation, clearing that 
+	relation and leaving us with an abelian group on $2g$ generators:
+	$$
+		H_1(S_g) = Ab(\pi_1(S_g))= \mathbb Z^{2g}
+	$$
+	
+	For $N_g$, we can change the presentation to (where we assume the presentation includes commutation relations) $Ab(N_g) = \langle a_1, ..., a_1 ... a_g | 
+	(a_1 ... a_g)^2 = 1\rangle = \langle a_1, ..., a_{g - 1}, b | b^2 = 1\rangle$, and so we see that:
+	$$
+		H_1(N_g) = Ab(\pi_1(N_g)) = \mathbb Z^{g - 1}\times (\mathbb Z / 2\mathbb Z)
+	$$
+	
+	Thus $S_g$ and $N_{g'}$ have different abelianized fundamental groups and therefore different fundamental groups, so they are not homotopy equivalent. 
+
+\end{document}

@@ -1,0 +1,872 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{tikz-cd}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Set Theory}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+\section{Introduction}
+
+Set theory provides the foundations for essentially all of modern mathematics. It is used in every mathematical field, often 
+implicitly. In these notes, we will study how to make this foundation rigorous. We will study the axiomatization of set theory 
+in such a way that properties of sets can be deduced from \textbf{only} the axioms which we decide upon. We will build 
+upon these axioms and study how to construct different mathematical objects, including many objects that you may have 
+studied before. Various number systems will also be constructed, so you can be at ease the next time you want to verify 
+\textit{why} $2 + 3 = 5$.
+
+\section{First Order Logic}
+
+Many of the axioms of set theory will be written down precisely in \textbf{first order logic}. This is a system which makes precise 
+notions like ``membership in" a set, as well as rules of logic like the symbols $\implies$, $\wedge$, $\vee$, and more. It is 
+the \textit{language} in which we make statements in set theory. We will treat first order logic briefly, as it is only needed in certain 
+statements we will make later. A statement in first order logic contains the following \textbf{symbols}\footnote{When asked to 
+provide a first order formula, you must \textbf{only} use these symbols.}:
+
+\begin{itemize}
+	\item \textbf{Variables}: Letters like $x, y, z, a, b, ...$
+	\item The symbols $\in$ and $=$. 
+	\item \textbf{Logical connectors}: $\wedge$ or $\&$ (``and"), $\vee$ (``or"), $\neg$ (``not"), $\implies$ (``implies"), $\iff$ 
+	(``equivalent").
+	\item \textbf{Quantifiers}: $\exists$ (``exists"), $\forall$ (``for all").
+\end{itemize}
+
+Using symbols, we can write formulas, which are essentially just statements of truth. Formulas can have different types of 
+variables, which may give different conditions of truth depending on context. As an example, consider the formula:
+$$
+	\phi(x) = \exists y\exists z ((y\in z) \wedge (z\in x))
+$$
+This is a first order formula because it only makes use of the symbols presented above. The variables $y$ and $z$ are called 
+\textbf{bound variables}; they are bound by quantifiers to make it clear what context they are being used in for the formula. 
+The variable $x$ is a \textbf{free variable}; you are allowed to input a value for $x$ yourself, and the formula will be either true 
+or false. For example, $\phi(\emptyset)$ is true, yet $\phi(\{\{\emptyset\}\})$ is false. First order logic can be used to generate 
+more complicated formulas or symbols to use, which can then be used to simplify different formulas. For example, we may 
+write the symbol $a\subseteq b$ as shorthand for the formula $\forall t (t\in a\implies t\in b)$. Note that to specify exactly the 
+elements of a set $a$, we will often write $\forall x (x\in a \iff ...)$. 
+
+\section{Axiomatization of Set Theory}
+
+When we study the properties of sets, we need to decide upon a common language: what exactly do we mean by a set? One 
+will have an intuitive understanding of this question, but a rigorous set of axioms must be decided on before propositions may 
+be proved. We will state the axioms of set theory here, and develop them further as we use them more. The first 9 axioms 
+are the \textbf{Zermelo-Fraenkel (ZF) Axioms} of set theory, and they are widely accepted to be the foundations most of 
+mathematics is built off of. The tenth axiom listed is the axiom of choice, and its acceptance is more controversial than the 
+other 9. The system of all ten axioms is denoted \textbf{ZFC}, standing for ZF with Choice.
+
+\begin{enumerate}
+
+	\item \textbf{Extensionality axiom}: If two sets have the same members, then they are equal. 
+	\begin{equation}
+		\forall a\forall b (\forall x (x\in a\iff x\in b)\implies a = b)
+	\end{equation}
+	
+	\item \textbf{Empty set axiom}: There is a set $\emptyset$ which has no members.
+	\begin{equation}
+		\exists a \forall x \neg(x\in a)
+	\end{equation}
+	
+	\item \textbf{Pairing axiom}: For any sets $u$ and $v$, there is a set $\{u, v\}$ whose members are exactly $u$ and $v$.
+	\begin{equation}
+		\forall u\forall v \exists x (\forall z (z\in x\implies z = u\vee z = v))
+	\end{equation}
+	
+	\item \textbf{Union axiom}: For any set $a$, there is a set $b$ (denoted $\bigcup a$) whose members are precisely the 
+	members of members of $a$. 
+	\begin{equation}
+		\forall a\exists b (\forall x (x\in b)\iff \exists c (c\in a\wedge x\in c))
+	\end{equation}
+	
+	\item \textbf{Subset axiom}: For any set $c$ and any first order formula $\Phi(x, t_1, ..., t_k)$, there is a set $b$ whose 
+	elements are precisely the elements of $c$ that satisfy $\Phi(x, t_1, ..., t_k)$. 
+	\begin{equation}
+		\forall c\forall t_1, ..., t_k\exists b (\forall x (x\in b)\iff x\in c\wedge \Phi(b, t_1, ..., t_k))
+	\end{equation}
+	
+	\item \textbf{Power set axiom}: For any set $a$, there is a set $b$ (denoted $\mathcal P a$) whose elements are 
+	precisely the subsets of $a$.
+	\begin{equation}
+		\forall a\exists b (\forall x (x\in b)\iff \forall y (y\in x\implies y\in a))
+	\end{equation}
+	
+	\item \textbf{Infinity axiom}: There exists an inductive set.
+	\begin{equation}
+		\exists a (\emptyset\in a\wedge \forall b\in a (b^+\in a))
+	\end{equation}
+	
+	\item \textbf{Replacement axiom}: 
+	
+	\item \textbf{Regularity axiom}: 
+	
+	\item \textbf{Axiom of choice}: For any relation $R$, there is a function $G\subseteq R$ such that $dom(G) = dom(R)$. 
+	\begin{equation}
+		\forall a\forall R ((R\subset a\times a)\iff (\exists G\subseteq R) (dom(G) = dom(R)))
+	\end{equation}
+
+\end{enumerate}
+
+We will now discuss the importance of the first six axioms listed here. We will eventually have the tools needed to discuss 
+Axioms 7 - 10 in depth, but at the moment these axioms are best studied after some additional knowledge is built up.
+
+\subsection{Extensionality and empty set axioms}
+
+These are the most basic axioms of set theory, yet give us a surprising amount of power. Extensionality allows us to know 
+when two sets are equal; this is if they have exactly the same members, which is quite an obvious statement. However, using 
+this axiom allows us to make well-defined definitions of types of sets; in other words, we can\footnote{Almost; we must also 
+prove the existence of the set which has been defined.} specify a set using \textbf{set builder} notation. This is a completely 
+unambiguous notation which allows one to specify a set's elements exactly. However, we will see later that we need the 
+subset axiom to do this correctly, as simply defining the elements of a set does not prove that such a set \textbf{exists}. 
+
+The \textbf{empty set} axiom gives us our first element to work with in set theory. At the time this axiom is introduced, no sets 
+actually exist; it is the first of its kind, which gives the empty set a special role in set theory. Without other axioms, the only 
+set which exists is the empty set. 
+\begin{theorem}
+	There is a unique set which has no members
+\end{theorem}
+This follows immediately from its definition and the extensionality axiom. 
+
+\subsection{Pairing and union axioms}
+
+The pairing axiom can be used in conjunction with the empty set axiom to start constructing sets, although these sets are rather 
+limited. First, we can use the pairing axiom with $u = v = \emptyset$ to create the set $\{\emptyset\}$. We can then join together 
+copies of these sets to create 2-element sets. However, it is severely limited; pairing can only be used to produce sets with 
+two elements, and we should be able to produce sets with arbitrary amounts of elements. This is done precisely by the union 
+axiom. The union of a set is unique, because as with all other sets, specifying exactly the elements as we have done means 
+we may use the extensionality axiom. We denote the union of the set $\{c, d\}$ (which we note exists by pairing) by $c\cup d$. 
+Given $n$ sets $\{c_j\}_{j = 1}^n$, we can inductively construct the union of this set by:
+\begin{equation}
+	\bigcup_{j = 1}^n c_j := \left(\bigcup_{j = 1}^{n - 1} c_j\right)\cup c_n
+\end{equation}
+
+We can now build sets which have more than 2 elements. Suppose we wish to construct $\{a, b, c\}$. Then we can use the 
+pairing axiom to build $\{a, b\}$ and the set $\{c\}$, then union these to form $\{a, b, c\}$, i.e. $\{a, b, c\} = \{a, b\}\cup\{c\}$. 
+
+As one final note on this subject, in proofs it is often easiest to use the following fact: we have $x\in\bigcup a$ if there is $b\in a$ 
+such that $x\in b$. 
+
+\subsection{Subset axiom}
+
+The subset axiom is necessary to prevent paradoxes which may be encountered when studying certain types of sets. The 
+most famous example of this is \textbf{Russel's paradox}, which states that if the set $a = \{x : x\notin x\}$ exists, we have a 
+contradiction. This leads to the following theorem. 
+\begin{theorem}
+	There is no set of all sets, i.e. there is no set which contains all other sets as elements.
+\end{theorem}
+\begin{proof}
+	Suppose that $M$ was such a set. Then we can construct the set $\{x\in M : x\notin x\}$ and obtain Russell's paradox, 
+	a contradiction. 
+\end{proof}
+
+\textbf{The easiest way to show a set exists is to exhibit that it is a subset of an existing set}. This will be our method of proof 
+when trying to construct sets. In other words, if you can use the set builder notation:
+\begin{equation}
+	\{x\in a : \Phi(x, t_1, ..., t_k)\}
+\end{equation}
+where $a$ is a set which we have previously shown exists, then \textbf{this set exists}. 
+
+We can use the subset axiom to define the intersection of sets, which we will do in the following way. 
+\begin{prop}
+	Let $a$ and $b$ be two sets. Then there is a unique set $c$ whose elements are precisely the members of $a$ and $b$, 
+	and $c$ is unique.
+\end{prop}
+\begin{proof}
+	Apply the subset axiom with the formula $\Phi(x, a, b) = x\in a\wedge x\in b$ to the set $a$, i.e. the set $c$ is the 
+	following:
+	$$
+		c = \{x\in a : x\in b\}
+	$$
+	That $c$ is unique follows from extensionality.
+\end{proof}
+\begin{definition}[Intersection]
+	The set $c$ is denoted $a\cap b$, and called the \textbf{intersection} of $a$ and $b$. 
+\end{definition}
+
+\begin{prop}
+	Let $A\neq\emptyset$. Then there is a set $B$, denoted $\bigcap A$ whose elements are precisely the sets which are 
+	members of \textbf{all} members of $A$.
+\end{prop}
+\begin{proof}
+	$A\neq\emptyset$, so pick $c\in A$. Then we can construct the following set:
+	$$
+		B = \{x\in c : \forall C (C\in A\iff x\in C)\}
+	$$
+\end{proof}
+
+\subsection{Power set axiom and set algebra}
+
+The power set axiom is only needed for infinite sets; it would be possible to construct the power set of a finite set with 
+the union and subset axioms we have already seen. Now that we can construct all subsets of any set, we can worry about 
+how to deal with subsets and what operations we can use on them. Namely, we will discuss \textbf{set algebra} and how 
+different operations relate to one another.
+
+\begin{definition}[Relative Complement]
+	For sets $A, B$, the \textbf{relative complement} of $B$ in $A$ is the set:
+	\begin{equation}
+		A\setminus B = \{x\in A : x\notin B\}
+	\end{equation}
+\end{definition}
+
+Now that we have all the major set operations, we can enumerate some important laws when dealing with set algebra. The first 
+are the \textbf{distributive laws}:
+$$
+	A\cup (B\cap C) = (A\cup B)\cap (A\cup C)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; A\cap (B\cup C) = (A\cap B)\cup (A\cap C)
+$$
+$$
+	A\cup (\bigcap B) = \bigcap \{A\cup b : b\in B\}\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; A\cap (\bigcup B) = \bigcup \{A\cap 
+	b : b\in B\}
+$$
+As important as these are \textbf{DeMorgan's laws}:
+$$
+	C\setminus (A\cup B) = (C\setminus A)\cap (C\setminus B) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; C\setminus (A\cap B)
+	= (C\setminus A)\cup (C\setminus B)
+$$
+$$
+	C\setminus (\bigcup A) = \bigcap \{C\setminus a : a\in A\} \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; C\setminus (\bigcap A) 
+	= \bigcup\{C\setminus a : a\in A\}
+$$
+
+\subsection{Axiom of Choice}
+
+The axiom of choice is perhaps the most controversial axiom in set theory. Although it is quite intuitive, assuming this axiom 
+often leads to many non-intuitive results, while at the same time gives one a very useful tool for proofs dealing with infinite sets. 
+
+TODO
+
+\newpage
+\section{Ordered Pairs, Relations, and Functions}
+
+We now turn to the discussion of ordered pairs, and how these will give us a way to define relations and functions. We will 
+formalize the notion of an ordered pair and discuss how to write one explicitly as a set, then develop relations and functions 
+as specific types of sets of ordered pairs. 
+
+\subsection{Ordered Pairs}
+
+As you have most likely seen before, an ordered pair is an object of the form $(a, b)$. We will seek to encode this pair 
+specifically as a set. Note that $(a, b)$ is a different object than $\{a, b\}$; to see this, $(a, b)\neq (b, a)$ unless $a = b$, while 
+the sets $\{a, b\}$ and $\{b, a\}$ are equal. Ordered pairs also do not collapse under repeated elements, i.e. the ordered 
+pair $(a, a)$ does not equal the tuple $(a)$. We will use the notation $\langle a, b\rangle$ interchangeably with $(a, b)$. 
+
+\begin{definition}[Ordered Pair]
+	Let $x$ and $y$ be sets. Then the \textbf{ordered pair} $(x, y)$ is defined to be:
+	\begin{equation}
+		(x, y) := \{\{x\}, \{x, y\}\}
+	\end{equation}
+\end{definition}
+
+\begin{prop}
+	If $(a, b) = (c, d)$, then $a = c$ and $b = d$. 
+\end{prop}
+
+\begin{proof}
+	Suppose that $(a, b) = (c, d)$. If $a = b$, then $(a, b) = \{\{a\}\}$ contains 1 element, so $\{c\} = \{c, d\}\implies c = d$, 
+	and so $\{\{a\}\} = \{\{c\}\}$, hence $a = b = c = d$. Suppose $a\neq b$. Then $\{\{a\}, \{a, b\}\} = \{\{c\}, \{c, d\}\}$, hence 
+	$\{a\} = \{c\}$ and $\{a, b\} = \{c, d\}$ because the number of the elements in each of these sets are the same. Thus 
+	$a = c$ and $b = d$, so we are done.
+\end{proof}
+
+We see that this definition of an ordered pair indeed has the properties that we want; namely, that the order in the pair matters. 
+We will now define the product of sets and prove that it exists.
+
+\begin{definition}[Cartesian Product]
+	If $A$ and $B$ are sets, the \textbf{Cartesian product} of $A$ and $B$, denoted $A\times B$, is the set of pairs of the 
+	form $(a, b)$ for $a\in A$ and $b\in B$.
+\end{definition}
+
+To show that $A\times B$ exists for sets $A$ and $B$, the easiest way to approach this is to use the subset axiom. Namely, we 
+want to find a set which contains $A\times B$ as a subset.
+
+\begin{lemma}
+	If $x\in A$ and $y\in B$, then $(x, y)\in \mathcal P\mathcal P (A\cup B)$. 
+\end{lemma}
+
+The proof of this lemma is immediate from the definition of $(x, y)$. It also proves the existence of $A\times B$ for given sets 
+$A$ and $B$, because we can see that:
+$$
+	A\times B = \{(a, b)\in \mathcal P\mathcal P (A\cup B) : a\in A, b\in B\}
+$$
+
+For notation's sake, we will denote $A\times A$ by $A^2$. As another quick lemma, we have the following statement which is 
+often useful to remember when we deal with relations in the next subsection.
+
+\begin{lemma}
+	If $(x, y)\in A$, then $x$ and $y$ are in $\bigcup\bigcup A$. ~
+	\label{lemma:3d}
+\end{lemma}
+
+Finally, note that now we have defined pairs, we can define $n$-tuples for $n \geq 1$. We will give an inductive definition as to 
+not clutter the definitions.
+
+\begin{definition}[$n$-tuple]
+	For sets $x_1, ..., x_n$, we define the \textbf{$n$-tuple} to be:
+	\begin{equation}
+		(x_1, ..., x_n) := ((x_1, ..., x_{n - 1}), x_n)
+	\end{equation}
+\end{definition}
+
+\subsection{Relations and Functions}
+
+We begin with the definition of a relation, as well as some basic terminology we will need.
+
+\begin{definition}[Relation]
+	A \textbf{relation} is a set of ordered pairs. If $R$ is a relation, we use the notation $xRy$ to denote $(x, y)\in R$. 
+\end{definition}
+
+\begin{definition}
+	Let $R$ be a relation. Then the \textbf{domain} of $R$ is:
+	\begin{equation}
+		dom(R) := \{x : \exists y (x, y)\in R\}
+	\end{equation}
+	The \textbf{range} of $R$ is:
+	\begin{equation}
+		ran(R) := \{y : \exists x (x, y)\in R\}
+	\end{equation}
+	The \textbf{field} of $R$ is:
+	\begin{equation}
+		fld(R) := dom(R)\cup ran(R)
+	\end{equation}
+\end{definition}
+
+To prove that these sets exists, it suffices to show they are a subset of an already constructed set. Note that by 
+Lemma~\ref{lemma:3d}, we know that $dom(R)$ and $ran(R)$ are subsets of $\bigcup\bigcup R$. Thus these sets do in 
+fact exist. We now define the notion of a function.
+
+\begin{definition}[Function]
+	A \textbf{function} $F$ is a relation such that for each $x\in dom(F)$, there is exactly one $y$ with $(x, y)\in F$. This 
+	$y$ is called the \textbf{image} of $x$ under $F$, and denoted $y = F(x)$. 
+\end{definition}
+
+\begin{definition}
+	We say $F$ is a function from $A$ to $B$ if $A = dom(F)$ and $ran(F) \subseteq B$. If $ran(F) = B$, we say that $F$ is 
+	\textbf{surjective}. If for each $y\in ran(F)$ we have a unique $x$ with $y = F(x)$, then we say $F$ is \textbf{injective}. 
+\end{definition}
+
+This definition of a function is probably very different than what one would typically think of as a function; usually a function 
+is thought of as an abstract rule which associates an output with any input, yet we just defined it as what is usually considered 
+to be the \textbf{graph} of a function. However, this definition allows us to encode all the information from a function into a 
+single set $F$, and so we now can use all of the axioms we have stated to deal with functions. 
+
+We now turn our attention to creating new relations from existing ones. We will apply these ideas to functions as well, as we will 
+be able to specify things more precisely with functions.
+
+\begin{definition}
+	Let $R, S$ be relations.
+	\begin{enumerate}
+		\item The \textbf{inverse} of $R$ is the relation:
+		\begin{equation}
+			R^{-1} := \{(v, u) : (u, v)\in R\}
+		\end{equation}
+		\item The \textbf{composition} of $R$ and $S$ is the set:
+		\begin{equation}
+			R\circ S := \{(u, v) : \exists t (uSt\wedge tRv)\}
+		\end{equation}
+		\item The \textbf{restriction} of $R$ to a set $A$ is the set:
+		\begin{equation}
+			R|_A := \{(u, v) : u\in A\wedge uRv\}
+		\end{equation}
+		\item The \textbf{image} of a set $A$ under $R$ is:
+		\begin{equation}
+			R[A] := ran(R|_A)
+		\end{equation}
+	\end{enumerate}
+\end{definition}
+
+To remember the definition $R\circ S$, think of these as functions $F\circ G$ acting on $x$. If $(x, z)\in F\circ G$, then $z = 
+F(G(x))$, i.e. we can find $y$ with $y = G(x)$ and $z = F(y)$, equivalently $x G y$ and $y F z$. We will study composition 
+in the specific case of functions.
+
+\begin{prop}
+	If $F$ and $G$ are functions, then $F\circ G$ is a function whose domain is:
+	\begin{equation}
+		dom(F\circ G) := \{x\in dom(G) : G(x)\in dom(F)\}
+	\end{equation}
+\end{prop}
+\begin{proof}
+	TODO.
+\end{proof}
+
+\begin{definition}[Identity]
+	Let $A$ be a set. Then we define the \textbf{identity function} of $A$ to be:
+	\begin{equation}
+		I_A := \{(a, a) : a\in A\}
+	\end{equation}
+	If $F : A\rightarrow B$ is a bijection, then $F^{-1}$ is a function and $F\circ F^{-1} = I_B$, $F^{-1}\circ F = I_A$. 
+\end{definition}
+
+\begin{theorem}
+	Assume $F : A\rightarrow B$ and $A\neq\emptyset$. 
+	\begin{enumerate}
+		\item There is a function $G : B\rightarrow A$ such that $G\circ F = I_A$ (a \textbf{left inverse}) iff $F$ is injective.
+		\item There is a function $G : B\rightarrow A$ such that $F\circ G = I_B$ (a \textbf{right inverse}) iff $F$ is onto $B$. 
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO. 
+\end{proof}
+
+Note that to prove one direction of the surjective part of the theorem, we need to use the axiom of choice. Our original 
+formulation of this axiom states that we can choose one element of the range of each element of a relation to turn it into a 
+function.
+
+\begin{definition}[Single-rooted]
+	A relation $R$ is \textbf{single-rooted} if for each $y\in ran(R)$, there is a unique $x\in dom(R)$ such that $x R y$. 
+\end{definition}
+
+Single rooted relations are the analogs of injective functions, and they are useful because they preserve certain equalities 
+among the set algebra.
+
+\begin{theorem}
+	Let $R$ be a relation. Then for any set $\mathcal A$, we have the following.
+	\begin{enumerate}
+		\item \begin{equation}R\left[\bigcup\mathcal A\right] = \bigcup_{A\in\mathcal A}R[A]\end{equation}
+		\item \begin{equation}R\left[\bigcap\mathcal A\right]\subseteq \bigcap_{A\in\mathcal A} R\left[A\right]\end{equation} 
+		with equality iff $R$ is single-rooted.
+		\item \begin{equation}R\left[A\setminus B\right]\supseteq R\left[A\right]\setminus R\left[B\right]\end{equation} with 
+		equality iff $R$ is single-rooted.
+	\end{enumerate}
+\end{theorem}
+\begin{proof} TODO \end{proof}
+
+These theorems give rise to immediate corollaries about the inverse relations of functions. These are extremely useful in 
+areas of math like topology, where the preimage of open sets is used to determined if a function is continuous or not.
+
+\begin{lemma}
+	For any function $G$ and sets $A, B$, and $\mathcal A$, we have:
+	\begin{enumerate}
+		\item \begin{equation}G^{-1}\left[\bigcup\mathcal A\right] = \bigcup\{G^{-1}[A] : A\in\mathcal A\}\end{equation}
+		\item If $\mathcal A\neq\emptyset$, we have:
+		\begin{equation}
+			G^{-1}\left[\bigcap\mathcal A\right] = \bigcap\{G^{-1}[A] : A\in\mathcal A\}
+		\end{equation}
+		\item \begin{equation}G^{-1}[A\setminus B] = G^{-1}[A]\setminus G^{-1}[B]\end{equation}
+	\end{enumerate}
+\end{lemma}
+
+\subsection{Equivalence Relations}
+
+\begin{definition}
+	Let $R$ be a relation on a set $A$. Then:
+	\begin{itemize}
+		\item $R$ is \textbf{reflexive} if for each $x\in A$, $x R x$. 
+		\item $R$ is \textbf{symmetric} if for all $x, y$, $x R y$ implies $y R x$. 
+		\item $R$ is \textbf{transitive} if for all $x, y, z$, $x R y$ and $y R z$ implies that $x R z$. 
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Equivalence Relation]
+	$R$ is an \textbf{equivalence relation} on $A$ if $R$ is a relation on $A$ and $R$ is reflexive, symmetric, and transitive. 
+	If $R$ is an equivalence relation on $A$ and $x\in A$, the set:
+	\begin{equation}
+		[x]_R := \{t : x R t\}
+	\end{equation}
+	is called the \textbf{equivalence class} of $x$ modulo $R$. We denote the set of equivalence classes on $A$ modulo 
+	$R$ by $A / R$, called the \textbf{quotient} of $A$ mod $R$. 
+\end{definition}
+
+We will show that the equivalence classes of an equivalence relation form a partition of a set, and that one can equally well 
+describe such a relation with the relation itself, the equivalence classes, or the canonical projection map it induces.
+
+\begin{definition}[Partition]
+	A partition $\Pi$ of a non-empty set $A$ is a set of subsets of $A$ such that:
+	\begin{itemize}
+		\item $\emptyset\in\Pi$. 
+		\item $\forall B, C\in\Pi, B\neq C\implies B\cap C = \emptyset$.
+		\item $A = \bigcup\Pi$. 
+	\end{itemize}
+\end{definition}
+
+\begin{lemma}
+	Let $R$ be an equivalence relation on $A$. Let $x, y\in A$. Then:
+	\begin{itemize}
+		\item $x\in [x]_R$.
+		\item If $xRy$, then $[x]_R = [y]_R$. 
+		\item If $(x, y)\notin R$, then $[x]_R\cap [y]_R = \emptyset$. 
+	\end{itemize}
+	In other words, the equivalence classes of $R$ form a \textbf{partition} of $A$.
+\end{lemma} 
+
+Suppose that $f : A\rightarrow B$ is a function. We may define a relation $E_f$ by $x E_f y$ iff $f(x) = f(y)$. This is in fact 
+an equivalence relation. Given a set of equivalence classes $\{[x]_R : x\in A\}$ on a set $A$, we can construct a function 
+$f : A\rightarrow A / R, x\mapsto [x]_R$. Then the equivalence clases $[x]_R$ will be exactly the equivalence classes of the 
+relation $E_f$. 
+
+As in algebra, every equivalence relation induces a canonical map into the quotient, $\pi_R : A\rightarrow A / R, x\mapsto 
+[x]_R$. Given the projection $\pi_R$, we have $R = E_{\pi_R}$. This is because $\pi_R(x) = \pi_R(y)$ iff $x R y$, so $x 
+E_{\pi_R} y$ iff $x R y$. 
+
+Finally, given a partition $\Pi$, we can construct an equivalence relation $R_\Pi$ by $x R_\Pi z$ iff $\exists z\in Pi$ such that 
+$x\in z$ and $y\in z$. This relation satisfies $\Pi = A / R_\Pi$. We see that given one of the following:
+\begin{itemize}
+	\item A relation on $A$.
+	\item The partition $A / R$. 
+	\item The canonical projection $\pi : A\rightarrow A / R$. 
+\end{itemize}
+we can construct the other two descriptions of a corresponding equivalence relation without any ambiguity. Thus, any of these 
+descriptions equivalently identifies an equivalence relation on $A$. 
+
+As one last topic in this section, we will discuss maps between quotients. Let $R$ be an equivalence relation and $G : 
+A / R\rightarrow B$ a function. Then we can lift $G$ to $A$ by defining $\hat G = G\circ\pi_R$, i.e. the following diagram 
+commutes.
+\[
+	\begin{tikzcd}
+		A \arrow[r, "\hat G"] \arrow[d, "\pi_R"] & B \\
+		A / R \arrow[ru, "G"] & {} \\
+	\end{tikzcd}
+\]
+
+However, the interesting question is to consider the other direction: when can we factor a map through the quotient?
+\begin{lemma}
+	Let $R$ be an equivalence relation on $A$ and $F : A\rightarrow B$ a function. Then we can factor $F$ through $A / R$ 
+	iff $\forall x, y\in A, x R y\implies F(x) = F(y)$ (i.e. $F$ sends each member of each equivalence class to the same image, 
+	$F$ is \textbf{constant} on each equivalence class). In other words, we can find $\tilde F : A / R\rightarrow B$ such that 
+	the diagram commutes.
+\[
+	\begin{tikzcd}
+		A \arrow[d, "\pi"] \arrow[dr, "F"] & {} \\
+		A / R \arrow[r, "\tilde F"] & B \\
+	\end{tikzcd}
+\]
+\end{lemma}
+
+There is one more notion of a function respecting an equivalence relation. Let $F : A\rightarrow A$ be a function, $R$ an 
+equivalence relation on $A$. We say that $F$ is \textbf{compatible with $R$} if $xRy\implies F(x) R F(y)$. If this is the case, 
+then we can find $\tilde F : A / R\rightarrow A / R$ such that $[F(x)]_R = \tilde F([x]_R)$, i.e. we can factor $F$ through the 
+following commutative square.
+\[
+	\begin{tikzcd}
+		A \arrow[r, "F"] \arrow[d, "\pi"] & A \arrow[d, "\pi"] \\
+		A / R \arrow[r, "\tilde F"] & A / R \\
+	\end{tikzcd}
+\]
+
+\newpage
+\section{Number Systems}
+
+In this section, we will explicitly construct the most common number systems used in mathematics: the naturals, the integers, 
+the rationals, and the reals. Although you have most likely already seen each of these number systems used in different areas 
+in math, this section will show that these numbers \textit{actually exist} as concrete mathematical entities. We will build 
+them up from scratch using the set theory that we have already established (introducing one new axiom on the way), and 
+exhibit that the structures we construct share the important properties of each of these number systems.
+
+\subsection{The Natural Numbers $\mathbb N$}
+
+The natural numbers are the building blocks of all mathematics; they give us a way to quantify objects by counting, and from 
+this number system we can construct many other more intricate systems. \textit{In these notes, we will denote the set of natural 
+numbers by the symbol $\omega$}. This notation will be useful later as we study ordinals later.As you are probably well aware, 
+the set $\omega = \{0, 1, 2, 3, ...\}$\footnote{Although in many areas of math $\omega$ starts at 1, when constructing the 
+number system we generally take it to start at 0 and associate this with the empty set. For the positive natural numbers, we 
+will use the symbol $\omega^+$.} and is equipped with two canonical operations
+addition $+_\omega : \omega\times\omega\rightarrow\omega$ and multiplication $\cdot_\omega : 
+\omega\times\omega\rightarrow\omega$. We also require a relation $<_\omega\subset\omega\times\omega$ which describes 
+exactly how the natural numbers are ordered, and satisfies some intuitive properties.
+We will soon see precisely how to define the system $(\omega, +_\omega, \cdot_\omega, <_\omega)$, and then state and 
+prove some statements that may be familiar to you from your discrete math class. Note that I will often drop the subscripts on 
+the $+, \cdot$, and $<$ symbols.
+
+In constructing $\omega$, we are looking to associate each number with a set that we will specify, similar to how we 
+encoded the definition of a tuple into a set definition. We will define the $+$ and 
+$\cdot$ operations on these sets, and we will show that this association of sets with the number system forms a Peano 
+system\footnote{The Peano axioms are the basic properties that the set $\omega$ must satisfy.}. The easiest way to 
+do this is to first make the assignment $0 := \emptyset$ and count up from this definition. The most obvious choice for 
+1 is to let it be the set containing 0 and so on, i.e. we let $1 := \{0\}$, $2 := \{1\}$, $3 = \{2\}$, continuing forever. However, 
+this assignment makes it difficult to order the natural numbers. We must have $0 < 1 < 2 < 3 < ...$, but there is no clear 
+definition of $<_\omega$ in this case. Instead, we make the following definition.
+
+\begin{definition}[Successor]
+	Let $a$ be a set. The \textbf{successor} of $a$, denoted $a^+$, is the set:
+	\begin{equation}
+		a^+ := a\cup\{a\}
+	\end{equation}
+\end{definition}
+
+We will represent each natural number as the successor of the preceding number, with 0 being defined as the empty set. 
+This is known as the \textbf{von-Neumann representation} of the natural numbers. For the first few numbers, this looks like the 
+following:
+\begin{equation}
+\begin{cases}
+	0 := \emptyset \\
+	1 := 0^+ = \{\emptyset\} = \{0\} \\
+	2 := 1^+ = \{\emptyset, \{\emptyset\}\} = \{0, 1\} \\
+	3 := 2^+ = \{0, 1, 2\} \\
+	\cdots
+\end{cases}
+\end{equation}
+Note that for each of these small numbers, we may write $n = \{0, 1, 2, ..., n - 1\}$. This is no accident, and in fact will hold for 
+a general $n\in\omega$, once we complete the definition of $\omega$. 
+
+\begin{definition}[Inductive set]
+	A set $a$ is \textbf{inductive} if $\emptyset\in a$ and if $b\in a$ implies $b^+\in a$. 
+\end{definition}
+
+In other words, an inductive set contains 0 and contains the successor of every element in it. Notice that the natural numbers 
+will end up being the smallest possible inductive set, as they contain $0, 1, 2, 3$, and so on. However, under the axioms of set 
+theory we have currently discussed (axioms 1 - 6) we cannot prove the existence of or construct an inductive set. Hence 
+we require axiom 7 to postulate the existence of the natural numbers, which we will restate here for convenience.
+
+\begin{axiom}[Infinity axiom]
+	There exists an inductive set.
+\end{axiom}
+\begin{definition}[Natural number]
+	A \textbf{natural number} is a set which belongs to all inductive sets. We let $\omega$ denote the set of natural numbers.
+\end{definition}
+Note that we can define $\omega$ now by the subset axiom. Pick an inductive set $a$ by the infinity axiom, then define 
+$\omega$ to be:
+\begin{equation}
+	\omega := \{n\in a : \forall b (b\textnormal{ inductive}\implies n\in b)\}
+\end{equation}
+By examining this construction of $\omega$, it is clear that $\omega$ is an inductive set. Indeed, $\emptyset$ is contained 
+in every inductive set, and if $n\in\omega$, then $n$ is in every inductive set, hence $n^+$ is contained in every set, and 
+hence $n^+\in\omega$. We state this as a proposition.
+
+\begin{prop}
+	$\omega$ is inductive.
+\end{prop}	
+
+This proposition, although obvious, will now allow us to state the induction principle, which is a key property of the natural 
+numbers. 
+\begin{theorem}[Induction Principle]
+	Any inductive subset of $\omega$ is $\omega$.
+\end{theorem}
+\begin{proof}
+	If $a\subseteq\omega$ is inductive, then $\omega\subseteq a$ by its definition as the smallest inductive set, hence 
+	$a = \omega$.
+\end{proof}
+
+The inductive principle is the induction that you know and love, just wrapped in layers of abstraction. To use it like induction, 
+we must prove that a subset $a\subseteq\omega$ is inductive. We do this by showing:
+\begin{enumerate}
+	\item $0\in a$. This is equivalent to showing a base case for the induction.
+	\item $n\in a$ implies $n^+\in a$. This is equivalent to the inductive step; If you assume something holds for case $n$ 
+	(i.e. $n\in a$), then you must show that it holds for $n^+$ (i.e. $n^+\in a$). 
+\end{enumerate}
+Many of the following proofs about the set $\omega$ will use induction as a tool. Upon studying them carefully, it will become 
+intuitive that the induction principle is the same as the induction you are used to.
+
+\begin{prop}
+	Every nonzero natural number $n$ is the successor of another natural number. 
+\end{prop}
+\begin{proof}
+	Let $P = \{n\in\omega : n = 0\vee\exists m\in\omega (n = m^+)\}$. We show that $P$ is inductive. Clearly $0\in P$, 
+	so assume that $n\in P$. Then $n\in\omega$, so $n^+\in P$ by definition. Hence $P$ is inductive, so $P = \omega$.
+\end{proof}
+
+Along with a set being inductive, there is another important quality a set may have that will be of use to us as we continue 
+to study $\omega$; it is called transitivity, not to be confused with transitivity of a relation.
+
+\begin{definition}[Transitive]
+	A set $a$ is transitive if:
+	\begin{equation}
+		\forall x\in a\forall y\in x (y\in a)
+	\end{equation}
+\end{definition}
+
+An easy way to remember this (and why it is called a transitive set) is that $a$ is transitive if $y\in x\in a$ implies that 
+$y\in a$, i.e. if the symbol $\in$ is ``transitive". Note that there are three equivalent definitions of a set being transitive. 
+$a$ is transitive if and only if:
+\begin{itemize}
+	\item $y\in x\in a\implies y\in a$
+	\item $a\subseteq Pa$
+	\item $\forall b\in a, b\subseteq a$
+\end{itemize}
+
+\begin{lemma}
+	If $a$ is transitive, then $a = \bigcup a^+$.
+\end{lemma}
+\begin{proof}
+	$\bigcup a^+ = \bigcup a\cup\{a\} = (\bigcup a)\cup a = a$ since $\bigcup a\subseteq a$ because $a$ is transitive.
+\end{proof}
+
+\begin{prop}
+	Every natural number $n$ is a transitive set.
+\end{prop}
+\begin{proof}
+	Let $P = \{n\in\omega : n\textnormal{ is transitive}\}$. Then $\emptyset\in P$ as it has no members. Suppose that 
+	$n\in P$. Then $\bigcup n^+ = n\subseteq n$, so $n^+$ is transitive, hence $n^+\in P$, which shows that $P = \omega$.
+\end{proof}
+
+\begin{prop}
+	$\omega$ is a transitive set.
+\end{prop}
+\begin{proof}
+	Again by induction. Let $P = \{n\in\omega : n\subseteq\omega\}$. Then $\emptyset\in P$ and if $n\in P$, $n^+ = n\cup
+	\{n\}\subseteq\omega$ because $n\subseteq\omega$ and $\{n\}\subseteq\omega$, so $P$ is inductive.
+\end{proof}
+
+Notice that although we do not define the ``predecessor" operation, for nonzero $n$ the previous natural number is 
+$\bigcup n$, as $n = \bigcup n^+$. This proves the following claim.
+\begin{prop}
+	The function $\omega\rightarrow\omega, n\mapsto n^+$ is injective. 
+\end{prop}
+
+Our next goal is to build up the operations of addition and multiplication on $\omega$. We will do this by recursively defining 
+these operations, but first we need to define what we mean by recursion. We will use the following theorem.
+
+\begin{theorem}[Recursion]
+	Let $A$ be a set, $a\in A$ and $F : A\rightarrow A$. Then there exists a unique function $h : \omega\rightarrow A$ 
+	such that:
+	\begin{enumerate}
+		\item $h(0) = a$
+		\item $\forall n\in\omega, h(n^+) = F(h(n))$
+	\end{enumerate}
+\end{theorem}
+For notation which may be a little more intuitive, notice that this theorem allows us to define a sequence by defining $a_0$ and 
+$a_{n^+} = F(a_n)$, i.e. the function $h$ represents a sequence of elements of $A$, and $F$ tells us how to get from 
+one element in the sequence to the next. The proof of this is involved, but can be found in any textbook on the subject or the 
+internet. Using recursion, we may now define addition and multiplication.
+
+\begin{definition}[Addition]
+	For $m\in\omega$, use recursion to define a function $A_m : \omega\rightarrow\omega$ with $A_m(0) := m$ 
+	and $A_m(n^+) := A_m(n)^+$ (here $F : \omega\rightarrow\omega$ with $F(k) = k$). We define:
+	\begin{equation}
+		m + n := A_m(n)
+	\end{equation}
+\end{definition}
+
+\begin{definition}[Multiplication]
+	For $m\in\omega$, define $M_n : \omega\rightarrow\omega$ with $M_m(0) := 0$ and $M_m(n^+) := M_m(n) + m$. 
+	Define:
+	\begin{equation}
+		m\cdot n := M_m(n)
+	\end{equation}
+\end{definition}
+
+Without the clutter of $A_m$ and $M_m$, note that these definitions are equivalent to letting $m + 0 = m$, $m + n^+ = (m + 
+n)^+$, $m\cdot 0 = 0$, and $m\cdot n^+ = m\cdot n + m$, so these operations do exactly what we expect. We must now 
+prove that they have additional properties that we expect, so that we do not have to wonder whether an expression like $1 + 2$ 
+is the same as $2 + 1$. 
+
+\begin{theorem}
+	Addition and multiplication are associative and commutative. Addition distributes over multiplication, i.e. $m\cdot (n + p) 
+	= m\cdot n + m\cdot p$. 
+\end{theorem}
+
+\begin{proof}
+Fix a number in the equation you are trying to prove and induct on the other number. You will need 
+to prove the following lemma as well:
+\begin{lemma}
+	$\forall m\in\omega, 0 + m = m$
+\end{lemma}
+\end{proof}
+
+The last piece of the puzzle for $\omega$ is to define the ordering $<_\omega$. As each natural number has the form 
+$n = \{0, 1, 2, ..., n - 1\}$, we see that each $n\in\omega$ contains all smaller natural numbers. Indeed, we make the 
+definition of $<_\omega$ to be the membership operation.
+\begin{definition}[$<_\omega$]
+	For $m, n\in\omega$, define $m <_\omega n$ if $m\in n$. We write $m\leq_\omega n$ if $m <_\omega n$ or $m = n$. 
+\end{definition}
+
+\begin{lemma}
+	For $m, n\in\omega$, the following hold.
+	\begin{enumerate}
+		\item $m\in n$ iff $m^+\in n^+$. 
+		\item $m\not\in m$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{definition}[Linear ordering]
+	Let $<$ be a relation on a set $a$. We say that $<$ is a \textbf{linear ordering} on $a$ if:
+	\begin{enumerate}
+		\item $<$ is transitive.
+		\item The relation $<$ is a \textbf{trichotomy}, i.e. for any $x, y\in a$, \textit{precisely one of the following holds.}
+			\begin{itemize}[-]
+				\item $x < y$
+				\item $y < x$
+				\item $x = y$
+			\end{itemize}
+	\end{enumerate}
+\end{definition}
+
+\begin{theorem}
+	The relation $<_\omega$ is a linear ordering on $\omega$.
+\end{theorem}
+
+\begin{proof}
+	We have already shown that $<_\omega$ is a transitive relation by showing that each $n\in\omega$ is a transitive set. 
+	To show $<_\omega$ is a trichotomy, let $T = \{n\in\omega : \forall m\in\omega (n <_\omega m\wedge n = m\wedge 
+	m <_\omega n)\}$, and we show $T$ is inductive. Clearly $\emptyset\in T$, so let $n\in T$. We show that $n^+\in T$ 
+	as well. Let $m\in\omega$. Then either we have $m <_\omega n$, $m = n$, or $n <_\omega m$. Suppose that 
+	$m <_\omega n$. Then we have $m <_\omega n <_\omega n^+$, since $n\in n^+$. If $m = n$, then again $m <_\omega
+	n^+$. Finally, suppose that $m >_\omega n$. If $m = n^+$, we are done. If not, then $n^+\in m$, hence $n^+ <_\omega 
+	m$. In any case, we see that $n^+\in T$< so $T$ is a transitive set and we are done.
+\end{proof}
+
+Linear orderings will come up later in the course when we discuss another type of ordering called a well-ordering, so keep the 
+intuition in mind from the linearly ordered system $(\omega, <_\omega)$. To end this section, we will state a few simple 
+propositions and theorems about $(\omega, <_\omega)$. 
+
+\begin{corollary}
+	For all $m, n, p\in\omega$, we have:
+	\begin{enumerate}
+		\item $m <_\omega n\iff m\subset n$ (strictly).
+		\item $m\leq_\omega n\iff m\subseteq n$.
+		\item $m < n\iff m + p <_\omega n + p$
+		\item If $p\neq 0$, then $m < n\iff m\cdot p <_\omega n\cdot p$. 
+	\end{enumerate}
+\end{corollary}
+
+\begin{theorem}[Well-ordering property for $\omega$]
+	Let $A\subseteq\omega$ be nonempty. Then $A$ has a least element, that is, $\exists a\in A$ such that $a\leq b\forall 
+	b\in A$. 
+\end{theorem}
+\begin{proof}
+	Assume that $A$ does not have a least element. Let $B = \{n\in\omega : \forall m <_\omega n, m\notin A\}$ and show 
+	that $B$ is inductive. 
+\end{proof}
+
+\begin{theorem}[Strong induction principle]
+	Let $A\subseteq\omega$ and assume that $\forall a\in \omega$, if $\forall b < a, b\in A$, then $a\in A$. Then $A = 
+	\omega$.
+\end{theorem}
+\begin{proof}
+	Suppose that $\omega\neq A$, so $\omega\setminus A$ is nonempty. Then the set $\omega\setminus A$ has a least 
+	element, and show that this leads towards a contradiction.
+\end{proof}
+
+\newpage
+\subsection{The Integers $\mathbb Z$ and the Rational Numbers $\mathbb Q$.}
+
+We will now construct the integers and the rational numbers. The construction of both of these systems is quite similar; we 
+will take an existing structure ($\omega$ for the case of the integers, and $\mathbb Z$ for the case of the rationals) and 
+manipulate it via set products and quotients until we have an object that behaves as we wish it to. 
+
+We begin with the integers. As we have already constructed $\omega$, we have the numbers $0, 1, 2, 3, ...$ equipped with a 
+canonical addition and multiplication. We wish to include additive inverses in addition to the numbers in $\omega$ in the 
+form of $-1, -2, -3, ...$, such that the entire set forms a commutative ring under $+$ and $\cdot$. 
+
+\subsection{The Real Numbers $\mathbb R$}
+
+\section{Acknowledgements}
+
+These notes are primarily based on two sources. First, Pierre Simon's Math 135 lectures at the \textit{University of 
+California, Berkeley}. Second, the text \textit{Elements of Set Theory} by Herbert Enderton.
+
+\end{document}

@@ -1,0 +1,464 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}{Example}[section]
+
+\graphicspath{{/Users/theoares/Desktop/Math\ 142/notes}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Homotopy}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+	Homotopy is a method that we use to study the deformation of continuous maps. We will see that it provides another notion of topological equivalence, 
+	called \textbf{homotopy equivalence}, which is weaker than homeomorphism but provides a large amount of topological information nonetheless. We will 
+	define the notion of a \textbf{fundamental group} which can be used to easily calculate the homotopy type of a space, and develop different ways to calculate 
+	this group. Finally, we will discuss homotopy lifting and covering spaces, which provide a useful tool for calculating homotopy information about a specific 
+	space.
+	
+	For these notes, let $X$ and $Y$ be topological spaces. Recall that a \textbf{path} is a continuous map $\gamma : [0, 1]\rightarrow X$. 
+
+\section{Definitions}
+
+	We begin by defining the notion of homotopic maps, which will give us a method to define homotopy equivalence. 
+	
+	\begin{definition}[Homotopy]
+		Let $f, g : X\rightarrow Y$ be continuous maps. Then a \textbf{homotopy} $F$ from $f$ to $g$ is a continuous map $F : X\times [0, 1]\rightarrow Y$ such 
+		that $F(x, 0) = f(x)$ and $F(x, 1) = g(x)$ for all $x\in X$, which we denote by $f\simeq_F g$. If $A\subset X$ and $f(a) = F(a, t)$ for all $t\in [0, 1]$ and $a\in 
+		A$, then we say that $F$ is a homotopy from $f$ to $g$ \textbf{relative to $A$}, and we write this as $f\simeq_F g\textnormal{ rel }A$.
+	\end{definition}
+	
+	To illustrate the notion of homotopy, we now consider an important example.
+	
+	\begin{example}[Straight-Line Homotopy]
+	
+		Let $Y\subseteq\mathbb R^n$. We say that $Y$ is \textbf{convex} if any two points in $Y$ can be connected by a line segment lying in $Y$. Let $f, g : 
+		X\rightarrow Y$ be continuous maps from an arbitrary topological space $X$ to $Y$. Then we can construct a homotopy $F$ from $f$ to $g$, called 
+		the \textbf{straight-line homotopy}, by defining:
+		$$
+			F(x, t) := (1 - t)f(x) + g(x)
+		$$
+		Thus any two maps into a convex space are homotopic, which will be quite useful later.
+	
+	\end{example}
+	
+	To make the notion of homotopy more useful, we now show that homotopy relative to a set $A$ is an equivalence relation. This will allow us to quotient the 
+	set of maps by this relation and define the notion of a homotopy class, which is essential to defining the fundamental group of a space.
+	
+	\begin{theorem}
+		The relation $f\simeq g$ on the set $\{f : X\rightarrow Y | f\textnormal{ continuous}\}$ is an equivalence relation. Similarly, $f\simeq g$ rel $A$ is an 
+		equivalence relation.
+	\end{theorem}
+	
+	\begin{proof}
+		Reflexivity and symmetry are easy ($F(x, t) = f(x)$ and $G(x, t) = F(x, 1 - t)$). We show transitivity. Suppose that $f\simeq_F g$ and $g\simeq_G h$. 
+		We can define a homotopy $H : X\times [0, 1]\rightarrow Y$ by:
+		$$
+			H(x, t) := \begin{cases}
+				F(x, 2t) & t\in [0, \frac{1}{2}] \\
+				G(x, 2t - 1) & t\in [\frac{1}{2}, 1]
+			\end{cases}
+		$$
+		and it is easy to verify that this is a homotopy from $f$ to $h$. 
+	\end{proof}
+	
+	Homotopies behave well with respect to compositions of continuous maps as well. If $f, g : X\rightarrow Y$ are homotopic via $F$, then for any continuous 
+	$h : Y\rightarrow Z$, $h\circ f\simeq h\circ g$ via the homotopy $G : X\times [0, 1]\rightarrow Z, G(x, t) := h(F(x, t))$. We will now define a new notion of 
+	equivalence for topological spaces using homotopy.
+	
+	\begin{definition}[Homotopy Equivalence]
+		If $X$ and $Y$ are topological spaces, we say that they are \textbf{homotopy equivalent} if there are continuous functions $f : X\rightarrow Y$ and $g : 
+		Y\rightarrow X$ such that $g\circ f\simeq id|_X$ and $f\circ g\simeq id|_Y$. We call $f$ a \textbf{homotopy equivalence} from $X$ to $Y$, and $g$ its 
+		\textbf{homotopy inverse}. We write $X\simeq Y$ to denote that $X$ and $Y$ are homotopy equivalent. 
+	\end{definition}
+	
+	Note that homotopy equivalence is weaker than homeomorphism. This follows because if $f : X\rightarrow Y$ is a homeomorphism, then $f^{-1}$ is a 
+	homotopy inverse as well, since $id\simeq id$. Thus any two spaces which are homeomorphic are homotopy equivalent, but not necessarily vice versa. 
+	We prove a lemma.
+	
+	\begin{lemma}
+		Homotopy equivalence is an equivalence relation on topological spaces.
+	\end{lemma}
+	
+	The proof of this is easy; the hardest part is transitivity, which follows because homotopy and compositions behave nicely with one another. The last part of 
+	this section will deal with retracting spaces. We begin with the notion of a deformation retract.
+	
+	\begin{definition}[Deformation Retract]
+		Let $A\subseteq X$ be a subspace. A \textbf{deformation retract} of $X$ onto $A$ is a homotopy $G$ relative to $A$ from $id_X$ to a continuous function 
+		$g : X\rightarrow A$. In other words, it is a map $G : X\times [0, 1]\rightarrow X$ relative to $A$ such that $G(x, 0) = x$ and $G(x, 1)\in A$. 
+	\end{definition}
+	
+	If $X$ deformation retracts onto $A$, then the two spaces are homotopy equivalent. An equivalent definition of a deformation retract is the map $\iota\circ f : 
+	X\rightarrow X$, where $\iota : A\rightarrow X$ is the inclusion and a homotopy equivalence with homotopy inverse $f$. These two definitions are equivalent 
+	via $f(x) = \pi(G(x, 1))$, where $\pi$ projects $X$ onto $A$. Finally, we introduce what a contractible space is.
+	
+	\begin{definition}[Contractible Space]
+		We say that $X$ is \textbf{contractible} if there is a deformation retract of $X$ onto the one point space $\{x_0\}$, where $x_0\in X$ is a point. 
+	\end{definition}
+	
+	That a space is contractible will eventually show us its fundamental group is trivial. In this case, there are not many interesting things we can say about its 
+	structure with respect to homotopy. An example is $\mathbb R^n$, which is contractible because of the straight-line homotopy.
+
+\section{The Fundamental Group}
+
+	\begin{definition}[Fundamental Group]
+		Let $p\in X$ be a point. We define the \textbf{fundamental group of $X$ based at $p$} to be the set $\pi_1(X, p)$ of homotopy classes relative to $\{0, 1\}$ 
+		of continuous paths from $p$ to $p$, i.e:
+		$$
+			\pi_1(X, p) = \{[\gamma] | \gamma : [0, 1]\rightarrow X\textnormal{ is continuous, }\gamma(0) = \gamma(1) = p\}
+		$$
+	\end{definition}
+	
+	\begin{theorem}
+		$\pi_1(X, p)$ is a group under the operation:
+		$$
+			[\alpha][\beta] := [\alpha\cdot\beta]
+		$$
+		where $\alpha\cdot\beta : [0, 1]\rightarrow X$ is the path:
+		$$
+			(\alpha\cdot\beta)(t) = \begin{cases}
+				\alpha(2t) & t\in [0, \frac{1}{2}] \\
+				\beta(2t - 1) & t\in [\frac{1}{2}, 1]
+			\end{cases}
+		$$
+	\end{theorem}
+	
+	\begin{proof}
+		You can show this is a well defined operation. We will list out the important steps of the proof.
+		\begin{itemize}
+			\item \textbf{Identity} The identity loop is $e : [0, 1]\rightarrow X$ given by:
+			$$
+				e(x) = p
+			$$
+			If we wish to show that this gives an identity with the group operation, we can pick a loop $\alpha$ based at $p$ and show it is homotopic to $\alpha
+			\cdot e$. Indeed, this homotopy is given by $F : [0, 1]\times [0, 1]\rightarrow X$ defined as:
+			$$
+				F(x, t) = \begin{cases}
+					\alpha(\frac{2x}{2 - t}) & x\in [0, 1 - \frac{t}{2}] \\
+					p & x\in [1 - \frac{t}{2}, 1]
+				\end{cases}
+			$$
+		
+			\item \textbf{Inverse} Given $[\alpha]\in\pi_1(X, p)$, we can define its inverse by:
+			$$
+				\alpha^{-1}(t) = \alpha(1 - t)
+			$$
+			
+			\item \textbf{Associativity}: This is not too interesting, so refer to the notes.
+		\end{itemize}
+	\end{proof}
+	
+	Note that the base point $p$ of $\pi_1(X, p)$ does matter; we will show that if $X$ is path-connected, it does not, but two base points which lie in different 
+	components of $X$ can give different fundamental groups. First, we will show how we can induce homomorphisms of different fundamental groups. 
+	
+	The first way to do this is by changing the base point of the fundamental group. Suppose that there is a path $\gamma : [0, 1]\rightarrow X$ from $p$ to $q$. 
+	Then we may use $\gamma$ to give an isomorphism of fundamental groups. We define $\gamma_* : \pi_1(X, p)\rightarrow\pi_1(X, q)$ to be the map:
+	$$
+		\gamma_*([\alpha]) = [\gamma^{-1}\cdot\alpha\cdot\gamma]
+	$$
+	
+	This map will be an isomorphism of fundamental groups. In particular, this shows that in a path-connected space, the fundamental groups based at each point 
+	are isomorphic. However, this is not the only way to induce maps between fundamental groups. Suppose that we have a continuous map $f : X\rightarrow Y$ 
+	such that $f(p) = q$. Then we get a homomorphism of fundamental groups:
+	$$
+		f_* : \pi_1(X, p)\rightarrow\pi_1(X, q), \;\; f_*([\alpha]) = [f\circ\alpha]
+	$$
+	This is well defined because homotopy respects composition, and will be a homomorphism. Because it is a homomorphism, this implies that for loops $\alpha$ 
+	and $\beta$ based at $p$ and a continuous function $f : X\rightarrow Y$, we have:
+	$$
+		f\circ (\alpha\cdot\beta)\simeq (f\circ\alpha)\cdot (f\circ\beta)
+	$$
+	Furthermore, one can show that if $f : X\rightarrow Y$ is a homeomorphism, then $f_*$ is a group isomorphism. The map $f\mapsto f_*$ is actually a sort of 
+	covariant functor, as shown in the next theorem:
+	
+	\begin{theorem}
+		Let $f : X\rightarrow Y$ and $g : Y\rightarrow Z$ be continuous. Then:
+		$$
+			(g\circ f)_* = g_*\circ f_*
+		$$
+	\end{theorem}
+	
+	Now, we consider path-components of $X$.
+	
+	\begin{definition}[Path Component]
+		A \textbf{path component} is a subset $A\subseteq X$ which is path-connected, and such that if $A\subset B$ is strict, then $B$ is not path-connected.
+	\end{definition}
+	
+	\begin{theorem}
+		If $X$ is path-connected, then for any $p, q\in X$, $\pi_1(X, p)\cong\pi_1(X, q)$. 
+	\end{theorem}
+	
+	\begin{proof}
+		Since $X$ is path-connected, pick a path $\gamma : [0, 1]\rightarrow X$ from $p$ to $q$. We will show that $\gamma_* : \pi_1(X, p)\rightarrow\pi_1(X, 
+		q)$ given by $\gamma([\alpha]) = \gamma^{-1}\cdot\alpha\cdot\gamma$. This will be a group isomorphism.
+	\end{proof}
+	
+	If $X$ is a path-connected space, then this allows us to write $\pi_1(X)$ without loss of generality. We now state one last definition.
+	
+	\begin{definition}[Simply Connected]
+		A path-connected space $X$ is \textbf{simply connected} if its fundamental group is trivial.
+	\end{definition}
+
+\section{Orbit Spaces}
+
+	We now discuss the construction of a new space given an action of a group on an existing space. This construction will be called an \textbf{orbit space}, and 
+	allow us to compute the fundamental group of some spaces of interest.
+	
+	\begin{definition}[Group Action]
+		Let $G$ be a group. We say $G$ acts on a space $X$ if:
+		\begin{enumerate}
+			\item $\forall g\in G$, $g$ defines a homeomorphism $f_g : X\rightarrow X$.
+			\item $\forall g, h\in G$, $f_{gh} = f_g\circ f_h$. 
+			\item If $e\in G$ is the identity, then $f_e = id_X$
+		\end{enumerate}
+		Furthermore, we say that $G$ \textbf{acts nicely} (properly discontinuously) on $X$ if $G$ acts on $X$ and:
+		\begin{enumerate}[4.]
+			\item For each $x\in X$ and $g\in G\setminus\{e\}$, there is an open neighborhood $U$ of $x$ such that $U\cap f_g(U) = \emptyset$.
+		\end{enumerate}
+	\end{definition}
+	
+	The last condition essentially just says that the action permutes the pieces of $X$; in other words, for any $x$ we can find a small enough neighborhood 
+	such that the action moves the neighborhood entirely to another part of the space. This also implies that if $G$ acts nicely on $X$ and if $g\neq e$, then 
+	$f_g$ has no fixed points. Now, we can define the notion of an orbit space.
+	
+	\begin{definition}[Orbit Space]
+		Let $G$ act on $X$. We define the \textbf{orbit space} of this action to be the space $X / G$ defined by the partition $P$, where $x$ and $y$ are in the 
+		same subset of $P$ iff $\exists g\in G$ such that $f_g(x) = y$. 
+	\end{definition}
+	
+	Note that this construction essentially just carves $X$ up into its orbits under $G$ and identifies each of these orbits as a point in the orbit space. Some 
+	examples of orbit spaces include:
+	\begin{itemize}
+		\item $\mathbb Z$ acts on $\mathbb R$ nicely via $f_n(x) = x + n$. The orbit space $\mathbb R / \mathbb Z$ is homeomorphic to $S^1$.
+		
+		\item Similarly, $\mathbb Z^2$ acts on $\mathbb R^2$ via $f_{m, n}(x, y) = (x + m, y + n)$ and its orbit space is $\mathbb R^2 / \mathbb Z^2\cong 
+		T^2$.
+		
+		\item The Mobius Strip $M$. This is homeomorphic to the orbit space formed by acting $\mathbb Z$ on $\mathbb R\times [0, 1]$ given by:
+		$$
+			f_1(x, y) = (x + 1, 1 - y)
+		$$
+		and $f_n = f_{n - 1}\circ f_1$. 
+		
+		\item The Klein Bottle $K$. This is homeomorphic to an orbit space $\mathbb R^2 / G$, where we define $G$ by its action on $\mathbb R^2$. We take 
+		$G = \langle r, u | rur = u\rangle$, where $r$ denotes a right translation of $x\in\mathbb R^2$ and $u$ is an upward translation, and where we identify 
+		$\mathbb R^2$ as being broken up into a grid with the correct identification of edges to form $K$. 
+		
+		\item The Projective Plane $\mathbb RP^2$. This is the orbit space $S^2 / (\mathbb Z / 2\mathbb Z)$, where the action of $\mathbb Z / 2\mathbb Z$ is 
+		given by $0\cdot x = x$ and $1\cdot x = -x$. 
+	\end{itemize}
+
+\section{Calculations}
+
+	This section will provide us with practical reason to study fundamental groups. We will develop the techniques necessary to calculate the fundamental groups 
+	of some simple surfaces. 
+
+	We begin with the circle $S^1$. Before we start, we will show how $\mathbb R$ is a covering space of $S^1$ (which we will define later), which gives us a way 
+	to lift paths and homotopies from the circle to $\mathbb R$. For this section, we will define a map $f : \mathbb R\rightarrow S^1$ by:
+	$$
+		f(x) := e^{2\pi i x}
+	$$
+	This map allows us to prove two lemmas which will be necessary to understanding $\pi_1(S^1)$. We will prove them in full generality for an arbitrary 
+	covering space (which behaves much like the map $f : \mathbb R\rightarrow S^1$), which we will now define.
+	
+	\begin{definition}[Covering Space]
+		We call a continuous function $\pi : \tilde X\rightarrow X$ a \textbf{covering space map} and $\tilde X$ a \textbf{covering space} of $X$ if $\forall x\in X$, 
+		there is an open neighborhood $U_x$ of $x$ such that 
+		$$
+			\pi^{-1}(U_x) = \bigcup_\alpha\tilde U_\alpha
+		$$
+		where each $\tilde U_\alpha$ is open, $\tilde U_\alpha\cap \tilde U_\alpha' = \emptyset$ for $\alpha\neq \alpha'$, and $\pi|_{\tilde U_\alpha}\rightarrow 
+		U_x$ is a homeomorphism.
+	\end{definition}
+	
+	Essentially all a covering space is is a space and a map that is large enough to nicely cover our original space. The map $f$ that we already constructed is a 
+	covering space map, as if we lift any open subset $U\subseteq S^1$ to $\mathbb R$ we will have an infinite number of components, each of which are 
+	homeomorphic to $U$. A covering space map gives us the tools to lift paths and homotopies, which we now describe.
+	
+	\begin{lemma}[Path-Lifting]
+		Let $p\in X$ and $q\in\pi^{-1}(\{p\})$. Then every path such that $\sigma(0) = p$ has a unique lift $\tilde\sigma$ to $\tilde X$ such that $\tilde\sigma(0) = 
+		q$. 
+	\end{lemma}
+	
+	\begin{lemma}[Homotopy Lifting]
+		Let $\sigma, \sigma'$ be loops in $X$ based at $p$ that are homotopic via $F$. Then there is a unique lift $\tilde F$ of $F$ to $\tilde X$ such that 
+		$\tilde\sigma\simeq_{\tilde f}\tilde\sigma'$ rel $\{0, 1\}$, where $\tilde\sigma, \tilde\sigma'$ are the unique lifts of $\sigma$ and $\sigma'$ to $\tilde X$. 
+	\end{lemma}
+	
+	Notice that there is a specific version of these lemmas for the covering space map $f$; we will need this to prove the result about the fundamental group of 
+	$S^1$. Here is one more definition, and you can show that it is well defined.
+	
+	\begin{definition}
+		Let $\pi : \tilde X\rightarrow X$ be a covering space map. If $\pi^{-1}(\{x\})$ is finite for all $x\in X$ and $|\pi^{-1}(\{x\})| = n\in\mathbb N$, then we say 
+		that $\tilde X$ is an \textbf{n-sheeted covering space}.
+	\end{definition}
+	
+	Finally, there is a connection between some orbit spaces and covering spaces, which we now state.
+	
+	\begin{theorem}
+		Let $G$ act nicely on a space $X$. Then the natural projection $\pi : X\rightarrow X / G$ is a covering space map.
+	\end{theorem}
+	
+	Covering spaces are important in their own right, and they give us helpful tools to compute fundamental groups. Many proofs involving $\pi_1(S^1)$ involve 
+	path and homotopy lifting, and so it is important to understand what this means. For the rest of this section, we will limit our discussion of covering spaces 
+	to the circle equipped with covering space map $f : \mathbb R\rightarrow S^1$. 
+	
+	\begin{theorem}
+		The fundamental group of the circle $\pi_1(S^1)$ is isomorphic to the integers $\mathbb Z$. 
+	\end{theorem}
+	
+	The proof is tedious, so I won't repeat it here. It will use the isomorphism $\mathbb Z\rightarrow\pi_1(S^1)$ given by $n\mapsto [f\circ\gamma_n]$, 
+	where $\gamma_n : [0, 1]\rightarrow \mathbb R$, $x\mapsto nx$. Now that we have one fundamental group, we can use this to compute others. We will 
+	first state a special case of the Seifert-van Kampen theorem:
+	
+	\begin{theorem}
+		Let $X$ be connected such that $X = U\cup V$ with $U, V$ both open and simply connected, and such that $U\cap V$ is path-connected. Let $p\in 
+		U\cap V$. Then $\pi_1(X, p)\cong\{1\}$. 
+	\end{theorem}
+	
+	\begin{corollary}
+		For $n\geq 2$:
+		$$
+			\pi_1(S^n)\cong\{1\}
+		$$
+	\end{corollary}
+	
+	The corollary follows immediately from the theorem, because $S^n\setminus\{p\}\cong\mathbb R^n$ for any point $p$, and we may subtract out the north and 
+	south poles to give us a path-connected intersection for $n\geq 2$. Another theorem that is useful is:
+	
+	\begin{theorem}
+		For spaces $X, Y$ and $x_0\in X$, $y_0\in Y$, we have:
+		$$
+			\pi_1(X\times Y, (x_0, y_0))\cong\pi_1(X, x_0)\times \pi_1(Y, y_0)
+		$$
+	\end{theorem}
+	
+	\begin{proof}
+		We have continuous maps $p_1 : X\times Y\rightarrow X$ and $p_2 : X\times Y\rightarrow Y$, so we map take the natural map $\psi : \pi_1(X\times Y, 
+		(x_0, y_0)\rightarrow\pi_1(X, x_0)\times \pi_1(Y, y_0)$ defined by $[\alpha]\mapsto ((p_1)_*([\alpha]), (p_2)_*([\alpha])) = ([p_1\circ\alpha], [p_2\circ
+		\alpha])$, which will be an isomorphism.
+	\end{proof}
+	
+	This gives the immediate corollary that $\pi_1(T^n)\cong\mathbb Z^n$. The next theorem deals with orbit spaces, and will make it very easy for us to compute 
+	the fundamental groups of some spaces we have already studied.
+	
+	\begin{theorem}
+		Let $G$ act nicely on a space $X$ with $X$ simply connected and path-connected. Then:
+		$$
+			\pi_1(X / G)\cong G
+		$$
+	\end{theorem}
+	
+	This proof will use homotopy and path lifting lemmas, which are true for orbit spaces if the action is nice. This allows us to compute $\pi_1$ for the Klein 
+	bottle and for the Mobius band, which are listed in the last section of this document. Now, we state two theorems which will allow us to show that 
+	two topological spaces are distinct. 
+	
+	\begin{theorem}
+		Let $f, g : X\rightarrow Y$ be continuous and $f\simeq_F g$. Let $\gamma : [0, 1]\rightarrow Y$, $\gamma(t) = F(p, t)$. Then $g_* = \gamma_*\circ
+		f_*$, i.e. $g_*$ can be described by the sequence of maps:
+		$$
+			\pi_1(X, p)\xrightarrow{f_*}\pi_1(Y, f(p))\xrightarrow{\gamma_*}\pi_1(Y, g(p))
+		$$
+	\end{theorem}
+	
+	\begin{theorem}
+		If $X$ and $Y$ are path-connected and $X\simeq Y$, then:
+		$$
+			\pi_1(X)\cong\pi_1(Y)
+		$$
+	\end{theorem}
+	
+	This last theorem uses the previous one in its proof. It is very useful; if we wish to show two spaces are not homotopy equivalent, we can compute their 
+	fundamental groups and show they are non-isomorphic. Note that the converse of this is not true; if two spaces have the same fundamental group, we cannot 
+	say if they are homotopy equivalent or not. More generally, this proof uses the following theorem:
+	
+	\begin{theorem}
+		Let $f : X\rightarrow Y$ be a homotopy equivalence. Then $f_* : \pi_1(X, p)\rightarrow\pi_1(Y, f(p))$ is a group isomorphism.
+	\end{theorem}
+
+\section{Brouwer Fixed Point Theorem}
+	
+	\begin{theorem}[Brouwer Fixed Point]
+		If $f : B^n\rightarrow B^n$ is continuous, then $f$ has a fixed point.
+	\end{theorem}
+
+\newpage
+
+\section{List of Fundamental Groups}
+
+\begin{itemize}
+	\item The circle $S^1$. 
+	$$
+		\pi_1(S^1)\cong\mathbb Z
+	$$
+	
+	\item The $n$-sphere for $n\geq 2$.
+	$$
+		\pi_1(S^n)\cong\{1\}
+	$$
+	
+	\item The $n$-torus $T^n$. 
+	$$
+		\pi_1(T^n)\cong\mathbb Z^n
+	$$
+	
+	\item Any contractible space $X$ (includes Euclidean space $\mathbb R^n$).
+	$$
+		\pi_1(X)\cong\{1\}
+	$$
+	
+	\item The Mobius strip $M$. 
+	$$
+		\pi_1(M)\cong\mathbb Z
+	$$
+	
+	\item The Klein Bottle $K$.
+	$$
+		\pi_1(K)\cong\langle r, u | rur = u\rangle
+	$$
+	
+	\item The Projective Plane $\mathbb RP^2$.
+	$$
+		\pi_1(\mathbb RP^2)\cong\mathbb Z / 2\mathbb Z
+	$$
+	
+	\item The one-point union of $n$ circles, $X_n$ at $p$.
+	$$
+		\pi_1(X_n, p)\cong F_n
+	$$
+	
+	\item The connected sum of $g$ tori, $S_g = T^2\# ...\# T^2$.
+	$$
+		\pi_1(S_g)\cong\langle a_1, ..., a_{2g} | a_1a_2a_1^{-1}a_2^{-1}...a_{2g - 1}a_{2g}a_{2g-1}^{-1}a_{2g}^{-1} = 1\rangle
+	$$
+	
+	\item The connected sum of $g$ projective planes, $N_g = \mathbb RP^2\# ...\#\mathbb RP^2$.
+	$$
+		\pi_1(N_g)\cong\langle a_1, ..., a_g | a_1^2a_2^2...a_g^2 = 1\rangle
+	$$
+	
+\end{itemize}
+
+\end{document}

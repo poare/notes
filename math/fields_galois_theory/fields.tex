@@ -1,0 +1,162 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{float}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+%SetFonts
+
+%SetFonts
+
+\title{Math 250A Lecture Recaps (Fields)}
+\author{Patrick Oare}
+
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+Let $L / K$ be a field extension unless otherwise specified.
+
+\section{10/31 (Field Extensions, Algebraic Closure)}
+
+\begin{itemize}
+
+	\item \textbf{Fields}: A \textbf{field} is a commutative division ring. We say that $L / K$, or $K\leq L$, is a \textbf{field extension} if $K$ is a subfield 
+	of $L$. The \textbf{degree} of a field extension is denoted:
+	$$
+		[L : K]
+	$$
+	and is the dimension of $L$ as a $K$-vector space. An extension $L / K$ is \textbf{finite} if $[L : K]$ is finite.
+	
+	\item \textbf{Algebraic Extensions}: An element $\alpha\in L$ is called \textbf{algebraic} over $K$ if it is the root of a nontrivial polynomial over $K$, 
+	i.e. if $\exists p(x)\in K[X]\setminus \{0\}$ with $p(\alpha) = 0$. $L / K$ is called an \textbf{algebraic} extension if every element in $L$ is algebraic over 
+	$K$. Every finite extension is algebraic, as if $\alpha\in L / K$ is in a finite extension, $\{1, \alpha, \alpha^2, ...\}$ is $K$-linearly dependent and 
+	terminates, giving a nontrivial relation among the powers of $\alpha$ with coefficients in $K$.
+	
+	\item \textbf{Tower Law}: Let $L / K$ and $K / F$ be field extensions. Then:
+	$$
+		[L : F] = [L : K][K : F]
+	$$
+	
+	Take bases $\{u_i\}_{i = 1}^n$ and $\{v_j\}_{j = 1}^m$ of $L$ over $K$ and of $K$ over $F$. Then $\{u_iv_j\}_{i, j = 1, 1}^{n, m}$ is a basis of $L$ as 
+	an $F$-vector space.
+	
+	\item \textbf{Splitting Fields}: Given a polynomial in $f\in K[X]$, we can construct a field extension $L / K$ such that $p$ has a root in $L$. Indeed, if 
+	$p | f$ is an irreducible polynomial, then $L := K[X] / (p)$ is a field as irreducible elements generate maximal ideals, and $p(x)$ has a root in $L$, 
+	namely $x \mod(p)$. If $p\in K[X]$, we call $L$ a \textbf{splitting field} of $p$ if:
+	
+	\begin{enumerate}
+		
+		\item $p$ splits into linear factors over $L$.
+		
+		\item $L$ is generated over $K$ by the roots of $p$.
+		
+	\end{enumerate}
+	
+	To construct the splitting field $L$ of $p$, we keep extending $K$ with more roots of $p$ until we have all of them. If $deg(p) = n$, then $[L : K] \leq n!$ 
+	(I believe it actually divides $n!$). \textbf{The splitting field $L$ is unique} up to an isomorphism fixing $K$.
+	
+	\item \textbf{Finite Fields}: The finite field $\mathbb F_p$ is isomorphic to $\mathbb Z / p\mathbb Z$. For each prime power $p^n$, there is a unique 
+	finite field $\mathbb F_{p^n}$, which we may construct as the splitting field of $x^{p^n} - x$ over $F_p[x]$. The derivative of $x^{p^n} - x$ is $p^nx^{p^n 
+	- 1} - 1 = -1$, which is coprime to $x^{p^n} - x$, and so the polynomial is separable and has $p^n$ roots. The roots are closed under $+, -, \cdot$ and 
+	division, and so form a field of order $p^n$. It is unique, as it is the splitting field of the polynomial. 
+	
+	\item \textbf{Algebraic Closure}: We call $L$ the \textbf{algebraic closure} of $K$ if:
+	
+	\begin{enumerate}
+	
+		\item Any element of $L$ is algebraic over $K$.
+		
+		\item Any polynomial in $L[X]$ has a root in $L$. 
+	
+	\end{enumerate}
+	
+	\textbf{Any field $K$ is contained in an algebraic closure $L$}. Furthermore, $L$ is unique up to isomorphism.
+
+\end{itemize}
+
+\section{11/7 (Normal, Separable, Galois Extensions)}
+
+\begin{itemize}
+
+	\item \textbf{Normal Extensions}: An algebraic extension $L / K$ is \textbf{normal} if whenever an irreducible polynomial $p\in K[X]$ has a root in $L$, it 
+	splits into linear factors in $L[X]$. 
+	
+	For an algebraic extension $L / K$, TFAE:
+	
+	\begin{enumerate}
+	
+		\item $L / K$ is normal.
+		
+		\item $L$ is the splitting field of a family of polynomials in $K[X]$. 
+	
+	\end{enumerate}
+	
+	\begin{proof}
+	
+		Suppose $ii$, and that $p\in K[X]$ is irreducible and has a root in $\alpha\in L$. Let $M$ be the algebraic closure of $L$. We may extend any 
+		homomorphism $\phi : K(\alpha)\rightarrow M$ to a homomorphism $\psi : L\rightarrow M$ because $M$ is algebraically closed. But, we have 
+		$im(\psi) = L$ because $L$ is the uniquely determined splitting field of a family of polynomials, and this implies $\alpha\in L$ (this part makes 
+		no sense).
+	
+	\end{proof}
+	
+	For example, $\mathbb Q(\sqrt{2}) / \mathbb Q$ is normal, as it is the splitting field of $x^2 - 2$. But, $\mathbb Q(2^{\frac{1}{3}}) / \mathbb Q$ is not 
+	normal; $x^3 - 2$ has one root in the field, but the other roots are not in the field.
+	
+	\item \textbf{Separable Extensions}: A polynomial is called \textbf{separable} if it has no multiple roots, i.e. $p$ and $p'$ are coprime. If $L / K$ is a field 
+	extension, an element $\alpha\in L$ is \textbf{separable} if its minimal polynomial over $K$ is separable. An extension is called separable if every 
+	element is separable over the base field. 
+	
+	\begin{theorem} If $char(K) = 0$, then $L / K$ is a separable extension. \end{theorem}
+	
+	This follows because if $p(x)$ is the minimal polynomial of $\alpha$ over $K$, then because $deg(p') < deg(p)\implies$ these can have no common 
+	factors since $p$ is irreducible unless $p' = 0$, and $p' = 0\implies p$ is constant and has no multiple roots. If $char(p) \neq 0$, then the derivative 
+	of $p$ can be $0$ while $p$ is not constant, so this proof only holds in $char$ 0.
+	
+	Furthermore, \textbf{any extension $\mathbb F_q / \mathbb F_p$ of finite fields is separable}. This follows because if $q = p^n$, any element $x$ of 
+	$\mathbb F_q$ satisfies $x^q - x = 0$, and this has derivative $-1$ and so is separable.
+	
+	Ex of a non-separable extension: Take $t$ transcendental over $\mathbb F_p$. Then the extension $\mathbb F_p(t) / \mathbb F_p(t^p)$ is degree 
+	$p$ as the minimal poly of $t$ over $\mathbb F_p(t^p)$ is $x^p - t^p$. However, this polynomial factors over $\mathbb F_p(t)$ as $(x - t)^p$, so 
+	this polynomial is not separable and this is not a separable extension.
+	
+	\item \textbf{Extending field homomorphisms}: 
+	
+	\begin{lemma} 
+		Suppose $L / K$ is a field extension of degree $n$. Then if $M / K$ is any field extension, there are at most $n$ ways to define a field 
+		homomorphism $L\rightarrow M$ which fixes $K$. 
+	\end{lemma}
+	
+	\begin{proof}
+	
+		Let $\sigma$ be such a homomorphism. Suppose first that $L = K(\alpha)$. Then $\alpha$ is a root of some $f\in K[X]$ of degree $\leq n$, and so
+		$\sigma$ must map $\alpha$ to another root of $f$ as it fixes $K$, so as $\sigma$ is completely determined by its action on $\alpha$, we 
+		have $\leq n$ possibilities for $\sigma$. Now, suppose $L = K(\alpha_1, ..., \alpha_n)$. The tower of primitive extensions $K\leq K(\alpha_1)\leq ... 
+		\leq K(\alpha_1, \alpha_n) = L$ has number of extensions of each previous map $\leq$ its degree, and so if we combine them, we reproduce the 
+		tower law and have $\leq [L : K]$ ways to define $\sigma$.
+	
+	\end{proof}
+	
+	\begin{lemma} Let $L / K$ be an algebraic extension, and let $f : K\rightarrow \Omega$ be a homomorphism into an algebraically closed field 
+	$\Omega$. Then, we may extend $f$ to a homomorphism $F : L\rightarrow \Omega$ with $F|_K = f$. \end{lemma}
+	
+	Check out this link for a proof of this: https://math.stackexchange.com/questions/897660/extending-homomorphism-into-algebraically-closed-field
+
+
+\end{itemize}
+
+\end{document}  

@@ -1,0 +1,945 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{tikz-cd}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Homology}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+Like the fundamental group, homology is an important algebraic invariant of topological spaces which can 
+be used to describe the properties of such spaces. Although it is more complicated to define, it provides 
+a powerful tool to use to classify spaces. The essence of homology is to define a sequence of functors 
+$H_n : Top\rightarrow Ab$ which are invariant up to homotopy. A particular advantage of $H_n(\cdot)$ 
+over homotopy groups $\pi_n(\cdot)$ is that the homology groups are abelian, and thus their structure 
+is much easier to understand than their non-abelian counterparts. 
+
+We will begin by studying simplicial homology, which is a particular example of a homology theory. Intuitively, 
+the simplicial homology groups of a space will classify how many ``n-dimensional holes" the space has. 
+Eventually, we will generalize the notion of homology to an arbitrary chain complex and examine 
+chain complex structures that may arise as we consider different examples of spaces. 
+
+\section{Simplicial Homology}
+
+We begin with simplicial homology, which is a particular way to construct homology groups on a space. We 
+will aim to study a space $X$ based on maps from simpler spaces (the $n$-simplices) into $X$.
+
+\begin{definition}[Standard $n$-simplex]
+	For $n > 0$, the \textbf{standard $n$-simplex} $\Delta^n$ is the convex hull of the standard basis 
+	$\{e_0, ..., e_n\}$ of $\mathbb R^{n + 1}$, i.e. we have:
+	\begin{equation}
+		\Delta^n := \left\{\sum_{k = 0}^n t_k e_k : \sum_{k = 0}^n t_k = 1, t_k\geq 0\right\}
+	\end{equation}
+	The numbers $(t_0, ..., t_k)$ are called \textbf{barycentric coordinates}. 
+\end{definition}
+
+The standard $n$-simplex is an extraordinary simple space, and just looks like a hyper-triangle embedded 
+into $\mathbb R^{n + 1}$. We can describe the $n$-simplex as an ordered pair $[v_0, ..., v_n]$, where 
+each $v_i\in \{0, ..., n\}$ and none are repeated. This assigns each simplex an implicit orientation, and 
+we can use this to manipulate such simplices. For each $n$, we have inclusion maps:
+\begin{equation}
+	d^i : \Delta^{n - 1}\rightarrow\Delta^n, \;\; 0\leq i\leq n
+\end{equation}
+where we map $[v_0, ..., v_{n - 1}]$ to $[v_0, ..., \hat v_i, ..., v_n]$, where the $\hat v_i$ denotes that we 
+omit the vertex $v_i$. 
+
+\begin{definition}[Singular $n$-simplex]
+	Let $X$ be a topological space. Then a \textbf{singular $n$-simplex} is a map:
+	\begin{equation}
+		\sigma : \Delta^n\rightarrow X
+	\end{equation}
+	We define $Sin_n(X)$ to be the set of all singular $n$-simplices in $X$. 
+\end{definition}
+
+Note that the face maps induce a canonical map between the singular $n$-simplices on $X$ through the 
+following composition of maps, which will call $d_i : Sin_n(X)\rightarrow Sin_{n - 1}(X)$, $\sigma\mapsto \sigma\circ d^i$:
+\[
+	\begin{tikzcd}
+		\Delta^{n - 1}\arrow[r, "d^i"]\arrow[dr, swap, "d_i\sigma"] & \Delta^n\arrow[d, "\sigma"] \\
+		 & X \\
+	\end{tikzcd}
+\]
+%$$
+%	\Delta^{n - 1}\xrightarrow{d_i}\Delta^{n}\xrightarrow{\sigma} X
+%$$
+
+For $i\leq j$, the maps $d_i$ satisfy (and the face maps $d^i$ satisfy the same identity): 
+\begin{equation}
+	d_i d_j = d_{j + 1} d_i
+\end{equation}
+
+We wish to consider a variant of $Sin_n(X)$ which allows us to add and subtract simplices in a natural 
+way. This will allow us to consider boundaries of simplices, which will be intimately connected to homology.  
+For example, consider a 1-simplex which is a closed loop, i.e. $\gamma : [0, 1] = \Delta^1\rightarrow X$. 
+We wish to be able to differentiate this loop from an open loop. We can almost do this with the definitions 
+we have already made: notice that $d_0(\gamma) = \gamma(1) = \gamma(0) = d_1(\gamma)$. However, 
+we need a way to take differences to make this precise. As such, we will consider the free abelian 
+group generated by $Sin_n(X)$.
+\begin{definition}[Singular $n$-chain]
+	Let $S_n(X)$ be the free abelian group generated by $Sin_n(X)$:
+	\begin{equation}
+		S_n(X) := \mathbb Z Sin_n(X)
+	\end{equation}
+	We call an element of $S_n(X)$ a \textbf{singular $n$-chain}, and we may write each $n$-chain as:
+	\begin{equation}
+		\sum_{k = 1}^n a_k\sigma_k
+	\end{equation}
+	for $\sigma_k\in Sin_n(X)$. 
+\end{definition}
+
+\begin{definition}[Boundary operator]
+	We define the \textbf{boundary operator} (also called a differential) $d : Sin_n(X)\rightarrow 
+	S_{n - 1}(X)$ by:
+	\begin{equation}
+		\sigma\mapsto\sum_{i = 0}^n (-1)^i d_i\sigma
+	\end{equation}
+	This extends uniquely to a homomorphism:
+	\begin{equation}
+		d : S_n(X)\rightarrow S_{n - 1}(X)
+	\end{equation}
+\end{definition}
+
+We will use this boundary map extensively, as it allows us to go between simplices of different dimensions. 
+Intuitively, the boundary map just gives you the oriented face of the $n$-simplex; for example, the 
+boundary of $\Delta^2$ is just an oriented (not filled in) triangle. Simplices which are killed by the 
+differential are ``boundaries" of closed regions, in a sense which we will make precise.
+
+\begin{definition}[$n$-cycle]
+	An $n$-chain $c$ in $X$ is a \textbf{$n$-cycle} if $dc = 0$. We denote the set of all $n$-cycles by:
+	\begin{equation}
+		Z_n(X) := ker(d : S_n(X)\rightarrow S_{n - 1}(X)
+	\end{equation}
+\end{definition}
+
+\begin{definition}[$n$-boundary]
+	An $n$-chain $b$ in $X$ is a \textbf{$n$-boundary} if $b\in im(d)$. We denote the set of all 
+	$n$-boundaries by:
+	\begin{equation}
+		B_n(X) := im(d : S_{n + 1}(X)\rightarrow S_n(X))
+	\end{equation}
+\end{definition}
+
+\begin{theorem}
+	The boundary operator satisfies:
+	\begin{equation}
+		d^2 = 0
+	\end{equation}
+	This implies that $B_n(X)\subseteq Z_n(X)$, so every boundary is a cycle. 
+\end{theorem}
+
+\begin{definition}[Graded abelian group]
+	A \textbf{graded abelian group} is a sequence of abelian groups indexed by $\mathbb Z$. A 
+	\textbf{chain complex} is a graded abelian group $\{A_n\}_{n\in\mathbb Z}$ together with 
+	homomorphisms $d : A_n\rightarrow A_{n - 1}$ such that $d^2\equiv 0$. We will draw a chain 
+	complex like so:
+	\[
+		\vspace{-.7cm}
+		\begin{tikzcd}
+			...\arrow[r, "d"] & A_{n + 1}\arrow[r, "d"] & A_n\arrow[r, "d"] & A_{n - 1}\arrow[r, "d"] & ... \\
+		\end{tikzcd}
+	\]
+\end{definition}
+
+An $n$-cycle in $Z_n(X)$ is closed in the way that a closed loop is closed-- it has no edges and all its 
+faces connect with itself. The distinction between cycles and boundaries will give us homology groups. 
+A nice way to visualize the difference is to consider an annulus in $\mathbb R^2$, $A = \{(x, y)\in\mathbb 
+R^2 : x^2 + y^2\in [1, 3]\}$. A circle wrapping the annulus $x^2 + y^2 = 2$ is a cycle because it is a 
+closed path; the boundary operator sends it to 0 since it links back to itself. However, it is \textbf{not} 
+a boundary. It could almost be the boundary of $U := \{(x, y) : x^2 + y^2 \leq 2\}\cap A$, but this is not a 
+simplex. $U$ is 2-dimensional and resembles the simplex $\Delta^2$, but unfortunately has a hole in it. 
+
+In a manner such as this, homology will tell us about the holes that a space has by considering the 
+quotient of the $n$-cycles by the $n$-boundaries. 
+
+\begin{definition}
+	For a topological space $X$, the $n$th \textbf{singular homology group} of $X$ is:
+	\begin{equation}
+		H_n(X) := Z_n(X) / B_n(X)
+	\end{equation}
+\end{definition}
+
+Homology can also be defined in the same way for an arbitrary chain complex, and often once we have a 
+chain complex we will forget about the underlying space it comes from. Note that homology groups 
+$H_n(X)$ are always abelian, since $Z_n(X)$ is an abelian group. 
+
+\begin{definition}[Semi-simplicial set]
+	A collection of sets $K_n$ for $n\geq 0$ together with maps $d_i : K_n\rightarrow K_{n - 1}$ satisfying $d_i d_j = 
+	d_{j + 1}d_i$ for $i\leq j$ is called a \textbf{semi-simplicial set}. 
+\end{definition}
+
+This notion generalizes the structure of the set $Sin_n(X)$. What we have done in the previous few pages is summarized 
+as follows: to each topological space, we associate a semi-simplicial set $Sin_n(X)$. To each of these sets, we create the 
+free abelian group $S_n(X)$ generated on these simplices. This forms a chain complex $(S_*(X), d)$, and we take the 
+homology of said chain complex to form the homology of the space. 
+
+For a basic computation, consider the homology of the one point space $X = \{*\}$. There is a single $n$ simplex for each 
+$n$ because $X$ only has one point, which we will denote by $C_*^n$, so $S_*(X) = \mathbb Z\{C_*^n\}$. The composition 
+of a face map with $C_*^n$ is $C_*^{n - 1}$ because we are simply sending the simplex of one dimension smaller to $*$, 
+so $d_i C_*^n = C_*^{n - 1}$. But, this implies that:
+\begin{equation}
+	d C_*^n = \begin{cases}
+		C_*^{n - 1} & n\textnormal{ even} \\
+		0 & n\textnormal{ odd} \\
+	\end{cases}
+\end{equation}
+because for odd $n$ we have an even number of face maps, so the alternating sum $d = \sum_{i = 0}^n (-1)^n d_i$ cancels 
+itself and vanishes. For even $n$ we have one surviving $d_i$, so $d C_*^n = C_*^{n - 1}$. So, the chain complex of 
+$n$-chains on $X$ is the following sequence (here I have labeled each copy of $\mathbb Z$ with which copy of $S_n(X)$ 
+it is):
+\[
+	\begin{tikzcd}
+		...\arrow[r, "id"] & \mathbb Z\arrow[r, "0"] & \mathbb Z\arrow[r, "id"] & \mathbb Z\arrow[r, "0"]
+		& \mathbb Z\arrow[r, "0"] & 0\arrow[r] & ... \\
+		 & S_3(X) & S_2(X) & S_1(X) & S_0(X) & \\
+	\end{tikzcd}
+\]
+For the even and nonzero $n$, the kernel of $id : S_n(X)\cong\mathbb Z\rightarrow \mathbb Z$ is 0, so $Z_n(X) = 0$ and 
+hence $H_n(X) = 0$. Similarly for odd $n$, the kernel of $0 : \mathbb Z\rightarrow\mathbb Z$ is $\mathbb Z$, but the image 
+of the previous map is $im(id) = \mathbb Z$, hence $Z_n(X) = B_n(X) = \mathbb Z$, so the homology $H_n(X)$ vanishes as 
+well. However, for $n = 0$, we note that $Z_0(X) = \mathbb Z$ and $B_0(X) = \{0\}$, hence $H_0(X) = \mathbb Z$. 
+Hence to summarize:
+\begin{equation}
+	H_n(*) = \begin{cases}
+	0 & n > 0 \\
+	\mathbb Z & n = 0
+	\end{cases}
+\end{equation}
+
+We will now briefly consider the functorial nature of homology before 
+moving on to lay out some definitions in category theory. 
+
+\begin{definition}[Chain map]
+	Let $C_*$ and $D_*$ be two chain complexes. A \textbf{chain map} $f_* : C_*\rightarrow D_*$ is a collection of 
+	homomorphisms $f_n : C_n\rightarrow D_n$ such that the following diagram commutes:
+	\begin{equation}\begin{tikzcd}
+	...\arrow[r, "d"] & C_{n + 1}\arrow[d, "f_{n + 1}"]\arrow[r, "d"] & C_n\arrow[d, "f_n"]\arrow[r, "d"] & C_{n - 1}\arrow[d, 
+	"f_{n - 1}"]\arrow[r, "d"] & ... \\
+	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ... \\
+	\end{tikzcd}\end{equation}
+\end{definition}
+
+A chain map is just a sequence of maps which respect the differential. Now, we show that a continuous map from $X$ to $Y$ 
+induces a chain map on the $n$-chains of $X$, which we will show in turn induces a morphism on homology. 
+
+\begin{theorem}
+	Let $f : X\rightarrow Y$ be a continuous map. Then $f$ induces a chain map:
+	\begin{equation}
+		f_* : S_*(X)\rightarrow S_*(Y)
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	The induced map is very much a natural one, and we shall map the generators $\sigma$ of $S_n(X)$ to $\sigma\mapsto 
+	f\circ\sigma : \Delta^n\rightarrow Y$, which extends to a homomorphism $f_* : S_*(X)\rightarrow S_*(Y)$ by linearity. We 
+	must show that $f_*$ is in fact a chain map. We have:
+	\begin{equation}
+		d_i (f_*\sigma) = d_i (f\circ\sigma) = (f\circ\sigma)\circ d^i = f(d_i\sigma)
+	\end{equation}
+	hence summing this up, we see that $df_* = f_*d$. 
+\end{proof}
+
+\begin{theorem}
+	Any chain map $f_* : C_*\rightarrow D_*$ induces a homomorphism on homology $f_* : H_*(C)\rightarrow H_*(D)$. 
+\end{theorem}
+
+\begin{proof}
+	We will restrict each $f_n : C_n\rightarrow D_n$ to the $n$-cycles $Z_n(C)$ and show that the map $f_n : Z_n(C)
+	\rightarrow Z_n(D)$ and is well defined. Suppose that $x\in Z_n(C)$, so $dx = 0$. Then $df_n(x) = f_{n - 1}(dx) = 0$ 
+	because $f_*$ is a chain map, hence $f_n(x)\in ker (d : D_n\rightarrow D_{n - 1})$, and the map is well defined on the 
+	n-cycles. Projecting $Z_n(D)$ onto the homology with the map $\pi_D : Z_n(D)\rightarrow H_n(D)$, we have the 
+	diagram:
+	\[\begin{tikzcd}
+		Z_n(C)\arrow[d, "\pi_C"]\arrow[r, "f_n"] & Z_n(D)\arrow[d, "\pi_D"] \\
+		H_n(C)\arrow[r, dashed, "\tilde f_n"] & H_n(D) \\
+	\end{tikzcd}\]
+	and we will show that $\tilde f_n : H_n(C)\rightarrow H_n(D), [c]\mapsto \pi_D f_n(c)$, i.e. that we have a well defined 
+	lift from the quotient. Suppose that $[c] = [c']\in H_n(C)$, so $c = c' + db$ for $b\in C_{n + 1}$. Then we must show that 
+	$\tilde f([c]) = \tilde f([c']) + \tilde f([db]) = \tilde f([c'])$, so we have:
+	\begin{equation}
+		\tilde f([db]) = \pi_D f_n(db) = \pi_D (d f_{n + 1}b) = 0
+	\end{equation}
+	because $df_{n + 1} b\in B_n(D) = im(d : D_{n + 1}\rightarrow D_n)$. Hence the map is well defined, so we have a 
+	valid morphism $H_n(C)\rightarrow H_n(D)$ for all $n$. 
+\end{proof}
+
+\newpage
+\section{Categorical Considerations}
+
+So, we have seen that any continuous map $f : X\rightarrow Y$ induces a well defined map $f_* : H_*(X)\rightarrow H_*(Y)$ 
+on the homology. In other words, \textbf{$H_n(\cdot)$ is a covariant functor from $Top$ to $Ab$}. We will be using many 
+of its functorial properties, and now may be a good time to brush up on your category theory. We will recall a few definitions 
+which will be important to us. We denote the objects of a category $\mathcal C$ by $obj(\mathcal C)$, and the morphisms 
+from $X$ to $Y$ by $\mathcal C(X, Y)$. 
+
+\begin{definition}[Natural transformation]
+	Let $F, G : \mathcal C\rightarrow\mathcal D$ be two functors. A \textbf{natural transformation} $\Theta : F\rightarrow G$ 
+	consists of, for each $X\in obj(\mathcal C)$, a map $\Theta_X : F(X)\rightarrow G(X)$ such that for each 
+	$f : X\rightarrow Y$ in $\mathcal C$, the following diagram commutes (in the category $\mathcal D$). 
+	\begin{equation}\begin{tikzcd}
+		F(X)\arrow[r, "\Theta_X"]\arrow[d, "F(f)"] & G(X)\arrow[d, "G(f)"] \\
+		F(Y)\arrow[r, "\Theta_Y"] & G(Y) \\
+	\end{tikzcd}\end{equation}
+\end{definition}
+
+A natural transformation is essentially a way of mapping one functor into another while respecting the structure of the functor; 
+it is essentially a ``morphism" of functors. A functor takes you between categories $\mathcal C\rightarrow\mathcal D$, but 
+a natural transformation takes you between functors. The canonical example of this is that for a small category $\mathcal C$ 
+(recall $\mathcal C$ is small if $obj(\mathcal C)$ is a set), we can define the category of functors $Fun(\mathcal C, 
+\mathcal D)$. The objects of this category are functors $F : \mathcal C\rightarrow\mathcal D$, and the morphisms of this 
+category are natural transformations $\Theta : F\rightarrow G$. We also recall the definition of the opposite category:
+
+\begin{definition}[Opposite category]
+	For a category $\mathcal C$, define its \textbf{opposite category} $\mathcal C^{op}$ to be the category with:
+	\begin{itemize}
+		\item Objects $obj(\mathcal C^{op}) = obj(\mathcal C)$. 
+		\item Morphisms $\mathcal C^{op}(X, Y) = \mathcal C(Y, X)$. 
+	\end{itemize}
+\end{definition}
+
+We can formalize some of the notions that we've discussed about simplices by defining the \textbf{simplex category} $\Delta$. 
+This category has the following data:
+\begin{itemize}
+	\item \textbf{Objects} are the sets $[n] := \{0, 1, ..., n\}$. 
+	\item \textbf{Morphisms} are weakly order preserving maps $\phi : [n]\rightarrow [m]$. By weakly order preserving, we 
+	mean that $i < j\implies \phi(i)\leq\phi(j)$. 
+\end{itemize}
+
+With this notation, the face maps are maps $d^i : [n - 1]\rightarrow [n]$
+\begin{equation}
+	d^i(k) = \begin{cases}
+		k & k < i \\
+		k + 1 & k\geq i
+	\end{cases}
+\end{equation}
+The counterpart of the face maps are \textbf{degeneracy maps} $s^i : [n + 1]\rightarrow [n]$ which repeat the value $i$ are:
+\begin{equation}
+	s^i(k) = \begin{cases}
+		k & k \leq i \\
+		k - 1 & k > i
+	\end{cases}
+\end{equation}
+Now, we can define simplicial objects.
+\begin{definition}[Simplicial object]
+	Let $\mathcal C$ be a category. A \textbf{simplicial object} in $\mathcal C$ is a functor $K : \Delta^{op}\rightarrow 
+	\mathcal C$. A \textbf{semi-simplicial object} is a functor $K : \Delta_{inj}^{op}\rightarrow\mathcal C$, where 
+	$\Delta_{inj}$ denotes the subcategory of $\Delta$ whose morphisms are injective. We use the phrase \textbf{simplicial 
+	set} to mean a simplicial object in $Set$. 
+\end{definition}
+
+Suppose that we fix a space $X$. Then the set of simplicial complexes in $X$ is a functor:
+\begin{equation}
+	Sin_* : \Delta^{op}\rightarrow Set
+\end{equation}
+On objects of these categories, this assigns to each simplex $[n] = \Delta^n$ the set $Sin_n(X) = Top(\Delta^n, X)$. The 
+reason this is from $\Delta^{op}$ to $Set$ is because of how morphisms are mapped by this functor. For the face map 
+$d^i : \Delta^{n - 1} = [n - 1]\rightarrow \Delta^n = [n]$, we induce a morphism:
+\begin{equation}
+	d_i = Sin_*(d^i) : Sin_n(X) = Sin_*([n])\rightarrow Sin_{n - 1}(X) = Sin_*([n - 1])
+\end{equation}
+i.e. $Sin_*$ reverses the arrows between objects, as seen in the following diagram:
+\[\begin{tikzcd}
+\left[ n - 1\right]\arrow[r, "d^i"]\arrow[d, "Sin_*"] & \left[ n\right]\arrow[d, "Sin_*"] \\
+Sin_{n - 1}(X) & Sin_n(X) \arrow[l, "d_i"] \\
+\end{tikzcd}\]
+
+We denote the category of simplicial sets to be \textbf{sSet}. This category has the following data:
+\begin{itemize}
+	\item Objects are simplicial sets, i.e. functors $\Delta^{op}\rightarrow Set$. 
+	\item Morphisms are the natural transformations between these functors.
+\end{itemize}
+
+Now, we consider certain types of maps. We will use this shortly to define reduced homology.
+
+\begin{definition}[Split epimorphism]
+	A morphism $f : X\rightarrow Y$ in $\mathcal C$ is called a \textbf{split epimorphism} if there is $g : Y\rightarrow X$ 
+	(such a $g$ is called a \textbf{section} of $f$) such that:
+	\[\begin{tikzcd}
+		Y\arrow[r, "g"]\arrow[dr, swap, "1_Y"] & X\arrow[d, "f"] \\ 
+		& Y\\
+	\end{tikzcd}\]
+	A morphism $g : Y\rightarrow X$ in $\mathcal C$ is called a \textbf{split monomorphism} if there is $f : Y\rightarrow X$ 
+	which makes the above diagram commute.
+\end{definition}
+
+\begin{lemma}
+	A morphism is an isomorphism iff it is a split epimorphism and a split monomorphism.
+\end{lemma}
+
+\begin{lemma}
+	Any functor sends split epimorphisms to split epimorphisms and split monomorphisms to split monomorphisms.
+\end{lemma}
+Epimorphisms are the categorical generalization of surjective morphisms, and monomorphisms generalize injectivity. For 
+example, if $\mathcal C = Set$, then an epimorphism is exactly a surjective map. Let us examine the category $\mathcal 
+C = Ab$ of abelian groups. Suppose that $f : A\rightarrow B$ is a split epimorphism. Then we have a section $g : B\rightarrow 
+A$, and we can consider the inclusion $\iota : ker(f)\hookleftarrow A$. Then we have an isomorphism:
+\begin{equation}
+	\iota\oplus g : ker(f)\oplus B\xrightarrow{\sim} A
+\end{equation}
+This should be reasonably intuitive because a split epimorphism is a surjection, so $B\cong A / ker(f)$, and  
+the presence of a section means we can actually solve the extension problem in this case. 
+
+We now put these ideas into practice. First recall the definition of terminal and initial objects in a category.
+\begin{definition}
+	Let $\mathcal C$ be a category. A \textbf{terminal object} is an object $X\in obj(\mathcal C)$ such that for each $A\in 
+	obj(\mathcal C)$, there is a morphism (which is unique) $A\rightarrow X$. An \textbf{initial object} is an object $X$ 
+	such that for each $A\in obj(\mathcal C)$, there is a morphism $X\rightarrow A$. 
+\end{definition}
+
+In the category \textbf{Top}, an initial object is $\emptyset$ and a terminal object is the one-point space $\{*\}$ (which we 
+often denote by $*$). So, let $X$ be a topological space. Then we get a map:
+\begin{equation}
+	\xi_n : H_n(X)\longrightarrow H_n(*) = \begin{cases} \mathbb Z & n = 0 \\ 0 & \textnormal{else} \end{cases}
+\end{equation}
+because $H_n$ is a covariant functor. On the $0$-chains in $X$, note that $S_0(X)$ is generated by the points in $X$ and 
+each element $c\in S_0(X)$ is of the form $c = \sum_{i = 1}^m a_i x_i$ with $a_i\in\mathbb Z$ and $x_i\in X$. So, we get 
+a map $S_0(X)\rightarrow S_0(*), c\mapsto\sum_{i = 1}^m a_i$, which induces the map $\xi_0 : H_0(X)\rightarrow H_0(*)$. 
+
+If $X\neq\emptyset$, then $X\rightarrow *$ is a split epimorphism, so $\xi_n$ is a split epimorphism as well. Thus we must 
+be able to factor its kernel out as a summand:
+\begin{equation}
+	H_n(X)\cong H_n(*)\oplus ker(\xi_n)
+\end{equation}
+We will call this kernel the reduced homology group of $X$.
+\begin{definition}[Reduced homology group]
+	Let $X\neq\emptyset$ be a topological space. Then the \textbf{reduced $n$th homology group} of $X$ is defined as 
+	$\tilde H_n(X) = ker(\xi_n)$, and the homology splits as a sum:
+	\begin{equation}
+		H_*(X) = H_*(*)\oplus \tilde H_*(X)
+	\end{equation}
+\end{definition}
+In particular, note that the homology is the reduced homology for each $H_n(X)$ as long as $n > 0$. For the $n = 0$ case, 
+the reduced homology factors out a copy of $\mathbb Z$:
+\begin{equation}
+	H_0(X) = \mathbb Z\oplus\tilde H_0(X)
+\end{equation}
+The reduced homology essentially compensates for the fact that $*$ has a nontrivial 0th homology group, so we can 
+extract only the interesting mathematics from more complicated spaces and not be required to carry a copy of $\mathbb Z$ 
+with us everywhere we go. 
+
+Note that the interpretation of the $0$th homology group is that it characterizes the path-components of a space. In this 
+case because $*$ has a single path component, it has $H_0(*) = \mathbb Z$. On the other hand, a space like $S^1\coprod 
+S^1$ has $H_0(S^1\coprod S^1) = \mathbb Z\oplus\mathbb Z$ because it has two path components. 
+
+We now consider the effect of homotopy on the homology groups of the space. Like the fundamental group, we will show 
+that the homotopy groups $H_n(X)$ are invariant under homotopy, which offers another way to categorize spaces, just like 
+$\pi_1(X)$. 
+
+\newpage
+\section{Homotopy}
+
+Recall the definition of a homotopy. If you are unfamiliar with this concept, it may be useful to check out my notes on 
+the subject.
+
+\begin{definition}[Homotopy]
+	Let $f, g : X\rightarrow Y$ be continuous maps. A \textbf{homotopy} from $f$ to $g$ is a continuous map:
+	\begin{equation}
+		h : X\times I\rightarrow Y
+	\end{equation}
+	where $I = [0, 1]$ is the unit interval, such that $h(x, 0) = f(x)$ and $h(x, 1) = g(x)$ for each $x\in X$. We say that 
+	$f$ and $g$ are \textbf{homotopic}, and $h$ is a \textbf{homotopy} between them. We denote this by $f\simeq_h g$. 
+\end{definition}
+
+Note that $\simeq$ is an equivalence relation on functions. We let $[X, Y]$ denote the homotopy classes of maps 
+from $X$ to $Y$:
+\begin{equation}
+	[X, Y] := Top(X, Y) / \simeq
+\end{equation}
+
+As in studying the fundamental group, homotopy will be an essential tool for our study of homology. Namely (although 
+we will not prove this until later), homology is invariant under homotopy, and so if $H_*(X)\neq H_*(Y)$, then the spaces 
+$X$ and $Y$ cannot be homotopy equivalent, much less so homeomorphic.
+\begin{theorem}[Homotopy invariance of homology]
+	View $H_*(\cdot)$ as a functor from \textbf{Top} to \textbf{Ab}. If $f_0\simeq f_1 : X\rightarrow Y$, then:
+	\begin{equation}
+		H_*(f_0) = H_*(f_1) : H_*(X)\rightarrow H_*(Y)
+	\end{equation}
+	and homology cannot distinguish between homotopic maps. 
+\end{theorem}
+
+\begin{definition}
+	The \textbf{homotopy category} of topological spaces \textbf{Ho(Top)} is the category with:
+	\begin{itemize}
+		\item Objects: Same as \textbf{Top}.
+		\item Morphisms: $\textbf{Ho(Top)}(X, Y) := [X, Y]$
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Homotopy equivalence]
+	A map $f : X\rightarrow Y$ is a \textbf{homotopy equivalence} if $[f]\in [X, Y]$ is an isomorphism. Equivalently, $f$ 
+	is a homotopy equivalence if there is $g : Y\rightarrow X$ such that $[f\circ g] = [1_Y]$ and $[g\circ f] = [1_X]$. 
+	In this case, we call $g$ a \textbf{homotopy inverse} of $f$, and we say that $X$ and $Y$ are \textbf{homotopy 
+	equivalent}. 
+\end{definition}
+
+Note that because of the homotopy invariance of homology, $H_* : \textbf{Top}\rightarrow\textbf{Ab}$ factors through 
+\textbf{Ho(Top)} as $\textbf{Top}\rightarrow\textbf{Ho(Top)}\rightarrow\textbf{Ab}$. An easy corollary of the homotopy 
+invariance of homology is that homotopy equivalent spaces have the same homology groups, as seen below.
+
+\begin{corollary}
+	Homotopy equivalence induces an isomorphism in $H_*$, i.e. if $X$ is homotopy equivalent to $Y$, then they have the 
+	same homology groups. 
+\end{corollary}
+\begin{proof}
+	If $f : X\rightarrow Y$ and $g : Y\rightarrow X$ are homotopy inverses, then $H_*(f)\circ H_*(g) = H_*(id_X) = 
+	1_{H_*(X)}$, and similarly for the other way. So, $H_*(f)$ and $H_*(g)$ are inverses of one another and hence 
+	isomorphisms.
+\end{proof}
+
+A nice diagram to remember when dealing with the homotopy invariance of homology is the following commutative square 
+of compositions (where $\pi$ is the quotient map taking $\textbf{Top}(X, Y)\rightarrow [X, Y]$):
+\[\begin{tikzcd}
+	\textbf{Top}(X, Y)\times\textbf{Top}(Y, Z)\arrow[d, "\pi"]\arrow[r, "\circ"] & \textbf{Top}(X, Z)\arrow[d, "\pi"] \\
+	\left[X, Y\right]\times \left[Y, Z\right]\arrow[r, "\circ"] & \left[X, Z\right] \\
+\end{tikzcd}\]
+
+Homotopy equivalence is a nicer type of map in many ways than homormorphism, simply because it is weaker. However, 
+note that it does not preserve many nice topological properties of spaces, including compactness, metrizability, being 
+Hausdorff, second countability, and dimension (as a topological manifold).
+The essential reasoning behind this is that homotopy equivalence allows one to crush a space into a point, as long as there 
+are no holes in the region of interest. It only preserves the structure of the space in the broadest sense, and if there are 
+parts of the space that may deformation retract onto other parts (like a dangling fiber), then no information about this 
+need be preserved under homotopy equivalence.
+
+To directly illustrate an example of one of these properties being lost, consider the sphere $S^{n - 1}\rightarrow \mathbb R^n
+\setminus\{0\}$. Then $\mathbb R^n\setminus\{0\}$ deformation retracts onto $S^{n - 1}$ because the projection map 
+$v\rightarrow \frac{v}{||v||}$ onto the sphere is a homotopy equivalence. However, the space $\mathbb R^n\setminus\{0\}$ is 
+certainly not a compact space, but $S^{n - 1}$ is a compact space. Hence when working with homotopy equivalence, it is 
+essential to remember that it is not nearly as strong a map as a homeomorphism, and that some properties may be lost in 
+translation from one space to another.
+
+\begin{definition}
+	A space $X$ is \textbf{contractible} if the unique map $X\rightarrow\{*\}$ is a homotopy equivalence. 
+\end{definition}
+
+\begin{corollary}
+	Let $X$ be contractible. Then $H_0(X) \cong\mathbb Z$ and $H_n(X)\cong 0$ for $n > 0$, i.e. we have:
+	\begin{equation}
+		\tilde H_*(X) = 0
+	\end{equation}
+\end{corollary}
+
+If a space is contractible, it has ``no holes in its surface", and can be crushed down into the one point space by homotopy. 
+This implies that it has both a trival fundamental group and trivial reduced homology groups. However, note that the converse 
+is not true: if a space has trivial reduced homology groups, it need not be contractible. This is closely related to the Poincar\'e 
+conjecture, and because the proof of this is extremely sophisticated we will not have the tools to prove this in these notes. 
+Another way to formulate contractibility is if $X$ can deformation retract onto a point, which we will define now.
+
+\begin{definition}[Deformation retract]
+	Let $X$ be a space. An inclusion $\iota : A\hookrightarrow X$ is a \textbf{deformation retract} if there the homotopy 
+	relative to $A$ from the identity into a map $X\rightarrow A$, i.e. we have a map $h : X\times I\rightarrow A$ such that 
+	the following hold:
+	\begin{enumerate}
+		\item $h(x, 0) = x$ for each $x\in X$.
+		\item $h(a, t) = a$ for $a\in A$ and $t\in I$.
+		\item $h(x, 1)\in A$ for each $x\in X$. 
+	\end{enumerate}
+\end{definition}
+
+We will now work towards a proof of the homotopy invariance of homology. To do this, we take a brief detour into the concept 
+of a chain homotopy.
+
+\begin{definition}[Chain homotopy]
+	Let $C_*, D_*$ be chain complexes and $f_*, g_* : C_*\rightarrow D_*$ be chain maps. Then a \textbf{chain homotopy} 
+	$h_* : f_*\simeq g_*$ is a chain map $h_n : C_n\rightarrow D_{n + 1}$:
+	\[\begin{tikzcd}
+	...\arrow[r, "d"] & C_{n + 1}\arrow[r, "d"]\arrow[d, "f_{n + 1}"]\arrow[d, swap, "g_{n + 1}"] & C_n\arrow[r, "d"]\arrow[d, "f_n"]
+	\arrow[d, swap, "g_n"]\arrow[ld, "h_n"] & C_{n - 1}\arrow[r, "d"]\arrow[d, "f_{n - 1}"]\arrow[d, swap, "g_{n - 1}"]\arrow[ld, 
+	"h_{n - 1}"] & ... \\
+	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ... \\
+	\end{tikzcd}\]
+	such that:
+	\begin{equation}
+		hd + dh = g - f
+	\end{equation}
+\end{definition}
+
+Chain homotopy is an equivalence relation on the space of maps between topological spaces, which is easy to verify 
+straight from the definition. The reason we are considering chain homotopy is because chain maps which are chain 
+homotopic will induce the same maps on homology. 
+
+\begin{theorem}
+	If $f_0\simeq f_1 : C_*\rightarrow D_*$ are chain homotopic, then they induce the same maps on homology:
+	\begin{equation}
+		(f_0)_* = (f_1)_* : H_*(C_*)\rightarrow H_*(D_*)
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	Recall that the induced map is the natural one, $f_*([x]) = [f(x)]$ for a map $f : C_*\rightarrow D_*$. So, we must 
+	show that for $x\in Z_n(C_*)$, $f_0(x)$ and $f_1(x)$ are in the same coset when we mod $Z_n(D_*)$ out by $B_n(D_*)$ 
+	to form the homology, i.e. $f_0(x) - f_1(x) = da$ with $a\in D_{n + 1}$. Let $x\in Z_n(C_*)$. Then:
+	\begin{equation}
+		f_0(x) - f_1(x) = (dh + hd)(x) = d(hx) + h(dx) = d(hx)\in B_n(D_*)
+	\end{equation}
+	because $dx = 0$ for a cycle $x$. Thus these induce the same maps on homology. 
+\end{proof}
+
+\subsection{Proof of the Homotopy Invariance of Homology}
+Using the above theorem, we can reduce proving the homotopy invariance of homology to showing that homotopic maps $f, g : 
+X\rightarrow Y$ induce chain homotopic maps $f_*, g_* : S_*(X)\rightarrow S_*(Y)$ on the $n$-chains, since these will by 
+default induce the same maps on homology. We will need the following lemma:
+\begin{lemma}
+	Let $k : f\simeq g$ be a chain homotopy between $f, g : C_*\rightarrow D_*$ and let $j : D_*\rightarrow E_*$ 
+	be a chain map. Then $j\circ k : j\circ f\simeq j\circ g$ is a chain homotopy between $j\circ f$ and $j\circ g$. 
+\end{lemma}
+\begin{proof}
+	This is immediate once you draw out the diagrams. Because $j$ is a chain map, $dj = jd$. So, $(jh)d + d(jh) = 
+	jhd + jdh = j(hd + dh) = j(f - g) = jf - jg$ because $hd + dh = f - g$ as $h$ is a chain homotopy. 
+\end{proof}
+
+Now, consider an arbitrary homotopy $h : X\times I\rightarrow Y$ from $f : X\rightarrow Y$ to $g : X\rightarrow Y$. Note 
+that we have canonical injections $\iota_0 : X\times\{0\}\hookrightarrow X\times I$ and $\iota_1 : X\times \{1\}\hookrightarrow 
+X\times I$ such that the diagram commutes:
+\[\begin{tikzcd}
+	X\times\{0\} \arrow[dr, "\iota_0"] \arrow[drr, "f", bend left=20]&  &  \\
+	& X\times I\arrow[r, "h"] & Y \\
+	X\times \{1\} \arrow[ur, "\iota_1"] \arrow[urr, "g", bend right=20] & & \\
+\end{tikzcd}\]
+
+We are trying to prove that we can find a chain homotopy $h_* : f_*\rightarrow g_* : H_*(X)\rightarrow H_*(Y)$ to prove the 
+homotopy invariance. Since $H_*$ is a covariant functor, note that $f_* = h_*\circ\iota_0$ and $g_* = h_*\circ\iota_1$. 
+Using the lemma, if we show that we can find a chain homotopy $k_* : (\iota_0)_*\simeq (\iota_1)_*$, then we can 
+compose the chain homotopy with $h_*$ to get a chain homotopy $h_*\circ k_* : f_*\simeq g_*$. Thus, if we can 
+find a map:
+\begin{equation}
+	k_n : S_n(X)\rightarrow S_{n + 1}(X\times I)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; dk + kd = (\iota_0)_* - (\iota_1)_*
+\end{equation}
+then we have proved the theorem. To construct such a map, view $X\times I\cong X\times\Delta^1$. We can view $k$ as  
+a map $k : \textbf{Top}(\Delta^n, X)\rightarrow \textbf{Top}(\Delta^{n + 1}, X\times\Delta^1)$, and if we can find a way to 
+construct a map:
+\begin{equation}
+	\gamma : \Delta^{n + 1}\rightarrow\Delta^n\times\Delta^1
+\end{equation}
+then given $\sigma\in\textbf{Top}(\Delta^n, X)$, we can construct a map $\tau\in\textbf{Top}(\Delta^{n + 1}, X)$, such that:
+\[\begin{tikzcd}
+	\Delta^{n + 1}\arrow[r, "\gamma"] \arrow[dr, "\tau", bend right] & \Delta^n\times\Delta^1 
+	\arrow[d, shift right=2ex, "\sigma"] \arrow[d, shift 
+	left = 2ex, hook] \\
+	& X\times I \\
+\end{tikzcd}\]
+
+To do this, we will take for granted a theorem that will be proven later in these notes in Section~\ref{subsec:products}: the 
+existence of a \textbf{cross product} on homology. 
+
+\begin{theorem}
+	There is a natural bilinear map $\times : S_p(X)\times S_q(Y)\rightarrow S_{p + q}(X \times Y)$, called the \textbf{cross 
+	product}, such that the following conditions hold.
+	\begin{enumerate}
+		\item $\times$ is natural, so given maps $f : X\rightarrow X'$ and $g : Y\rightarrow Y'$, the following diagram 
+		commutes:
+		\[\begin{tikzcd}
+			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)\arrow[d, "(f \times g)_*"] \\
+			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y') \\
+		\end{tikzcd}\]
+		where $f_*$ and $g_*$ are the maps induced on the $n$-chains and $(f\times g)_*$ is the map induced by 
+		$f\times g : X\times Y\rightarrow X'\times Y', (x, y)\mapsto (f(x), g(y))$. 
+		\item $\times$ is bilinear, i.e. $(a + a')\times b = a\times b + a'\times b$ and $a\times (b + b') = a\times b + a\times 
+		b'$. 
+		\item $d$ is an \textit{anti-derivation} with respect to $\times$, so
+		\begin{equation}
+			d(a\times b) = da\times b + (-1)^p a\times db
+		\end{equation}
+		\item $\times$ is normalized. For $x\in X$, $y\in Y$, and each $a\in S_p(X), b\in S_q(Y)$, given the inclusions 
+		$j_x : Y\hookrightarrow X\times Y, y\mapsto (x, y)$ and $\iota_y : X\rightarrow X\times Y$, the induced maps 
+		$(j_x)_* : S_*(Y)\rightarrow S_*(X\times Y)$ and $(\iota_y)_* : S_*(X)\rightarrow S_*(X\times Y)$ satisfy the 
+		following equations:
+		\begin{equation}
+			(j_x)_*(b) = C_x^0\times b
+		\end{equation}
+		\begin{equation}
+			(\iota_y)_* (a) = a\times C_y^0
+		\end{equation}
+	\end{enumerate}
+\label{thm:cross_product}
+\end{theorem}
+
+Using the cross product, we can explicitly construct a chain homotopy $k_* : (\iota_0)_*\simeq (\iota_1)_*$. Pick 
+a map $j : \Delta^1\rightarrow I$ such that $d_0 j = C_1^0$ and $d_1 j = C_0^0$, which is a very obtuse way of saying $j(0) = 
+1$ and $j(1) = 0$, i.e. $j$ is an orientation reversing path\footnote{Recall that $C_p^n$ is the 
+constant map $\Delta^n\rightarrow X$ with image $p\in X$.}. Then define our map $k_n : S_n(X)\rightarrow S_{n + 1}(X\times I)$ as follows:
+\begin{equation}
+	k_n\sigma := (-1)^n\sigma\times j
+\end{equation}
+Now we take the boundary of this map. Using the properties of $\times$, we have:
+\[
+	d(k_n\sigma) = (-1)^n d(\sigma\times j) = (-1)^n (d\sigma\times j + \sigma\times dj) = -(-1)^{n - 1} (d\sigma\times j) 
+	+ \sigma\times (d_0j - d_1j)
+\]
+\[
+	= -k_{n - 1}(d\sigma) + \sigma\times C_1^0 - \sigma\times C_0^0
+\]
+where we use that $k_{n - 1}(d\sigma) = (-1)^{n - 1} d\sigma\times j$. Now, using the normalization of the cross product 
+for the induced maps $(\iota_0)_*, (\iota_1)_* : S_n(X)\rightarrow S_{n}(X\times I)$, we can write\footnote{These are exactly 
+the maps $\iota_y : X\rightarrow X\times I$ in the theorem at $y = 0$ and $y = 1$.} $\sigma\times C_1^0 = (\iota_1)_*(\sigma)$ 
+and $\sigma\times C_0^1 = (\iota_0)_*(\sigma)$. Thus we see that:
+\begin{equation}
+	dk\sigma = -kd\sigma + ((\iota_1)_* - (\iota_0)_*)\sigma
+\end{equation}
+and we see that $k_*$ is indeed a chain homotopy from $(\iota_0)_*$ to $(\iota_1)_*$, which completes the proof.
+
+Note that there is still a black box in this proof: namely, proof of the existence of the cross product. We will prove this in a 
+later chapter when we discuss it further in detail. The proof ends up requiring the fact that the product $\Delta^p\times\Delta^q$ 
+has a trivial $p + q - 1$ homology group; this can either be shown explicitly, or one can prove a weaker version of the 
+homotopy invariance of homology for star shaped regions, since $\Delta^p\times\Delta^q$ is convex and hence star shaped. 
+However, this is not difficult to prove and can be shown by considering the straight line homotopy. 
+
+\newpage
+\section{Sequences and Relative Homology}
+The tone of these notes is now going to pivot quite a bit and begin preparation for homological algebra, which was developed 
+originally to aid in the study of homology and cohomology. We will be considering abstract sequences of objects and 
+drawing lots of arrows, and our proofs will take a more diagrammatic tone than previously. We begin with the definition of 
+a sequence.
+
+\begin{definition}[Sequence]
+	A \textbf{sequence} of abelian groups is a diagram of the form:
+	\[\begin{tikzcd}
+		...\arrow[r] & C_{n + 1}\arrow[r, "f_{n + 1}"] & C_n\arrow[r, "f_{n}"] & C_{n - 1}\arrow[r] & ... \\
+	\end{tikzcd}\]
+	such that $f_n\circ f_{n - 1} = 0$ for each $n$. A sequence is \textbf{long exact} if $im(f_n) = ker(f_{n - 1})$ for each $n$, 
+	i.e. if its homology vanishes identically. 
+\end{definition}
+In other words, a sequence is a chain complex, and for any such chain complex $im(f_n)\subseteq ker(f_{n - 1})$, the 
+central property that enables the definition and study of homology. If the sequence only has a finite number of nonzero 
+elements, it is understood that we have just left out the 0 elements after the last nonzero one. 
+
+\begin{definition}
+	A \textbf{short exact sequence} (SES) is a long exact sequence of the form:
+	\[\begin{tikzcd}
+		0\arrow[r] & A\arrow[r, "\iota", hook] & B\arrow[r, "p", twoheadrightarrow] & C\arrow[r] & 0 \\
+	\end{tikzcd}\]
+\end{definition}
+Note here we have drawn the arrows in a certain way to suggest specific properties. Namely, for the first and last arrows to 
+be exact, then $A$ must embed into $B$ and $B$ must project onto $C$. Additionally, if this sequence is exact then 
+$A\cong ker(p)$, because $\iota$ embeds $A$ as $A\cong im(\iota)\subseteq B$ and $im(\iota) = ker(p)$. Similarly, 
+we must have $C\cong coker(\iota)$, because $coker(\iota) = B / im(\iota)\cong B / ker(p)\cong C$ as $p$ is surjective. 
+Recall the cokernel of a map is defined as:
+\begin{equation}
+	coker(f : A\rightarrow B) := B / im(f)
+\end{equation}
+
+Intuition for the cokernel of a map is a bit more subtle than intuition for the kernel. This is because 
+the cokernel is not strictly a group (or module, etc.) as we do not necessarily have $im(f)\trianglelefteq B$, and so we cannot 
+consider its algebraic properties. However, an easy way to view the cokernel is by considering how much $f$ deviates from 
+being a surjection. Just as how if the kernel of $f$ grows larger, it is less close to being injective, we have a similar 
+property for the cokernel: as the cokernel grows, $f$ is less and less close to being a surjection. In particular, $f$ is a surjection 
+iff $coker(f) = 0$, so this gives a nice analog to how a map is injective iff $ker(f) = 0$. 
+
+\begin{definition}
+	We define $\bf{Top_2}$ to be the category of pairs $(X, A)$ where $X$ is a topological space and $A$ is a subspace. The 
+	morphisms $(X, A)\rightarrow (Y, B)$ are continuous maps $f : X\rightarrow Y$ such that $f(A)\subseteq B$. 
+\end{definition}
+
+Note that $\bf{Top}$ is a subcategory in $\bf{Top_2}$, which can be seen by either sending $X\mapsto (X, \emptyset)$ or 
+$X\mapsto (X, X)$. 
+
+
+\begin{lemma}
+	Let $B_*$ be a chain complex with subchain complex $A_*\subseteq B_*$. Then there is a unique structure of a chain 
+	complex on the graded abelian groups $C_* := B_* / A_*$ such that the canonical projection $B_*\rightarrow C_*$ 
+	is a chain map. 
+\end{lemma}
+
+\begin{proof}
+	The following diagram outlines the situation we are in, where the diagram is exact vertically and horizonatally:
+	\[ \begin{tikzcd}
+		\cdots \arrow[r] & A_{n + 1} \arrow[r, "d"] \arrow[d, hook] & A_n\arrow[r, "d"] \arrow[d, hook] & A_{n - 1}\arrow[r, "d"] 
+		\arrow[d, hook] & \cdots \\
+		\cdots \arrow[r] & B_{n + 1} \arrow[r, "d"] \arrow[d, "\pi", twoheadrightarrow] & B_n\arrow[r, "d"]\arrow[d, "\pi", 
+		twoheadrightarrow] & B_{n - 1} \arrow[r, "d"] \arrow[d, "\pi", twoheadrightarrow] & \cdots \\
+		\cdots \arrow[r] & C_{n + 1}\arrow[r, "d"] & C_n\arrow[r, "d"] & C_{n - 1}\arrow[r, "d"] & \cdots \\
+	\end{tikzcd} \]
+	We need to define the maps $d : C_n\rightarrow C_{n - 1}$ to make $(C_*, d)$ into a chain complex, where each 
+	$C_n = B_n / A_n$. Define:
+	\begin{equation}
+		d([b]) := [db]
+	\end{equation}
+	To show this is well defined, suppose that $b = b' + a$ with $b, b'\in B_n$ and $a\in A_n$ (i.e. $[b] = [b']$). Then:
+	\begin{equation}
+		db = db' + da\implies [db] = [db']
+	\end{equation}
+	because $[da] = 0$ as $d$ is a chain map on the complex $A_*$, so $da\in A_{n - 1}$ which is killed by the quotient. 
+	This is indeed a chain complex, because:
+	\begin{equation}
+		d^2[b] = d[db] = [d^2 b] = 0
+	\end{equation}
+	Finally, this definition makes $\pi : B_*\rightarrow C_*$ into a chain map by definition, because $\pi(b) = [b]$. Furthermore, 
+	this makes it clear the definition is unique, so we are done.
+\end{proof}
+
+\begin{definition}[Relative singular chain]
+	A \textbf{relative singular chain} is a functor $S_* : \bf{Top_2}\rightarrow\bf{Chain}$, where $\bf{Chain}$ is the 
+	category of chain complexes, which maps:
+	\begin{equation}
+		S_*(X, A) := S_*(X) / S_*(A)
+	\end{equation}
+	which is well defined as $S_*(A)$ is a subcomplex of $S_*(X)$ for a subspace $A$ of $X$. 
+\end{definition}
+
+\begin{definition}[Relative Homology]
+	The \textbf{relative homology} of $(X, A)\in\bf{Top_2}$ is:
+	\begin{equation}
+		H_*(X, A) := H_*(S_*(X, A))
+	\end{equation}
+\end{definition}
+
+Note that the relative homology \textbf{is not} the quotient of the homology groups. However, it is related, and we will 
+show that in certain situations the relative homology behaves just like a quotient. 
+
+As an example, consider $X = \Delta^n$ and $A = \partial X = \partial\Delta^n$. Then the identity $\iota : 
+\Delta^n\rightarrow\Delta^n$ is an element of $Sin_n(\Delta^n$, and the boundary satisfies $d\iota\in S_*(\partial\Delta^n) 
+= S_*(A)$. So, $[\iota]$ is a relative cycle ($[\iota]\in Z_n(X, A)$) because $d[\iota] = [d\iota] = 0$ in $S_*(X, A) = S_*(X) / 
+S_*(A)$, hence $[\iota]$ defines an element of the relative homology $H_n(\Delta^n, \partial\Delta^n)$, which is 
+interesting because $\iota$ is not a representative of an element in the homology of $\Delta^n$. Eventually, we will see that 
+$H_n(\Delta^n, \partial\Delta^n)\cong\mathbb Z$ with $[\iota]$ as a generator. 
+
+Suppose we have a short exact sequence of chain complexes
+\begin{equation}
+	0\longrightarrow A_*\longrightarrow B_*\longrightarrow C_*\longrightarrow 0
+\end{equation}
+In particular, this is the case when $A_* = S_*(A)$, $B_* = S_*(X)$, and $C_* = S_*(X, A)$ for $(X, A)\in\bf{Top_2}$, so 
+anything proved with a sequence of this form can be used for relative simplicial homology as well. When we apply 
+the functor $H_*(\cdot)$, we unfortunately do not get a short exact sequence, although some parts of this SES stay 
+exact when dropped to the level of homology. We make this precise in the following theorem, which will be very important 
+as we continue our study of homology. 
+
+\begin{theorem}
+	Let $0\rightarrow A_*\xrightarrow{f_*} B_*\xrightarrow{g_*} C_*\rightarrow 0$ be a short exact sequence of chain 
+	complexes. Then there is a natural homomorphism:
+	\begin{equation}
+		\partial : H_n(C_*)\rightarrow H_{n - 1}(A_*)
+	\end{equation}
+	such that the following sequence is long exact:
+	\[\begin{tikzcd}
+		\cdots\arrow[r] & H_{n + 1}(A_*)\arrow[r] & H_{n + 1}(B_*)\arrow[r] \arrow[d, phantom, ""{coordinate, name=Z}] & 
+		H_{n + 1}(C_*) \arrow[dll, "\partial", rounded corners, 
+		to path={ -- ([xshift=2ex]\tikztostart.east)
+                |- (Z) [near end]\tikztonodes
+                -| ([xshift=-2ex]\tikztotarget.west)
+                -- (\tikztotarget)}] & \\
+		& H_n(A_*)\arrow[r] & H_n(B_*)\arrow[r] \arrow[d, phantom, ""{coordinate, name=W}] & H_n(C_*) 
+		\arrow[dll, "\partial", rounded corners, 
+		to path={ -- ([xshift=2ex]\tikztostart.east)
+                |- (W) [near end]\tikztonodes
+                -| ([xshift=-2ex]\tikztotarget.west)
+                -- (\tikztotarget)}] & \\
+		 & H_{n - 1}(A_*)\arrow[r] & H_{n - 1}(B_*)\arrow[r] & H_{n - 1}(C_*)\arrow[r] & \cdots \\
+	\end{tikzcd}\]
+\end{theorem}
+
+\begin{proof}
+	We begin by showing exactness at the $\rightarrow H_n(B_*)\rightarrow$ joint. Let $\bar f_*, \bar g_*$ be the 
+	maps induced on the homology by $f_*, g_*$, i.e. $\bar f([a]) := [f(a)]$. Then: 
+	\begin{equation}
+		\bar g_n\circ\bar f_n ([a]) = [g\circ f(a)] = [0] = 0
+	\end{equation}
+	so $im(\bar f_*)\subseteq ker(\bar g_*)$. The reverse inclusion is a bit more involved, and we will need to chase the 
+	following diagram, which is the statement that the above SES is exact (in the future I will not draw this diagram 
+	explicitly). 
+	\[\begin{tikzcd}
+		& 0\arrow[d] & 0\arrow[d] & 0\arrow[d] & \\
+		\cdots\arrow[r, "d"] & A_{n + 1}\arrow[r, "d"]\arrow[d, "f_{n + 1}"] & A_n\arrow[r, "d"]\arrow[d, "f_{n}"] & A_{n - 1}
+		\arrow[r, "d"]\arrow[d, "f_{n - 1}"] & \cdots \\
+		\cdots\arrow[r, "d"] & B_{n + 1}\arrow[r, "d"]\arrow[d, "g_{n + 1}"] & B_n\arrow[r, "d"]\arrow[d, "g_n"] & B_{n - 1}
+		\arrow[r, "d"]\arrow[d, "g_{n - 1}"] & \cdots \\
+		\cdots\arrow[r, "d"] & C_{n + 1}\arrow[r, "d"]\arrow[d] & C_n\arrow[r, "d"]\arrow[d] & C_{n - 1}\arrow[r, "d"]\arrow[d] & 
+		\cdots \\
+		& 0 & 0 & 0 & \\ 
+	\end{tikzcd} \]
+	Pick $[b]\in ker(\bar g_n)$. Then $[g_nb] = 0$ in $H_n(C)$, so $g_nb = dc$ for $c\in C_{n + 1}$. Lift $c$ to $b'\in B_{n + 
+	1}$, so $c = g_{n + 1}b'$. Then $g_nb = dc = dg_{n + 1} b' = g_n db'$, so $g_n(b - db') = 0$, which implies $b - db' = 
+	f_n a$ for $a\in A_n$. Then it is clear that $[b] = [db'] + [f_n a] = \bar f_n([a])$, so $im(\bar f_*) = ker(\bar g_*)$. 
+	
+	We now turn to the connecting homomorphism $\partial$, which we define via a diagram chase. Let $[c]\in H_n(C_*)$, 
+	so $c\in C_n$ and $dc = 0$. Lift $c$ to $b\in B_n$, so $g_{n - 1} db = d g_n b = dc = 0\implies db\in ker(g_{n - 1}) = 
+	im(f_{n - 1})$, so we can lift $db$ to $a\in A_{n - 1}$ so $f_{n - 1}a = db$. We use this element $a$ to define 
+	$\partial[c]$ as $\partial [c] := [a]$. 
+	
+	Now, we show this is well defined. Suppose $[c] = [c']$, so $c = c' + dc''$ with $c''\in C_{n + 1}$. Let $b'\in B_n$ be 
+	a lift of $c'$ and $b''\in B_{n + 1}$ be a lift of $c''$, so $c' = g_n b'$, $c'' = g_{n + 1}b''$, and $dc'' = g_n(b' - b)$. 
+	Applying $dg_{n + 1}$ to $b''$, we see $dg_{n + 1}b'' = dc'' = g_n(b' - b)$, but because $g_*$ is a chain map, we also 
+	have $g_n db'' = dg_{n + 1}b''$, hence $g_n(b' - b - db'') = 0$ and we lift $b' - b - db''$ to $a''\in A_n$. 
+	Note that $db = f_{n - 1}(a)$ and $db' = f_{n - 1}(a')$, where $a'$ is defined for $b'$ as above. But then $df_{n}(a'') = 
+	d(b' - b - db'') = db' - db$, and also $df_n(a'') = f_{n - 1} da''$, and by the definition of $a$ and $a'$ we have 
+	$db' - db = f_{n - 1}(a - a') = f_{n - 1}(da'')\implies f_{n - 1}(a - a' - da'') = 0$. But $f_{n - 1}$ is injective, so this implies 
+	$a = a' + da''$, so $[a] = [a']$ and $\partial$ is thus well defined. 
+\end{proof}
+
+
+
+
+\newpage
+\label{subsec:products}
+\section{Products on Homology}
+
+\subsection{The cross product}
+
+The cross product is a map $\times : S_p(X)\times S_q(Y)\rightarrow S_{p + q}(X\times Y)$, which we will show extends to 
+homology and has many nice properties. The basic intuition is to separate our simplices into factors and then map them into a 
+larger simplex in the product space in a natural way. We will prove the existence by induction. Recall 
+Theorem~\ref{thm:cross_product}, which we restate here for convenience:
+
+\begin{theorem}
+	There is a natural bilinear map $\times : S_p(X)\times S_q(Y)\rightarrow S_{p + q}(X \times Y)$, called the \textbf{cross 
+	product}, such that the following conditions hold.
+	\begin{enumerate}
+		\item $\times$ is natural, so given maps $f : X\rightarrow X'$ and $g : Y\rightarrow Y'$, the following diagram 
+		commutes:
+		\[\begin{tikzcd}
+			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)\arrow[d, "(f \times g)_*"] \\
+			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y') \\
+		\end{tikzcd}\]
+		where $f_*$ and $g_*$ are the maps induced on the $n$-chains and $(f\times g)_*$ is the map induced by 
+		$f\times g : X\times Y\rightarrow X'\times Y', (x, y)\mapsto (f(x), g(y))$. 
+		\item $\times$ is bilinear, i.e. $(a + a')\times b = a\times b + a'\times b$ and $a\times (b + b') = a\times b + a\times 
+		b'$. 
+		\item $d$ is an \textit{anti-derivation} with respect to $\times$, so
+		\[
+			d(a\times b) = da\times b + (-1)^p a\times db
+		\]
+		\item $\times$ is normalized. For $x\in X$, $y\in Y$, and each $a\in S_p(X), b\in S_q(Y)$, given the inclusions 
+		$j_x : Y\hookrightarrow X\times Y, y\mapsto (x, y)$ and $\iota_y : X\rightarrow X\times Y$, the induced maps 
+		$(j_x)_* : S_*(Y)\rightarrow S_*(X\times Y)$ and $(\iota_x)_* : S_*(X)\rightarrow S_*(X\times Y)$ satisfy:
+		\[
+			(j_x)_*(b) = C_x^0\times b
+		\]
+	\end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+	There is a natural bilinear normalized map:
+	\begin{equation}
+		\times : H_q(X)\times H_q(X)\rightarrow H_{p + q}(X\times Y)
+	\end{equation}
+\end{theorem}
+
+\subsection{Kunneth Formulas}
+
+\end{document}

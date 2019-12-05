@@ -1,0 +1,1463 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{tikz-cd}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{prop}{Proposition}[section]
+
+\graphicspath{{/Users/theoares/Math\ Notes/Point\ Set\ Topology/}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{Point-Set Topology}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section{Axioms and Definitions}
+
+	In topology, we take as given our open sets which satisfy certain axioms; namely, we want to be able to combine these open sets as we did in metric 
+	spaces. However, we will make our definition more general to include a broader range of spaces which will give us more flexibility and more useful 
+	tools that we can use.
+	
+	\begin{definition}[Topological Space] A \textbf{topological space} is a pair $(X, \tau)$ consisting of a set $X$ and a collection $\tau$ of subsets of $X$, where 
+	$\tau$ satisfies the following axioms.
+		\begin{enumerate}
+			\item $X$ and $\emptyset$ are in $\tau$.
+			\item $\tau$ is closed under arbitrary unions, i.e. if $\{U_\alpha\}\subset\tau$, then:
+			$$
+				\bigcup_\alpha U_\alpha\in\tau
+			$$
+			\item $\tau$ is closed under finite intersections, i.e. if $\{U_i\}_{i = 1}^n\subset\tau$, then:
+			$$
+				\bigcap_{i = 1}^n U_i\in\tau
+			$$
+		\end{enumerate}
+	We call the set $\tau$ a \textbf{topology} on the set $X$ and we call the members of $\tau$ \textbf{open sets}. 
+	\end{definition}
+	
+	For the rest of these notes, unless otherwise specified, $(X, \tau)$ will be a topological space. Also notice that in this definition, we basically just took the 
+	things that we liked about how to combine open sets from metric spaces and turned them into axioms. Because of this, every metric space admits a 
+	canonical topology; called the \textbf{metric topology}, the open sets are just the ones that are open via the metric. 
+	
+	Given any set $S$, there are two topologies that are always admitted on $S$. The first is called the \textbf{discrete topology}, in which every subset of $S$ 
+	is open. The second is called the \textbf{trivial topology}, in which the open sets are $\{\emptyset, S\}$. Neither of these are very interesting, though they 
+	sometimes turn up as malicious counterexamples.
+	
+	Note that there is a standard way to turn any subset of a topological space into a topological space in its own right.
+	
+	\begin{definition}[Subspace Topology]
+		Let $A\subseteq X$. Then the \textbf{subspace topology} on $A$ is given by $U\subseteq A$ open iff $U = A\cap V$ for some open set $V\subseteq X
+		$. We refer to $A$ as a \textbf{subspace} of $A$ if it is endowed with the subspace topology.
+	\end{definition}
+	
+	\subsection{Combining Topologies}
+	
+	We also have the notion of how ``large" a topology is. Intuitively, one topology is finer than another if it has more open sets; essentially, we can break the 
+	space up into open sets, and a larger topology will break the space up into smaller pieces, while a coarser topology will break the space up into larger 
+	pieces.
+	
+	\begin{definition}
+		Let $\tau_1$ and $\tau_2$ be two topologies on $X$. We say that $\tau_1$ is \textbf{larger (finer, stronger)} than $\tau_2$ if $\tau_2\subset\tau_1$. We say 
+		that $\tau_1$ is \textbf{smaller (coarser, weaker)} than $\tau_2$ if $\tau_1\subset\tau_2$.
+	\end{definition}
+	
+	Generally, we will work with the elements of a topological space in topology. However, it is useful to know how we can combine open sets from different 
+	topologies. Much as in how a space can have different metrics, a space can also have different topologies, and the properties it has in one topology need 
+	not be the same properties it has in another topology.
+	
+	\begin{prop}
+		Let $\mathcal C$ be a collection of topologies on $X$. Then:
+		$$
+			\bigcap_{\tau\in\mathcal C}\tau
+		$$
+		is a topology on $X$.
+	\end{prop}
+	
+	\begin{prop}
+		Let $S$ be any nonempty collection of subsets of $X$. Then there is a smallest topology on $X$ that contains $S$, namely:
+		$$
+			\tau := \bigcap\{\tau : \tau\textnormal{ a topology with } S\subseteq\tau\}
+		$$
+	\end{prop}
+	
+	\subsection{Generalization of Metric Space Properties}
+	
+	As we dealt with closed sets in metric spaces, we can equally well define closed sets in topology. We will now generalize many of the notions we saw in metric 
+	spaces to arbitrary topological spaces.
+	
+	\begin{definition}[Closed Set]
+		A subset $E\subset X$ is a \textbf{closed set} if $E^c$ is open.
+	\end{definition}
+	
+	We now define the important notion of a neighborhood of a point.
+	
+	\begin{definition}[Neighborhood]
+		Let $x\in X$. A \textbf{neighborhood} of $x$ is an open set $U$ that contains $x$.
+	\end{definition}
+	
+	Neighborhoods give us a practical way to show that a set is open-- suppose that we are trying to determine if $V\subset X$ is open. Then it suffices to show 
+	that given $x\in V$, we can find a neighborhood $U_x$ of $x$ contained in $V$, for if we have found such a collection of neighborhoods $\{U_x\}_{x\in V}$, 
+	then:
+	$$
+		\bigcup_{x\in V}U_x = V
+	$$
+	for the forward containment follows because each $U_x\subseteq V$, and the reverse because $V\subseteq\{x : x\in V\}$. Because open sets are closed 
+	under arbitrary unions, if we can find such a neighborhood for every $x\in V$ it guarantees that $V$ is open, because we will have written it as a union 
+	of open sets.
+
+	We can define the notion of interior and of a limit point equally well in a topological space as in a metric space. A limit point of a set is a point that is ``close" to 
+	the set in a topological sense, i.e. that every neighborhood of a limit point intersects the set in some point. The interior is just as in metric spaces, where we 
+	can find an open neighborhood around any point in the interior contained that is contained in the set.
+	
+	\begin{definition}[Interior]
+		Let $A\subset X$. Then we define the \textbf{interior} of $A$, denoted $A^\circ$, to be the union of all the open sets contained in $A$.
+	\end{definition}
+	
+	\begin{definition}[Limit Point]
+		Let $A\subseteq X$, $p\in X$. Then $p$ is a \textbf{limit point} of $A$ if for each neighborhood $p\in U$, we have:
+		$$
+			U\cap(A\setminus\{p\})\neq\emptyset
+		$$
+	\end{definition}
+	
+	Subtracting $p$ out of $A$ guarantees that the points of $A$ have to be sufficiently close to $p$, and that it is not enough to just have $p\in A$ (consider 
+	the natural numbers $\mathbb N$. These do not have a limit point in the standard topology of $\mathbb R$.). To show $p$ is not a limit point, we can 
+	simply show it has a disjoint neighborhood from $A\setminus\{p\}$. Just as limit points generalize, convergent sequences generalize as well.
+	
+	\begin{definition}[Convergence]
+		Let $X$ be a topological space, and let $(x_n)$ be a sequence in $X$. Let $x\in X$. Then we say that $(x_n)$ \textbf{converges} to $x$, denoted $x_n
+		\rightarrow x$, if for each open neighborhood $U\ni x, \exists N\in\mathbb N$ such that $x_n\in U, \forall n > N$.
+	\end{definition}
+	
+	For the most part, convergence plays a much smaller role in topology than it does in the theory of metric spaces. To relate this definition to its metric space 
+	counterpart, suppose $x_n\rightarrow x$. Then for any open set $U\ni x$ (i.e. $\epsilon > 0$ in metric spaces), the sequence lies in $U$ \textbf{eventually}. 
+	Open sets may look very strange in this space, but the basic notion is the same: for any tolerance (open set around $x$), the sequence eventually gets within 
+	this tolerance and stays within this tolerance. Now, we may relate closed sets and limit points.
+	
+	\begin{definition}[Closure, Dense]
+		Let $A\subseteq X$. We define the \textbf{closure} of $A$ to be the set:
+		$$
+			\overline A := A\cup\{p\in X : p \textnormal{ is a limit point of $A$}\}
+		$$
+		If $\overline A = X$, we say that $A$ is \textbf{dense} in $X$.
+	\end{definition}
+	
+	\begin{theorem}
+		$A\subseteq X$ is closed iff $A$ contains all its limit points, i.e. $A = \overline A$.
+	\end{theorem}
+	
+	\begin{proof}
+		Suppose $A$ is closed and $p\notin A$ is a limit point of $A$. Then $A^c$ is an open neighborhood of $p$ and is disjoint from $A\setminus\{p\}$, a 
+		contradiction to $p$ being a limit point of $A$. Conversely, suppose $A$ contains all its limit points. Then each $p\in A^c$ is not a limit point, and so 
+		we may find a disjoint open neighborhood to $A$ of $p$, $U_p$. But then $A^c = \bigcup_{p\in A^c} U_p$, and hence is open.
+	\end{proof}
+	
+	In a sense, the closure of $A$ is the ``best" closed set that contains $A$, in that if any other closed set $B$ contains $A$, then it must contain $\overline A$ 
+	as well.
+	
+	\begin{theorem}
+		The closure $\overline A$ is the smallest closed set containing $A$.
+	\end{theorem}
+	
+	\begin{proof}
+		We must show that $\overline A$ is closed, and that given any $A\subseteq B\subseteq X$ with $B$ closed, $\overline A\subseteq B$. We prove the 
+		latter first; if this is the case, then limit points of $A$ are also limit points of $B$, and $B$ must contain all its limit points, so $\overline A\subseteq B$. 
+		We show $\overline A$ is closed, i.e. that $\overline{\overline A} = \overline A$, or that $\overline A^c$ is open. Let $x\in \overline A^c$, so $x$ is 
+		not a limit point of $A$ and $\exists U_x$ an open neighborhood of $x$ such that $U_x\cap (A\setminus \{x\}) = U_x\cap A = \emptyset$. Now, 
+		suppose $y\in\overline A$ is in $U_x$. This is a contradiction because $U_x\cap(A\setminus\{y\}) = \emptyset$, so $y\notin U_x\implies U_x\cap
+		\overline A = \emptyset$, so $\overline A^c$ is open. 
+	\end{proof}
+	
+	\begin{corollary}
+		$A$ is closed iff $A = \overline A$. 
+	\end{corollary}
+	
+	\subsection{Bases}
+	
+	It is often quite difficult to specify an explicit list of open sets in a topological space. Instead, we specify a subset of open sets that can ``create" every other open 
+	set, called a base.
+	
+	\begin{definition}[Base]
+		A \textbf{base} for a topological space $(X, \tau)$ is a collection of open sets $B$ such that any set $A\in\tau$ is a union of open sets in $B$.
+	\end{definition}
+	
+	For example, a base for the standard topology on $\mathbb R^n$ is the collection of open balls with radius $\epsilon > 0$ centered at an arbitrary $x\in
+	\mathbb R^n$. Note that \textbf{bases are not unique} whatsoever; we can always add an extra open set to a base to make a new base. Now, let's see 
+	how we can generate a base from a family of subsets of $X$. 
+	
+	\begin{prop}
+		Let $X$ be a set, $B$ a collection of subsets of $X$. If $B$ has the property that for $U, V\in B$, $U\cap V$ is a union of elements in $B$, then the 
+		collection of unions of elements of $B$ is a topology with a base given by $B$. 
+	\end{prop}
+	
+	\begin{prop}
+		Let $X$ be a set, $S$ any collection of subsets of $X$ such that $\bigcap\{V\in S\} = X$. Then the set of finite intersections of elements of $S$ is a 
+		base for a topology (the topology in the previous proposition). Then we say that $S$ is a \textbf{subbase} for the topology.
+	\end{prop}
+	
+	\begin{definition}[Subbase]
+		Let $\tau$ be a topology on $X$, and $S\subseteq\tau$ such that $X = \bigcup S$. If the topology for which $S$ is a subbase is $\tau$, we say that 
+		$S$ is a \textbf{subbase} for $\tau$. 
+	\end{definition}
+	
+	All a subbase means is that we generate a base by intersecting subbase elements. Condition that $\bigcup S = X$ is just so that $X$ is in our topology. 
+	So, a subbase allows us to generate a base by taking finite intersections of subbase elements, and a base in turn allows us to generate a topology by taking 
+	arbitrary unions of base elements. We will see later that in some cases, it is more natural to specify a subbase. Note that \textbf{a base is note necessarily 
+	a subbase}. Indeed, if we take a subbase on a metric space to be the collection of open balls, then the base it generates is not the collection of open balls 
+	on the metric space, because the intersection of two balls is not guaranteed to be a ball.
+
+\section{Continuity}
+
+	As we did with the axioms for a topology, we motivate the topological definition of continuity with the definition from continuity we use from metric spaces. 
+	The general notion of continuity from a metric space that involves the metric $d$ cannot be easily generalized to topological spaces, but we can use the 
+	theorem relating pullbacks of open sets in metric spaces. That is:
+	
+	\begin{definition}[Continuity]
+		A map $f : X\rightarrow Y$ between topological spaces is \textbf{continuous} if for every open set $V$ in $Y$, 
+		$$
+			f^{-1}(V)\subseteq X
+		$$
+		is open. 
+	\end{definition}
+	
+	We also define special types of maps, called open maps and closed maps, that may help us a bit when we get to homeomorphisms.
+	
+	\begin{definition}[Open and Closed]
+		Let $f : X\rightarrow Y$ be a map. We say $f$ is \textbf{open} if $f$ maps open sets into open sets; we say $f$ is \textbf{closed} if $f$ maps closed sets 
+		to closed sets.
+	\end{definition}
+	
+	Even though a map is open / closed, it does not imply that the map is closed / open. Note that any function out of a discrete topological space is continuous, 
+	simply because every set is open in the discrete topology. Continuity respects the subspace topology nicely. Here is a slew of easy theorems to prove about 
+	continuity:
+	
+	\begin{theorem}
+		If $A\subseteq X$ is a subspace, then the inclusion map $\iota : A\rightarrow X$ is continuous. Furthermore, if $f : X\rightarrow Y$ is any continuous 
+		map, then $f|_A : A\rightarrow Y$ is continuous, where $f|_A = f\circ\iota$.
+	\end{theorem}
+	
+	The first part follows essentially from the definition of a subspace, and the second is an immediate corollary of the next theorem, which shows that we can 
+	compose continuous maps:
+	
+	\begin{theorem}
+		If $f : X\rightarrow Y$ and $g : Y\rightarrow Z$ are continuous functions, then:
+		$$
+			g\circ f : X\rightarrow Z
+		$$
+		is also continuous.
+	\end{theorem}
+	
+	\begin{theorem}
+		Let $f : X\rightarrow Y$ be a map. The following are equivalent:
+		\begin{enumerate}
+			\item $f$ is continuous. 
+			\item $f^{-1}(A)$ is closed whenever $A\subseteq Y$ is closed. 
+			\item If $\{U_\alpha\}$ is a base (or subbase) for the topology on $Y$, then $f^{-1}(U_\alpha)$ is open for all $\alpha$.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}
+		These follow due to a couple of set theory identities:
+		$$
+			f^{-1}(A\cup B) = f^{-1}(A)\cup f^{-1}(B) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+			f^{-1}(A^c) = (f^{-1}(A))^c
+		$$
+	\end{proof}
+	
+	The last identity is especially useful; since we typically don't know what every open set in a topology looks like, it is much easier to prove that $f$ pulls back 
+	base elements into open sets than knowing that $f$ pulls back all open sets into open sets. Now, we turn to the idea of topological equivalence. In 
+	algebra, we say that two structures are the same up to isomorphism if they share the same algebraic structure. There is a similar notion in topology; 
+	we use the homeomorphism to describe a nice, topology-preserving map between spaces.
+	
+	\begin{definition}[Homeomorphism]
+		A function $f : X\rightarrow Y$ is a \textbf{homeomorphism} if $f$ is a continuous bijection with a continuous inverse. We call $X$ and $Y$ \textbf{
+		homeomorphic spaces} if there is a homeomorphism between them, and write $X\cong Y$.
+	\end{definition}
+	
+	Homeomorphisms are isomorphisms in the category of topological spaces. Any homeomorphism $f$ induces a bijection between open sets of $X$ and open 
+	sets of $Y$, because since $f^{-1}$ is continuous, $f$ pushes open sets of $X$ into open sets of $Y$. So, if $X\cong Y$, their topologies are in bijection, and it 
+	makes sense to identify them as topologically the same.
+	
+	As an example, consider the stereographic projection $f : S^n\setminus\{(0, 0, ..., 1)\}\rightarrow \mathbb R^n$. This is a homeomorphism from $S^n$ 
+	minus one point to $\mathbb R^n$, and we will use this quite a bit in this course.
+	
+	
+\section{Constructions}
+
+	\subsection{Abstract Constructions}
+	
+	By an abstract construction, I mean a construction which specifies another space as a universal object. Given a map to or from a topological space, we will 
+	consider natural topologies that we can put on the domain or the codomain. 
+	
+	\begin{definition}[Initial Topology]
+		Let Let $\{(X_\alpha, \tau_\alpha)\}_\alpha$ be a collection of topological spaces, $Y$ a set, and $f_\alpha : 
+		Y\rightarrow X_\alpha$ a map for each $\alpha$.Then the weakest topology on $Y$ making each $f_\alpha$ 
+		continuous is called the \textbf{initial topology}.
+	\end{definition}
+	
+	\begin{definition}[Final Topology]
+		Let $\{(X_\alpha, \tau_\alpha)\}_\alpha$ be a collection of topological spaces, $Y$ a set, and $f_\alpha : 
+		X_\alpha\rightarrow Y$ a map for each $\alpha$. Then the strongest topology making each $f_\alpha$ continuous is 
+		called the \textbf{final topology}
+	\end{definition}
+	
+	Note that these two constructions are dual to one another. To remember them, remember that ``initial" and ``final" specify 
+	the side of the map which we are trying to put a topology on. If we are given a map from a set \textbf{into} a space, then 
+	we put the initial topology on it, and vice versa. Remembering if we should put the strongest or weakest topology on the 
+	set is a bit harder, but still reasonably easy. For example, suppose we have the map $f : X\rightarrow Y$ from a space $X$ 
+	into a set $Y$, and we wish to put a topology $\tau_Y$ on $Y$ making $f$ continuous. To make $f$ continuous, we don't 
+	need to add any sets to $\tau_Y$ at all; we can simply let $\tau_Y = \{\emptyset, Y\}$, and then these will trivially pull back 
+	open sets of $X$. But, this is not interesting, hence we don't want the final topology on $Y$ to be the weakest topology 
+	making $f$ continuous; rather, we want an interesting topology! This means instead we should make the final topology on 
+	$Y$ the \textbf{strongest} topology making $f$ continuous, as then we will get a nontrivial topology. The same line of 
+	reasoning will show that we should consider the initial topology to be the weakest one making such a function continuous, 
+	because the strongest topology we can put on the domain of a map to make it continuous is the power set itself.
+	
+	The first topology we will construct with these notions is the quotient topology.
+	
+	\begin{definition}[Quotient Topology]
+		Let $\{(X_\alpha, \tau_\alpha)\}$ be a collection of topological spaces, $Y$ a set, and $f_\alpha : X\alpha\rightarrow 
+		Y$ a map for each $\alpha$. Then, the final topology on $Y$ is called the \textbf{quotient topology}. 
+	\end{definition}
+	
+	Essentially, the quotient topology maps the natural structure of the open sets in $X$ onto $Y$. For another look at this, 
+	see the section below about identification spaces. Given a collection $\{((X_\alpha, \tau_\alpha), f_\alpha)\}$ mapping into 
+	$Y$ as above, we can explicitly construct the quotient topology on $Y$. Let $X = \bigoplus_\alpha X_\alpha$ be the 
+	disjoint union of all the $X_\alpha$'s, and define $f : X\rightarrow Y$ by $f|_{X_\alpha} = f_\alpha$. Put a topology on $X$ 
+	which has base $\tau_X := \bigoplus_\alpha \tau_{X_\alpha}$. Then we can define the quotient topology on $Y$ via this 
+	map $f$, where a subset of $Y$ is open iff its preimage in $X$ is open. 
+	
+	Now, all that was a construction of a final topology. With an initial topology, the biggest difference is that our base is only 
+	\textbf{finite intersections} of preimages of base elements. For example, suppose we are putting the initial topology on 
+	$Y$, and we have maps $f_\alpha : Y\rightarrow X_\alpha$. Then a base for the initial topology is:
+	$$
+		\beta = \{\bigcap_{j = 1}^n f_{\alpha_j}^{-1}(U_j) : U_{\alpha_j}\subseteq X_{\alpha_j}\textnormal{ is open.}\}
+	$$
+	Feel free to justify this to yourself; this will be important later when we consider products. Finally, with initial topologies we 
+	have a nice characterization of continuous maps. There is an equivalent theorem for final topologies.
+	
+	\begin{prop}
+		Let $Y$ be equipped with the initial topology from maps $f_\alpha : Y\rightarrow X_\alpha$. Let $Z$ be another 
+		topological space with a map $g : Z\rightarrow Y$. Then $g$ is continuous iff $f_\alpha\circ g$ is continuous for each 
+		$\alpha$.
+		\[
+		\begin{tikzcd}
+			{} & Z \arrow[d, "g"] & {} \\
+			{} & Y \arrow[ld, bend right, "f_\alpha"] \arrow[d, "f_\beta"] \arrow[rd, bend left] & {} \\
+			X_\alpha & X_\beta & \cdots \\
+		\end{tikzcd}
+		\]
+	\end{prop}	
+	
+	\subsection{Concrete Constructions}
+
+	Here, we will provide concrete examples of constructions. Some of the information will be repeated from the first section to this section, but everything should 
+	be compatible, i.e. the original definition we gave of a quotient space will be the same as the definition we will give in this section, just looked at in a different 
+	way. 
+	
+	\subsection{Disjoint Union}
+	
+	Let $X$ and $Y$ be topological spaces. Then we can put a topology on the disjoint union:
+	$$
+		X\sqcup Y
+	$$
+	by letting a base for the topology be of the form $\{U_\alpha\}\cup\{V_\beta\}$, where $\{U_\alpha\}$ are the open sets of $X$ and $\{V_\beta\}$ are the open 
+	sets of $Y$. \textit{Note the union is disjoint}; even if $X$ and $Y$ come from the same space originally and have nonempty intersection, we still must 
+	identify the elements of $X$ separately from the elements of $Y$. For example, if $X = \{1, 2, 3\}$ and $Y = \{3, 4, 5\}$, then $X\sqcup Y = \{1, 2, 3_X, 3_Y, 
+	4, 5\}$.
+	
+	\subsection{Product Space}
+	
+	If $X$ and $Y$ are topological spaces, we can turn their Cartesian product 
+	$$
+		X\times Y = \{(x, y) : x\in X, y\in Y\}
+	$$
+	into a topological space by specifying a base for the topology as:
+	$$
+		\{U\times V : U\subseteq X\textnormal{ open, } V\subseteq Y\textnormal{ open}\}
+	$$
+	Essentially, we take products of all the open sets as our base, and then union them to get all the open sets in the topology. In the case of $\mathbb R^2 = 
+	\mathbb R\times\mathbb R$, the base we get is from the box topology; i.e. the base for $\mathbb R^2$ from the product topology is:
+	$$
+		\{(a, b)\times (c, d) : a < b, c < d\}
+	$$
+	In this topology, the unit disk $B^2$ is \textbf{not} a base element; it is an open set, however, because it is a union of open boxes. Now, we turn our attention 
+	to projection maps. Every product space comes equipped with two projection maps, 
+	$$
+	\begin{cases}
+		p_1 : X\times Y\rightarrow X & (x, y)\mapsto x \\
+		p_2 : X\times Y\rightarrow Y & (x, y)\mapsto y
+	\end{cases}
+	$$ 
+	which are naturally surjective.
+	
+	\begin{theorem}
+		If $X\times Y$ is a product space, then $p_1$ and $p_2$ are continuous and take open sets into open sets. Furthermore, \textbf{the product topology 
+		is the smallest topology for which $p_1$ and $p_2$ are continuous}.
+	\end{theorem}
+	
+	\begin{proof}
+		$p_1$ is continuous because it pulls back open $U\subseteq X$ to $U\times Y$, which is a base element. Suppose $A\subseteq X\times Y$ is open. 
+		Then
+		$$
+			A = \bigcup_{\alpha, \beta}U_\alpha\times V_\beta
+		$$
+		and so:
+		$$
+			p_1(A) = p_1(\bigcup_{\alpha, \beta}U_\alpha\times V_\beta) = \bigcup_\alpha U_\alpha
+		$$ 
+		is open in $X$. Suppose $\tau$ is another topology making $p_1$ and $p_2$ continuous; we will show that the product topology is contained in 
+		$\tau$. Because $p_1$ is continuous, every open set $U\subseteq X$ pulls back (via $p_1$) to $U\times Y\in \tau$, and every open set $V\subseteq 
+		Y$ pulls back (via $p_2$) to $X\times V\in\tau$. This implies that $U\times V = (U\times Y)\cap (X\times V)\in\tau$, and so the base for the product 
+		topology is contained in $\tau$. Hence $\tau$ contains the product topology, so $\tau$ is finer than the product topology.
+	\end{proof}
+	
+	\begin{theorem}
+		A function $f : Z\rightarrow X\times Y$ is continuous iff $p_1\circ f : Z\rightarrow X$ and $p_2\circ f : Z\rightarrow Y$ are continuous.
+	\end{theorem}
+	
+	\begin{proof}
+		The forward direction is trivial. Suppose the converse, that $p_1\circ f$ and $p_2\circ f$ are continuous. Let $U\times V$ be open in $X\times Y$. 
+		Then $(p_1\circ f)^{-1}(U) = f^{-1}(U\times Y)$ and $(p_2\circ f)^{-1}(V) = f^{-1}(X\times V)$ are open in $Z$, and because:
+		$$
+			f^{-1}(U\times V) = f^{-1}((U\times Y)\cap (X\times V)) = f^{-1}(U\times Y)\cap f^{-1}(X\times V)
+		$$
+		is the intersection of two open sets, $f^{-1}(U\times V)$ is open as well, hence $f$ is continuous.
+	\end{proof}
+	
+	Now, we can consider general product. Up until now, we have considered products of two (and by induction, finite) spaces. However, many of the things that 
+	we have said hold more generally if we take arbitrary products.
+	
+	\begin{definition}[Product Space]
+		Let $\{(X_\alpha, \tau_\alpha)\}_{\alpha\in A}$ be a collection of topological spaces. Let:
+		$$
+			Y = \prod_{\alpha\in A} X_\alpha := \{h : A\rightarrow\bigoplus_\alpha X_\alpha | h(\alpha)\in X_\alpha, \forall\alpha\in A\}
+		$$
+		equipped with projection maps $\pi_\alpha : Y\rightarrow X_\alpha, (x_\beta)_{\beta\in A}\mapsto x_\alpha$. Then the \textbf{product topology} on $Y$ 
+		is the initial topology of $Y$ under the maps $\{\pi_\alpha\}_{\alpha\in A}$.
+	\end{definition}
+	
+	First, note that we can view $Y$ as functions $h : A\rightarrow\bigoplus_\alpha X_\alpha$, since with each sequence $(x_\alpha)_{\alpha\in A}$, we can 
+	define $h(\alpha) := x_\alpha$ (this is a more general way to define a product than to by viewing it as a sequence of tuples). As a base for the product 
+	topology, we get \textbf{finite} intersections of preimages of open sets in each $X_\alpha$. This means that a subbase for the product topology is:
+	$$
+		S = \{\pi_\alpha^{-1}(U) : U\subseteq X_\alpha\textnormal{ is open.}\}
+	$$
+	Explicitly, the open sets for the product topology are of the form:
+	$$
+		\bigcap_{j = 1}^n\pi_{\alpha_j}^{-1}(U_{\alpha_j})
+	$$
+	where each $U_{\alpha_j}$ is open in $X_{\alpha_j}$. For an example, let $I$ be the interval $[0, 1]$ in $\mathbb R$, and let $B(I)$ denote that 
+	set of all functions $I\rightarrow I$. Then we can equivalently define $B$ as a product; for $i\in I$, define $X_i := I$. Let $X := \prod_{i\in I} X_i$. Then, there is a 
+	natural homeomorphism:
+	$$
+		B(I)\xrightarrow{\sim}X
+	$$
+	by mapping each $f\mapsto (f(i))_{i\in I}$. This product topology is interesting to consider; if we view elements of $X$ as functions $f : I\rightarrow I$, then 
+	the open sets are finite intersections of preimages of open sets in $X_i$. This means the following: fix a finite number of points $\{i_j\}_{j = 1}^n$ in $I$. 
+	For each $j$, take an open subset $U_j$ of $[0, 1]$. Then, let $\mathcal O$ be the set $\{f\in X : f(x_j) \in U_j\forall j = 1, ..., n\}$. Then $\mathcal O$ is an 
+	open set, and every open set in the product topology is of this form. Essentially, the open sets in $X$ contain functions whose values are specified to be in 
+	a given open set at a finite number of points in $I$. The values the functions take on not in this finite range of values can be arbitrary.
+	
+	\subsection{Identification Spaces}
+	
+	This is the most complicated construction we will encounter; the idea behind identification spaces it to ``identify" points on an existing space $X$ as equal, 
+	and endow this new space with a topology inherited from $X$. We may formalize this notion like so:
+	
+	\begin{definition}[Identification Space]
+		Let $P$ be a partition of $X$, i.e. $P$ is a collection of disjoint subsets of $X$ such that $X = \bigcup_{A\in P}A$. We define $\pi : X\rightarrow P$ to be 
+		the map $x\mapsto A_x$, where $x\in A_x\in P$, and define the \textbf{identification space} $Y$ by setting the points of $Y$ to be the elements of $P$ 
+		(i.e. as sets, $Y = P$), and we say a subset $A\subseteq Y$ is open iff $\pi^{-1}(A)\subseteq X$ is open.
+	\end{definition}
+	
+	\begin{theorem}
+		The projection map $\pi : X\rightarrow Y$ is continuous, and the identification topology is the largest (finest) topology on $Y$ making $\pi$ continuous.
+	\end{theorem}
+	
+	This is essentially a restatement of the definition. We have a universal property for the quotient similar to the one for the product, whose proof is quite 
+	easy:
+	
+	\begin{theorem}
+		If $Y$ is an identification space and $Z$ is any space, then $f : Y\rightarrow Z$ is continuous iff $f\circ\pi : X\rightarrow Z$ is continuous. 
+	\end{theorem}
+	
+	Now, we turn to the subject of attaching maps and quotient spaces. 
+	
+	\begin{definition}[Attaching Map]
+		Let $X, Y$ be topological spaces, $A\subseteq X$, and $f : A\rightarrow Y$ a continuous function. Construct a partition $P$ on $X\sqcup Y$ by 
+		letting $P$ contain $\{x\}$ for $x\in X\setminus A$, $\{y\}$ for $y\in Y\setminus im(f)$, and $\{y\}\cup f^{-1}(\{y\})$ for $y\in im(f)$. We denote the 
+		identification space produced by $P$ by:
+		$$
+			X\cup_f Y
+		$$
+		and call $f$ the \textbf{attaching map}.
+	\end{definition}
+	
+	What we have done is essentially used the map $f$ to glue together $X$ and $Y$ along $A$. We have identified any points in the image of $f$ with its 
+	preimage as equal, so we can view this as joining the spaces along the set $A$. We may use the notion of an attaching map to construct a quotient space, 
+	one in which we collapse an entire subset of a space to a point.
+	
+	\begin{definition}[Quotient Space]
+		Let $A\subseteq X$, and let $Y = \{*\}$ be the one-point space. Let $f : A\rightarrow Y$ be the (only) map $a\mapsto *$. Then we define the 
+		\textbf{quotient space} $X / A$ to be the identification space $X\cup_f Y$
+	\end{definition}
+	
+	The intuitive view of a quotient space is that we have collapsed $A$ into a single point. For example, if we quotient the endpoints of a line segment out, 
+	the resulting space is homeomorphic to a circle. 
+	
+	Now \textbf{suppose we have a continuous surjective $f : X\rightarrow Y$, and that the topology on $Y$ is the largest for which $f$ is continuous}. We can 
+	define a partition $P$ on $X$ by taking sets of the form $f^{-1}(\{y\})$, for $y\in Y$, and let $Y^*$ be this identification space with projection map $\pi : X
+	\rightarrow Y^*$. 
+	
+	\begin{lemma}
+		A function $g : Y\rightarrow Z$ is continuous iff the map $g\circ f : X\rightarrow Z$ is continuous.
+	\end{lemma}
+	
+	\begin{proof}
+		The forward direction is obvious, so suppose $g\circ f$ is continuous. Let $V\subseteq Z$ be open, so $(g\circ f)^{-1}(V) = f^{-1}(g^{-1}(V))$ is open 
+		in $X$. Let $U := g^{-1}(V)$. If $U$ is not open, then we may add $U$ to the topology on $Y$ and preserve the continuity of $f$ as $f$ pulls $U$ 
+		back into an open set in $X$. But since the topology on $Y$ is the largest making $f$ continuous, this implies that $U$ is open in $Y$, and hence 
+		$g^{-1}(V)$ is open, so $g$ is continuous.
+	\end{proof}
+	
+	\begin{theorem}
+		If the above conditions are satisfied ($f$ a continuous surjection and the topology on $Y$ the largest making $f$ continuous), then $Y$ and $Y^*$ 
+		are homeomorphic by the map:
+		$$
+			f_* : Y^*\rightarrow Y \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; f_*(\{f^{-1}(y)\}) := y
+		$$
+	\end{theorem}
+	
+	\begin{proof}
+		We define a map $f_* : Y^*\rightarrow Y$ by $f_*(\{f^{-1}(y)\}) = y$. Then $f_*$ is injective because if $f^{-1}(\{y_1\})\neq f^{-1}(\{y_2\})$, then $y_1\neq 
+		y_2$, and $f_*$ is surjective because $f^{-1}(\{y\})$ is nonempty for each $y\in Y$ due to the surjectivity of $f$. Now, note that $f = f_*\circ\pi$ and 
+		$\pi = f_*^{-1}\circ f$, and this implies that $f_*$ and its inverse are continuous by the previous theorems and lemma.
+	\end{proof}
+	
+	Let's notice that the only place we used the condition about the topology on $Y$ being the finest making $f$ continuous was the lemma, so what can we 
+	assume given an arbitrary continuous surjection $f : X\rightarrow Y$? We can still construct the identification space $Y^*$, and the induced map $f_* : Y^*
+	\rightarrow Y$ is a continuous bijection. However, it is \textbf{not} necessarily a homeomorphism, as we cannot use the lemma that we proved. Note 
+	that (I think) this is the topological equivalent of the first isomorphism theorem-- although if we don't make any assumptions about the topology on $Y$, 
+	we can only assume that $f_*$ is a continuous bijection, not a homeomorphism.
+	
+	\begin{theorem}
+		Let $f : X\rightarrow Y$ be a continuous surjection that maps open sets to open sets. Then $Y$ is an identification space of $X$, and in fact $Y\cong 
+		Y^*$. 
+	\end{theorem}
+	
+	\begin{proof}
+		If $f$ maps open sets to open sets, then the topology on $Y$ is the largest making $f$ continuous, because any set in $Y$ that is not open does 
+		not pull back to an open set in $X$, and hence if we add any open sets to $Y$, they do not pull back to open sets in $X$ under $f$ and hence 
+		$f$ would cease to be continuous. So, this is equivalent to the previous theorem. 
+	\end{proof}
+	
+	As one final example, we have the relation:
+	$$
+		S^n\cong B^n / S^{n - 1}
+	$$
+	where $B^n$ is the unit ball, and we use the relations $S^n\setminus\{p\}\cong \mathbb R^n$ for any point $p$.
+
+	Now, we will move on to study topological properties that are invariant under homeomorphism; the two main properties 
+	we will consider are \textbf{compactness} and \textbf{connectedness}.
+
+\newpage
+
+\section{Compactness}
+	
+	Compactness in an arbitrary topological space is a generalization of ``finiteness" in $\mathbb R^n$. Essentially, compact 
+	sets are not homeomorphic to ``infinite sized" set. We will define compactness topologically in terms of covers:
+	
+	\begin{definition}[Open Cover, Subcover]
+		An \textbf{open cover} of a topological space $X$ is a collection of open sets $\{U_\alpha\}$ such that:
+		$$
+			X = \bigcup_\alpha U_\alpha
+		$$
+		If $\{U_\alpha\}$ and $\{V_\beta\}$ are open covers of $X$ and $\{V_\beta\}\subseteq\{U_\alpha\}$, then we say 
+		$\{V_\beta\}$ is a \textbf{subcover} of $\{U_\alpha\}$.
+	\end{definition}
+	
+	\begin{definition}[Compactness]
+		A space $X$ is \textbf{compact} if every open cover of $X$ contains a finite subcover. A subset $A\subseteq X$ is 
+		\textbf{compact} if it is compact in the subspace topology. 
+	\end{definition}
+	
+	Showing a space is not compact is much easier than showing it is compact; just exhibit an open cover that has no finite 
+	subcover. For example, the open cover $\{B_k(\vec{0})\}_{k\in\mathbb N}$ of $\mathbb R^n$ has no finite subcover, and 
+	hence $\mathbb R^n$ is not compact. Compactness is preserved under continuous mappings.
+	
+	\begin{prop}
+		The continuous image of a compact set is compact. In other words, if $f : X\rightarrow Y$ is continuous and $X$ is 
+		compact, then $im(f)\subseteq Y$ is compact as well.
+	\end{prop}
+	
+	\begin{proof}
+		Assume WLOG that $f$ is surjective, and let $\{V_\alpha\}$ be an open cover of $Y$, so $Y = \bigcup_\alpha V_
+		\alpha$. Then we also have an open cover of $X$ given by $\{f^{-1}(V_\alpha)\}$, as $f$ is continuous and 
+		surjective. But $X$ is compact, so this has a finite subcover $\{f^{-1}(V_{\alpha_i})\}_{i = 1}^n$, and we have that:
+		$$
+			Y = f(X) = f(\bigcup_{i = 1}^n f^{-1}(V_{\alpha_i})) = \bigcup_{i = 1}^n f(f^{-1}(V_{\alpha_i})) = \bigcup_{i = 1}^n 
+			V_{\alpha_i}
+		$$
+		and so we have found a finite subcover of $\{V_\alpha\}$, and hence $Y$ is compact.
+	\end{proof}
+	
+	\begin{prop}
+		A closed subset of a compact space is compact.
+	\end{prop}
+	
+	However, note that the converse of this is not true, namely that there are compact subsets of a compact space which 
+	are not closed. For example, take a finite number of points and give them the indiscrete topology. Then these will 
+	not be closed, but they will be compact, because any finite set is compact. There are also some equivalent formations of 
+	compactness that are sometimes easier to use in a proof. One of these will rely on a property called the finite intersection 
+	property, and we will use it reasonably frequently.
+	
+	\begin{definition}[Finite Intersection Property]
+		Let $X$ be a set, and $\xi$ a collection of subsets of $X$. We say that $\xi$ has the \textbf{Finite Intersection 
+		Property (FIP)} if the intersection of any finite number of elements of $\xi$ is nonempty.
+	\end{definition}
+	
+	\begin{theorem}
+		A space $(X, \tau)$ is compact if given any family of closed subsets $\xi$ with the FIP, then $\bigcap\xi\neq
+		\emptyset$.
+	\end{theorem}
+	
+	An example of a collection of subsets with the FIP is the tower $\{[0, \frac{1}{n}]\}_{n\in\mathbb N}$ of $\mathbb R$. 
+	This is because if we take a finite intersection, it will always be equal to the smallest interval, and if we intersect the 
+	entire family together, we will have $0$ in the intersection. 
+		
+	Now, here are some theorems that you may recall from analysis.
+	
+	\begin{theorem}[Bolzano-Weierstrauss]
+		An infinite subset of a compact space has a limit point.
+	\end{theorem}
+	
+	\begin{theorem}
+		If $X$ is compact and $f : X\rightarrow\mathbb R$ is continuous, then $f$ is bounded and attains its bounds.
+	\end{theorem}
+	
+	\begin{theorem}[Heine-Borel]
+		A subset of $\mathbb R$ is compact iff it is closed and bounded.
+	\end{theorem}
+	
+	We will now study how compact spaces behave under products. It turns out that they act rather nicely, and 
+	compactness will be preserved under products. We will state Tychonoff's theorem, which is a very important 
+	theorem in all areas of analysis.
+	
+	\begin{lemma}
+		If $\{U_\alpha\}$ is a base for the topology on $X$, then $X$ is compact iff every open cover $C$ of $X$ such that 
+		$C\subseteq\{U_\alpha\}$ has a 
+		finite subcover.
+	\end{lemma}
+	
+	\begin{prop}
+		$X\times Y$ is compact iff $X$ and $Y$ are compact.
+	\end{prop}
+	
+	This gives the immediate corollary:
+	
+	\begin{corollary}
+		$A\subseteq\mathbb R^n$ is compact iff $A$ is closed and bounded.
+	\end{corollary}
+	
+	\subsection{Tychonoff's Theorem}
+	
+	This is actually not the strongest statement that we can make about products of compact spaces. It turns out that in 
+	addition to finite products, we can extend this to arbitrary, possibly \textbf{uncountable}, products of spaces.
+	
+	\begin{theorem}[Tychonoff]
+		Let $\{(X_\alpha, \tau_\alpha\}_\alpha$ be a collection of compact spaces. Then:
+		$$
+			\prod_\alpha X_\alpha
+		$$
+		is compact.
+	\end{theorem}
+	
+	Before we are able to prove this, we need to study some properties of sets, namely we will need to introduce the 
+	Axiom of Choice and Zorn's Lemma. Tychonoff's theorem will end up being equivalent to the AoC, just as Zorn's 
+	lemma is, i.e. if you assume Tychonoff's theorem, then your set theory will implicitly have the AoC built in. 
+	
+	\begin{definition}[Axiom of Choice]
+		Given any family of non-empty sets, there is a set that contains one element from each of these sets
+	\end{definition}
+	
+	The axiom of choice seems very intuitive, but it can lead to some very strange constructions. For example, the axiom 
+	of choice can be used to prove that every vector space has a basis. However, what is a basis for $\mathbb R$ as a 
+	vector space over $\mathbb Q$? It often seems impossible to exhibit explicit constructions that are a consequence 
+	of the axiom of choice, hence why it is so controversial. Another statement that is equivalent to the AoC is 
+	Zorn's Lemma.
+	
+	\begin{definition}[Partial order]
+		A \textbf{partial order} on a set $P$ is a relation $\leq$ such that:
+		\begin{enumerate}
+			\item $a\leq b$ and $b\leq c$ implies $a\leq c$.
+			\item $a\leq b$ and $b\leq a$ implies $a = b$.
+		\end{enumerate}
+		A set $P$ is called a \textbf{partially ordered set (poset)} if it has a partial order.
+	\end{definition}
+	
+	\begin{definition}[Total order, chain]
+		A \textbf{total order} on a set $P$ is a partial order with the additional property that for any $a, b\in P$, either 
+		$a\leq b$ or $b\leq a$. A \textbf{chain} in a poset $P$ is a totally ordered subset of $P$. 
+	\end{definition}
+	
+	\begin{definition}[Maximal element]
+		Let $P$ be a poset. A \textbf{maximal element} of $P$ is an element $a$ such that $\not\exists b\in P$ such that 
+		$a < b$. 
+	\end{definition}
+	
+	\begin{definition}[Inductively ordered]
+		We say $P$ is \textbf{inductively ordered} if for each chain $\mathcal C\subseteq P$, there is some $b\in P$ with 
+		$a < b$ for all $a\in\mathcal C$ (b may or may not be in $\mathcal C$). 
+	\end{definition}
+	
+	\begin{theorem}[Zorn's Lemma]
+		Let $P$ be inductively ordered. Then for each chain $\mathcal C$, there is a maximal element $b$ with 
+		$a\leq b, \forall a\in\mathcal C$.
+	\end{theorem}
+	
+	Note that by a maximal element, we do not mean an element $a$ with $a\geq x$ for each $x\in P$; instead, we mean 
+	that no element can be larger than $a$. These are only equivalent if the set we are interested in has a total order. 
+	For example, if we use the partial order $\subseteq$ on the collection of subsets of a set, then we may have two 
+	subsets which are incomparable. We can still have a maximal element $A$ such that $B\not\subseteq A$, because 
+	our definition only requires that we do not have $A\subset B$. 
+	
+	With these prerequisites, we can prove Tychonoff's theorem. Let $X = \prod_\alpha X_\alpha$. We will show that if 
+	$\mathcal C$ is any collection of closed subsets of $X$ with the FIP, then $\mathcal C\neq\emptyset$. We define:
+	$$
+		\Theta := \{D : \mathcal C\subseteq D\textnormal{ is a family of subsets of } X \textnormal{ s.t. } D \textnormal{ has 
+		the FIP.}\}
+	$$
+	Note that the elements $D$ of $\Theta$ are not necessarily closed. Now, $\Theta$ form a poset by inclusion. First, 
+	show that $\Theta$ is inductively ordered. Then, we have a maximal element of $D^*$ of $\Theta$ by Zorn's Lemma.
+	Then $D^*$ satisfies:
+	\begin{enumerate}
+		\item $Z_1, Z_2\in D^*\implies Z_1\cap Z_2\in D^*$.
+		\item Let $Y\subseteq X$. If $Y\cap Z\neq\emptyset$ for each $Z\in D^*$, then $Y\in D^*$.
+	\end{enumerate}
+	Now, for $D\in\Theta$ and for any $\alpha$, we claim that $\mathcal F_\alpha :=\{\pi_\alpha(Z) : Z\in D\}$ has the FIP. 
+	TODO.
+	
+	As we stated before, Tychonoff's theorem, like Zorn's Lemma, is equivalent to the AoC.
+	
+	\begin{theorem}
+		Tychonoff's theorem implies the AoC.
+	\end{theorem}
+	
+	\begin{proof}
+		Let $\{X_\alpha\}_{\alpha\in A}$ be a collection of non-empty sets. Form $\prod_\alpha X_\alpha$, and we wish to 
+		show that this set is not empty. Let $X = \bigoplus_\alpha X_\alpha$, and let $w$ be a symbol (can take it to 
+		be a set not in $\bigoplus_\alpha X_\alpha$). For each $\alpha$, set:
+		$$
+			Y_\alpha := X_\alpha\cup\{w\}
+		$$
+		For each $Y_\alpha$, define $\tau_\alpha$ to be $\{X_\alpha, \{w\}, Y_\alpha, \emptyset\}$. Each $(Y_\alpha, 
+		\tau_\alpha)$ is a compact space (as the topology is finite), so $\prod_\alpha Y_\alpha$ is compact. For each 
+		$\alpha$, let $C_\alpha = \pi_\alpha^{-1}(X_\alpha)$. This is closed because $X_\alpha\subseteq Y_\alpha$ is 
+		closed, and we claim that $\{C_\alpha\}_{\alpha\in A}$ has the FIP. Given $\{C_{\alpha_j}\}_{j = 1}^n$, we can 
+		choose $x_{\alpha_j}\in X_{\alpha_j}$, and let $y\in Y$ be defined as:
+		$$
+			y_\alpha := \begin{cases}
+				x_{\alpha_j} & \alpha = \alpha_j \\
+				w & else
+			\end{cases}
+		$$
+		so $y\in \bigcap_{j = 1}^n C_{\alpha_j}$, and thus $\{C_\alpha\}_{\alpha\in A}$ has the FIP. But, because 
+		$\prod_\alpha Y_\alpha$ is compact, this implies that $\bigcap_\alpha C_\alpha\neq\emptyset$. But $z\in 
+		\bigcap_\alpha C_\alpha$ has $z_\alpha\in X_\alpha$ for each $\alpha$, and hence $z\in\prod_\alpha X_\alpha$.
+	\end{proof}
+	
+\subsection{Locally Compact Spaces}
+
+	Many topological spaces are not compact, but they are ``nice" enough that we can find compact neighborhoods of 
+	points. 
+	
+	\begin{definition}[Locally Compact]
+		A topological space $(X, \tau)$ is \textbf{locally compact} if for each $x\in X$, there is an open set $\mathcal O
+		\in\tau$ such that $x\in\mathcal O$ and $\overline{\mathcal O}$ is compact.
+	\end{definition}
+	
+	\begin{prop}
+		Let $(X, \tau)$ be locally compact. Let $C$ be a compact subset of $X$. Then $\exists\mathcal O\in\tau$ such 
+		that $C\subseteq\mathcal O$ and $\overline{\mathcal O}$ is compact.
+	\end{prop}
+	
+	\begin{proof}
+		For each $x\in C$, we can find an open neighborhood $\mathcal O_x$ such that $x\in\mathcal O_x$ and 
+		$\overline{\mathcal O_x}$ is compact. So, the set $\{\mathcal O_x\}_{x\in C}$ is an open cover for $C$, and 
+		hence has a finite subcover because $C$ is compact. Call this subcover $\{\mathcal O_{x_j}\}_{j = 1}^n$, and 
+		let:
+		$$
+			\mathcal O = \bigcup_{j = 1}^n\mathcal O_{x_j}
+		$$
+		But, $ D := \bigcup_{j = 1}^n\overline{\mathcal O_{x_j}}$ is compact because it is a finite union of compact sets, 
+		and $\overline{\mathcal O}\subseteq D$ because $\mathcal O\subseteq D$ and $\overline{\mathcal O}$ is the 
+		smallest closed set containing $\mathcal O$. This implies that $\overline{\mathcal O}$ is compact because it 
+		is a closed subspace of a compact space $D$, and hence we are done (in fact, $\overline{\mathcal O} = D$).
+	\end{proof}
+	
+	The canonical example of a locally compact space is $\mathbb R$, because for each real number, we can find a 
+	closed and bounded interval surrounding this number.
+
+\newpage
+	
+\section{Connectedness}
+	
+	The next major topological property that we consider is connectedness. 
+	
+	\begin{definition}[Connectedness]
+		A space $X$ is \textbf{connected} if whenever $X = A\cup B$ with $A, B$ open and $A\cap B = \emptyset$, then 
+		either $A = \emptyset$ or $B = \emptyset$. 
+	\end{definition}
+	
+	There are a number of equivalent ways to define a connected space. $X$ is connected iff:
+	\begin{enumerate}
+		\item if $X = A\cup B$ with $A, B$ open and nonempty, then $\overline A\cap B = \emptyset$ or $A\cap\overline B = 
+			\emptyset$. 
+		\item if $A\subseteq X$ is open and closed, then $A = X$ or $A = \emptyset$. 
+		\item if $A\subseteq X$ has empty boundary, then $A = X$ or $A = \emptyset$. 
+		\item if $f : X\rightarrow \{1, 2\}$ is continuous and $\{1, 2\}$ has the discrete topology, then $f$ is constant.
+	\end{enumerate}
+	
+	\begin{theorem}
+		$\mathbb R$ is connected.
+	\end{theorem}
+	
+	\begin{proof}
+		Assume $\mathbb R = A\cup B$ with $A$ and $B$ open and disjoint; note this implies they are both closed as well. Pick $x\in A, y\in B$ and assume 
+		WLOG that $x < y$. Consider the set:
+		$$
+			X := \{b\in [x, y]: [b, y]\subseteq B]\}
+		$$
+		Note that $y\in X$, so $X\neq\emptyset$ and $x$ gives a lower bound for $X$, so $x\leq\inf X$, hence $I := \inf X$ 
+		exists. This is a limit point of $X$ by definition, and because $X\subseteq B$, $I\in\overline B = B$, and hence $I
+		\notin A$. But $B$ is open, so $\exists\epsilon > 0$ such that $(I - \epsilon, I + \epsilon)\subseteq B\implies I-
+		\frac{\epsilon}{2}\in X$, but this is a contradiction to $I$ being the infimum of $X$.
+	\end{proof}
+	
+	\begin{prop}
+		A nonempty $X\subseteq\mathbb R$ is connected iff $X$ is an interval.
+	\end{prop}
+	
+	For many of these connectedness proofs, think of why intuitively the set should not be connected. For example, if you 
+	know a set is connected, it should have no ``holes", and you should be able to use this to prove that it is an interval. For 
+	the theorem above, supposing that the set is not an interval will give you a ``hole", $p$, that is surrounded by points in 
+	the set, and you can use this $p$ to find a contradiction to connectedness. Now, like compactness, connectedness 
+	behaves well under continuous maps.
+	
+	\begin{prop}
+		If $f : X\rightarrow Y$ is a continuous map and $X$ is connected, then $f(X)$ is connected.
+	\end{prop}
+	
+	\begin{proof}
+		Assume WLOG that $Y = f(X)$. Suppose $Y = A\cap B$ with $A$ and $B$ open, and $A\cap B = \emptyset$. Then $X = f^{-1}(A)\cap f^{-1}(B)$, which 
+		are open, and $f^{-1}(A)\cap f^{-1}(B) = \emptyset$, hence $f^{-1}(A)$ or $f^{-1}(B)$ is the empty set because $X$ is connected. This implies that 
+		$A = \emptyset$ or $B = \emptyset$. 
+	\end{proof}
+	
+	\begin{lemma}
+		Suppose $\{A_i\}$ is a collection of connected subspaces of $X$ such that $\bigcap_i A_i\neq\emptyset$. Then 
+		$$
+			\bigcup_i A_i
+		$$
+		is connected.
+	\end{lemma}
+	
+	Note this is an arbitrary union of connected subsets, and doesn't have to be finite or even countable. 
+	
+	\begin{proof}
+		Suppose that $\bigcup_i A_i = B\cup C$ with $B$ and $C$ open and disjoint, and let $p\in\bigcap_i A_i$. Let $p\in B$ WLOG. For each $A_i$, 
+		$A_i\cap B$ and $A_i\cap C$ are disjoint and open in the subspace topology, and $A_i = (A_i\cap B)\cup (A_i\cap C)$, which implies that either 
+		$A_i\cap B$ or $A_i\cap C$ is the empty set. But $p\in B\cap(\bigcap_i A_i)$, hence $A_i\cap B\neq\emptyset\implies A_i\cap C = \emptyset$. 
+		This holds for each $A_i$, so
+		$$
+			C = \bigcup_i (A_i\cap C) = \emptyset
+		$$
+		and thus $\bigcup_i A_i$ is connected.
+	\end{proof}
+	
+	\begin{theorem}
+		$X\times Y$ is connected iff $X$ and $Y$ are connected.
+	\end{theorem}
+	
+	\begin{proof}
+		The forward direction is immediate because of the continuity of the projection maps $p_1$ and $p_2$. Suppose $X$ and $Y$ are connected. We 
+		have $\{x\}\times Y\cong Y$ and $X\times\{y\}\cong X$ for any $x\in X, y\in Y$, so these are connected. Define 
+		$$
+			A_{x, y} := (X\times \{y\})\cup (\{x\}\times Y)
+		$$
+		which is connected because these two sets intersect at $(x, y)$. Fix $y_0\in Y$. Then:
+		$$
+			X\times Y = \bigcup_{x\in X} A_{x, y_0}
+		$$
+		and these $A_{x, y_0}$ intersect at $X\times \{y_0\}$, hence $X\times Y$ is connected.
+	\end{proof}
+	
+	This gives immediate corollaries:
+	\begin{corollary}
+		The spaces $\mathbb R^n$ and $S^n$ are connected.
+	\end{corollary}
+	
+	\begin{proof}
+		The first follows immediately; for $S^n$, note that $S^n\setminus\{p\}\cong\mathbb R^n$ is connected, and so $S^n = (S^n\setminus\{N\})\cup(S^n
+		\setminus\{S\})$, where $N$ and $S$ are the north and south poles.
+	\end{proof}
+	
+	We can break spaces up into connected pieces, which have some nice properties. In the case of the real line, there is only one maximal connected piece, 
+	as the space is connected. However, if we look at a union of intervals, there are multiple pieces, each of which are connected individually. We give this 
+	notion a name.
+	
+	\begin{definition}[Component]
+		A \textbf{component} of a space $X$ is a maximal connected subspace. 
+	\end{definition}
+	
+	The final property of connectedness we will study is path connectedness; this is a property in topological spaces that you can connect any two points together 
+	via a curve.
+	
+	\begin{definition}[Path, Path-Connected]
+		A \textbf{path} in a space $X$ is a continuous function $\gamma : [0, 1]\rightarrow X$. We say the path is from $\gamma(0)$ to $\gamma(1)$. A 
+		space is called \textbf{path-connected} if for each $x\neq y$ in $X$, there is a path from $x$ to $y$.
+	\end{definition}
+	
+	\begin{prop}
+		A path-connected space is connected.
+	\end{prop}
+	
+	\begin{proof}
+		Suppose $X$ is path-connected and $X = A\cup B$ with $A, B$ disjoint and open; suppose $A$ and $B$ are nonempty. Pick $x\in A$, $y\in B$, and we 
+		have a path $\gamma$ connecting them from $x$ to $y$. Then $[0, 1] = \gamma^{-1}(A)\cup\gamma^{-1}(B)$ is a disjoint union of open sets, so 
+		because this is an interval, this implies one of these is empty; suppose WLOG that $\gamma^{-1}(A) = \emptyset$. But $\gamma(0) = x\in A$, so 
+		this is a contradiction, hence $A$ or $B$ is empty.
+	\end{proof}
+
+\newpage
+
+\section{Separability}
+
+	In this section, we will consider separability of topological spaces. We are going to encounter some non-intuitive 
+	properties that spaces may have. In my head, when I think of a topological space, I think of $\mathbb R^n$; however, 
+	many spaces are not like this at all. When we consider more general spaces, we may not have a metric or a well defined 
+	notion of distance, and the open sets do not act as we would expect them. A major property that some spaces have is 
+	whether points or sets can be separated by open sets; in other words, how can you tell topologically that two points or 
+	sets are distinct? The first examples we will consider is when points or sets can be separated.
+	
+	\begin{definition}[Hausdorff]
+		A space $X$ is \textbf{Hausdorff} if given $x\neq y$ in $X$, we can find disjoint open neighborhoods $x\in U_x$, 
+		$y\in U_y$ such that 
+		$$
+			U_x\cap U_y = \emptyset
+		$$
+	\end{definition}
+	
+	\begin{definition}[Regular]
+		A space $X$ is \textbf{regular} if for every closed $A\subseteq X$ and every $x\notin A$, there are disjoint open 
+		sets $\mathcal O, U$ such that $A\subseteq\mathcal O$ and $x\in U$.
+	\end{definition}
+	
+	\begin{definition}[Normal Space]
+		Let $X$ be a topological space. We say it is \textbf{normal} if for any two disjoint closed subsets $\mathcal C_0$ 
+		and $\mathcal C_1$ of $X$, there are disjoint open sets $\mathcal O_0$ and $\mathcal O_1$ such that 
+		$\mathcal C_0\subseteq\mathcal O_0$, $\mathcal C_1\subseteq\mathcal O_1$, and:
+		$$
+			\mathcal O_0\cap\mathcal O_1 = \emptyset
+		$$
+	\end{definition}
+	
+	For the most part, we will be interested in Hausdorff and normal spaces. Regular spaces are a nice middle ground 
+	between the two, but they are not as interesting as the others. In a Hausdorff space, we can separate points. In a 
+	regular space, we can separate points from sets. Finally, in a normal space we can separate sets. Note that normal 
+	spaces are not necessarily Hausdorff (if singleton sets are closed, then they are). Many books in literature assume that 
+	normal spaces are Hausdorff as well, but we will not require this. For example, $X$ with the indiscrete topology is normal 
+	in our case, but \textbf{not} Hausdorff. Likewise, there are examples of Hausdorff spaces which are not normal. First, we 
+	will show some properties of normal spaces.
+	
+	\begin{definition}[Metrizable]
+		A topology $\tau$ on a set $X$ is \textbf{metrizable} if there is a metric on $X$ which induces $\tau$
+	\end{definition}
+	
+	\begin{theorem}
+		Every metric space is normal. To be more precise, every metrizable topology is normal.
+	\end{theorem}
+	
+	\begin{proof}
+		Let $(X, d)$ be a metric space. Let $C_0, C_1$ be closed and disjoint subsets of $X$. For $x\in C_0$, choose 
+		$\epsilon_x > 0$ such that $B(x, \epsilon_x)\subseteq C_1^C$, and likewise for $y\in C_1$ choose $\epsilon_y > 0$ 
+		with $B(y, \epsilon_y)\subseteq C_0^C$ (as $C_0, C_1$ are closed, we can do this). Now, let:
+		$$
+			\mathcal O_0 := \bigcup_{x\in C_0} B(x, \frac{\epsilon_x}{3})
+		$$
+		$$
+			\mathcal O_1 := \bigcup_{y\in C_1} B(y, \frac{\epsilon_y}{3})
+		$$
+		Note that $\mathcal O_0$ and $\mathcal O_1$ are open and contain $C_0, C_1$. We claim that these are disjoint; 
+		let $z\in\mathcal O_0\cap\mathcal O_1$. Then, $z\in B(x, \frac{\epsilon_x}{3})$ and in $B(y, \frac{\epsilon_y}{3})$. 
+		Assume WLOG that $\epsilon_x \leq\epsilon_y$. Then $d(x, y)\leq d(x, z) + d(z, y) < \frac{\epsilon_x}{3} + 
+		\frac{\epsilon_y}{3} \leq \frac{2\epsilon_x}{3} < \epsilon_x\implies y\in B(x, \epsilon_x)\subseteq C_1^C$, a 
+		contradiction $y\in C_1$. Hence these sets are disjoint, which completes the proof.
+	\end{proof}
+	
+	Now, for one of the fundamental theorems of point-set topology. We will soon use this to prove the Tietze Extension 
+	theorem, which is another theorem of great importance. Before we state Urysohn's Lemma, we will prove a separate 
+	lemma. This lemma will show us that given an open subset of a topological space containing a closed set, we can 
+	``squeeze" another open set between the closed set and original open set. 
+	
+	\begin{lemma}
+		Let $X$ be normal and $C$ a closed subset of $X$. Let $\mathcal O$ be an open subset of $X$ containing $C$. 
+		Then, there is an open set $U$ such that $C\subseteq U\subseteq\overline U\subseteq\mathcal O$.
+	\end{lemma}
+	
+	\begin{proof}
+		Note that $\mathcal O^C$ is a closed subset disjoint from $C$. Because $X$ is normal, we can find disjoint open 
+		subsets $U, V$ such that $C\subseteq U$ and $\mathcal O^C\subseteq V$. So, $U\subseteq\mathcal O$. But, $U
+		\subseteq V^C\subseteq\mathcal O$, and because $V^C$ is a closed set containing $U$, we have $\overline U
+		\subseteq V^C$. Hence $\overline U\subseteq\mathcal O$, and so we are done.
+	\end{proof}
+	
+	\begin{theorem}[Urysohn's Lemma]
+		Let $X$ be a normal space and $C_0, C_1\subseteq X$ disjoint and closed subsets of $X$. Then, there is a 
+		continuous function $f : X\rightarrow [0, 1]$such that $f|{C_0}\equiv 0$ and $f|_{C_1}\equiv 1$. 
+	\end{theorem}
+	
+	\begin{proof}
+		We will sketch the proof for metric spaces, and I may fill in the general proof later. For any $A\subseteq X$, define 
+		$\rho_A : X\rightarrow\mathbb R$ by:
+		$$
+			\rho_A(x) := \inf\{d(x, y) : y\in A\}
+		$$
+		i.e. $\rho_A$ is the distance from a point to $A$. One can show that $\rho_A(x) = 0$ if and only if $x\in \overline A$. 
+		Now, let $A, B$ be closed and disjoint subsets of $X$. Define:
+		$$
+			f(x) := \frac{\rho_A(x)}{\rho_A(x) + \rho_B(x)}
+		$$
+		Note $\rho_A(x) + \rho_B(x)$ is never zero, because this would only be the case if they both vanished. However, 
+		because they are both closed, this could vanish only if there was an element in $\overline A = A$ and $\overline B = 
+		B$, but we assumed they are disjoint, hence this sum is never 0. This implies that $f$ is continuous. We also have 
+		$f|_A\equiv 0$ and $f|_B\equiv 1$, hence we are done.
+	\end{proof}
+	
+	Now, we will use Urysohn's Lemma to prove the Tietze Extension theorem. We first prove a lemma which we will 
+	use.
+	
+	\begin{lemma}
+		For any space $(X, \tau)$ and closed $A\subseteq X$, if $C\subseteq A$ is closed in $A$, then $C$ is closed in 
+		$X$.
+	\end{lemma}
+	
+	\begin{proof}
+		In this case, $A\setminus C\subseteq A$ is open in $A$, so $A\setminus C = U\cap A$ for some open $U\in 
+		\tau$. But, this implies that $C = A\cap U^C$ is open in $X$. 
+	\end{proof}
+	
+	\begin{theorem}[Tietze Extension Theorem]
+		Let $(X, \tau)$ be a normal space with $A\subseteq X$ closed. Let $f : A\rightarrow\mathbb R$ be continuous. 
+		Then there is an extension $\tilde f : X\rightarrow\mathbb R$ of $f$ which is continuous. Furthermore, if $f : 
+		A\rightarrow [a, b]$, then we can choose $\tilde f : X\rightarrow [a, b]$. 
+	\end{theorem}
+	
+	\begin{proof}
+		We will sketch the proof. First, consider the case when $f : A\rightarrow [0, 1]$, which will prove this for all 
+		compact sets because we can find a homeomorphism onto $[a, b]$. Essentially, we will construct a sequence 
+		of maps using Urysohn's Lemma to extend $f$. The easiest way to visualize this proof is with a ``mountain 
+		range" of values of $f$ on $A$. Here is the idea. $f$ originally maps $A$ onto the interval $[0, 1]$. We will 
+		``flatten" the range of this out by defining inductively functions $f_n$ which map $A$ onto the interval $[0, 
+		(\frac{2}{3})^n]$. We will take the low and high points of each part of the mountain range to apply Urysohn's 
+		lemma to, and using this we will be able to construct a family of functions $g_n$ which sum to the original 
+		function on $A$.
+		
+		We also need to prove this for the unbounded case, i.e. $f : A\rightarrow\mathbb R$ is unbounded. Let 
+		$h : \mathbb R\rightarrow (-1, 1)$ be a homeomorphism. Then $g = h\circ f : A\rightarrow (-1, 1)\subseteq [-1, 1]$, 
+		so we can extend $g$ to $\tilde g : X\rightarrow [-1, 1]$. Now, we need to determine if $\tilde g$ maps anything 
+		into $0$ or $1$, since we want to define an extension of $g$ which maps $X$ into $(-1, 1)$. Let $D = 
+		\tilde g^{-1}(\{-1\}\cup\{1\})$, which is closed. Then note that $A$ and $D$ are disjoint, because everything in 
+		$A$ maps into $g(A)\subset (-1, 1)$. Then we can apply Urysohn's lemma to $A$ and $D$ to get a map 
+		$k : X\rightarrow [0, 1]$ such that $k|_D = 0$ and $k|_A = 1$. Now, we will use $k$ to kill off any of the values 
+		of $\tilde g$ which are at the endpoints $-1$ or $1$, which is $D$. Thus $k\cdot\tilde g : X\rightarrow (0, 1)$ is a 
+		continuous extension of $g$ to $(0, 1)$, and we can take $\tilde f := h^{-1}\circ (k\cdot\tilde g)$, and so we are done.
+	\end{proof}
+	
+	\subsection{Compactness and Hausdorff Spaces}
+	
+	There are a number of important theorems relating compact spaces and Hausdorff spaces, enough to warrant a full 
+	subsection on the topic. 
+	
+	\begin{prop}
+		If $f : X\rightarrow Y$ is a continuous bijection from a compact space to a Hausdorff space, then $f$ is a 
+		homeomorphism. 
+	\end{prop}
+	
+	\begin{proof}
+		Suppose $B\subseteq X$ is closed. Then $B$ is compact, and because $f$ is continuous, $f(B)$ is compact in $X$. 
+		But a compact subset of a Hausdorff space is closed (proof next), so $f(B)$ is closed, and $f$ takes closed sets to 
+		closed sets. Because $f$ is a bijection, this implies that $f^{-1}$ pulls back open sets to open sets as well, so $f$ is 
+		a homeomorphism. 
+	\end{proof}
+	
+	\begin{prop}
+		Compact subsets of Hausdorff spaces are closed, i.e. if $X$ is Hausdorff and $A\subseteq X$ is compact, then $A$ 
+		is closed. 
+	\end{prop}
+	
+	\begin{proof}
+		Let $x\in A^c$, and pick $z\in A$. Then we have disjoint open neighborhoods $x\in U_x$, $z\in V_z$, and let us vary 
+		$z$ throughout $A$ to get an open cover $\{V_z\}_{z\in A}$ of $A$. Then this has a finite subcover 
+		$\{V_{z_i}\}_{i = 1}^n$, and consider:
+		$$
+			U := \bigcap_{i = 1}^n U_{x_i}
+		$$
+		$U$ is an open neighborhood of $x$, and we have $A\subseteq \bigcup_{i = 1}^n V_{z_i}$, and that $U\cap V_{z_i} 
+		= \emptyset$ by construction. Then:
+		$$
+			U\cap A \subseteq U\cap(\bigcup_{i = 1}^n V_{z_i}) = \bigcup_{i = 1}^n U\cap V_{z_i} = \bigcup_{i = 1}^n
+			\emptyset = \emptyset
+		$$
+		and hence we have found a neighborhood of $x$ contained in $A^c$, so $A^c$ is open.
+	\end{proof}
+	
+	Compact Hausdorff spaces themselves are very nice. We can show that they are both regular and normal.
+	
+	\begin{prop}
+		Any compact Hausdorff space is regular.
+	\end{prop}
+	
+	\begin{proof}
+		Let $X$ be a compact Hausdorff space. Let $A\subseteq X$ be closed, and $x\notin A$. Note that because $A$ 
+		is a closed subset of a compact space, it is compact. For $y\in A$, because $X$ is Hausdorff we can separate $x$ 
+		and $y$ by open sets, i.e. we have $x\in U_y$ and $y\in V_y$ such that $U_y\cap V_y = \emptyset$. But, 
+		$\{V_y\}_{y\in A}$ is an open cover for $A$, and hence we have a finite subcover $\{V_{y_j}\}_{j = 1}^n$ for $A$. 
+		So, let:
+		$$
+			U := \bigcap_{j = 1}^n U_{y_j}
+		$$
+		$$
+			\mathcal O := \bigcup_{j = 1}^n V_{y_j}
+		$$
+		Then $x\in U$ and $A\subseteq \mathcal O$, and both of these are open since $U$ is a finite intersection of 
+		open sets. Furthermore, these are disjoint because if $z\in U\cap\mathcal O$, then $z\in V_{y_k}$ for some 
+		$k$, but $z\in U\implies z\in U_{y_k}$ which is disjoint from $V_{y_k}$, a contradiction. Thus $U\cap
+		\mathcal O = \emptyset$, so we are done.
+	\end{proof}
+	
+	\begin{prop}
+		Any compact Hausdorff space is normal.
+	\end{prop}
+	
+	\begin{proof}
+		Let $X$ be a compact Hausdorff space, and let $C, D\subseteq X$ be closed and disjoint. Both of these spaces 
+		are compact. By the previous proposition, $X$ is regular, hence for each $x\in D$ we can find disjoint open 
+		subsets $\mathcal O_x$ and $U_x$ such that $x\in U_x$ and $C\subseteq\mathcal O_x$. Now, we have an 
+		open cover of $D$ given by $\{U_x\}_{x\in D}$, so we get a finite subcover $\{U_{x_j}\}_{j = 1}^n$. So, let:
+		$$
+			\mathcal O :=\bigcap_{j = 1}\mathcal O_{x_j}
+		$$
+		$$
+			U := \bigcup_{j = 1}^n U_{x_j}
+		$$
+		Then we have $C\subseteq\mathcal O$ and $D\subseteq\mathcal U$, $U\cap\mathcal O = \emptyset$, and both 
+		of these are open because they are finite intersections and unions, hence $X$ is normal.
+	\end{proof}
+	
+	Note the proof of each of these is essentially the same. Pick an open cover of the set you are interested in by ranging 
+	over all points in the set, use compactness to make this finite, then intersect or union the relevant sets until you 
+	can cover the entire set with one open set.
+	
+	\begin{prop}
+		Let $X$ be a set with two topologies, $\tau_1$ and $\tau_2$ such that $\tau_2\subseteq\tau_1$, so $\tau_1$ is 
+		finer than $\tau_2$. If $(X, \tau_1)$ is compact, then so is $(X, \tau_2)$. If $(X, \tau_2)$ is Hausdorff, then so 
+		is $(X, \tau_1)$. 
+	\end{prop}
+	
+	\begin{prop}
+		If $(X, \tau_1)$ and $(X, \tau_2)$ are both compact and Hausdorff and $\tau_1\subseteq \tau_2$, then $\tau_1 = 
+		\tau_2$. 
+	\end{prop}
+	
+	Now, we will turn our attention to Hausdorff spaces which are locally compact. When we write LCH, this means ``locally 
+	compact and Hausdorff". 
+	
+	\begin{prop}
+		Let $(X, \tau)$ be LCH, and let $C\subseteq X$ be compact. Then for $\mathcal O\in\tau$ with $C\subseteq
+		\mathcal O$, there is an open set $U\in\tau$ such that $C\subseteq U\subseteq \overline U\subseteq O$, and 
+		$\overline U$ is compact. 
+	\end{prop}
+	
+	\begin{proof}
+		$X$ is locally compact, so we can find an open set $V$ such that $C\subseteq V$ with $\overline{V}$ compact. 
+		Let $W := V\cap \mathcal O$, which is an open set containing $C$ such that $W\subseteq\mathcal O$.  
+		We also have that $\overline W$ is compact and Hausdorff, so $\overline W$ is normal. This implies that 
+		$C$ is normal. Let $B := \overline W\setminus W$. This is closed and disjoint from $C$ because $C\subseteq W$. 
+		This is closed and disjoint from $C$ and contained in $\overline W$ which is normal, so we have open sets 
+		$U, Z$ disjoint such that $C\subseteq U$ and $B\subseteq Z$. Then $U\subseteq Z^C\cap\overline W$ which is 
+		closed, so $\overline U\subseteq Z^C\cap\overline W$. Thus $\overline U\subseteq B^C = (\overline W\setminus 
+		W)^C\cap\overline W = W\subseteq \mathcal O$, and $\overline U$ is compact, so we are done.
+	\end{proof}
+	
+	\begin{definition}[Support]
+		Let $f$ be a continuous function on $X$ with values in a normed vector space $V$. Then the \textbf{support} of $f$ 
+		is:
+		$$
+			supp(f) := \overline{\{x\in X : f(x)\neq 0\}}
+		$$
+		If $supp(f)$ is compact, then we say that $f$ has \textbf{compact support}. Let $C_C(X, V)$ be the vector space of 
+		continuous functions of compact support.
+	\end{definition}
+	
+	\begin{prop}
+		Let $(X, \tau)$ be LCH. Let $C\subseteq X$ be compact, and let $\mathcal O\in\tau$ with $C\subseteq\mathcal O$. 
+		Then there is a continuous function $f : X\rightarrow [0, 1]$ such that $f\equiv 1$ on $C$, $f\equiv 0$ on $\mathcal
+		 O^C$, and $f$ has compact support. 
+	\end{prop}
+	
+	\begin{proof}
+		By the previous proposition, we can find a set $U$ such that $\overline U$ is compact and $C\subseteq U\subseteq
+		\overline U\subseteq \mathcal O$. So, $\overline U$ is normal. We can apply the previous proposition again 
+		to $U$ and find $V$ such that $\overline V$ is compact and $C\subseteq V\subseteq\overline V\subseteq U$. 
+		Let $B := \overline U\setminus V$, which is closed in $\overline U$. Then because $B$ and $C$ are disjoint, 
+		by Urysohn's lemma we can find a continuous function $f : \overline U\rightarrow [0, 1]$ such that $f|_C\equiv 1$ 
+		and $f|_B\equiv 0$. For $x\notin\overline U$, set $f(x) := 0$. Then $f|_C\equiv 1$ and $f|_{\mathcal O^C}\equiv 
+		0$. If $x\in U$, then $f$ is continuous at $x$ because $f$ was defined to be continuous on $\overline U$. If 
+		$x\in \overline{V^C}$, then $f(x) = 0$, so it is continuous on $\overline{V^C}$ as well. Thus $f$ is continuous, 
+		and we are done.
+	\end{proof}
+
+\newpage
+
+\section{Banach Spaces and Metric Spaces}
+
+\subsection{Banach Spaces}
+
+	Let $X$ be any set, and $V$ a normed vector space (we will often use $V = \mathbb R$). Then $V$ inherits a metric from 
+	its norm, and likewise a topology from this metric. 
+	
+	\begin{definition}
+		$S\subseteq V$ is \textbf{bounded} if $\exists r\in\mathbb R$ such that $S\subseteq B(0, r)$. We say a function 
+		$f : X\rightarrow V$ is bounded if $f(X)$ is bounded. Denote by $B(X, V)$ the set of all bounded functions 
+		$X\rightarrow V$. We define a norm on $B(X, V)$ by:
+		$$
+			||f||_\infty := \sup_{x\in V} ||f(x)||
+		$$
+	\end{definition}
+	
+	\begin{definition}[Banach Space]
+		Let $V$ be a normed vector space with norm $||\cdot||$. If $V$ is complete with respect to $||\cdot||$, then we say 
+		$V$ is a \textbf{Banach space}.
+	\end{definition}
+	
+	Banach spaces are a very interesting object of study in their own right. We will barely be able to scratch the surface, 
+	but they will be an object that we see a lot of for the rest of this course. Note that $B(X, V)$ is a vector space as 
+	well under the operations of pointwise addition and pointwise scaling. Now, we have the following proposition.
+	
+	\begin{prop}
+		Let $V$ be a Banach space. Then $B(X, V)$ is a Banach space. 
+	\end{prop}
+	
+	\begin{proof}
+		Let $(f_n)$ be a Cauchy sequence in $B(X, V)$. Note that the sequence $(f_n(x))$ is Cauchy in $V$. For $x\in X$, 
+		we can define:
+		$$
+			f(x) := \lim f_n(x)
+		$$
+		This is a valid definition because $V$ is a Banach space, and hence Cauchy sequences converge. We show that 
+		$f_n\rightarrow f$ with respect to $||\cdot||_\infty$. Let $\epsilon > 0$. We need to show that we can find $N\in
+		\mathbb N$ such that $||f - f_n||_\infty < \epsilon$, for each $n \geq N$. Pick $N\in\mathbb N$ such that 
+		$||f_n - f_m||_\infty < \frac{\epsilon}{2}$ for $n, m\geq N$, which exists because $(f_n)$ is Cauchy. Then for 
+		each $x\in X$, we can choose $m \geq N$ such that $||f(x) - f_m(x)|| < \frac{\epsilon}{2}$ because $f_n(x)
+		\rightarrow f(x)$. But then:
+		$$
+			||f_n(x) - f(x)||\leq ||f_n(x) - f_m(x)|| + ||f_m(x) + f(x)|| < \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon
+		$$
+		and hence we are done.
+	\end{proof}
+	
+	\begin{prop}
+		Let $(X, \tau)$ be a topological space, and let $C_b(X, V)$ be the set of all closed and bounded continuous 
+		functions from $X$ to a Banach space $V$. Then $C_b(X, V)$ is a closed subspace of $B(X, V)$. 
+	\end{prop}
+	
+	\begin{proof}
+		It is easy to show $C_b(X, V)$ is a subspace. So, will show it is closed. Let $(f_n)$ be a sequence in 
+		$C_b(X, V)$ that converges to $f\in B(X, V)$ w.r.t $||\cdot||_\infty$. We show that $f$ is continuous, so let 
+		$\epsilon > 0$ and $v\in V$. We need to show $f^{-1}(B(v, \epsilon))$ is open in $X$. TODO.
+	\end{proof}
+	
+\subsection{Compact Metric Spaces}
+
+	Compact metric spaces give us an environment to extend the notion about compactness in $\mathbb R^n$. Namely, 
+	we will seek to characterize compact subsets of a metric space, just as the Heine-Borel theorem characterized 
+	compact subsets of Euclidean space. We first need to generalize the notion of boundedness in $\mathbb R^n$.
+	
+	\begin{definition}[Totally Bounded]
+		A metric space $(X, d)$ is \textbf{totally bounded} if for every $\epsilon > 0$, there are a finite number of 
+		$\epsilon$-balls that cover $X$.
+	\end{definition}
+	
+	\begin{prop}
+		Let $X$ be a metric space, and $A\subseteq X$. If $A$ is totally bounded, then so is $\overline A$. 
+	\end{prop}
+	
+	\begin{proof}
+		Let $\epsilon > 0$. Then $A$ is totally bounded, so we can contain $A$ in a finite number of $\frac{\epsilon}{2}$ 
+		balls centered at $\{z_j\}_{j = 1}^n$. But, $A$ is dense in $\overline A$, so for any $x\in\overline A$, we can find an 
+		element $y\in A$ such that $x\in B(y, \frac{\epsilon}{2})$. But $y$ is contained in some $\frac{\epsilon}{2}$ ball about 
+		some point $z_k$ for some $k$, and so $x$ is contained in the $\epsilon$-ball about $z_k$, and hence $\overline 
+		A$ is covered by a finite number of $\epsilon$-balls.
+	\end{proof}
+	
+	We will also deal with completeness in metric spaces. Complete metric spaces will have a special place in the study of 
+	compact metric spaces, as seen in the following proposition.
+	
+	\begin{prop}
+		Let $(X, d)$ be a metric space. If $X$ is not complete, then it is not compact.
+	\end{prop}
+	
+	\begin{proof}
+		Because $X$ is not complete, we can find a Cauchy sequence $(x_n)$ in $X$ such that $x_n$ does not converge. 
+		Pick $x\in X$. Then $x_n\not\rightarrow x$, so there is $\epsilon_x > 0$ such that for each $M\in\mathbb N$, 
+		there is $m > M$ with $d(x_m, x) > \epsilon_x$. Because $(x_n)$ is Cauchy, there is $N\in\mathbb N$ such 
+		that $n, m\geq N\implies d(x_n, x_m) < \frac{\epsilon}{2}$. Now, there is $m > N$ such that $d(x_m, x) > 
+		\epsilon_x$ by what we already argued. TODO.
+	\end{proof}
+	
+	\begin{prop}
+		Let $(X, d)$ be a complete metric space. Then if $X$ is also totally bounded, then $X$ is compact.
+	\end{prop}
+	
+	\begin{proof}
+		TODO.
+	\end{proof}
+	
+	\begin{theorem}
+		Let $(X, d)$ be a complete metric space with $A\subseteq X$. If $A$ is totally bounded, then $\overline A$ is 
+		compact.
+	\end{theorem}
+	
+	This follows immediately from the last few theorems, because $A$ is totally bounded implies $\overline A$ is as well, 
+	and any closed subset of a complete metric space is complete. Hence we can apply the previous proposition to show 
+	that $\overline A$ is compact. Now, we will examine conditions on when a subset of $X$ is totally bounded.
+	
+	\begin{definition}[Bounded]
+		Let $(X, d)$ be a metric space. A subset $A\subseteq X$ is \textbf{bounded} if $\exists K\geq 0$ such 
+		that $d(x, y) < K$ for each $x, y\in A$. Let $Z$ be a set. A function $f : Z\rightarrow X$ is bounded if 
+		$f(Z)$ is bounded.
+	\end{definition}
+	
+	\begin{theorem}
+		Let $B(X, Y)$ be the collection of bounded functions $f : X\rightarrow Y$, for a set $X$ and a 
+		metric space $Y$. Then for $f, g\in B(X, Y)$, set:
+		$$
+			d_\infty (f, g) := \sup_{x\in X}\{d(f(x), g(x))\}
+		$$
+		Then $(B(X, Y), d_\infty)$ is a metric space. If $Y$ is complete, then $B(X, Y)$ is complete.
+	\end{theorem}
+	
+	Note that $d_\infty$ is defined on $B(X, Y)$ because each of these functions are bounded. For the rest of this section, 
+	we will be working in $B(X, Y)$ with the metric $d_\infty$. Suppose that $X$ is a topological space. We again examine 
+	$B(X, Y)$ with the metric $d_\infty$. If $\tau$ is the topology on $X$, then let:
+	$$
+		C_b(X, Y) = \{f \in B(X, Y) : f \textnormal{ is closed and bounded.}\}
+	$$
+	Suppose that we are given $\mathcal F\subseteq C_b(X, Y)$, where $\mathcal F$ is totally bounded. Then for $\epsilon 
+	> 0$, we can find a finite number of $g_1, ..., g_n\in \mathcal F\subseteq C_b(X, Y)$ such that the balls of radius 
+	$\epsilon$ with $d_\infty$ around each $g_j$ cover $\mathcal F$. Let $x\in X$ be given. Then for each $j$, we 
+	can find $\mathcal O_j\in\tau$ such that $x, y\in\mathcal O_j\implies d(g_j(x), g_j(y)) < \epsilon$ because $g_j$ is 
+	continuous. Now, let:
+	$$
+		\mathcal O_x = \bigcap_{j = 1}^n\mathcal O_j\in\tau
+	$$
+	Then $x\in \mathcal O_x$ and if $y\in\mathcal O_x$, we have $d(g_j(x), g_j(y)) < \epsilon$ for each $j$. Let $f\in
+	\mathcal F$. Since the $g_j$ cover $\mathcal F$, we can find $g_j$ such that $d_\infty(g_j, f) < \epsilon$. So, we 
+	have:
+	$$
+		d(f(x), f(y)) \leq d(f(x), g_j(x)) + d(g_j(x), g_j(y)) + d(g_j(y), g(y)) < 3\epsilon
+	$$
+	Rename the $\epsilon$ to $\frac{\epsilon}{3}$. So, we have shown that if $\mathcal F$ is a totally bounded family 
+	of functions in $C_b(X, Y)$ and if $x\in X$ and $\epsilon > 0$, then there is an open set $\mathcal O_x$ such 
+	that $y\in \mathcal O_x$ implies $d(f(x), f(y)) < \epsilon$ for each $f\in\mathcal F$. This $\mathcal O_x$ works for 
+	every $f\in\mathcal F$. Essentially, the family of functions $\mathcal F$ are all smooth enough to ensure ``continuity" 
+	for each function in $\mathcal F$. This motivates the following definition:
+	
+	\begin{definition}[Equicontinuity]
+		Let $(X, \tau)$ be a topological space and $(Y, d)$ a metric space. Let $\mathcal F\subseteq C(X, Y)$. We say that 
+		$\mathcal F$ is \textbf{equicontinuous} at $x\in X$ if for each $\epsilon > 0$, there exists $\mathcal O_x\in\tau$ 
+		such that $y\in\mathcal O_x\implies d(f(x), f(y)) < \epsilon$ for each $f\in\mathcal F$. If $\mathcal F$ is 
+		equicontinuous at each point in $X$, we say that $\mathcal F$ is equicontinuous.
+	\end{definition}
+	
+	Equicontinuity is essentially a generalization of continuity applied to a family of functions. It will have an important role 
+	to play with regards to total boundedness. The other definition we must make first before we can discuss that is that 
+	of pointwise boundedness.
+	
+	\begin{definition}[Pointwise totally bounded]
+		Let $\mathcal F\subseteq C_b(X, Y)$ be a family of functions. We say that $\mathcal F$ is \textbf{pointwise 
+		totally bounded} for each $x\in X$, the set $\{f(x) : f\in\mathcal F\}$ is bounded, i.e. if there are a finite 
+		number of $\epsilon$-balls in $Y$ which cover $\{f(x) : f\in\mathcal F\}$.
+	\end{definition}
+	
+	Now, for the main part of the Arzela-Ascoli theorem. This theorem makes it immensely easier to prove that a 
+	subset of $C_b(X, Y)$ is totally bounded, for in general it is quite difficult.
+	
+	\begin{theorem}
+		Let $(X, \tau)$ be a compact topological space and $(M, d)$ a metric space. If $\mathcal F\subseteq C_b(X, M)$ 
+		is equicontinuous and pointwise totally bounded, then $\mathcal F$ is totally bounded for $d_\infty$.
+	\end{theorem}
+	
+	\begin{theorem}[Arzela-Ascoli]
+		Let $(X, \tau)$ be a compact space, and let $(M, d)$ be a complete metric space. Then $\mathcal F$ is compact in
+		$(C(X, M), d_\infty)$ iff the following hold:
+		\begin{enumerate}
+			\item $\mathcal F$ is equicontinuous.
+			\item $\mathcal F$ is pointwise totally bounded.
+			\item $\mathcal F$ is closed in $C_b(X, Y)$.
+		\end{enumerate}
+	\end{theorem}
+	
+	Arzela-Ascoli immediately follows from previous theorem, because a subset of a complete metric space is compact iff it is 
+	closed and totally bounded.
+
+\newpage
+
+\section{Random Set Theory Identities}
+
+	\begin{enumerate}
+		\item Maps respect unions, complements, intersections, and set difference:
+		$$
+			\begin{cases}
+				f^{-1}(A\cup B) = f^{-1}(A)\cup f^{-1}(B) \\
+				f^{-1}(A\cap B) = f^{-1}(A)\cap f^{-1}(B) \\
+				f^{-1}(A^c) = f^{-1}(A)^c \\
+				f^{-1}(A\setminus B) = f^{-1}(A)\setminus f^{-1}(B)
+			\end{cases}
+		$$
+		\item For any map $f$:
+		$$
+			A\subseteq f^{-1}(f(A))
+		$$
+		and if $f$ is surjective, then we have equality:
+		$$
+			A = f^{-1}(f(A))
+		$$
+		\item \textbf{When is this true?}:
+		$$
+			f(A^c) = f(A)^c
+		$$
+	\end{enumerate}
+
+\end{document}
