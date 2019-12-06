@@ -213,7 +213,37 @@ $\psi_L(y)$ for which $D(x | y)$ is nonzero. Thus, we have chiral symmetry on th
 
 \section{The Index Theorem and Topological Charge}
 
-We now turn to other implications the Ginsparg-Wilson equation has for fermions on the lattice. 
+We now turn to other implications the Ginsparg-Wilson equation has for fermions on the lattice-- namely, a consequence of this 
+relation is that there is a well defined topological charge. To define a topological charge, we must first consider the spectrum of 
+the Dirac operator $D$. Note that the Dirac operator is $\gamma_5$-hermitian, which means that $\gamma_5 D\gamma_5 = 
+D^\dagger$. We can multiply Equation~\ref{eq:ginsparg_wilson} on the right by $\gamma_5$ and use $\gamma_5$-hermicity to show that 
+$D^\dagger + D = aDD^\dagger$, and multiplying on the left with $\gamma_5$ gives us $D + D^\dagger = aD^\dagger D$. Equating 
+these two equations, we see that:
+\begin{equation}
+	[D, D^\dagger] = 0
+\end{equation}
+which is the definition of a \textit{normal operator}, and thus the eigenspaces of $D$ are orthogonal. 
+
+Now, introduce the operator $V := 1 - a D$. Then direct computation shows $V^\dagger V = 1 - a(D + D^\dagger - a D^\dagger D) = 1$ 
+because of the equations we just derived, hence $V$ is unitary. This implies that the eigenvalues of $V$ have unit norm and can be 
+parameterized as $e^{i\theta}$ for $\theta\in [-\pi, \pi)$. So, the eigenvalues of $D$ must be of the form:
+\begin{equation}
+	\lambda = \frac{1}{a}\left(1 - e^{i\theta}\right)
+\end{equation}
+and must therefore lie on the circle in the complex plane of radius $\frac{1}{a}$ centered at $\frac{1}{a}$. In particular, notice that there 
+are only two real eigenvalues, one at $\lambda = 0$ and one at $\lambda = \frac{2}{a}$. It turns out that the real eigenvalues are the 
+only ones whose eigenvectors may have definite chirality. We adopt the notation here that $\langle\cdot, \cdot\rangle$ is the inner 
+product on Dirac spinors, i.e. $\langle u, v\rangle = u^\dagger v$ where the transpose is taken in Dirac space. Suppose we have an eigenvalue 
+$\lambda$ of $D$ with corresponding nonzero eigenvector $u = u(\lambda)$. Then:
+\begin{equation}
+	\lambda\langle u, \gamma_5 u\rangle = \langle u, \gamma_5 Du\rangle = \langle u, D^\dagger\gamma_5 u\rangle = \langle Du, \gamma_5 u\rangle = \lambda^*
+	\langle u, \gamma_5 u\rangle\iff \mathbb{I}m\{\lambda\} = 0\textnormal{ or } \langle u, \gamma_5 u\rangle = 0
+\end{equation}
+Hence we see that if $\lambda\notin\mathbb R$, $u(\lambda)$ \textbf{cannot} have definite chirality. 
+
+%TODO probably cut some parts of this discussion out, it's a bit math-heavy and can be summarized. 
+
+On the other hand, the real modes do have definite chirality. Let $v_0$ be a 0-mode, so $Dv_0 = 0$. 
 
 %next section is up for grabs
 
