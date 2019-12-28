@@ -81,12 +81,12 @@ omit the vertex $v_i$.
 
 Note that the face maps induce a canonical map between the singular $n$-simplices on $X$ through the 
 following composition of maps, which will call $d_i : Sin_n(X)\rightarrow Sin_{n - 1}(X)$, $\sigma\mapsto \sigma\circ d^i$:
-\[
+\begin{equation}
 	\begin{tikzcd}
 		\Delta^{n - 1}\arrow[r, "d^i"]\arrow[dr, swap, "d_i\sigma"] & \Delta^n\arrow[d, "\sigma"] \\
-		 & X \\
+		 & X
 	\end{tikzcd}
-\]
+\end{equation}
 %$$
 %	\Delta^{n - 1}\xrightarrow{d_i}\Delta^{n}\xrightarrow{\sigma} X
 %$$
@@ -160,12 +160,9 @@ differential are ``boundaries" of closed regions, in a sense which we will make 
 	\textbf{chain complex} is a graded abelian group $\{A_n\}_{n\in\mathbb Z}$ together with 
 	homomorphisms $d : A_n\rightarrow A_{n - 1}$ such that $d^2\equiv 0$. We will draw a chain 
 	complex like so:
-	\[
-		\vspace{-.7cm}
-		\begin{tikzcd}
-			...\arrow[r, "d"] & A_{n + 1}\arrow[r, "d"] & A_n\arrow[r, "d"] & A_{n - 1}\arrow[r, "d"] & ... \\
-		\end{tikzcd}
-	\]
+	\begin{equation}\begin{tikzcd}
+			...\arrow[r, "d"] & A_{n + 1}\arrow[r, "d"] & A_n\arrow[r, "d"] & A_{n - 1}\arrow[r, "d"] & ...
+	\end{tikzcd}\end{equation}
 \end{definition}
 
 An $n$-cycle in $Z_n(X)$ is closed in the way that a closed loop is closed-- it has no edges and all its 
@@ -214,13 +211,11 @@ because for odd $n$ we have an even number of face maps, so the alternating sum 
 itself and vanishes. For even $n$ we have one surviving $d_i$, so $d C_*^n = C_*^{n - 1}$. So, the chain complex of 
 $n$-chains on $X$ is the following sequence (here I have labeled each copy of $\mathbb Z$ with which copy of $S_n(X)$ 
 it is):
-\[
-	\begin{tikzcd}
+\begin{equation}\begin{tikzcd}
 		...\arrow[r, "id"] & \mathbb Z\arrow[r, "0"] & \mathbb Z\arrow[r, "id"] & \mathbb Z\arrow[r, "0"]
 		& \mathbb Z\arrow[r, "0"] & 0\arrow[r] & ... \\
-		 & S_3(X) & S_2(X) & S_1(X) & S_0(X) & \\
-	\end{tikzcd}
-\]
+		 & S_3(X) & S_2(X) & S_1(X) & S_0(X) &
+\end{tikzcd}\end{equation}
 For the even and nonzero $n$, the kernel of $id : S_n(X)\cong\mathbb Z\rightarrow \mathbb Z$ is 0, so $Z_n(X) = 0$ and 
 hence $H_n(X) = 0$. Similarly for odd $n$, the kernel of $0 : \mathbb Z\rightarrow\mathbb Z$ is $\mathbb Z$, but the image 
 of the previous map is $im(id) = \mathbb Z$, hence $Z_n(X) = B_n(X) = \mathbb Z$, so the homology $H_n(X)$ vanishes as 
@@ -242,7 +237,7 @@ moving on to lay out some definitions in category theory.
 	\begin{equation}\begin{tikzcd}
 	...\arrow[r, "d"] & C_{n + 1}\arrow[d, "f_{n + 1}"]\arrow[r, "d"] & C_n\arrow[d, "f_n"]\arrow[r, "d"] & C_{n - 1}\arrow[d, 
 	"f_{n - 1}"]\arrow[r, "d"] & ... \\
-	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ... \\
+	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ...
 	\end{tikzcd}\end{equation}
 \end{definition}
 
@@ -276,10 +271,10 @@ induces a chain map on the $n$-chains of $X$, which we will show in turn induces
 	because $f_*$ is a chain map, hence $f_n(x)\in ker (d : D_n\rightarrow D_{n - 1})$, and the map is well defined on the 
 	n-cycles. Projecting $Z_n(D)$ onto the homology with the map $\pi_D : Z_n(D)\rightarrow H_n(D)$, we have the 
 	diagram:
-	\[\begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 		Z_n(C)\arrow[d, "\pi_C"]\arrow[r, "f_n"] & Z_n(D)\arrow[d, "\pi_D"] \\
-		H_n(C)\arrow[r, dashed, "\tilde f_n"] & H_n(D) \\
-	\end{tikzcd}\]
+		H_n(C)\arrow[r, dashed, "\tilde f_n"] & H_n(D)
+	\end{tikzcd}\end{equation}
 	and we will show that $\tilde f_n : H_n(C)\rightarrow H_n(D), [c]\mapsto \pi_D f_n(c)$, i.e. that we have a well defined 
 	lift from the quotient. Suppose that $[c] = [c']\in H_n(C)$, so $c = c' + db$ for $b\in C_{n + 1}$. Then we must show that 
 	$\tilde f([c]) = \tilde f([c']) + \tilde f([db]) = \tilde f([c'])$, so we have:
@@ -305,7 +300,7 @@ from $X$ to $Y$ by $\mathcal C(X, Y)$.
 	$f : X\rightarrow Y$ in $\mathcal C$, the following diagram commutes (in the category $\mathcal D$). 
 	\begin{equation}\begin{tikzcd}
 		F(X)\arrow[r, "\Theta_X"]\arrow[d, "F(f)"] & G(X)\arrow[d, "G(f)"] \\
-		F(Y)\arrow[r, "\Theta_Y"] & G(Y) \\
+		F(Y)\arrow[r, "\Theta_Y"] & G(Y)
 	\end{tikzcd}\end{equation}
 \end{definition}
 
@@ -365,10 +360,10 @@ $d^i : \Delta^{n - 1} = [n - 1]\rightarrow \Delta^n = [n]$, we induce a morphism
 	d_i = Sin_*(d^i) : Sin_n(X) = Sin_*([n])\rightarrow Sin_{n - 1}(X) = Sin_*([n - 1])
 \end{equation}
 i.e. $Sin_*$ reverses the arrows between objects, as seen in the following diagram:
-\[\begin{tikzcd}
+\begin{equation}\begin{tikzcd}
 \left[ n - 1\right]\arrow[r, "d^i"]\arrow[d, "Sin_*"] & \left[ n\right]\arrow[d, "Sin_*"] \\
-Sin_{n - 1}(X) & Sin_n(X) \arrow[l, "d_i"] \\
-\end{tikzcd}\]
+Sin_{n - 1}(X) & Sin_n(X) \arrow[l, "d_i"]
+\end{tikzcd}\end{equation}
 
 We denote the category of simplicial sets to be \textbf{sSet}. This category has the following data:
 \begin{itemize}
@@ -381,10 +376,10 @@ Now, we consider certain types of maps. We will use this shortly to define reduc
 \begin{definition}[Split epimorphism]
 	A morphism $f : X\rightarrow Y$ in $\mathcal C$ is called a \textbf{split epimorphism} if there is $g : Y\rightarrow X$ 
 	(such a $g$ is called a \textbf{section} of $f$) such that:
-	\[\begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 		Y\arrow[r, "g"]\arrow[dr, swap, "1_Y"] & X\arrow[d, "f"] \\ 
-		& Y\\
-	\end{tikzcd}\]
+		& Y
+	\end{tikzcd}\end{equation}
 	A morphism $g : Y\rightarrow X$ in $\mathcal C$ is called a \textbf{split monomorphism} if there is $f : Y\rightarrow X$ 
 	which makes the above diagram commute.
 \end{definition}
@@ -515,10 +510,10 @@ invariance of homology is that homotopy equivalent spaces have the same homology
 
 A nice diagram to remember when dealing with the homotopy invariance of homology is the following commutative square 
 of compositions (where $\pi$ is the quotient map taking $\textbf{Top}(X, Y)\rightarrow [X, Y]$):
-\[\begin{tikzcd}
+\begin{equation}\begin{tikzcd}
 	\textbf{Top}(X, Y)\times\textbf{Top}(Y, Z)\arrow[d, "\pi"]\arrow[r, "\circ"] & \textbf{Top}(X, Z)\arrow[d, "\pi"] \\
-	\left[X, Y\right]\times \left[Y, Z\right]\arrow[r, "\circ"] & \left[X, Z\right] \\
-\end{tikzcd}\]
+	\left[X, Y\right]\times \left[Y, Z\right]\arrow[r, "\circ"] & \left[X, Z\right]
+\end{tikzcd}\end{equation}
 
 Homotopy equivalence is a nicer type of map in many ways than homormorphism, simply because it is weaker. However, 
 note that it does not preserve many nice topological properties of spaces, including compactness, metrizability, being 
@@ -569,12 +564,12 @@ of a chain homotopy.
 \begin{definition}[Chain homotopy]
 	Let $C_*, D_*$ be chain complexes and $f_*, g_* : C_*\rightarrow D_*$ be chain maps. Then a \textbf{chain homotopy} 
 	$h_* : f_*\simeq g_*$ is a chain map $h_n : C_n\rightarrow D_{n + 1}$:
-	\[\begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 	...\arrow[r, "d"] & C_{n + 1}\arrow[r, "d"]\arrow[d, "f_{n + 1}"]\arrow[d, swap, "g_{n + 1}"] & C_n\arrow[r, "d"]\arrow[d, "f_n"]
 	\arrow[d, swap, "g_n"]\arrow[ld, "h_n"] & C_{n - 1}\arrow[r, "d"]\arrow[d, "f_{n - 1}"]\arrow[d, swap, "g_{n - 1}"]\arrow[ld, 
 	"h_{n - 1}"] & ... \\
-	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ... \\
-	\end{tikzcd}\]
+	...\arrow[r, "d"] & D_{n + 1}\arrow[r, "d"] & D_n\arrow[r, "d"] & D_{n - 1}\arrow[r, "d"] & ... 
+	\end{tikzcd}\end{equation}
 	such that:
 	\begin{equation}
 		hd + dh = g - f
@@ -594,8 +589,8 @@ homotopic will induce the same maps on homology.
 
 \begin{proof}
 	Recall that the induced map is the natural one, $f_*([x]) = [f(x)]$ for a map $f : C_*\rightarrow D_*$. So, we must 
-	show that for $x\in Z_n(C_*)$, $f_0(x)$ and $f_1(x)$ are in the same coset when we mod $Z_n(D_*)$ out by $B_n(D_*)$ 
-	to form the homology, i.e. $f_0(x) - f_1(x) = da$ with $a\in D_{n + 1}$. Let $x\in Z_n(C_*)$. Then:
+	show that for $x\in Z_n(C_*)$, $f_0(x)$ and $f_1(x)$ are in the same coset when we mod $Z_n(D_*)$ out by 
+	$B_n(D_*)$ to form the homology, i.e. $f_0(x) - f_1(x) = da$ with $a\in D_{n + 1}$. Let $x\in Z_n(C_*)$. Then:
 	\begin{equation}
 		f_0(x) - f_1(x) = (dh + hd)(x) = d(hx) + h(dx) = d(hx)\in B_n(D_*)
 	\end{equation}
@@ -603,9 +598,9 @@ homotopic will induce the same maps on homology.
 \end{proof}
 
 \subsection{Proof of the Homotopy Invariance of Homology}
-Using the above theorem, we can reduce proving the homotopy invariance of homology to showing that homotopic maps $f, g : 
-X\rightarrow Y$ induce chain homotopic maps $f_*, g_* : S_*(X)\rightarrow S_*(Y)$ on the $n$-chains, since these will by 
-default induce the same maps on homology. We will need the following lemma:
+Using the above theorem, we can reduce proving the homotopy invariance of homology to showing that homotopic maps 
+$f, g : X\rightarrow Y$ induce chain homotopic maps $f_*, g_* : S_*(X)\rightarrow S_*(Y)$ on the $n$-chains, since these will 
+by default induce the same maps on homology. We will need the following lemma:
 \begin{lemma}
 	Let $k : f\simeq g$ be a chain homotopy between $f, g : C_*\rightarrow D_*$ and let $j : D_*\rightarrow E_*$ 
 	be a chain map. Then $j\circ k : j\circ f\simeq j\circ g$ is a chain homotopy between $j\circ f$ and $j\circ g$. 
@@ -618,11 +613,11 @@ default induce the same maps on homology. We will need the following lemma:
 Now, consider an arbitrary homotopy $h : X\times I\rightarrow Y$ from $f : X\rightarrow Y$ to $g : X\rightarrow Y$. Note 
 that we have canonical injections $\iota_0 : X\times\{0\}\hookrightarrow X\times I$ and $\iota_1 : X\times \{1\}\hookrightarrow 
 X\times I$ such that the diagram commutes:
-\[\begin{tikzcd}
+\begin{equation}\begin{tikzcd}
 	X\times\{0\} \arrow[dr, "\iota_0"] \arrow[drr, "f", bend left=20]&  &  \\
 	& X\times I\arrow[r, "h"] & Y \\
-	X\times \{1\} \arrow[ur, "\iota_1"] \arrow[urr, "g", bend right=20] & & \\
-\end{tikzcd}\]
+	X\times \{1\} \arrow[ur, "\iota_1"] \arrow[urr, "g", bend right=20] & &
+\end{tikzcd}\end{equation}
 
 We are trying to prove that we can find a chain homotopy $h_* : f_*\rightarrow g_* : H_*(X)\rightarrow H_*(Y)$ to prove the 
 homotopy invariance. Since $H_*$ is a covariant functor, note that $f_* = h_*\circ\iota_0$ and $g_* = h_*\circ\iota_1$. 
@@ -639,12 +634,12 @@ construct a map:
 	\gamma : \Delta^{n + 1}\rightarrow\Delta^n\times\Delta^1
 \end{equation}
 then given $\sigma\in\textbf{Top}(\Delta^n, X)$, we can construct a map $\tau\in\textbf{Top}(\Delta^{n + 1}, X)$, such that:
-\[\begin{tikzcd}
+\begin{equation}\begin{tikzcd}
 	\Delta^{n + 1}\arrow[r, "\gamma"] \arrow[dr, "\tau", bend right] & \Delta^n\times\Delta^1 
 	\arrow[d, shift right=2ex, "\sigma"] \arrow[d, shift 
 	left = 2ex, hook] \\
-	& X\times I \\
-\end{tikzcd}\]
+	& X\times I
+\end{tikzcd}\end{equation}
 
 To do this, we will take for granted a theorem that will be proven later in these notes in Section~\ref{subsec:products}: the 
 existence of a \textbf{cross product} on homology. 
@@ -655,10 +650,11 @@ existence of a \textbf{cross product} on homology.
 	\begin{enumerate}
 		\item $\times$ is natural, so given maps $f : X\rightarrow X'$ and $g : Y\rightarrow Y'$, the following diagram 
 		commutes:
-		\[\begin{tikzcd}
-			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)\arrow[d, "(f \times g)_*"] \\
-			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y') \\
-		\end{tikzcd}\]
+		\begin{equation}\begin{tikzcd}
+			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)
+			\arrow[d, "(f \times g)_*"] \\
+			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y')
+		\end{tikzcd}\end{equation}
 		where $f_*$ and $g_*$ are the maps induced on the $n$-chains and $(f\times g)_*$ is the map induced by 
 		$f\times g : X\times Y\rightarrow X'\times Y', (x, y)\mapsto (f(x), g(y))$. 
 		\item $\times$ is bilinear, i.e. $(a + a')\times b = a\times b + a'\times b$ and $a\times (b + b') = a\times b + a\times 
@@ -720,9 +716,9 @@ a sequence.
 
 \begin{definition}[Sequence]
 	A \textbf{sequence} of abelian groups is a diagram of the form:
-	\[\begin{tikzcd}
-		...\arrow[r] & C_{n + 1}\arrow[r, "f_{n + 1}"] & C_n\arrow[r, "f_{n}"] & C_{n - 1}\arrow[r] & ... \\
-	\end{tikzcd}\]
+	\begin{equation}\begin{tikzcd}
+		...\arrow[r] & C_{n + 1}\arrow[r, "f_{n + 1}"] & C_n\arrow[r, "f_{n}"] & C_{n - 1}\arrow[r] & ...
+	\end{tikzcd}\end{equation}
 	such that $f_n\circ f_{n - 1} = 0$ for each $n$. A sequence is \textbf{long exact} if $im(f_n) = ker(f_{n - 1})$ for each $n$, 
 	i.e. if its homology vanishes identically. 
 \end{definition}
@@ -732,9 +728,9 @@ elements, it is understood that we have just left out the 0 elements after the l
 
 \begin{definition}
 	A \textbf{short exact sequence} (SES) is a long exact sequence of the form:
-	\[\begin{tikzcd}
-		0\arrow[r] & A\arrow[r, "\iota", hook] & B\arrow[r, "p", twoheadrightarrow] & C\arrow[r] & 0 \\
-	\end{tikzcd}\]
+	\begin{equation}\begin{tikzcd}
+		0\arrow[r] & A\arrow[r, "\iota", hook] & B\arrow[r, "p", twoheadrightarrow] & C\arrow[r] & 0 
+	\end{tikzcd}\end{equation}
 \end{definition}
 Note here we have drawn the arrows in a certain way to suggest specific properties. Namely, for the first and last arrows to 
 be exact, then $A$ must embed into $B$ and $B$ must project onto $C$. Additionally, if this sequence is exact then 
@@ -753,8 +749,8 @@ property for the cokernel: as the cokernel grows, $f$ is less and less close to 
 iff $coker(f) = 0$, so this gives a nice analog to how a map is injective iff $ker(f) = 0$. 
 
 \begin{definition}
-	We define $\bf{Top_2}$ to be the category of pairs $(X, A)$ where $X$ is a topological space and $A$ is a subspace. The 
-	morphisms $(X, A)\rightarrow (Y, B)$ are continuous maps $f : X\rightarrow Y$ such that $f(A)\subseteq B$. 
+	We define $\bf{Top_2}$ to be the category of pairs $(X, A)$ where $X$ is a topological space and $A$ is a subspace. 
+	The morphisms $(X, A)\rightarrow (Y, B)$ are continuous maps $f : X\rightarrow Y$ such that $f(A)\subseteq B$. 
 \end{definition}
 
 Note that $\bf{Top}$ is a subcategory in $\bf{Top_2}$, which can be seen by either sending $X\mapsto (X, \emptyset)$ or 
@@ -769,13 +765,13 @@ $X\mapsto (X, X)$.
 
 \begin{proof}
 	The following diagram outlines the situation we are in, where the diagram is exact vertically and horizonatally:
-	\[ \begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 		\cdots \arrow[r] & A_{n + 1} \arrow[r, "d"] \arrow[d, hook] & A_n\arrow[r, "d"] \arrow[d, hook] & A_{n - 1}\arrow[r, "d"] 
 		\arrow[d, hook] & \cdots \\
 		\cdots \arrow[r] & B_{n + 1} \arrow[r, "d"] \arrow[d, "\pi", twoheadrightarrow] & B_n\arrow[r, "d"]\arrow[d, "\pi", 
 		twoheadrightarrow] & B_{n - 1} \arrow[r, "d"] \arrow[d, "\pi", twoheadrightarrow] & \cdots \\
-		\cdots \arrow[r] & C_{n + 1}\arrow[r, "d"] & C_n\arrow[r, "d"] & C_{n - 1}\arrow[r, "d"] & \cdots \\
-	\end{tikzcd} \]
+		\cdots \arrow[r] & C_{n + 1}\arrow[r, "d"] & C_n\arrow[r, "d"] & C_{n - 1}\arrow[r, "d"] & \cdots
+	\end{tikzcd} \end{equation}
 	We need to define the maps $d : C_n\rightarrow C_{n - 1}$ to make $(C_*, d)$ into a chain complex, where each 
 	$C_n = B_n / A_n$. Define:
 	\begin{equation}
@@ -837,7 +833,7 @@ as we continue our study of homology.
 		\partial : H_n(C_*)\rightarrow H_{n - 1}(A_*)
 	\end{equation}
 	such that the following sequence is long exact:
-	\[\begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 		\cdots\arrow[r] & H_{n + 1}(A_*)\arrow[r] & H_{n + 1}(B_*)\arrow[r] \arrow[d, phantom, ""{coordinate, name=Z}] & 
 		H_{n + 1}(C_*) \arrow[dll, "\partial", rounded corners, 
 		to path={ -- ([xshift=2ex]\tikztostart.east)
@@ -850,8 +846,8 @@ as we continue our study of homology.
                 |- (W) [near end]\tikztonodes
                 -| ([xshift=-2ex]\tikztotarget.west)
                 -- (\tikztotarget)}] & \\
-		 & H_{n - 1}(A_*)\arrow[r] & H_{n - 1}(B_*)\arrow[r] & H_{n - 1}(C_*)\arrow[r] & \cdots \\
-	\end{tikzcd}\]
+		 & H_{n - 1}(A_*)\arrow[r] & H_{n - 1}(B_*)\arrow[r] & H_{n - 1}(C_*)\arrow[r] & \cdots
+	\end{tikzcd}\end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -863,7 +859,7 @@ as we continue our study of homology.
 	so $im(\bar f_*)\subseteq ker(\bar g_*)$. The reverse inclusion is a bit more involved, and we will need to chase the 
 	following diagram, which is the statement that the above SES is exact (in the future I will not draw this diagram 
 	explicitly). 
-	\[\begin{tikzcd}
+	\begin{equation}\begin{tikzcd}
 		& 0\arrow[d] & 0\arrow[d] & 0\arrow[d] & \\
 		\cdots\arrow[r, "d"] & A_{n + 1}\arrow[r, "d"]\arrow[d, "f_{n + 1}"] & A_n\arrow[r, "d"]\arrow[d, "f_{n}"] & A_{n - 1}
 		\arrow[r, "d"]\arrow[d, "f_{n - 1}"] & \cdots \\
@@ -871,8 +867,8 @@ as we continue our study of homology.
 		\arrow[r, "d"]\arrow[d, "g_{n - 1}"] & \cdots \\
 		\cdots\arrow[r, "d"] & C_{n + 1}\arrow[r, "d"]\arrow[d] & C_n\arrow[r, "d"]\arrow[d] & C_{n - 1}\arrow[r, "d"]\arrow[d] & 
 		\cdots \\
-		& 0 & 0 & 0 & \\ 
-	\end{tikzcd} \]
+		& 0 & 0 & 0 &
+	\end{tikzcd} \end{equation}
 	Pick $[b]\in ker(\bar g_n)$. Then $[g_nb] = 0$ in $H_n(C)$, so $g_nb = dc$ for $c\in C_{n + 1}$. Lift $c$ to $b'\in B_{n + 
 	1}$, so $c = g_{n + 1}b'$. Then $g_nb = dc = dg_{n + 1} b' = g_n db'$, so $g_n(b - db') = 0$, which implies $b - db' = 
 	f_n a$ for $a\in A_n$. Then it is clear that $[b] = [db'] + [f_n a] = \bar f_n([a])$, so $im(\bar f_*) = ker(\bar g_*)$. 
@@ -890,10 +886,132 @@ as we continue our study of homology.
 	d(b' - b - db'') = db' - db$, and also $df_n(a'') = f_{n - 1} da''$, and by the definition of $a$ and $a'$ we have 
 	$db' - db = f_{n - 1}(a - a') = f_{n - 1}(da'')\implies f_{n - 1}(a - a' - da'') = 0$. But $f_{n - 1}$ is injective, so this implies 
 	$a = a' + da''$, so $[a] = [a']$ and $\partial$ is thus well defined. 
+	
+	Finally, we will prove exactness at the $H_n(C_*)$ vertex. Suppose $[c]\in H_n(C_*)$ and $[c] = \bar g_n([b])$, so 
+	$[c] = [g_n(b)]$ for $b\in B_n$ with $db = 0$. Then when we lift $c$ to $B_n$, we can lift it to $b$. But, $db = 0$, 
+	so when we lift $db$ in our definition of $\delta$, we lift it to $a\in ker(f_{n - 1})$. But $ker(f_{n - 1}) = 0$ because it 
+	is injective, hence $a = 0$, and thus $\partial [c] = 0$, which shows $im(\bar g_*)\subseteq ker(\partial)$. 
+	
+	Suppose $[c]\in H_n(C_*)$ and $\partial[c] = 0$. We must show we can lift $[c]$ to $[b]$. Note that although we can 
+	lift $c$ to $b\in B_n$ (as we did in the definition of $\partial$) we do not necessarily have that $db = 0$, so we must 
+	find a lift $b'\in B_n$ of $c$ with $db' = 0$. Let $\partial[c] = [\tilde a]$ with $\tilde a\in A_{n - 1}$. Then $c$ lifts to $b\in 
+	B_n$ by the definition of $\partial$, and we have $db = f_{n - 1}\tilde a$. Because $\partial[c] = [\tilde a] = 0$, we have 
+	$\tilde a = da$ with $a\in A_n$. So, define $b' := b - f_n a$. Then $db' = db - d f_n a = db - f_{n - 1} \tilde a = 0$, and 
+	$g_n b' = g_n b + g_n f_n a = g_n b = c$, hence we have found the desired lift. 
 \end{proof}
 
+This ``long exact sequence in homology" is the basis for many of the computational tools that we will study to calculate the 
+homology of different spaces. In particular, this works very nicely with elements of $\bf{Top_2}$. Consider a pair $(X, A)\in 
+\bf{Top_2}$. Then we have the canonical short exact sequence:
+\begin{equation}
+	0\rightarrow S_*(A)\rightarrow S_*(X)\rightarrow S_*(X, A)\rightarrow 0
+\end{equation}
+by definition of $S_*(X, A)$ as the quotient $S_*(X) / S_*(A)$, so we get a long exact sequence:
+\begin{equation}\begin{tikzcd}
+		\cdots\arrow[r] & H_{n + 1}(A)\arrow[r] & H_{n + 1}(X)\arrow[r] \arrow[d, phantom, ""{coordinate, name=Z}] & 
+		H_{n + 1}(X, A) \arrow[dll, "\partial", rounded corners, 
+		to path={ -- ([xshift=2ex]\tikztostart.east)
+                |- (Z) [near end]\tikztonodes
+                -| ([xshift=-2ex]\tikztotarget.west)
+                -- (\tikztotarget)}] & \\
+		& H_n(A)\arrow[r] & H_n(X)\arrow[r] \arrow[d, phantom, ""{coordinate, name=W}] & H_n(X, A) 
+		\arrow[dll, "\partial", rounded corners, 
+		to path={ -- ([xshift=2ex]\tikztostart.east)
+                |- (W) [near end]\tikztonodes
+                -| ([xshift=-2ex]\tikztotarget.west)
+                -- (\tikztotarget)}] & \\
+		 & H_{n - 1}(A)\arrow[r] & H_{n - 1}(X)\arrow[r] & H_{n - 1}(X, A)\arrow[r] & \cdots
+\end{tikzcd}\end{equation}
+which in many cases provides us a practical way to compute the reduced homology if we know the homology of one or both of 
+the spaces. For example, consider the spaces $X = D^n$ and $A = S^{n - 1}$. We know $D^n$ is contractible, so $H_*(D^n) 
+= *$, where $*$ is a chain complex concentrated in degree 0 (i.e. the homology of a point). Because of this, the middle 
+vertices in the above diagram are 0, and so we get exact sequences:
+\begin{equation}
+	0\rightarrow H_q(D^n, S^{n - 1}\rightarrow H_{q - 1}(S^{n - 1})\rightarrow 0
+\end{equation}
+which implies that $H_q(D^n, S^{n - 1})\cong H_{q - 1}(S^{n - 1})$. This is a very nontrivial realization-- note in particular that 
+determining this had \textit{nothing to do with the boundary map $\partial$}, and we only needed to use the fact that it 
+existed and was well defined. This will be a recurring theme in many areas of algebraic topology-- many times we only care 
+about the exactness of maps, not about the maps themself. Because of this, many theorems that we studied in 
+homological algebra will be applicable to our study of algebraic topology. In particular, recall the five lemma.
+\begin{lemma}[Five Lemma]
+	Suppose the following diagram commutes and the rows are exact.
+	\begin{equation}\begin{tikzcd}
+		A_1\arrow[r]\arrow[d, "f_1"] & A_2\arrow[r]\arrow[d, "f_2"] & A_3\arrow[r]\arrow[d, "f_3"] & A_4\arrow[r]\arrow[d, 
+		"f_4"] & A_5\arrow[d, "f_5"] \\
+		B_1\arrow[r] & B_2\arrow[r] & B_3\arrow[r] & B_4\arrow[r] & B_5
+	\end{tikzcd}\end{equation}
+\begin{enumerate}
+	\item If $f_5$ is injective and $f_2, f_4$ are surjective, then $f_3$ is surjective.
+	\item If $f_1$ is surjective and $f_2, f_4$ are injective, then $f_3$ is injective. 
+\end{enumerate}
+In particular, if $f_1$ is surjective, $f_5$ is injective, and $f_2, f_4$ are isomorphisms, then $f_3$ is an isomorphism.
+\end{lemma}
 
+Although there seem to be a lot of conditions on this lemma, we will typically only use it when $f_3$ is sandwiched by 
+isomorphisms-- this condition will appear a lot in proofs later on in the course. The following immediate consequence of 
+this lemma will be useful.
 
+\begin{corollary}
+	Suppose we have the following diagram of chain complexes:
+	\[\begin{tikzcd}
+		0\arrow[r] & A_*\arrow[r]\arrow[d, "f_1"] & B_*\arrow[r]\arrow[d, "f_2"] & C_*\arrow[r]\arrow[d, "f_3"] & 0 \\
+		0\arrow[r] & A'_*\arrow[r] & B'_*\arrow[r] & C'_*\arrow[r] & 0 \\
+	\end{tikzcd}\]
+	If any two of $f_1, f_2, or f_3$ are isomorphisms on homology, then so is the third. 
+\end{corollary}
+\begin{proof}
+	By drawing out the induced long exact sequence and maps on homology, we see:
+	\begin{equation}\begin{tikzcd}
+		\cdots\arrow[r] & H_{n + 1}(B_*)\arrow[r]\arrow[d, "f_{2*}"] & 
+		H_{n + 1}(C_*)\arrow[r, "\partial"]\arrow[d, "f_{3*}"] & H_{n}(A_*)\arrow[r]\arrow[d, "f_{1*}"] & H_{n}(B_*)\arrow[r]
+		\arrow[d, "f_{2*}"] & H_{n}(C_*)\arrow[r, "\partial"] \arrow[d, "f_{3*}"] & \cdots \\
+		\cdots\arrow[r] & H_{n + 1}(B'_*)\arrow[r] & H_{n + 1}(C'_*)\arrow[r, "\partial"] & H_n(A'_*) 
+		\arrow[r] & H_n(B'_*)\arrow[r] & H_n(C'_*)\arrow[r, "\partial"] & \cdots
+	\end{tikzcd}\end{equation}
+\end{proof}
+
+\begin{corollary}
+	Let $(X, A)\rightarrow (Y, B)$ be a morphism in $\bf{Top}_2$. If any two of:
+	\begin{itemize}
+		\item $X\rightarrow Y$
+		\item $A\rightarrow B$
+		\item $(X, A)\rightarrow (Y, B)$
+	\end{itemize}
+	induce isomorphisms in homology, then so does the third map. 
+\end{corollary}
+
+We move toward one of the main theorems in this part of the course-- the \textit{excision} theorem, which will give us the 
+ability to ``cut out" pieces of spaces and study the homology of the cut space in terms of the relative homology of the 
+original space. This theorem was one of the first that helped me gain intuition for relative homology; although it is hard to 
+prove, the statement of the theorem is very insightful and shows homology has plenty of interesting local properties. 
+
+\begin{definition}[Excision]
+	A triple $(X, A, U)$ is called \textbf{excisive} if:
+	\begin{equation}
+		\bar U\subseteq int(A)
+	\end{equation}
+	where $\bar\cdot$ is the closure operator. Then the map:
+	\begin{equation}
+		(X\setminus U, A\setminus U)\hookrightarrow (X, A)
+	\end{equation}
+	is called an \textbf{excision}. 
+\end{definition}
+
+We will typically use this when $X\in \bf{Top}$ and $U\subseteq A\subseteq X$ are two subspaces. Note that an excision is 
+quite literally a cutting out of a space; we cut out the subspace $U$ and then are able to embed this reduced space into the 
+original. This should not change the relative homology of $X$ relative to $A$, since the relative homology should depend on 
+only the information of $X$ which lies outside $A$, since it depends on the quotient $S_*(X) / S_*(A)$. We make this 
+precise with the excision theorem:
+\begin{theorem}[Excision]
+	An excision is a homology isomorphism, i.e. if $(X, A, U)$ is excisive, then:
+	\begin{equation}
+		H_*(X\setminus U, A\setminus U)\cong H_*(X, A)
+	\end{equation}
+\end{theorem}
+
+In this way, an excision allows us to cut out a subset of $A$, and the relative homology will just ``forget about it" and be left 
+unchanged. 
 
 \newpage
 \label{subsec:products}
@@ -912,10 +1030,11 @@ Theorem~\ref{thm:cross_product}, which we restate here for convenience:
 	\begin{enumerate}
 		\item $\times$ is natural, so given maps $f : X\rightarrow X'$ and $g : Y\rightarrow Y'$, the following diagram 
 		commutes:
-		\[\begin{tikzcd}
-			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)\arrow[d, "(f \times g)_*"] \\
-			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y') \\
-		\end{tikzcd}\]
+		\begin{equation}\begin{tikzcd}
+			S_p(X)\times S_q(Y) \arrow[r, "\times"]\arrow[d, "{(f_*, g_*)}"] & S_{p + q}(X \times Y)
+			\arrow[d, "(f \times g)_*"] \\
+			S_p(X')\times S_q(Y')\arrow[r, "\times"] & S_{p + q}(X'\times Y')
+		\end{tikzcd}\end{equation}
 		where $f_*$ and $g_*$ are the maps induced on the $n$-chains and $(f\times g)_*$ is the map induced by 
 		$f\times g : X\times Y\rightarrow X'\times Y', (x, y)\mapsto (f(x), g(y))$. 
 		\item $\times$ is bilinear, i.e. $(a + a')\times b = a\times b + a'\times b$ and $a\times (b + b') = a\times b + a\times 

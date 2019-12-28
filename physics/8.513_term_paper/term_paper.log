@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  9 DEC 2019 13:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  9 DEC 2019 21:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -613,17 +613,14 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 37.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Missing character: There is no ü in font cmr10!
- [3] [4] [5]
-Missing character: There is no ü in font cmr10!
-
+{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+ [4] [5]
 [6] (./term_paper.aux) ) 
 Here is how much of TeX's memory you used:
- 14066 strings out of 493014
- 285806 string characters out of 6133351
+ 14067 strings out of 493014
+ 285814 string characters out of 6133351
  334422 words of memory out of 5000000
- 17325 multiletter control sequences out of 15000+600000
+ 17326 multiletter control sequences out of 15000+600000
  13888 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  61i,11n,84p,454b,239s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -646,7 +643,7 @@ r/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/
 local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/lo
 cal/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loc
 al/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on term_paper.pdf (6 pages, 234795 bytes).
+Output written on term_paper.pdf (6 pages, 236335 bytes).
 PDF statistics:
  102 PDF objects out of 1000 (max. 8388607)
  74 compressed objects within 1 object stream

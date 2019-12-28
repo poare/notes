@@ -44,7 +44,7 @@ which means physics must be extracted by non-perturbative means. One such way to
 large) dimensional integral which can be evaluated on a computer. 
 
 One of the key properties of QCD in the continuum is an approximate chiral symmetry; when we take the light quarks ($u, d$, 
-sometimes $s$) to be massless, the QCD Lagrangian decouples into left and right handed fields of definite chirality. This 
+sometimes $s$) to be massless, the left and right handed fields in the QCD Lagrangian decouple. This 
 allows us to study QCD in many ways which do not require perturbation theory, and allows for a definition of topological charge 
 in QCD. However, when QCD is put on the lattice, chiral symmetry appears broken and the original continuum definition of a 
 topological charge is no longer a good quantity to consider. In this paper, I will discuss how chiral symmetry can be modified to 
@@ -57,7 +57,7 @@ $\Lambda$, and Wick rotate to imaginary time so that $\Lambda$ is a Euclidean la
 the Boltzmann factor of $e^{iS}$ in the path integral becomes a valid probability density $e^{-S}$, in order to perform any 
 computations at all.}. In the full theory of QCD, the dynamical fields in the path integral are the quark fields $\psi_f$ and gluon 
 fields $A_\mu$. When we discretize QCD, we will still work with the quark fields, but instead of directly working with the gauge 
-fields $A_\mu$ we will work \textbf{link fields} $U_\mu(n)$ which transform in the following way under a gauge transformation 
+fields $A_\mu$ we will work with \textbf{link fields} $U_\mu(n)$ which transform in the following way under a gauge transformation 
 $\Omega : \Lambda\rightarrow SU(3)$:
 \begin{equation}
 	U_\mu(n)\xrightarrow{\Omega(n)}\Omega(n) U_\mu(n)\Omega(n + \hat{\mu})^\dagger
@@ -75,7 +75,7 @@ define a covariant derivative.
 We may now write down a first pass at a fermion action, which will be equivalent to $\slashed D + m$ upon taking the 
 continuum limit. The direct discretization of this action is thus:
 \begin{align}
-	S_f^0[\psi_f, \bar\psi_f, U] &= a^4\sum_{n\in\Lambda}\sum_f \bar\psi_f(n)\left(\gamma^\mu\frac{U_\mu(n)\psi_f(n + \hat\mu) - U_{-\mu}(n)\psi_f(n - \hat\mu)}{2a} - m_f\psi_f(n)\right) 
+	S_f^0[\psi_f, \bar\psi_f, U] &= a^4\sum_{n\in\Lambda}\sum_f \bar\psi_f(n)\left(\gamma^\mu\frac{U_\mu(n)\psi_f(n + \hat\mu) - U_{-\mu}(n)\psi_f(n - \hat\mu)}{2a} + m_f\psi_f(n)\right) 
 	\\
 	&= a^4\sum_{n, m\in\Lambda}\sum_f \bar\psi_f(n)_{\alpha}^a D_{f}^0(n | m)_{\alpha\beta}^{ab}\psi_f(m)_{\beta}^b~
 	\label{eq:naive_action}
@@ -87,12 +87,14 @@ where we have defined the \textbf{Dirac operator} $D_{\alpha\beta}^{ab}(n | m)$ 
 \end{equation}
 Note the Greek indices $\alpha, \beta$ are in Dirac space, and the Latin indices $a, b$ are in color space. The Dirac operator 
 is one of the fundamental objects we will study later when considering the role of topology in lattice QCD, and is the discretized 
-version of $i\slashed D - m$ in Euclidean space. 
+version of $\slashed D + m$, the Euclidean space Dirac equation.
 
 However, there is a slight problem with the action in Equation~\ref{eq:naive_action}. Because we are working on a lattice, the 
 Fourier transform $\tilde D^0(p)$ of the Dirac operator $D^0(n | m)$ has extra unphysical poles at the edges of the Brillioun 
 zone. These extra poles are known in the literature as \textbf{doublers}, and must be eliminated by adjusting the action. We do 
-this by adding a corresponding Wilson term to the Dirac operator, so that the full Dirac operator and action now become:
+this by adding a corresponding Wilson term to the Dirac operator (as $a\rightarrow 0$, the mass term in this adjusted action 
+goes to $\infty$, and so is not a dynamical degree of freedom), so that the full 
+Dirac operator and action now become:
 \begin{equation}
 	D_f^W(n | m)_{\alpha\beta}^{ab} := \left(m_f + \frac{4}{a}\right)\delta_{\alpha\beta}\delta^{ab}\delta_{nm} - 
 	\frac{1}{2a}\sum_{\mu = \pm 1}^{\pm 4} (1 - \gamma^\mu)_{\alpha\beta} U_\mu(n)^{ab}\delta_{n + \hat{\mu}, m}~
@@ -122,7 +124,7 @@ Chiral symmetry in standard QCD is realized by taking the approximations that th
 Let $D_{cont} := \gamma^\mu (\partial_\mu + i A_\mu)$ be the continuum Dirac operator in Euclidean space for a massless 
 field. The key equation for chiral symmetry in the continuum is the anticommutation of $D_{cont}$ with $\gamma_5$:
 \begin{equation}
-	\{D, \gamma_5\} = 0~
+	\{D_{cont}, \gamma_5\} = 0~
 	\label{eq:cont_anticommutation}
 \end{equation}
 Using Equation~\ref{eq:cont_anticommutation}, it is immediate to show that for a fermion described by $\mathcal L = 
@@ -139,7 +141,7 @@ see that the chiral fields decouple in the Dirac Lagrangian and make chiral symm
 	\label{eq:cont_chiral_lagrangian}
 \end{equation}
 Because of this decoupling, rotating $\psi_L$ and $\psi_R$ separately in flavor space\footnote{Flavor space is where we view 
-$\psi$ as a vector of different species of quarks. For example, we will generally either view $\psi_i = (u_i\; d_i)^T$ or 
+$\psi$ as a vector of different species of quarks. For $i \in\{L, R\}$, we will generally either view $\psi_i = (u_i\; d_i)^T$ or 
 $\psi_i = (u_i\; d_i\; s_i)^T$ when we examine the massless quarks in the theory, depending on whether or not we approximate 
 the strange quark as massless.} leaves the Lagrangian invariant and gives us the chiral symmetry $SU(N_f)_L\times 
 SU(N_f)_R$, where $N_f$ is the number of (approximately) massless quarks. 
@@ -167,13 +169,13 @@ of Dirac operators on the lattice. One in particular was defined by Neuberger \c
 For the duration of this paper, we will take $D_f(n | m)_{\alpha\beta}^{ab}$ to be a lattice Dirac operator which satisfies 
 Equation~\ref{eq:ginsparg_wilson}.
 
-Lüscher \cite{Lüscher} showed that because $D$ satisfies the Ginsparg-Wilson equation, the Lagrangian density is invariant 
+L\"uscher \cite{Luscher} showed that because $D$ satisfies the Ginsparg-Wilson equation, the Lagrangian density is invariant 
 under a modified chiral rotation of the field $\psi$:
 \begin{equation}
 	\psi\mapsto \exp\left(ia\gamma_5 \left(1 - \frac{1}{2}a D\right)\right)\psi
 	\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi\mapsto\bar\psi 
 	\exp\left(ia\left(1 - \frac{1}{2}aD\right)\gamma_5\right)~
-	\label{eq:Lüscher_transformation}
+	\label{eq:luscher_transformation}
 \end{equation}
 because taking $a$ to be an small parameter and expanding in powers of $a$, we find that the extra terms obey the 
 Ginsparg-Wilson equation order by order and cancel:
@@ -182,7 +184,7 @@ Ginsparg-Wilson equation order by order and cancel:
 	\mathcal L + O(a^3)
 \end{equation}
 hence we can take the Noether current generated by this symmetry to be our new definition of a chiral current. Note that the 
-transformation in Equation~\ref{eq:Lüscher_transformation} reduces to the standard chiral transformation in the limit 
+transformation in Equation~\ref{eq:luscher_transformation} reduces to the standard chiral transformation in the limit 
 $a\rightarrow 0$, and so this symmetry become chiral symmetry in the continuum limit. 
 
 To make manifest the modified chiral symmetry of the Lagrangian, we follow an argument by Niedermayer \cite{niedermayer} 
@@ -194,7 +196,7 @@ and introduce modified chiral projectors which act as the standard projectors $\
 Because $D$ satisfies Equation~\ref{eq:ginsparg_wilson}, these new projectors satisfy $D\hat P_\pm = P_\mp D$, which is a 
 very similar algebra to the standard chiral projectors. This means that if we introduce modified chiral fields:
 \begin{equation}
-	\psi_L = \hat P_-\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \psi_L = \hat P_+\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi_L = \bar\psi 
+	\psi_L = \hat P_-\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \psi_R = \hat P_+\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi_L = \bar\psi 
 	P_+ ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi_R = \bar\psi P_-
 \end{equation}
 then our Lagrangian splits into chiral components $\mathcal L = \bar\psi_L D\psi_L + \bar\psi_R D\psi_R$ as in the continuum 
@@ -224,9 +226,9 @@ the Dirac operator $D$. Neidermayer's paper shows a few important results that w
 \end{enumerate}
 All of these arguments are detailed in Appendix~\ref{subsec:spectrum}. Note we adopt the notation here that $\langle\cdot, 
 \cdot\rangle$ is the inner product on Dirac spinors, i.e. $\langle u, v\rangle = u^\dagger v$ where the transpose is taken in 
-Dirac space. This implies that we can describe the left and right movers in our lattice regularized theory by describing the 
-eigenspaces of $D$ which have real eigenvalues. Because the distribution of eigenvalues lies on a circle, we therefore know 
-the left and right movers must have exactly eigenvalues $\lambda = 0$ or $\lambda = \frac{2}{a}$. 
+Dirac space. Condition 4 implies that we can describe the left and right movers in our lattice regularized theory by 
+describing the eigenspaces of $D$ which have real eigenvalues. Because the distribution of eigenvalues lies on a circle, we 
+therefore know the left and right movers must have exactly eigenvalues $\lambda = 0$ or $\lambda = \frac{2}{a}$. 
 
 We can use this to define a topological charge on the lattice, following Hasenfratz's paper \cite{hasenfratz}. We define a 
 topological charge by:
@@ -341,8 +343,8 @@ real modes to have definite chirality.
 	\bibitem{neuberger}
 	Neuberger, H. (1999). The Overlap Dirac Operator. hep-lat/9910040v1
 	
-	\bibitem{Lüscher}
-	Lüscher, M. (1998). Exact chiral symmetry on the lattice and the Ginsparg-Wilson relation. hep-lat/9802011
+	\bibitem{Luscher}
+	L\"uscher, M. (1998). Exact chiral symmetry on the lattice and the Ginsparg-Wilson relation. hep-lat/9802011
 	
 	\bibitem{niedermayer}
 	Niedermayer, F. (1998). Exact chiral symmetry, topological charge and related topics. hep-lat/9810026

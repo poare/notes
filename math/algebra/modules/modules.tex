@@ -1,0 +1,189 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{tikz-cd}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Modules}
+\author{Patrick Oare}
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+At their most basic level, modules are essentially dumb vector spaces. They have the same structure as vector spaces, but 
+instead of being equipped with a multiplicative action from a vector space, they are equipped with an action from a ring. 
+Although this seems like a small thing to change, module theory is a \textit{much} more difficult subject to work with than vector 
+space theory. We will see that free modules have a similar structure to vector spaces because they look like products of the 
+base ring $R$. However, most modules are not free. 
+
+These notes will cover the basic definitions of module theory and then study the basics of homological algebra. We will define 
+the tensor product $\otimes$ of two modules, then study certain derived functors of interest. Many of the tools that we will 
+consider in the latter half of these notes are fundamental for the study of algebraic topology, especially when working with 
+homology groups and cohomology algebras. The study of simplicial homology is typically the first place that one encounters 
+using many of these ideas outside of a purely abstract sense, and these notes should help set a foundation for that subject. 
+
+\section{Basic Definitions and $Hom$}
+
+For these notes, we will work over a ring $R$. It may or may not be commutative or have identity, and when we need these 
+properties we will specify them. We begin with the definition of a module. 
+
+\begin{definition}[$R$-module]
+	A \textbf{left $R$-module} is a triple $(M, +, \cdot)$ consisting of a set $M$, a binary operation $(M, +)$, and a map 
+	$\cdot : R\times M\rightarrow M$ such that:
+	\begin{enumerate}
+			\item $(M, +)$ is an Abelian group.
+			\item $(r_1r_2)m = r_1(r_2 m)$.
+			\item $r(m_1 + m_2) = rm_1 + rm_2$.
+			\item$ (r_1 + r_2)m = r_1m + r_2m$.
+			\item $1m = m$ if $R$ has unity.
+	\end{enumerate}
+	In other words, we have a left action of $(R, \times)$ on $M$ compatible with its group structure. A 
+	\textbf{right $R$-module} is defined in an analogous manner with a right $R$-action. 
+\end{definition}
+
+We will typically drop the modifiers ``left" and ``right" unless they are important to the theorem we are trying to prove. Similarly, 
+unless it is important we will drop the modifier ``$R$" and simply refer to these objects as modules. For a fixed ring $R$, 
+$R$-modules form a category \textbf{RMod} with the following morphisms:
+\begin{definition}
+	Given two modules $M, N$, a \textbf{$R$-module homomorphism} is a map $f : M\rightarrow N$ such that $f(m + n) = 
+	f(m) + f(n)$ and $f(rm) = rf(m)$ for $r\in R$ and $m, n\in M$. 
+\end{definition}
+For left modules, a more suggestive notation is to write $mf := f(m)$. With this manner, then the linearity of scalar multiplication 
+simply means that writing $rmf$ is ambiguous, because $r(mf) = (rm)f$. 
+
+Given two modules $M, N$, we denote by $Hom_R(M, N)$ the set of all $R$-module homomorphisms between them (and will 
+often suppress the $R$). For a general ring, $Hom_R(M, N)$ is an abelian group. For $\phi, \psi\in Hom(M, N)$, define:
+\begin{equation}
+	(\phi + \psi)(m) := \phi(m) + \psi(m)
+\end{equation}
+If $R$ is commutative, then $Hom_R(M, N)$ additionally gets the structure of a $R$-module by defining the multiplication:
+\begin{equation}
+	(rf)(m) := r(fm)
+\end{equation}
+
+$Hom$ also respects maps between modules. Fix a module $L$ and consider a map $\phi : M\rightarrow N$. If we consider the 
+action of $Hom(\cdot, L)$ on these modules, we get an induced map:
+\begin{align}
+	\phi^* : Hom(N, L) &\rightarrow Hom(M, L) \\
+	f & \mapsto f\circ\phi
+\end{align}
+and considering the action of $Hom(L, \cdot)$:
+\begin{align}
+	\phi_* : Hom(L, M) &\rightarrow Hom(L, N) \\
+	g &\mapsto \phi\circ g
+\end{align}
+Notice that $phi^*$ switches the arrow directions and $\phi_*$ preserves the arrow directions. This implies that $Hom(\cdot, L)$ is a 
+\textbf{contravariant functor}, and $Hom(L, \cdot)$ is a covariant functor. In other words:
+\begin{theorem}
+	$Hom_R(\cdot, \cdot)$ is a \textbf{bifunctor} from \textbf{RMod} to \textbf{Ab}. If $R$ is a commutative ring, then it is in fact a 
+	bifunctor from \textbf{RMod} to \textbf{RMod}. 
+\end{theorem}
+
+This is a nice functor, but unfortunately it is not precisely exact, i.e. it does not preserve exact sequences. However, it is close, as we will 
+see in the following theorem.
+\begin{theorem}
+	$Hom_R(\cdot, \cdot)$ is a \textbf{left-exact} functor, i.e. given an exact sequence of $R$-modules:
+	\begin{equation}\begin{tikzcd}
+		0\arrow[r] & A\arrow[r, "\phi"] & B\arrow[r, "\psi"] & C\arrow[r] & 0
+	\end{tikzcd}\end{equation}
+	the following sequences are exact:
+	\begin{equation}\begin{tikzcd}
+		0\arrow[r] & Hom_R(M, A)\arrow[r, "\phi_*"] & Hom_R(M, B)\arrow[r, "\psi_*"] & Hom_R(M, C)
+	\end{tikzcd}\end{equation}
+	\begin{equation}\begin{tikzcd}
+		Hom_R(A, M) & Hom_R(B, M)\arrow[l, "\psi^*"] & Hom_R(C, M)\arrow[l, "\phi^*"] & 0\arrow[l]
+	\end{tikzcd}\end{equation}	
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+\section{The Tensor Product}
+
+\subsection{Graded algebras}
+
+In this section we consider naturally graded algebras that arise in the studies of modules; the tensor algebra and the 
+exterior algebra. The tensor algebra is the ``mother of all algebras", and is very important in all areas of math. The exterior 
+algebra $\Lambda^*M$ over $R$ is derived from the tensor algebra, and shows up most commonly in the 
+definition of a differential form. The algebra operation over $\Lambda^*M$ is the wedge product, which we will define abstractly 
+and show how to use it on computations. 
+
+\begin{definition}[Graded module]
+	An algebra $(M, +, \cdot, \times)$ ($\times : M\times M\rightarrow M$ is the ring multiplication) is called \textbf{graded} if 
+	$M$ can be decomposed as a direct sum of submodules:
+	\begin{equation}
+		M = \bigoplus_{k = 0}^\infty M_k
+	\end{equation}
+	and the algebra product acts on submodules as $\times : M_k\times M_\ell\rightarrow M_{k + \ell}$. 
+\end{definition}
+The first example of a graded module we will consider is the tensor algebra. Another example of a graded algebraic object 
+that you may have studied before is the homology group and the cohomology algebra, which are naturally graded as 
+they are sums of 
+
+\begin{definition}[Tensor algebra]
+	Let $M$ be a $R$-module space. We define $\bigotimes_0 V := R$, and for $k\geq 1$:
+	\begin{equation}
+		\bigotimes_k M := M\otimes\left(\bigotimes_{k - 1} M\right)
+	\end{equation}
+	i.e. $\bigotimes_k M$ equals $M\otimes M\otimes ...\otimes M$ with $k$ copies of $M$. The \textbf{tensor algebra} of 
+	$M$ is the module:
+	\begin{equation}
+		\bigotimes M := \bigoplus_{k = 0}^\infty \left(\bigotimes_k M\right)
+	\end{equation}
+	equipped with the ring multiplication $\otimes: (\bigotimes_k M)\times (\bigotimes_\ell M)\rightarrow 
+	\bigotimes_{k + \ell} M$ (which means that $\otimes$ is a valid multiplication on $\bigotimes M$ and makes it into an 
+	algebra). 
+\end{definition}
+The tensor algebra is naturally graded as it is a direct sum of $\bigotimes_k M$. We will use it to define another graded 
+algebra, called the \textit{exterior algebra} of $M$. This will be the space of interest for differential forms. 
+
+\begin{definition}[Exterior algebra]
+	The \textbf{$k$th exterior power} of a module $M$ is the quotient algebra:
+	\begin{equation}
+		\Lambda^k M := \bigotimes_k M / \langle\{x_1\otimes ... \otimes x_k : x_i = x_j, i\neq j\}\rangle
+	\end{equation}
+	where $\langle ...\rangle$ denotes the hull of such a subset. The \textbf{exterior algebra} of $M$ is:
+	\begin{equation}
+		\Lambda^* M :=\bigoplus_{k = 0}^\infty\Lambda^kM
+	\end{equation}
+	equipped with the natural ring multiplication $\wedge : \Lambda^k M\times\Lambda^\ell M\rightarrow\Lambda^{k + \ell}
+	M$ defined by:
+	\begin{equation}
+		[x]\wedge [y] := [x\otimes y]
+	\end{equation}
+	i.e. $\wedge$ is the image of $\otimes$ in $\Lambda^* M$. 
+\end{definition}
+The exterior algebra is a naturally graded algebra with exterior multiplication. It is the ``best" algebra over $M$ which is 
+antisymmetric, in the sense that $x\wedge y = - y \wedge x$, and more generally for $\sigma\in S_n$:
+\begin{equation}
+	x_1\wedge ...\wedge x_n = sgn(\sigma) x_{\sigma 1}(\wedge ...\wedge x_{\sigma n})
+\end{equation}
+By ``best", we mean that it satisfies a universal property outlined in the following theorem. 
+\begin{theorem}
+	Suppose that $\phi : M^k\rightarrow N$ is an alternating multilinear map. Denote by $\iota : M^k\rightarrow 
+	\Lambda^k M$ the canonical embedding $(m_1, ..., m_k)\mapsto m_1\wedge ...\wedge m_k$. Then $\phi$ 
+	factors through a linear map of $R$-modules $\tilde\phi : \Lambda^k M\rightarrow N$, i.e. the diagram commutes:
+	\begin{equation}\begin{tikzcd}
+		M^k\arrow[r, "\iota"]\arrow[dr, "\phi"] & \Lambda^k M, \arrow[d, "\tilde\phi"] \\
+		& N
+	\end{tikzcd}\end{equation}
+\end{theorem}
+
+\end{document}
