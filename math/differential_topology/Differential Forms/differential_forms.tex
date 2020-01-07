@@ -16,6 +16,7 @@
 \newtheorem{definition}{Definition}[section]
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{example}{Example}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 
 \newcommand{\N}{\mathbb{N}}
@@ -214,7 +215,12 @@ A section\footnote{In physics, whenever we think about a ``field", we are really
 just thinking about standard functions). For example, a QCD gauge field is a section of a fiber bundle with fibers $SU(3)$ over 
 the base space $\mathbb R^4$. Sections are thus a concept that you've almost certainly seen before, albeit in a much less 
 rigorous way.} of the tangent bundle is called a \textbf{vector field}, which is perhaps the easiest way to visualize the definition 
-of a section; it is simply an assignment of each base point to an element in its fiber which is continuous. A frame on the bundle 
+of a section; it is simply a continuous assignment of each base point to an element in its fiber. We denote by $\mathfrak X(M)$ 
+the set of all $C^\infty$ vector fields on $M$, i.e: 
+\begin{equation}
+	\mathfrak X(M) := \{X\in \Gamma(TM) : X\textnormal{ is } C^\infty\}
+\end{equation}
+A frame on the bundle 
 $TM$ is then a set of pointwise linearly independent vector fields, and the requirement that the tangent bundle has a global 
 frame means that there are $n$ nowhere vanishing, linearly independent vector fields on the entire manifold. As an 
 example of a frame, the vector fields $\{\partial_x, \partial_y, \partial_z\}$ form a global frame on $\mathbb R^3$. 
@@ -501,10 +507,17 @@ This implies a $k$-form $\omega\in\Omega^k(M)$ can be expanded as:
 	\omega = a_{i_1, ..., i_k}dx^{i_1}\wedge ...\wedge dx^{i_k} = \sum_{I\in\mathfrak I_k^n} a_I dx^I~
 	\label{eq:k_form}
 \end{equation}
-A $k$-form $\omega$ represented by Equation~\ref{eq:k_form} is \textbf{smooth} if and only if $a_I : M\rightarrow\mathbb R$ 
-is smooth as a function on $M$. 
+A $k$-form $\omega$ represented by Equation~\ref{eq:k_form} is \textbf{smooth} (so $\omega\in\Omega^k(M)$) if and only if 
+$a_I : M\rightarrow\mathbb R$ is smooth as a function on $M$. For each $p\in M$, the $k$-covectors $\Lambda^k(T_p^* M)$ 
+are a vector space over $\mathbb R$. When we extend to sections of $\Lambda^k(T^* M)$ to form $\Omega^k(M)$, we 
+thus see that $\Omega^k(M)$ has the structure of a vector space over $C^\infty(M)$, as we can multiply a differential 
+form pointwise by a smooth function and still have a smooth section of $\Lambda^k(T^* M)$. Note the dimensionality of 
+this space as a vector space over $C^\infty(M)$ is:
+\begin{equation}
+	dim(\Omega^k(M) / C^\infty(M)) = {n\choose k}
+\end{equation}
 
-We can now define a pullback of $k$-forms. 
+We now switch gears a bit, and will generalize the pullback that we defined in the previous section to $k$-forms. 
 \begin{definition}[Pullback]
 	Let $f : M\rightarrow N$ be $C^\infty$. Then there is an induced map:
 	\begin{equation}
@@ -539,9 +552,9 @@ first define the wedge product generally on a vector space $V$.
 
 \begin{definition}[Wedge product]
 	Let $V$ be a vector space, $\alpha\in\Lambda^k(V^*)$, and $\beta\in\Lambda^\ell(V^*)$ be two alternating 
-	tensors\footnote{Another common notation is to denote the space of alternating tensors $\Lambda^k(V^*)$ by $A^k(V)$.}. 
-	Then we define their \textbf{wedge product} to be an alternating tensor $\alpha\wedge\beta\in\Lambda^{k + \ell}(V^*)$ 
-	such that:
+	tensors\footnote{Another common notation is to denote the space of alternating tensors 
+	$\Lambda^k(V^*)$ by $A^k(V)$.}. Then we define their \textbf{wedge product} to be an alternating tensor 
+	$\alpha\wedge\beta\in\Lambda^{k + \ell}(V^*)$ such that:
 	\begin{equation}
 		(\alpha\wedge\beta)(v_1, ..., v_{k + \ell}) := \frac{1}{k!\ell!}\sum_{\sigma\in S_{k + \ell}}sgn(\sigma)
 		\alpha(v_{\sigma(1)}, ..., v_{\sigma(k)})\beta(v_{\sigma(k + 1), ..., v_{\sigma(k + \ell)}})~
@@ -608,8 +621,309 @@ with it to make it into a cochain complex. The pullback $f^*$ is also an algebra
 	\end{align}
 \end{proof}
 
-\subsection{The exterior derivative}
+\subsection{The Exterior Derivative}
 
+We come to the last few major definitions for differential forms: we will first define a coboundary map, called the \textbf{exterior 
+derivative}, that generalizes the standard derivative in $\mathbb R^n$ and gives $\Omega^*(M)$ the structure of a 
+graded cochain complex. Later, we will generalize the notion of a derivative to a \textbf{Lie derivative}, and show that this 
+is intimately connected with the exterior derivative. 
+
+\begin{definition}[Antiderivation]
+	Let $A = \bigoplus_{k = 0}^\infty A^k$ be a graded algebra. A \textbf{antiderivation} on $A$ is a $\mathbb R$-linear map 
+	$D : A\rightarrow A$ such that for $\omega\in A^k$ and $\tau\in A^\ell$:
+	\begin{equation}
+		D(\omega\cdot\tau) = D(\omega)\cdot\tau + (-1)^k\omega\cdot D(\tau)
+	\end{equation}
+	We say the antiderivation has \textbf{degree} $m$ if $\deg D(\omega) = \omega + m$ for each $\omega\in A^k$. 
+\end{definition}
+
+\begin{definition}[Exterior derivative]
+	An \textbf{exterior derivative} on a manifold $M$ is a $\mathbb R$-linear map $d : \Omega^*(M)\rightarrow\Omega^*(M)$ 
+	such that:
+	\begin{enumerate}
+		\item $d$ is an antiderivation of degree 1. 
+		\item $d^2 = 0$. 
+		\item If $f\in C^\infty(M)$ and $X$ is a smooth vector field on $M$, then:
+		\begin{equation}
+			(df)(X) = X(f)
+		\end{equation}
+	\end{enumerate}~
+	\label{def:derivative}
+\end{definition}
+
+From condition 3 of the definition, it is clear that the differential $d : \Omega^0(M)\rightarrow\Omega^1(M)$ that we have 
+defined in the previous section will be the action of the exterior derivative on $0$-forms. This then means that if we 
+take $\omega\in\Omega^k(M)$, when we expand $\omega = a_{i_1, ..., i_k} dx^{i_1}\wedge ...\wedge dx^{i_k}$, we have:
+\begin{equation}
+	d\omega = (da_I)\wedge dx^I + a_I D(dx^I) = \frac{\partial a_{i_1, ..., i_k}}{\partial x^j}dx^j\wedge dx^{i_1}\wedge ... 
+	\wedge dx^{i_k}
+\end{equation}
+
+Thus on any chart $(U, x^i)$, we can define an exterior derivative on $U$ by:
+\begin{equation}
+	d\omega := da_I\wedge dx^I = \frac{\partial a_I}{\partial x^j} dx^j\wedge dx^I
+\end{equation}
+for $\omega = a_I dx^I$. It turns out that this definition is independent of the chart we have picked, and this proves the 
+existence of such an exterior derivative. Furthermore, the exterior derivative defined in this way is unique, and we state 
+this as a theorem.
+\begin{theorem}
+	There is a unique exterior derivative $d : \Omega^*(M)\rightarrow\Omega^*(M)$ which agrees with all the all the 
+	properties in Definition~\ref{def:derivative}. 
+\end{theorem}
+
+The exterior derivative is a natural map which gives $\Omega^*(M)$ the structure of a cochain complex because it squares to 
+0:
+\begin{equation}\begin{tikzcd}
+	\Omega^0(M)\arrow[r, "d"] & \Omega^1(M) \arrow[r, "d"] & \Omega^2(M)\arrow[r, "d"] & \Omega^3(M)\arrow[r, "d"] & ...
+\end{tikzcd}\end{equation}
+Furthermore, the pullback that was studied in the previous section is indeed a chain map with respect to $(\Omega^*(M), d)$. 
+\begin{theorem}
+	Let $f : M\rightarrow N$ be smooth. Then the pullback $f^* : \Omega^*(N)\rightarrow\Omega^*(M)$ is a chain map, 
+	i.e. the diagram commutes:
+	\begin{equation}\begin{tikzcd}
+		...\arrow[r, "d"] & \Omega^{k - 1}(N)\arrow[r, "d"]\arrow[d, "f^*"] & \Omega^k(N)\arrow[r, "d"]\arrow[d, "f^*"] &
+		\Omega^{k + 1}(N)\arrow[r, "d"]\arrow[d, "f^*"] & ... \\
+		...\arrow[r, "d"] & \Omega^{k - 1}(M)\arrow[r, "d"] & \Omega^k(M)\arrow[r, "d"] & \Omega^{k + 1}(M)\arrow[r, "d"] & 
+		...
+	\end{tikzcd}\end{equation}
+\end{theorem}
+\begin{proof}
+	Let $\omega\in\Omega^k(N)$. We must show that $f^* d\omega = d f^*\omega\in\Omega^{k + 1}(M)$. We expand 
+	$\omega = a_I dx^I$. Recall we have already shown $f^* dg = df^* g$ for $g\in C^\infty(M)$. Then:
+	\begin{equation}
+		df^*\omega = d\left[(f^* a_I) f^* dx^{i_1}\wedge ... \wedge f^* dx^{i_k}\right] = d\left[(a_I\circ f) df^{i_1}\wedge ... 
+		\wedge df^{i_k}\right] = d(a_I\circ f)\wedge df^I
+	\end{equation}
+	\begin{equation}
+		f^*d\omega = f^*\left[da_I\wedge dx^I\right] = f^* da_I\wedge f^* dx^{i_1}\wedge ...\wedge f^* dx^{i_k}
+		= d(a_I\circ f)\wedge df^I
+	\end{equation}
+\end{proof}
+
+We will study the cochain complex $(\Omega^*(M), d)$ further later in these notes when we consider the cohomology obtained 
+from this complex. It is called the \textbf{de Rham cohomology}, and is an essential tool in the study of smooth manifolds. 
+
+\subsection{The Lie Derivative}
+
+We now seek to find a nice coordinate independent way to express the exterior derivative, which we will do by introducing 
+the Lie derivative. We will denote by $\{X_t\}$ or $\{\omega_t\}$ a 1-parameter family of vector fields or manifolds, where 
+$t$ is varied over some subset of $\mathbb R$. For a coordinate chart $(U, x^i)$, we may expand $X_t = a^i(t, p)\partial_i|_p$. 
+We say $\lim_{t\rightarrow t_0}X_t$ exists if for each $p\in M$ and $i = 1, ..., n$, $\lim_{t\rightarrow t_0} a^i(t, p)$ exists, and 
+if this limit exists we set it equal to the pointwise limit. We do the same thing with a 1-parameter family $\omega_t$ of 
+$k$-forms, and expand $\omega_t = b_J(t, p) dx^J|_p$. Naturally, we can define a derivative of these objects:
+\begin{equation}
+	\left(\frac{d}{dt}\bigg|_{t = t_0} X_t\right)_p := \frac{\partial a^i}{\partial t}(t_0, p)\partial_i|_p
+	\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+	\left(\frac{d}{dt}\bigg|_{t = t_0} \omega_t\right)_p := \frac{\partial b_J}{\partial t}(t_0, p)dx^J
+\end{equation}
+Note that $dX_t / dt$ and $d\omega_t / dt$ respectively remain 1-parameter families of vector fields and $k$-forms. This 
+1-parameter derivative has some nice properties which we state here.
+\begin{theorem}
+	Let $\omega_t, \tau_t$ be smooth 1-parameter families of $k$-forms. Then:
+	\begin{itemize}
+		\item $d / dt$ satisfies the product rule:
+		\begin{equation}
+			\frac{d(\omega_t\wedge\tau_t)}{dt} = \frac{d\omega_t}{dt}\wedge\tau_t + \omega_t\wedge\frac{d\tau_t}{dt}
+		\end{equation}
+		\item $d / dt$ commutes with the differential:
+		\begin{equation}
+			\frac{d}{dt}\bigg|_{t = t_0} d\omega_t = d\left(\frac{d}{dt}\bigg|_{t = t_0}\omega_t\right)
+		\end{equation}
+	\end{itemize}
+\end{theorem}
+
+Recall the definition of an integral curve and a local flow. Given a vector field $X\in\mathfrak X(M)$, an integral curve of $X$ is 
+a curve $\gamma$ for which $X$ is a tangent vector field to $\gamma$ at each point on the curve. A local flow generated by 
+$X$ is a neighborhood $W$ and a family of curves $F_t(q)$ for each $q\in W$ such that $F_t(q)$ is an integral curve of 
+$X$ starting at each $q\in W$ in a ``nice" manner. More formally:
+\begin{definition}[Integral curve]
+	Let $X\in\mathfrak X(M)$. A curve $\gamma : (a, b)\rightarrow M$ is an \textbf{integral curve} of $X$ if $\gamma'(t) = 
+	X_{\gamma(t)}$ at each $t\in (a, b)$. An integral curve is called \textbf{maximal} if its domain cannot be extended to a 
+	larger interval.
+\end{definition}
+\begin{definition}[Local Flow]
+	Let $X\in\mathfrak X(M)$. A \textbf{local flow} generated by $X$ about point $p$ in an open set $U$ is a $C^\infty$ 
+	function $F : (-\epsilon, \epsilon)\times W\rightarrow U$ for $\epsilon > 0$ on neighborhood $p\in W\subseteq U$ such 
+	that for each $q\in W$, we have:
+	\begin{itemize}
+		\item $F_t(q)$ is an integral curve of $X$. 
+		\item $F_0(q) = q$. 
+		\item $F_t(F_s(q)) = F_{t + s}(q)$ whenever both sides are defined. 
+	\end{itemize}
+\end{definition}
+
+Given $X\in\mathfrak X(M)$ and $p\in M$, we will take for granted the existence of a neighborhood $p\in U$ for which there is 
+a local flow $\phi : (-\epsilon, \epsilon)\times U\rightarrow M$ generated by $X$, so:
+\begin{equation}
+	\frac{\partial\phi_t(q)}{\partial t} = X_{\phi_t(q)}
+\end{equation}
+and $\phi_0(q) = q$. Note that in particular, $\phi_{-t}\circ\phi_t = \phi_0 = 1$. We will use this to define the Lie derivative, 
+which we will define for vector fields and $k$-forms. 
+\begin{definition}[Lie derivative]
+	Let $X\in\mathfrak X(M)$, $p\in M$, and $\phi : (-\epsilon, \epsilon)\times U\rightarrow M$ a local flow of $X$ on a 
+	neighborhood $U\ni p$. 
+	Let $Y\in\mathfrak X(M)$, and $\omega\in\Omega^k(M)$. We define the \textbf{Lie derivative} $\mathcal L_X Y$ of $Y$ 
+	with respect to $X$ at $p$ to be the vector:
+	\begin{equation}
+		(\mathcal L_X Y)_p :=\lim_{t\rightarrow 0}\frac{\phi_{-t*}(Y_{\phi(t)}) - Y_p}{t}
+	\end{equation}
+	and the \textbf{Lie derivative} $\mathcal L_X\omega$ to be the $k$-covector:
+	\begin{equation}
+		(\mathcal L_X\omega)_p := \lim_{t\rightarrow 0}\frac{\phi_{-t}^* (\omega_{\phi(t)}) - \omega_{p}}{t}
+	\end{equation}
+\end{definition}
+The idea here is that we transport either $Y$ or $\omega$ along the path of $X$ using the local flow generated by $X$, 
+and then use this to define a derivative of the vector field $T$. On functions, the Lie derivative $\mathcal L_X f$ will be the 
+exact same as the directional derivative. We can characterize the Lie derivatives of such simple objects as follows.
+\begin{theorem}
+	Let $X\in\mathfrak X(M)$. 
+	\begin{enumerate}
+		\item If $f\in C^\infty(M)$, then:
+		\begin{equation}
+			\mathcal L_X f = Xf
+		\end{equation}
+		\item If $Y\in\mathfrak X(M)$, then:
+		\begin{equation}
+			\mathcal L_X Y = [X, Y]
+		\end{equation}
+	\end{enumerate}
+\end{theorem}
+Note that $X(f)\in C^\infty(M)$ by evaluation at $p\in M$, i.e. we view it as the map $p\mapsto X_p(f)$. The Lie bracket of 
+vector fields is defined to be the vector field $[X, Y]$ given by the following action on $f\in C^\infty(M)$ at $p\in M$:
+\begin{equation}
+	[X, Y]_p f := (X_p Y - Y_p X) f
+\end{equation}
+where note that $X(f)\in C^\infty(M), p\mapsto X_p(f)$, so this is a well defined definition. The Lie bracket is 
+intimately connected with the coordinate derivative because if $X = a^i\partial_i$ and $Y = b^j\partial_j$ are two vector 
+fields, then:
+\begin{equation}
+	[X, Y] = \left(a^k\partial_k b^i - b^k\partial_k a^i\right)\partial_i
+\end{equation}
+The Lie bracket here gives $\mathfrak X(M)$ the structure of a \textbf{Lie algebra} $\left(\mathfrak X(M), [\cdot, \cdot]\right)$. 
+Intuitively, the Lie bracket is nonzero when the flows generated by $X$ and $Y$ do not commute via parallel transport. When 
+$[X, Y]_p$ is nonzero, it ends up being proportional to the infinitesimal parallel transport of a point along the parallelpiped 
+defined by $X_p$ and $Y_p$. Finally, we relate some of the properties of the Lie derivative as it acts on differential forms. 
+
+\begin{theorem}
+	Let $X\in\mathfrak X(M)$, $\omega\in\Omega^k(M)$, and $\tau\in\Omega^\ell(M)$. 
+	\begin{enumerate}
+		\item $\mathcal L_X$ is a derivation:
+		\begin{equation}
+			\mathcal L_X(\omega\wedge\tau) = (\mathcal L_X\omega)\wedge\tau + \omega\wedge(\mathcal L_X\tau)
+		\end{equation}
+		
+		\item $\mathcal L_X$ commutes with the exterior derivative:
+		\begin{equation}\begin{tikzcd}
+			\Omega^k(M)\arrow[d, "\mathcal L_X"]\arrow[r, "d"] & \Omega^{k + 1}(M)\arrow[d, "\mathcal L_X"] \\
+			\Omega^k(M)\arrow[r, "d"] & \Omega^{k + 1}(M)
+		\end{tikzcd}\end{equation}
+		
+		\item $\mathcal L_X$ satisfies a ``product" rule. For $Y_1, ..., Y_k\in\mathfrak X(M)$, we have:
+		\begin{equation}
+			\mathcal L_X(\omega(Y_1, ..., Y_k)) = (\mathcal L_X\omega)(Y_1, ..., Y_k) + \sum_{i = 1}^k\omega(Y_1, ..., 
+			\mathcal L_X Y_i, ..., Y_k)~
+			\label{eq:lie_derivative_global}
+		\end{equation}
+	\end{enumerate}
+\end{theorem}
+
+We next define interior multiplication, which is the final operation on forms that we will consider. Luckily for us, unlike the 
+Lie derivative, this requires relatively little machinery.
+\begin{definition}[Interior multiplication]
+	Let $\beta$ be a $k$-covector on a vector space $V$ and $v\in V$. Then for $k\geq 2$, the \textbf{interior multiplication} 
+	or \textbf{contraction} of $\beta$ with $v$ is the $(k-1)$ covector:
+	\begin{equation}
+		\iota_v(\beta)(v_2, ..., v_k) := \beta(v, v_2, ..., v_k)
+	\end{equation}
+	For $k = 1$, we define $\iota_v(\beta) := \beta(v)\in\mathbb R$ and for $k = 0$, $\iota_v(\beta) := 0$. 
+\end{definition}
+
+We see that for $v\in T_p M$, $\iota_v : \Lambda^k(T_p^* M)\rightarrow\Lambda^{k - 1}(T_p^* M)$. Similarly for a 
+vector field $X\in\mathfrak X(M)$, we can define an interior derivative pointwise as $\iota_X(\omega)(X_2, ..., X_k) := 
+\omega(X, X_2, ..., X_k)$, and so we see that $\iota_X : \Omega^k(M)\rightarrow\Omega^{k - 1}(M)$. Because each 
+$\omega\in\Omega^k(M)$ is antisymmetric, note that:
+\begin{equation}
+	\iota_X^2 = 0
+\end{equation}
+for each $X\in\mathfrak X(M)$ because $\iota_X^2(\omega)(X_3, ..., X_k) = \omega(X, X, X_2, ..., X_k) = 0$. Thus, 
+$\iota_X$ gives $\Omega^*(M)$ the structure of a chain complex:
+\begin{equation}\begin{tikzcd}
+	...\arrow[r, "\iota_X"] & \Omega^3(M) \arrow[r, "\iota_X"] & \Omega^2(M) \arrow[r, "\iota_X"] & \Omega^1(M) \arrow[r, 
+	"\iota_X"] & \Omega^0(M)
+\end{tikzcd}\end{equation}
+There is a natural duality of $\iota_X$ with the exterior derivative in this manner. Because of this, it is often called the 
+\textbf{interior derivative} as well. As a derivative should, it is a graded derivation. For $\omega\in\Omega^k(M)$ and 
+$\tau\in\Omega^\ell(M)$:
+\begin{equation}
+	\iota_X(\omega\wedge\tau) = \iota_X(\omega)\wedge\tau + (-1)^k\omega\wedge\iota_X(\tau)
+\end{equation}
+The other appearance of a duality between the exterior and interior derivatives is \textbf{Cartan homotopy formula}, which 
+states that $\iota_X$ is a cochain homotopy between $\mathcal L_X$ and 0, and likewise $d$ is a chain homotopy between 
+$\mathcal L_X$ and 0. 
+\begin{theorem}[Cartan homotopy formula]
+	For $X\in\mathfrak X(M)$:
+	\begin{equation}
+		\mathcal L_X = d\iota_X + \iota_X d
+	\end{equation}
+\end{theorem}
+A corollary of this formula is that for any vector field, $\mathcal L_X$ is chain homotopic to the 0 map, and thus $\mathcal 
+L_X$ induces the zero map on the de Rham cohomology. 
+
+For $k$-forms with small $k$, computing $\iota_X\omega$ by hand is not too difficult and can be done by brute force. 
+However, it is often simpler to do this abstractly, and there is a nice formula to help with computations.
+\begin{lemma}
+	Let $\alpha^1, ..., \alpha^k$ be 1-covectors on $V$. Then for $v\in V$:
+	\begin{equation}
+		\iota_v(\alpha^1\wedge ...\wedge\alpha^k) = \sum_{i = 1}^k(-1)^{i + 1}\alpha^i(v)\alpha^1\wedge ...\wedge\hat
+		\alpha^i\wedge ...\wedge\alpha^k~
+		\label{lemma:int_derivative}
+	\end{equation}
+\end{lemma}
+
+\begin{example}
+	Let $\omega = dx^1\wedge ...\wedge dx^n$ and $X = x^i\partial_i$ on $\mathbb R^n$. To compute $\iota_X\omega$, 
+	we could note that $\iota_X\omega\in\Omega^{n - 1}(M)$ and compute $(\iota_X\omega)(X_1, ..., X_{n - 1})$, 
+	where $X_i = X_{ij}\partial_j$ are vector fields. This would get extraordinarily unwieldy, so it is simpler to use 
+	Equation~\ref{lemma:int_derivative}. We can thus instead compute $dx^i(X) = dx^i(x^j\partial_j) = x^i$, thus:
+	\begin{align}
+		\iota_X\omega &= \sum_{i = 1}^k (-1)^{i + 1} x^i dx^1\wedge ...\wedge\hat dx^i\wedge ...\wedge dx^n \\
+		&= x^1 dx^2\wedge dx^3\wedge ...\wedge dx^n - x^2 dx^1\wedge dx^3\wedge ...\wedge dx^n + ...
+	\end{align}
+\end{example}
+
+Finally, this new machinery allows us to express the exterior derivative 
+$d$ globally without needing to refer to derivatives on a coordinate chart.
+\begin{theorem}
+	Let $\omega\in\Omega^k(M)$ and $Y_0, Y_1, ..., Y_k\in\mathfrak X(M)$. Then:
+	\begin{align}
+		(d\omega)(Y_0, ..., Y_k) &= \sum_{i = 1}^k(-1)^i \omega(Y_0, ..., \hat Y_i, ..., Y_k)Y_i \\ 
+		&+ \sum_{i < j}(-1)^{i + j}
+		\omega([Y_i, Y_j], Y_0, ..., \hat Y_i, ..., \hat Y_j, ..., Y_k)
+	\end{align}
+\end{theorem}
+Note $\hat Y$ means to omit $Y$ from the argument of $\omega$. The proof of this formula is done with induction and 
+expressing $(d\omega)(Y_0, ..., Y_k) = (\iota_{Y_0} d\omega)(Y_1, ..., Y_k)$ and using the Cartan homotopy formula 
+$\iota_{Y_0} d = (\mathcal L_{Y_0}\omega - d\iota_{Y_0})(Y_1, ..., Y_k)$ and using induction and 
+Equation~\ref{eq:lie_derivative_global}. As an example of this formula, we may write the action of the $d\omega$ for a 
+1-form $\omega$ explicitly for $X, Y\in\mathfrak X(M)$:
+\begin{equation}
+	d\omega(X, Y) = X\omega(Y) - Y\omega(X) - \omega([X, Y])
+\end{equation}
+
+\begin{example}
+	Consider $M = S^1$, and consider $\omega = -y\,dx + x\,dy\in\Omega^1(S^1)$ and $X = -y\,\partial_x + x\,\partial_y\in
+	\mathfrak X(S^1)$. Note that since $dim(S^1) = 1$, we must have $d\omega = 2\,dx\wedge dy\in\Omega^2(S^1) \equiv
+	0$. Indeed on the circle we can see this because since the coordinates are defined by $x^2 + y^2 = R^2$, $x\,dx + 
+	y\,dy = 0$, hence wedging with $dx$ we see $dx\wedge dy = 0$ when $y\neq 0$ (and when $x\neq 0$ by wedging with 
+	$dy$). Thus we of course have $d\omega = 0$, although it does not appear to vanish immediately from the computation. 
+	We can then compute $\mathcal L_X\omega = (d\iota_X + \iota_X d)\omega = d\iota_X\omega$:
+	\begin{equation}
+		\mathcal L_X\omega = d\iota_X\omega = d(\omega(X)) = d(y^2 + x^2) = d(R^2) = 0
+	\end{equation}
+	
+\end{example}
+
+\newpage
 \subsection{Summary}
 
 There were a lot of definitions introduced in this section, so I will summarize the major definitions and results here for a 
@@ -619,7 +933,15 @@ manifold $M$ of dimension $n$.
 	\begin{equation}
 		T_p^* M := Hom(T_p M, \mathbb R)
 	\end{equation}
-	A basis for this space is $\{dx^i\}_{i = 1}^n$, and the dual vectors obey $dx^i(\partial_j) = \delta^i_j$. 
+	A basis for this space is $\{dx^i\}_{i = 1}^n$, and the dual vectors obey $dx^i(\partial_j) = \delta^i_j$, where $d$ is the 
+	differential map $d : C^\infty(M)\rightarrow\Omega^1(M)$ defined by its action on a vector field $X\in\Gamma(TM)$:
+	\begin{equation}
+		(df)(X) := X(f)
+	\end{equation}
+	The differential can also be expressed in any chart $(U, x^i)$ as:
+	\begin{equation}
+		df = \frac{\partial f}{\partial x^i} dx^i
+	\end{equation}
 	
 	\item A \textbf{$k$-covector} $\omega_p$ at a point $p\in M$ is an element of the $k$th exterior power of the cotangent 
 	space at $p$ is: 
@@ -654,9 +976,9 @@ manifold $M$ of dimension $n$.
 	\begin{equation}
 		f^*(\omega)(X_1, ..., X_k) = \omega(f_* X_1, ..., f_* X_k)
 	\end{equation}
-	Furthermore, $f^*$ is a homomorphism of algebras. 
+	Furthermore, $f^*$ is a homomorphism of algebras and a chain map on the de Rham complex $(\Omega^*(M), d)$. 
 	
-	\item The \textbf{exterior derivative} is a natural map $d : \Omega^k(M)\rightarrow\Omega^{k + 1}(M)$ defined as 
+	\item The \textbf{exterior derivative} is a coboundary map $d : \Omega^k(M)\rightarrow\Omega^{k + 1}(M)$ defined as 
 	$df = (\partial f / \partial x^i)dx^i$ on $f\in\Omega^0(M)$ and:
 	\begin{equation}
 		d\omega := dg_{i_1, ..., i_k}\wedge dx^{i_1}\wedge ...\wedge 
@@ -664,13 +986,348 @@ manifold $M$ of dimension $n$.
 	\end{equation}
 	on $\omega = g_{i_1, ..., i_k} dx^{i_1}\wedge...\wedge dx^{i_k}\in\Omega^k(M)$. 
 	
-	\item The pullback is a chain map with respect to the de Rham complex $(\Omega^*(M), d)$
+	\item Given $X\in\mathfrak X(M)$, the \textbf{interior derivative} is a boundary map $\iota_X : \Omega^k(M)
+	\rightarrow\Omega^{k - 1}(M)$ defined as:
+	\begin{equation}
+		\iota_X(\omega)(X_2, ..., X_k) := \omega(X, X_2, ..., X_k)
+	\end{equation}
+	
+	\item Given $X\in\mathfrak X(M)$, the \textbf{Lie derivative} measures the infinitesimal change in a tensor field as it 
+	flows along $X$. On a differential form $\omega\in\Omega^k(M)$:
+	\begin{equation}
+		(\mathcal L_X\omega)_p := \lim_{t\rightarrow 0}\frac{\phi_{-t}^* (\omega_{\phi(t)}) - \omega_p}{t}
+	\end{equation}
+	where $\phi_t(p)$ is the flow generated by $X$ at $p$, so $\phi_0(p) = p$ and $\phi_t(p)$ is an integral curve to $X$. 
+	
+	\item The derivatives are all related via the \textbf{Cartan homotopy formula}:
+	\begin{equation}
+		\mathcal L_X = d\iota_X + \iota_X d
+	\end{equation}
 \end{itemize}
 
+\newpage
 \section{Integration}
+
+Differential forms exist to be integrated over. Since a $k$-form generalizes a notion of a $k$-dimensional volume, we 
+can only integrate $k$-forms over a $k$-dimensional subset of a manifold. These forms are called \textbf{top forms}:
+\begin{definition}[Top form]
+	A \textbf{top form} on a $k$-dimensional manifold $M$ is a $k$-form $\omega\in\Omega^k(M)$. 
+\end{definition}
+Before discussing how to integrate a differential form, we must discuss orientations on a manifold. Forms may only be 
+integrated over an oriented manifold, and we will make that notion precise.
 
 \subsection{Orientation}
 
+Let $V$ be a vector space of dimension $n$. We denote an ordered subset of $V$ by $[v_1, ..., v_n]$, as opposed to the 
+typical unordered subset $\{v_1, ..., v_n\}$. Let $u = [u_1, ..., u_n]$ and $v = [v_1, ..., v_n]$ be two ordered bases for $V$. 
+We say that $u$ is \textbf{equivalent} to $v$ iff $u = vA$ with $det(A) > 0$, and we write $u\sim v$ in this case. This forms an 
+equivalence relation on the space of ordered bases of $V$, and we define an \textbf{orientation} on $V$ to be an equivalence 
+class of ordered bases on $V$. There are two orientations on any vector space; a positive one, and a negative one, and one 
+can get between ordered bases of the same orientation by a positive change of basis. 
+
+Orientations are nicely related to $n$-covectors on a space. Suppose that two ordered bases are related by $u_j = v_i A_{ij}$. 
+Then for any $n$-covector $\beta$ on $V$, we have:
+\begin{equation}
+	\beta(u_1, ..., u_n) = det(A)\beta(v_1, ..., v_n)
+\end{equation}
+This implies that $u\sim v$ iff $\beta(u_1, ..., u_n)$ and $\beta(v_1, ..., v_n)$ have the same sign for any covector 
+$\beta$. In this case, we say that $\beta$ \textbf{determines} the orientation $[v_1, ..., v_n]$ when $\beta(v_1, ..., v_n) > 0$. 
+This is well defined because if $\beta$ determines the orientation $v$ and $u\sim v$, then $\beta$ also determines the 
+orientation $u$ as well because $u = vA$ and $\beta(u) = det(A)\beta(v)$ with $det(A) > 0$. Furthermore, any 
+multiple $a\beta$ with $a > 0$ \textbf{specifies the same orientation as $\beta$} because $a\beta(v)$ will have the 
+same sign as $\beta(v)$. So, we say two $n$-covectors $\alpha$ and $\beta$ are \textbf{equivalent}, $\alpha\sim\beta$, 
+iff $\alpha = a\beta$ with $a > 0$. Note that any two $n$-covectors are multiples of one another because $dim(\Lambda^n(V)) 
+= 1$. An orientation on $V$ can thus be viewed as an equivalence class of ordered bases, or an equivalence class of 
+$n$-covectors. 
+
+Now we work with a manifold $M$ of dimension $n$. Recall a frame on an open set $U\subseteq M$ is a choice of $n$
+vector fields $X_1, ..., X_n\in\mathfrak X(U)$ such that $\{X_{1, p}, ..., X_{n, p}\}$ is linearly independent (forms a basis) 
+at each $p\in U$. We can take this to an equivalence relation on frames $(X_1, ..., X_n)$ and $(Y_1, ..., Y_n)$ by decreeing:
+\begin{equation}
+	(X_1, ..., X_n)\sim (Y_1, ..., Y_n)\iff \forall p\in U, \;(X_{1, p}, ..., X_{n, p})\sim (Y_{1, p}, ..., Y_{n, p})
+\end{equation}
+A \textbf{pointwise orientation} $\mu$ assigns an orientation to each $p\in M$, i.e. $\mu = [X_1, ..., X_n]$ with $\mu_p = 
+[X_{1, p}, ..., X_{n, p}]$. The vector fields contained in $\mu$ do not need to be continuous, but it is only interesting when 
+they are continuous. Note that a pointwise orientation is global and assigns an orientation to each tangent space on $M$. 
+\begin{definition}
+	A continuous pointwise orientation on $M$ is called an \textbf{orientation} on $M$. If $M$ has an orientation, we call 
+	$M$ \textbf{orientable}. 
+\end{definition}
+\begin{theorem}
+	A connected orientable manifold $M$ has precisely two orientations. 
+\end{theorem}
+\begin{theorem}
+	A pointwise orientation $[X_1, ..., X_n]$ on $M$ is continuous iff at each $p\in M$, there is a chart $(U, x^i)$ containing 
+	$p$ such that the function:
+	\begin{equation}
+		(dx_1\wedge ...\wedge dx_n)(X_1, ..., X_n) : U\rightarrow\mathbb R
+	\end{equation}
+	is positive at each $q\in U$. 
+\end{theorem}
+
+This leads to a classification theorem for a manifold being orientable. We can instead simply look at the top forms on $M$, 
+and there is a simple condition on these top forms for us to see if $M$ is orientable.
+\begin{theorem}
+	An $n$-dimensional manifold $M$ is orientable iff there exists a $C^\infty$ nowhere vanishing $n$-form on $M$. 
+\end{theorem}
+\begin{proof}
+Given an orientable $M$, we can use the previous theorem and a partition of unity to ``stitch" together 
+the forms in the previous theorem into a single continuous top form which vanishes nowhere. In the other direction, 
+suppose that $\omega$ vanishes nowhere. At each $p\in M$, we can find $[X_{1, p}, ..., X_{n, p}]$ such that $\omega_p
+(X_{1, p}, ..., X_{n, p}) > 0$. Then for any chart $(U, x^i)$ containing $p$, we can write $\omega = f\;dx^1\wedge ...\wedge 
+dx^n$ where $f$ is continuous and nowhere vanishing, hence $f > 0$ or $f < 0$ on $U$. If $f > 0$, then $\omega(X_1, ..., 
+X_n) > 0$ everywhere on $U$, and if $f < 0$, then $-\omega(X_1, ..., X_n) > 0$ everywhere on $U$, and we can 
+apply the previous theorem.
+\end{proof}
+Thus on an orientable manifold $M$, there are two types of top forms-- forms which are everywhere positive, and forms which 
+are everywhere negative. 
+\begin{definition}
+	Let $\omega\in\Omega^n(M)$ be a top form. We call $\omega$ an \textbf{orientation (volume) form} if $\omega$ is 
+	nowhere vanishing, i.e. $\omega_p\neq 0$ at any $p\in M$. If we have an ordered frame $[X_1, ..., X_n]$ such that 
+	$\omega(X_1, ..., X_n) > 0$, we say that $\omega$ \textbf{specifies} the orientation $[X_1, ..., X_n]$. 
+\end{definition}
+We can partition the volume forms on $M$ into two equivalence classes: let $\omega\sim\omega'$ iff $\omega = f\omega'$ 
+with $f > 0$ everywhere. Then \textit{each equivalence class of this relation exactly specifies an orientation of $M$}. 
+Note in coordinates, one orientation form is given by $dx^1\wedge ...\wedge dx^n$, and the other is $-dx^1\wedge ...
+\wedge dx^n$. We will write an oriented manifold as a pair $(M, [\omega])$, where $\omega$ is a volume form on $M$ 
+specifying the positive orientation. 
+
+A diffeomorphism $f : (M, [\omega_M])\rightarrow (N, [\omega_N])$ is \textbf{orientation preserving} if $[f^*\omega_N] = 
+[\omega_M]$. On charts $U\subseteq M$ and $V\subseteq N$, this is equivalent to the Jacobian:
+\begin{equation}
+	\det\left\{\frac{\partial F^i}{\partial x^j}\right\}
+\end{equation}
+being everywhere positive on $U$. Given an orientable manifold $M$, we can find an oriented atlas on $M$, i.e. an atlas 
+such that for any two overlapping charts $(U, x^i)$ and $(V, y^i)$, the Jacobian $\det\{\partial y^i / \partial x^j\} > 0$ 
+everywhere. 
+
+An orientation allows us to integrate a manifold. Before we dive into integration, we must define orientations on the 
+boundaries of manifolds, as this will allow us to formulate Stokes's theorem rigorously. Recall on a manifold with 
+boundary, the points in $\partial M$ have coordinate neighborhoods diffeomorphic to a point on the boundary of 
+$\mathcal H^n$, where $\mathcal H^n := \{(x_1, ..., x_n) : x_n\geq 0\}$ is the Euclidean half-plane. 
+
+Defining the tangent space to a manifold with boundary is slightly different than that on a manifold without boundary, 
+because $\partial M$ is a $(n - 1)$ degree manifold, i.e. $dim(T_p(\partial M)) + 1 = dim(T_p M)$. However, since we defined 
+the tangent space on a manifold with regards to derivations on the entire manifold, if $p\in \partial M$, the tangent space 
+to $p$ in $M$ is $n$-dimensional and \textit{still includes derivative operators which point away from the boundary}. 
+So, one must be careful to specify if we are considering $T_p M$ or $T_p\partial M$ when $p\in\partial M$; for our 
+considerations we will want the full $n$-dimensional tangent space $T_p M$, but one may also examine the $(n - 1)$ 
+dimensional tangent space $T_p\partial M$. 
+
+\begin{definition}
+	Let $M$ be an $n$-dimensional manifold with boundary and $p\in M$. We say that a tangent vector $X_p\in T_p M$ is 
+	\textbf{inward-pointing} if $X_p\not\in T_p\partial M$ and if there is $\epsilon > 0$ and a curve $\gamma : [0, \epsilon)
+	\rightarrow M$ such that $\gamma(0) = p$ and $\gamma'(0) = X_p$. We say $X_p$ is \textbf{outward-pointing} if 
+	$-X_p$ is inward pointing. 
+\end{definition}
+An inward pointing vector on the boundary is literally what it sounds like; for example, in $\mathcal H^3 = \mathbb R^3_{z\geq 
+0}$, an inward pointing vector at $\vec 0$ is $\partial_z$, while an outward pointing vector is $-\partial_z$. 
+\begin{theorem}
+	On a manifold $M$ with boundary $\partial M$, there is a smooth outward pointing vector field along $\partial M$. 
+\end{theorem}
+An outward pointing vector field allows us to push an orientation for $M$ onto an orientation for $\partial M$ by means 
+of the interior derivative. 
+\begin{theorem}
+	Let $(M, [\omega])$ be an oriented $n$ dimensional manifold with boundary. If $\omega$ is a volume form on $M$ 
+	representing the positive orientation and $X$ is a 
+	smooth outward pointing vector field on $\partial M$, then $\iota_X\omega$ is a smooth nowhere vanishing $(n - 1)$ 
+	form on $\partial M$, and hence $\partial M$ is orientable. ~
+	\label{thm:boundary}
+\end{theorem}
+\begin{definition}
+	In the notation of Theorem~\ref{thm:boundary}, we define the \textbf{boundary orientation} on $\partial M$ to 
+	be $[\iota_X\omega]$, the orientation specified by $\iota_X\omega$. 
+\end{definition}
+\begin{corollary}
+	Let $p\in\partial M$ and $X_p\in T_p M$ be outward-pointed. Then an ordered basis $[v_1, ..., v_{n - 1}]$ for $T_p
+	\partial M$ represents the boundary orientation at $p$ iff the ordered basis $[X_p, v_1, ..., v_{n - 1}]$ for $T_p M$ 
+	represents the orientation on $M$ at $p$. 
+\end{corollary}
+In the manner of these theorems, this allows us to endow the boundary of an oriented manifold with an orientation which 
+respects the orientation of $M$. Remember that it is conventional for the normal vector field to be put first in such an 
+orientation: as Tu says, remember the mnemonic ``outward vector first". 
+
+\begin{example}
+	Consider the boundary orientation on $\mathcal H^n$ induced by the positive orientation $\omega := dx^1\wedge ...
+	\wedge dx^n$. An outward pointed vector is $X := -\partial_n$, and we can contract this with the volume form to get 
+	the boundary orientation form:
+	\begin{equation}
+		\iota_{X}\omega = (-1)^{n + 1}dx^n(-\partial_n) dx^1\wedge ... \wedge dx^{n - 1} = (-1)^n dx^1\wedge ...\wedge 
+		dx^{n - 1}
+	\end{equation}
+	For $\mathcal H^3$, the boundary orientation form is thus $\iota_X\omega = (-1)^3 dx\wedge dy = dy\wedge dx$. Note 
+	the negative here is because we have put the $-\partial_z$ vector in first from the prescription for the boundary 
+	orientation, so our ordered basis is $[-\partial_z, \partial_y, \partial_x]\sim [\partial_x, \partial_y, \partial_z]$. 
+\end{example}
+
 \subsection{Integration}
+
+Integrating over forms follows in a natural way from integrating over $\mathbb R^n$, since a manifold is locally 
+homeomorphic to $\mathbb R^n$. In Euclidean space, we integrate $n$-forms over $\mathbb R^n$. Suppose 
+$\omega\in\Omega^n(\mathbb R^n)$ is an $n$-form. Then we may express $\omega$ in the standard coordinates 
+of $\mathbb R^n$ as $\omega = f(x)\,dx^1\wedge ...\wedge dx^n$, and we define the \textbf{integral} of $\omega$ 
+over $\mathbb R^n$ to be:
+\begin{equation}
+	\int_{\mathbb R^n}\omega = \int_{\mathbb R^n} f(x)\,dx^1\wedge ...\wedge dx^n := \int_{\mathbb R^n} f(x)\,d^nx
+\end{equation}
+where $d^nx$ is the standard Lebesgue measure on $\mathbb R^n$ and the last integral is the usual Lebesgue integral. 
+So, integration of a form in $\mathbb R^n$ essentially amounts to forgetting the wedge products between the differentials. 
+Because of the wedge product, integrating forms remembers the orientation of the form, i.e. $\int f(x)\,dx^2\wedge dx^1 = 
+-\int f(x)\,dx^1\wedge dx^2$. 
+
+Now we are in position to define an integral over a $n$-dimensional manifold $M$. We may only integrate top forms with 
+compact support so that we are guaranteed the integral converges. We denote the set of $k$-forms on $M$ with compact 
+support by $\Omega^k_C(M)$.
+
+Let $(U, \phi)$ be a chart on $M$, and $\omega\in\Omega^n_C(U)$. Because $\phi : U\rightarrow\phi(U)$ is a 
+diffeomorphism, the pullback $(\phi^{-1})*\omega$ is a $n$-form on $\mathbb R^n$, so we can integrate it. We thus define:
+\begin{equation}
+	\int_U\omega := \int_{\phi(U)}\left(\phi^{-1}\right)^*\omega
+\end{equation}
+where $\phi(U)\subseteq\mathbb R^n$ and the integral on the right is the previously defined integral. 
+
+We can use a partition of unity on $M$ to extend this definition to an integral over the total manifold. Let $\{U_\alpha, 
+\phi_\alpha\}$ be an oriented atlas on $M$, and let $\{\rho_\alpha\}$ be a partition of unity subordinate to $\{U_\alpha\}$. 
+Recall that by definition for, any differential form $\omega$ satisfies $\omega = \sum_\alpha\rho_\alpha\omega$. 
+\begin{definition}[Integral of a differential form]
+Let $\omega\in\Omega^n_C(M)$. We define the \textbf{integral} of $\omega$ over $M$ to be:
+\begin{equation}
+	\int_M\omega := \sum_\alpha\int_{U_{\alpha}}\rho_\alpha\omega
+\end{equation}
+\end{definition}
+
+This definition can be shown to be independent of choice of atlas and partition of unity, and so is well defined. Although 
+the definition is intuitively nice, it is often difficult to use this to compute actual integrals. In practice, it is often 
+easier to find a parameterization of a manifold $M$. A \textbf{parameterization} of $M$ is a subset $A\subseteq M$ and a 
+$C^\infty$ map $F : D\rightarrow M$, where $D\subseteq\mathbb R^n$ is compact such that $A = im(F)$ and $F$ 
+restricts to an orientation preserving diffeomorphism on $int(D)$ to $F(int(D))$. The integral of $\omega\in\Omega^n(M)$ 
+can thus be calculated over $A$ as follows:
+\begin{equation}
+	\int_A\omega = \int_D F^*\omega
+\end{equation}
+
+\begin{example}
+	We can integrate the area form over the sphere $S^2$. This form is defined as:
+	\begin{equation}
+		\omega = \begin{cases}
+			\frac{dy\wedge dz}{x} & x\neq 0 \\
+			\frac{dz\wedge dx}{y} & y\neq 0 \\
+			\frac{dx\wedge dy}{z} & z\neq 0
+		\end{cases}
+	\end{equation}
+	We compute $\int_{S^2}\omega$ by parameterizing the sphere with the coordinates $F : [0, 2\pi]\times [0, \pi]
+	\rightarrow S^2$ by:
+	\begin{equation}
+		F(\phi, \theta) = (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta)
+	\end{equation}
+	We must compute the pullback $F^*\omega$. Note that $F^* x = x\circ F : [0, 2\pi]\times [0, \pi]\rightarrow\mathbb 
+	R$ is given by $(F^* x)(\phi, \theta) = \sin\theta\cos\phi$. Similarly, $F^* y = \sin\theta\sin\phi$, and $F^* z = \cos\theta$. 
+	We also have $F^* dy = dF^*y = d(\sin\theta\sin\phi) = \cos\theta\sin\phi\,d\theta + \sin\theta\cos\phi\,d\phi$, and 
+	$F^* dz = dF^* z = d\cos\theta = -\sin\theta\,d\theta$. So:
+	\begin{equation}
+		F^*\omega = \frac{F^*(dy)\wedge F^*(dz)}{F^*x} = \frac{(\sin\theta\cos\phi\,d\phi)\wedge (-\sin\theta\,d\theta)}{\sin
+		\theta\cos\phi} = \sin\theta\,d\theta\wedge d\phi
+	\end{equation}
+	Therefore:
+	\begin{equation}
+		\int_{S^2}\omega = \int_{[0, 2\pi]\times [0, \pi]}\sin\theta\,d\theta\wedge d\phi = \int_0^{2\pi} d\phi\int_0^\phi d\theta
+		\,\sin\theta = 4\pi
+	\end{equation}
+\end{example}
+
+Note integration over a form $\omega$ induces a premeasure $\mu_\omega$ on the Borel sets (which are generated by 
+the open sets on a topological space) by:
+\begin{equation}
+	\mu_\omega(U) :=\int_U\omega
+\end{equation}
+The important thing to note is that integrating differential forms is different than integrating a function on a measure space 
+because of the domain of integration. In measure theory, we integrate a function over a subset of the measure space. 
+In particular, we have no notion of an ``oriented volume", and instead just have an absolute notion of measure. When 
+integrating a differential form, we have an implicit notion of orientation that comes built into our framework. Technically, 
+the domain of integration is not a subset of a manifold; rather, it is an \textit{oriented subset of $M$}, given formally 
+by an equivalence class of orientation forms $[M] = (M, [\omega])$. 
+
+We end this section with Stokes' Theorem, which fully generalizes the fundamental theorem of calculus to manifolds. 
+As a corollary to this theorem, it is easy to prove most of the nice multivariable integration theorems that you studied way 
+back when in multivariable calculus.
+\begin{theorem}[Stokes' Theorem]
+	Let $M$ be a smooth $n$ dimensional manifold, and $\omega\in\Omega_C^{n - 1}(M)$. Then:
+	\begin{equation}
+		\int_M d\omega = \int_{\partial M}\omega
+	\end{equation}
+	where $\partial M$ is realized with the boundary orientation.
+\end{theorem}
+
+In particular, if $M$ has no boundary, then any exact form $\omega = d\tau$ integrates to 0 across $M$, $\int_M \omega = 0$. 
+\begin{example}[Vector calculus in $\mathbb R^3$]
+	Let us study the exterior algebra in $\mathbb R^3$. We have four nonzero graded subsets of $\Omega^*(M)$. 
+	$\Omega^0(M)$ is 1-dimensional and is identified with functions $f(x)$. Similarly, $\Omega^3(M)$ is 
+	one-dimensional and can also be identified with functions $f(x)\leftrightarrow f(x)\,dx\wedge dy\wedge dz$. 
+	$\Omega^1(M)$ and $\Omega^2(M)$ can both be identified with vector fields $\vec f(x) := f_1(x)\hat x + f_2(x)\hat y + 
+	f_3(x)\hat z$. In $\Omega^1(M)$, $\vec f\leftrightarrow f_1\,dx + f_2\,dy + f_3\,dz$, and in $\Omega^2(M)$ 
+	the identification is $\vec f\leftrightarrow f_1 \,dy\wedge dz + f_2\, dz\wedge dx + f_3\, dx\wedge dy$. We can compute 
+	the differential on these different functions. On $\Omega^0(M)$:
+	\begin{equation}
+		df = (\partial_i f)dx^i\leftrightarrow \partial_i f\,\hat x_i
+	\end{equation}
+	and we see this is the standard gradient! On $\Omega^1(M)$:
+	\begin{align}
+		d(f_1\,dx + f_2\, dy + f_3\, dz) &= \left(\partial_y f_3 - \partial_z f_2\right)dy\wedge dz + \left(\partial_z f_1 - 
+		\partial_x f_3\right)dz\wedge dx + \left(\partial_x f_2-\partial_y f_1\right)dx\wedge dy \nonumber\\
+		&\leftrightarrow\nabla\times\vec f
+	\end{align}
+	which is the curl of the vector field. Similarly, on 2 forms:
+	\begin{equation}
+		d(f_1\,dy\wedge dz + f_2\,dz\wedge dx + f_3\,dx\wedge dy) = (\partial_x f_1 + \partial_y f_2 + \partial_z f_3)\,
+		dx\wedge dy\wedge dz \leftrightarrow\nabla\cdot\vec f
+	\end{equation}
+	So, we see that every time we use multivariable calculus, we are secretly using the machinery of differential forms. 
+	The reason that this is not immediately obvious is because the exterior powers of $\mathbb R^3$ have similar 
+	dimensions, and we identify the 3-dimensional powers as vector fields and the 1-dimensional powers as standard
+	functions. 
+\end{example}
+
+\section{de Rham Cohomology}
+
+The exterior derivative provides a powerful structure on differential forms; as mentioned earlier, the fact that $d^2 = 0$ gives 
+$\Omega^*(M)$ the structure of a cochain complex. Accordingly, we can take the cohomology of this complex. We start 
+with some terminology.
+\begin{definition}
+	Let $\omega\in\Omega^k(M)$ be a $k$-form. If $d\omega = 0$, we say that $\omega$ is \textbf{closed}. If $\omega = 
+	d\tau$ for $\tau\in\Omega^{k - 1}(M)$, we say that $\omega$ is \textbf{exact}. Let $Z^k(M)$ be the space of closed 
+	$k$-forms, and $B^k(M)$ be the space of exact $k$-forms. Then the \textbf{$k$th de Rham cohomology group} is 
+	defined to be:
+	\begin{equation}
+		H^k(M) := Z^k(M) / B^k(M)
+	\end{equation}
+\end{definition}
+
+Because $\Omega^k(M)$ vanishes for $k > n$, $H^k(M)$ also vanishes for $k > n$. For $k = 0$, we can classify 
+the cohomology group $H^0(M)$.
+\begin{theorem}
+	Suppose $M$ has $r$ connected components. Then:
+	\begin{equation}
+		H^0(M) = \mathbb R^r
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	Since $B^0(M) = 0$, $H^0(M) = Z^0(M)$, and we must classify the closed $0$-forms. Recall that 0-forms on a manifold 
+	are canonically isomorphic to functions on a manifold. So, let $f\in Z^0(M)$. Then:
+	\begin{equation}
+		df = \partial_i f\, dx^i = 0\implies \forall i,\,\partial_i f = 0
+	\end{equation}
+	This implies $f$ is locally constant, and a basis of the locally constant functions is a set of functions which are 
+	constant on each component of $M$. Thus, $Z^0(M) = \mathbb R^r$. 
+\end{proof}
+
+The wedge product $\wedge$ gives the de Rham cohomology an algebra structure $(H^*(M), +, \cdot, \wedge)$. 
+
+\section{Applications to physics}
+
+\subsection{Electromagnetism}
+
+Problem 19.13 in Tu is a good start for this. 
+
+\subsection{Relativity}
 
 \end{document}
