@@ -29,14 +29,14 @@
 %SetFonts
 
 
-\title{Lie Groups and Algebras}
+\title{Representation Theory}
 \author{Patrick Oare}
 \date{}							% Activate to display a given date or no date
 
 \begin{document}
 \maketitle
 
-\section{Basic Definitions}
+\section{Lie Groups and Algebras}
 
 In physics, we use Lie groups to describe sets of continuous symmetries. Although we will attempt to 
 make definitions as general as possible, we will often restrict ourselves to the case of specific 
@@ -103,9 +103,31 @@ its Lie bracket.
 
 The associated Lie algebra with a Lie group can be defined by taking its tangent space at the 
 identity, and in this way we have an correspondence from Lie groups to Lie algebras, and back. 
-Geometrically, I like to view the Lie group as a ``smoothly deformed version" of the flat Lie algebra. 
+Geometrically, I like to view a (connected) Lie group as a ``smoothly deformed version" of a flat Lie algebra. 
 The exponential map does the deformation, and to me this emphasizes the fact that a Lie group is 
 first and foremost a manifold. 
+
+A common operation on Lie algebras we will use is the adjoint operation, of which there are two; the 
+first is an action from the element of the Lie algebra, and the second is from the action of the Lie group. 
+For $X\in\mathfrak g$, we define the \textbf{adjoint map} $ad_X : \mathfrak g\rightarrow\mathfrak g$ by:
+\begin{equation}
+	ad_X(Y) := [X, Y]
+\end{equation}
+For $A\in G$, there is a different type of adjoint map that we can consider. It is still an endomorphism of 
+$\mathfrak g$, just defined slightly differently. Here we also require $G$ to be a matrix Lie group so that 
+we can multiply elements of the algebra with elements of $G$. The map is denoted $Ad_A : \mathfrak g
+\rightarrow\mathfrak g$:
+\begin{equation}
+	Ad_A(Y) := AYA^{-1}
+\end{equation}
+and we see that it is just the group adjoint. These two maps are connected via the exponential map:
+\begin{equation}
+	e^{ad_X} = Ad_{e^{X}}
+\end{equation}
+which is an expression of the familiar formula for Lie algebras:
+\begin{equation}
+	e^{X} Y e^{-X} = Y + [X, Y] + \frac{1}{2}[X, [X, Y]] + ...
+\end{equation}
 
 To act Lie groups on spaces, we must discuss representations. Note that the endomorphism ring 
 $End(V)$ of a vector space is also a Lie algebra, by allowing the Lie bracket to equal the 
@@ -159,7 +181,7 @@ is essentially a vector space map which respects the action induced by the repre
 	In other words, the canonical diagram commutes for each element $g\in G$:
 	\[\begin{tikzcd}
 		V\arrow[r, "\Pi(g)"]\arrow[d, "\phi"] & V\arrow[d, "\phi"] \\
-		W\arrow[r, "\Sigma(g)"] & W \\
+		W\arrow[r, "\Sigma(g)"] & W
 	\end{tikzcd}\]
 	An intertwining map which is invertible is a \textbf{representation isomorphism}. 
 \end{definition}
@@ -173,6 +195,87 @@ $\phi$ being an intertwining map can equivalently be written as:
 \end{equation}
 which makes it completely obvious that such an intertwining map is a morphism in the category of linear 
 $G$-representations. 
+
+Let $G$ be a Lie group with associated Lie algebra $\mathfrak g$. We will now discuss to what extent a representation 
+of $G$ induces a representation of $\mathfrak g$, and vice versa. 
+\begin{definition}
+	Let $\mathfrak g$ and $\mathfrak h$ be two Lie algebras. A \textbf{Lie algebra homomorphism} between $\mathfrak g$ 
+	and $\mathfrak h$ is a linear map $\phi : \mathfrak g\rightarrow\mathfrak h$ which respects the Lie bracket, i.e. 
+	$\phi([X, Y]) = [\phi(X), \phi(Y)]$ for each $X, Y\in\mathfrak g$. 
+\end{definition}
+On the other hand, a Lie group homomorphism is simply a group homomorphism which is smooth with respect to 
+the manifold structure of the group. However, there is a subtle disparity between Lie groups and Lie algebras when 
+it comes to maps between them. Lie algebras are simpler objects than Lie groups because they have a fundamentally 
+linear structure. This means that if two Lie groups are the same, then their Lie algebras will be the same; unfortunately, 
+the converse only holds in certain cases where the Lie group has a simple structure. Recall that we can move between 
+$\mathfrak g$ and $G$ by exponentiation, $X\mapsto \exp(iX)$, and consider the following theorem.
+\begin{theorem}
+	Let $G$ and $H$ be Lie groups with algebras $\mathfrak g$ and $\mathfrak h$, and let $\Phi : G\rightarrow H$ be a 
+	Lie group homomorphism. Then, there is an unique homomorphism of Lie algebras $\phi : \mathfrak g\rightarrow\mathfrak 
+	h$ such that:
+	\begin{equation}
+		\Phi(e^{iX}) = e^{i\phi(X)}
+	\end{equation}
+	for each $X\in\mathfrak g$. Furthermore, $\phi$ is given by:
+	\begin{equation}
+		\phi(X) := \frac{d}{dt}\bigg|_{t = 0}\Phi(e^{itX})
+	\end{equation}
+\end{theorem}
+In this theorem lies the disparity; a Lie group homomorphism $\Phi$ induces a Lie algebra homomorphism $\phi$, 
+but we have said nothing about the converse. Indeed, the converse is not always true. This associated map also 
+acts functorially, in that if $\Phi : H\rightarrow K$ and $\Psi : G\rightarrow H$ are homomorphisms of Lie groups and 
+$\Lambda = \Phi\circ\Psi$, then (denoting the map between algebras as lowercase):
+\begin{equation}
+	\lambda = \phi\circ\psi
+\end{equation}
+This immediately says that \textbf{if two Lie groups are isomorphic, then so are their Lie algebras}. In particular, 
+consider the effect this has on representations of a group.
+\begin{corollary}
+	Let $\Pi : G\rightarrow Aut(V)$ be a representation of a Lie group $G$. Then there is an associated 
+	representation of Lie algebras $\pi : \mathfrak g\rightarrow End(V)$. In other words, every representation 
+	of a Lie group induces a representation of its Lie algebra.
+\end{corollary}
+
+The converse of this is \textbf{only true when $G$ is simply connected}, i.e. $\pi_1(G) = 0$, and can be proved with 
+the Baker-Campbell-Hausdorff formula. 
+\begin{theorem}
+	Let $G$ and $H$ be Lie groups with Lie algebras $\mathfrak g$ and $\mathfrak h$. Let $\phi : \mathfrak g
+	\rightarrow\mathfrak h$ be a homomorphism of Lie algebras. If $G$ is simply connected, then there exists 
+	a unique Lie group homomorphism $\Phi : G\rightarrow H$ such that $\Phi(e^{iX}) = e^{i\phi(X)}$. 
+\end{theorem}
+\begin{corollary}
+	Suppose $G$ and $H$ are simply connected Lie groups with Lie algebras $\mathfrak g$ and $\mathfrak h$. If 
+	$\mathfrak g$ is isomorphic to $\mathfrak h$, then $G$ is isomorphic to $H$. 
+\end{corollary}
+\begin{corollary}
+	Let $G$ be a Lie group with Lie algebra $\mathfrak g$, and let $\pi : \mathfrak g\rightarrow End(V)$ be a representation 
+	of $\mathfrak g$. Suppose that $G$ is simply connected. Then there is a corresponding representation $\Pi : 
+	G\rightarrow Aut(V)$ such that $\Pi(e^{iX}) = e^{i\pi(X)}$ for $X\in\mathfrak g$. 
+\end{corollary}
+
+As an example of all this, consider the Lie groups $SU(2)$ and $SO(3)$\footnote{$SU(2)$ is the ``universal cover" of $SO(3)$, 
+which means that $SU(2)$ is simply connected and has the same Lie algebra as $SO(3)$. I hope to include covering spaces in 
+these notes at some point if I have time, because I believe that much of the correspondence between these two spaces 
+generalizes to an arbitrary Lie group and its universal cover.}. These have the same Lie algebras, 
+but since $SU(2)\cong S^3$, it is simply connected, while $SO(3)$ has $\pi_1(SO(3))\cong\mathbb Z / 2\mathbb Z$. 
+Let $\phi : \mathfrak{su}(2)\rightarrow\mathfrak{so}(3)$ be the corresponding Lie algebra isomorphism. 
+In a later section we will show that every representation of $\mathfrak{su}(2)$ is of the form $\pi_m : \mathfrak{su}(2)
+\rightarrow End(V_m)$ with $dim(V_m) = m + 1$. Then, we of course can form a representation of $\mathfrak{so}(3)$ 
+by lifting $\pi_m$ with the isomorphism, $\sigma_m := \pi_m\circ\phi^{-1}$, and these are precisely the isomorphisms 
+of $\mathfrak{so}(3)$, since $\mathfrak{so}(2)$ and $\mathfrak{su}(3)$ are the same Lie algebra. Here's the catch: 
+if $m$ is even, then there is a representation $\Sigma_m$ of $SO(3)$ such that $\Sigma_m(e^{iX}) = e^{i\sigma_m(X)}$ 
+for each $X\in\mathfrak{so}(3)$. However, \textbf{if $m$ is odd, then there is no representation of $SO(3)$ such that 
+$\sigma_m$ is the induced Lie algebra representation}. 
+
+You should know this fact inherently from physics: it is the statement that rotating systems with half integral spin behaves 
+differently than 3D rotations, i.e. a full $2\pi$ rotation of a spin state is not the identity. The representations of $SU(2)$ are 
+exactly the different angular momentum systems; a system with angular momentum $j$ has Hilbert space $V_m$ with 
+$m = 2j$, as the dimension of the Hilbert space is $2j + 1 = m + 1$. The angular momentum operators on this Hilbert space 
+are $\frac{1}{2}\pi_m(\sigma_i)$, where $\sigma_i$ are the Pauli matrices which generate $\mathfrak{su}(2)$. So, a system with 
+integer angular momentum $j$ ($m$ even) has is described representation of $\mathfrak{su}(2)\cong\mathfrak{so}(3)$ which is 
+induced by a representation of the 3D rotation group $SO(3)$, and thus these rotations must behave like 3D rotations. In the 
+half integer case, there is no corresponding representation $\Sigma_m$ of $SO(3)$, and thus quantum mechanical rotations 
+do not need to behave like rotations in $SO(3)$. 
 
 \newpage
 \section{Irreducible Representations}
@@ -353,24 +456,24 @@ dimensions of vector spaces:
 
 \subsection{Products}
 
-Suppose that we have representations of groups $G$ and $H$, namely $\pi_1 : G\rightarrow Aut(V)$ and 
-$\pi_2 : H\rightarrow Aut(W)$. Then we can define a canonical representation of $G\times H$ by:
+Suppose that we have representations of groups $G$ and $H$, namely $\Pi_1 : G\rightarrow Aut(V)$ and 
+$\Pi_2 : H\rightarrow Aut(W)$. Then we can define a canonical representation of $G\times H$ by:
 \begin{equation}
-	\pi_1\otimes\pi_2 : G\times H\rightarrow Aut(V\otimes W)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
-	(g, h)\mapsto (\pi_1 g)\otimes (\pi_2 h)
+	\Pi_1\otimes\Pi_2 : G\times H\rightarrow Aut(V\otimes W)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+	(g, h)\mapsto (\Pi_1 g)\otimes (\Pi_2 h)
 \end{equation}
-where we see that $(\pi_1 g)\otimes (\pi_2 h)$ is a morphism on the space $V\otimes W$ by its 
+where we see that $(\Pi_1 g)\otimes (\Pi_2 h)$ is a morphism on the space $V\otimes W$ by its 
 definition. 
 
-Now, further suppose that $H = G$, and so we have two representations of $G$, $\pi_1 : G\rightarrow V$ 
-and $\pi_2 : G\rightarrow W$. Then using the previous construction, we can embed $G$ into $G\times G$:
+Now, further suppose that $H = G$, and so we have two representations of $G$, $\Pi_1 : G\rightarrow V$ 
+and $\Pi_2 : G\rightarrow W$. Then using the previous construction, we can embed $G$ into $G\times G$:
 \begin{equation}
-	G\hookrightarrow G\times G \xrightarrow{\pi_1\otimes\pi_2} Aut(V\otimes W)
+	G\hookrightarrow G\times G \xrightarrow{\Pi_1\otimes\Pi_2} Aut(V\otimes W)
 \end{equation}
-to form a new representation of $G$, one which acts on $V\otimes W$ as $(\pi_1\otimes\pi_2)(g) = 
+to form a new representation of $G$, one which acts on $V\otimes W$ as $(\Pi_1\otimes\Pi_2)(g) = 
 (\pi_1 g)\otimes (\pi_2 g)$. Note the dimensionality of the new representation is: 
 \begin{equation}
-	dim(\pi_1\otimes\pi_2) = dim(\pi_1)dim(\pi_2)
+	dim(\Pi_1\otimes\Pi_2) = dim(\Pi_1)dim(\Pi_2)
 \end{equation}
 In general, the product of irreducible representations is not reducible, and 
 the factorization of the product of irreps into a sum of irreps is the basis for the Clebsch-Gordan theory 
@@ -378,7 +481,21 @@ often studied in the context of adding angular momentum in quantum mechanics. Fo
 the irreps of $SU(3)$. Then $3\otimes\bar 3$ (the fundamental times the antifundamental) is reducible, 
 and in fact $3\otimes\bar 3 = 8\oplus 1$, i.e. it splits as the sum of the adjoint $8$ and the singlet $1$. 
 
+There is a corresponding induced representation of the Lie algebra on the tensor product. If we have two 
+Lie algebra representations $\pi_1 : \mathfrak g\rightarrow End(V)$ and $\pi_2 : \mathfrak g\rightarrow End(W)$, 
+then the tensor product representation of $\mathfrak g$ is the representation:
+\begin{align}
+	\pi_1\otimes\pi_2: \mathfrak g &\rightarrow End(V\otimes W)\\
+	(\pi_1\otimes\pi_2)(X) &= \pi_1(X)\otimes I + I\otimes\pi_2(X)
+\end{align}
+Although this looks a bit clunky, this exponentiates to the correct representation of G since $[\pi_1(X)\otimes I, I\otimes\pi_2(X)] = 0$.
+\begin{equation}
+	e^{i(\pi_1\otimes\pi_2)(X)} = e^{i\pi_1(X)\otimes I + iI\otimes\pi_2(X)} = e^{i\pi_1(X)}\otimes e^{i\pi_2(X)}
+\end{equation}
+
 \subsection{Conjugate (dual) representations}
+
+\section{Finite Groups and Characters}
 
 \section{Common Irreducible Representations}
 
@@ -447,7 +564,47 @@ And secondly, how the entire matrix $X$ transforms:
 	X\mapsto VXV^\dagger
 \end{equation}
 
+\subsection{Irreps of $\mathfrak{sl}(2; \mathbb C)$}
+
+This section will perform the classification of angular momentum done in quantum mechanics in a 
+much more abstract sense. The Lie algebra $\mathfrak{sl}(2; \mathbb C)$ is simply the complexification 
+of $\mathfrak{su}(2)$, and so has the same irreps and structure as $\mathfrak{su}(2)$. This is 
+particularly important because of how the quantum mechanics of angular momentum works. \textbf{A 
+quantum mechanical system with angular momentum $j$ is described by the representation of 
+$\mathfrak{su}(2)$ with dimension $2j + 1$}, and thus studying the representations of $\mathfrak{sl}(2; \mathbb C)$ 
+is equivalent to studying quantum mechanical systems with different values of angular momentum. 
+In particular, angular momentum operators are elements of the representation $\pi_{2j}$ of $\mathfrak{su}(2)$, 
+and rotation operators are elements of the representation $\Pi_{2j}$ of $SU(2)$. We will describe and characterize 
+these representations $\Pi_m$ and $\pi_m$ in this section. 
+
+Because of this, things like Clebsch-Gordan theory can be described purely mathematically in terms of representations 
+of $SU(2)$. Addition of angular momentum is simply decomposing tensor product representations of $SU(2)$ into a 
+direct sum of irreps of $SU(2)$. For example, the equation for adding angular momentum:
+\begin{equation}
+	\bf{j_1}\otimes j_2 = \bigoplus_{j = |j_1 - j_2|}^{j_1 + j_2} j
+\end{equation}
+allows one to fully unravel the addition of angular momentum in quantum mechanics. This may be viewed as a mathematical 
+statement about adding representations; when the tensor product representation $\pi_{2j_1}\otimes\pi_{2j_2}$ of $\mathfrak{su}(2)$ 
+is formed, it can be decomposed into the direct sum representation $\pi_{|j_1 - j_2|}\oplus ...\oplus\pi_{j_1 + j_2}$ of $\mathfrak{su}(2)$. 
+
+\subsection{Irreps of $\mathfrak{sl}(3; \mathbb C)$}
+
 \section{Invariants}
 
+\section{Roots and Weights}
+
+\section{Representations of $SU(N)$}
+
+\subsection{$SU(2)$ and Angular Momentum}
+
+\subsection{$SU(3)$ and the Quark Model}
+
+\subsection{$SU(N)$}
+
+\section{Representations of other groups}
+
+\subsection{The Lorentz and Poincar\'{e} Groups}
+
+\subsection{The Hypercubic Group}
 
 \end{document}
