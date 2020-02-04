@@ -36,12 +36,48 @@
 \begin{document}
 \maketitle
 
-\section{Lie Groups and Algebras}
+These notes will cover the basics of representation theory and its applications to physics. Most of the 
+theory that we discuss will have a large range of applications, and you will almost certainly see it in 
+a course on quantum field theory. This subject is integral to all of physics because representation 
+theory provides a mathematical framework to study symmetries, both discrete and continuous. Indeed, 
+whenever a physicist says the words ``group theory" they really mean ``representation theory", and 
+it is really impossible to study subjects like quantum field theory without at least a working knowledge 
+of representation theory. 
 
-In physics, we use Lie groups to describe sets of continuous symmetries. Although we will attempt to 
+Although I'm writing these notes as a background for physics, I tend to write my notes more like a 
+mathematician. As such, there will be some sections that read like definition, definition, theorem, 
+corollary. I've found that bundling things up into theorems make them easier to remember and reference 
+in the long run, and this is ultimately meant to be a reference for myself to use when doing physics. 
+Generally, I will only include proofs of theorems if I find them to be informative or fun to do, so if a 
+proof is there, it is generally pretty easy or will introduce methods that will be used later. We will 
+assume background knowledge in algebra (specifically group theory and linear algebra) and some 
+knowledge of topology, specifically smooth manifolds. 
+
+Now, on to some common notation. For a field $\mathbb K$, we let  $M_{n\times m}(\mathbb K)$ 
+denote the set of all $m\times n$ matrices with values in $\mathbb K$ (usually here $\mathbb K$ will 
+be either $\mathbb R$ or $\mathbb C$). Group representations will typically be denoted by $\Pi$ or 
+by $D$ depending on whether the group is a Lie group or finite group, and Lie algebra representations 
+will typically be denoted $\pi$. For algebraic objects $M$ and $N$ (by this I mean objects in a category), 
+the set of morphisms between them will be denoted $Hom(M, N)$.
+
+Let $V$ be a $n$-dimensional $\mathbb K$-vector space. We denote its dual by $V^*$, and recall for 
+finite dimensional vector spaces there is an isomorphism $V\rightarrow V^*$. An \textbf{endomorphism} 
+of $V$ is an homomorphism $\phi : V\rightarrow V$. If $\phi$ is continuous (an isomorphism $V\rightarrow 
+V$) then we will call $\phi$ an \textbf{automorphism}. We will denote its automorphism group of $V$ by $Aut(V)$ 
+and its endomorphism ring by $End(V)$. The group $Aut(V)$ is naturally isomorphic to the group 
+$GL(V) := GL(\mathbb K^n)$ of $n\times n$ invertible matrices with values in $\mathbb K$ (as once 
+a basis is chosen for $V$, invertible linear maps $V\rightarrow V$ are in bijection with invertible matrices), 
+and the group $End(V)$ is naturally isomorphic to $gl(V) := gl(\mathbb K^n)$, the set of all $n\times n$ 
+matrices with values in $\mathbb K$. 
+
+\newpage
+\section{Lie Groups, Algebras and Representations}
+
+Lie groups are used to describe sets of continuous symmetries. Although we will attempt to 
 make definitions as general as possible, we will often restrict ourselves to the case of specific 
 examples which are of interest for physics, namely the Lie groups $SU(N)$, $SO(N)$, and 
-occasionally symplectic groups. We define Lie groups and algebras, and then will discuss the 
+occasionally symplectic groups, which is where classical mechanics lives. We define Lie groups 
+and algebras, and then will discuss the 
 interplay between the two.
 
 \begin{definition}[Lie group]
@@ -90,7 +126,8 @@ Lie group $G$ because an arbitrary element of $G$ can be represented as:
 	\exp(i X^a T^a)
 \end{equation}
 because $T^a$ spans $\mathfrak g$. This means the coordinates $X^a$ parameterize the Lie 
-group $G$, and so we can specify an element of $G$ by specifying a set of $n$ coordinates. 
+group $G$ (really they parameterize the path-component of 1), and so we can specify an 
+element of $G$ by specifying a set of $n$ coordinates. 
 
 Every Lie algebra is defined by its Lie bracket. Since $[\cdot, \cdot]$ maps $\mathfrak g^2$ into 
 $\mathfrak g$, we must be able to expand:
@@ -130,8 +167,8 @@ which is an expression of the familiar formula for Lie algebras:
 \end{equation}
 
 To act Lie groups on spaces, we must discuss representations. Note that the endomorphism ring 
-$End(V)$ of a vector space is also a Lie algebra, by allowing the Lie bracket to equal the 
-commutator.
+$End(V)$ of a vector space is also a Lie algebra, by allowing the Lie bracket to equal the commutator 
+of operators $A, B\in End(V)$. 
 \begin{definition}[Representation]
 	A \textbf{representation} of a Lie algebra $\mathfrak g$ on a vector space $V$ is a Lie 
 	algebra homomorphism\footnote{Meaning it preserves $+$ and $[\cdot, \cdot$]}  
@@ -141,22 +178,37 @@ commutator.
 	obvious manner to a Lie group homomorphism.
 \end{definition}
 
-\begin{definition}
+\begin{definition}[Dimension]
 	The \textbf{dimension} of a representation $\pi : G\rightarrow Aut(V)$ is the dimension of $V$. 
 	If $\pi : G\rightarrow GL(n, \mathbb F)$ is a representation of a Lie group with $n\times n$ matrices, 
 	then $n$ is the dimension of $\pi$. 
 \end{definition}
 
-\begin{definition}[Faithful]
-	A representation $\Pi : G\rightarrow V$ is \textbf{faithful} if $\Pi$ is injective. 
+\begin{definition}[Equivalent representations]
+	Two representations $\Pi : G\rightarrow Aut(V)$ and $\Psi : G\rightarrow Aut(V)$ are said to be 
+	\textbf{equivalent} if there is $S\in Aut(V)$ such that:
+	\begin{equation}
+		\Pi(g) = S\Pi(g) S^{-1}~
+		\label{eq:equivalent}
+	\end{equation}
 \end{definition}
 
-A representation can likewise be defined as an action of $G$ or $\mathfrak g$ on $V$, as given a 
+\begin{definition}[Faithful]
+	A representation $\Pi : G\rightarrow Aut(V)$ is \textbf{faithful} if $\Pi$ is injective. In other words, if 
+	$\Pi$ is a faithful representation, then different group elements will map to different matrices in 
+	$Aut(V)$. 
+\end{definition}
+
+Equivalent representations are essentially the same representation, since a conjugation like in 
+Equation~\ref{eq:equivalent} is the same as changing the basis that the two representations are 
+expanded in. 
+
+ A representation can likewise be defined as an action of $G$ or $\mathfrak g$ on $V$, as given a 
 representation $\pi : \mathfrak g\rightarrow V$, we have a $\mathfrak g$-action on $V$ defined 
 by $X\cdot v := \pi(X)(v)$. The easiest way to define a representation is to give an explicit 
 embedding of the generators of $\mathfrak g$ into $End(V)$ as matrices, as every endomorphism 
 can be realized as a matrix. Once the generators are embedded into matrices, then the rest of 
-the representation can be embedded by linearity. 
+the representation can be embedded by linearity. Here are a few more definitions to keep in mind. 
 
 Representations are more than just a Lie group and a vector space: they also implicitly contain the 
 map from $G\rightarrow Aut(V)$. Because of this, we have been labelling a representation $\Pi : G\rightarrow 
@@ -166,7 +218,7 @@ $G$-representation induces a canonical $\mathfrak g$-representation (and vice ve
 useful to abuse notation and to let $V$ denote the $G$-representation and the $\mathfrak g$-representation, 
 since $V$ is the common element of the triple denoting $\Pi$ and $\pi$. This is often used in physics, where 
 for example we may refer to the octet of $SU(3)$ as $\textbf{8}$ to denote the representation $\pi : \mathfrak{su}(3)
-\rightarrow\mathbb R^8$ which has action $\pi(T^a)^{bc} = - if^{abc}$ (the adjoint representation). 
+\rightarrow\mathbb R^8$ which has action $\pi(T^a)^{bc} = - if^{abc}$ (the adjoint representation).  
 
 We now consider what a morphism between representations looks like. This is called an intertwining map, and 
 is essentially a vector space map which respects the action induced by the representation. 
@@ -196,6 +248,7 @@ $\phi$ being an intertwining map can equivalently be written as:
 which makes it completely obvious that such an intertwining map is a morphism in the category of linear 
 $G$-representations. 
 
+\subsection{Algebras vs. Groups}
 Let $G$ be a Lie group with associated Lie algebra $\mathfrak g$. We will now discuss to what extent a representation 
 of $G$ induces a representation of $\mathfrak g$, and vice versa. 
 \begin{definition}
@@ -307,7 +360,7 @@ Because we are studying Lie theory in the context of physics, we are interested 
 symmetry groups. In particular, these groups are unitary, and so are the representations of these groups.
 \begin{definition}[Unitary]
 	Let $\Pi : G\rightarrow Aut(V)$ be a representation. Then $\Pi$ is an \textbf{unitary representation} if $\Pi(g)$ 
-	is a unitary operator on $V$ for each $g\in G$. 
+	is a unitary operator on $V$ for each $g\in G$. Note that this implies $\Pi(g^{-1}) = \Pi(g)^\dagger$. 
 \end{definition}
 
 Luckily for us, unitary representations are quite simple and can always be decomposed into the direct sum of irreps. 
@@ -353,162 +406,63 @@ is certainly a nice fact to know.
 	If $G$ is compact, then every finite dimensional representation of $G$ is completely reducible.
 \end{theorem}
 
-\subsection{Schur's Lemma}
+An important theorem about irreps is called \textbf{Schur's lemma}. We will simply state the theorem.
+\begin{lemma}[Schur]
+	\begin{enumerate}
+		\item Let $V$ and $W$ be irreducible real or complex representations of a group or Lie algebra and 
+		let $\phi : V\rightarrow W$ be an intertwining map (representation homomorphism). Then $\phi$ 
+		is either identically 0 or an isomorphism of representations.
+		\item Let $V$ be a complex irrep of a group or Lie algebra and let $\phi : V\rightarrow V$ be an 
+		intertwining map. Then $\phi = \lambda I$ for some $\lambda\in\mathbb C$. 
+		\item Let $V$ and $W$ be complex irreps of a group or Lie algebra and $\phi_1, \phi_2 : V\rightarrow 
+		W$ be nonzero intertwining maps. Then $\phi_1 = \lambda\phi_2$ for some $\lambda\in\mathbb C$. 
+	\end{enumerate}
+\end{lemma}
+Schur's lemma essentially states that any two irreps which are homomorphic are also isomorphic, and so irreps 
+are the simplest building blocks of representations. There is also a few nice corollaries which deal with commuting 
+objects in the representation.
+\begin{corollary}
+	Let $(\Pi_1, V), (\Pi_2, V)$ be two inequivalent irreps of $G$. If $\Pi_1(g) A = A\Pi_2(g)$ for each $g\in G$, then 
+	$A = 0$. 
+\end{corollary}
+\begin{corollary}
+	Let $(\Pi, V)$ be an irrep of $G$. If $\Pi(g)A = A\Pi(g)$ for each $g\in G$ and $A\in Aut(V)$, then $A = \lambda I$. 
+\end{corollary}
+\begin{corollary}
+	Let $\mathfrak g$ be a Lie algebra and $(\pi, V)$ is an irrep of $\mathfrak g$. If $X$ is in the center of 
+	$\mathfrak g$ (so $[X, Y] = 0$ for each $Y\in\mathfrak g$), then $\pi(X) = \lambda I$. 
+\end{corollary}
+These theorems are all very similar, and the main point is that \textbf{any element in an irrep of $G$ which commutes 
+with all other elements of $G$ is proportional to the identity}. This can be a surprisingly powerful fact, and it often 
+is applicable in places you might not expect it to be. It also proves the following fact, because if a group is 
+commutative then each element must be mapped to a multiple of $I$. 
+\begin{corollary}
+	An irrep of a commutative group is one dimensional.
+\end{corollary}
 
-
-
-\newpage
-\section{Constructions}
-
-\subsection{Complexification}
-
-It is often useful to study a real Lie algebra by complexifying it and studying the algebra as a complex 
-vector space instead of a real vector space. 
-\begin{definition}[Complex Lie group]
-	A Lie group $G$ is \textbf{complex} if its Lie algebra $\mathfrak g$ is a vector space over $\mathbb C$, 
-	i.e. if $iX\in\mathfrak g$ for each $X\in\mathfrak g$. 
-\end{definition}
-
-We will next define how to complexify a real vector space and treat it as a $\mathbb C$-vector space. This 
-will extend naturally to any Lie algebra (as a Lie algebra has a vector space structure in addition to its Lie 
-bracket) in a functorial manner. 
-\begin{definition}[Complexification]
-	Let $V$ be a vector space over $\mathbb R$. Then the \textbf{complexification} of $V$, denoted $V_\mathbb{C}$, is the set of 
-	formal linear combinations:
-	\begin{equation}
-		V_\mathbb{C} = \{v_1 + iv_2 : v_1, v_2\in V\}
-	\end{equation}
-	We endow $V_\mathbb{C}$ with a vector space structure by defining for $v_1 + iv_2\in V_\mathbb{C}$:
-	\begin{equation}
-		i(v_1 + iv_2) := -v_2 + iv_1
-	\end{equation}
-	This extends by linearity to all of $V_\mathbb{C}$, making it into a vector space over $\mathbb C$. 
-\end{definition}
-
-The complexification of a vector space is in itself also a real vector space of dimension $2dim(V)$, since as a set it is isomorphic to 
-the direct sum $V\oplus V$. For a Lie algebra, we can use this construction to complexify the structure of the algebra as a vector space, 
-and also extend the bracket to this new complex space. The complexification is also the ``best" way we can embed a real Lie algebra 
-into a complex Lie algebra, in the sense that it is a universal attractor in the category of maps $\mathfrak g\rightarrow h$, where 
-$h$ is a complex Lie algebra. 
-
-\begin{theorem}
-	Let $\mathfrak g$ be a finite dimensional real Lie algebra. Let $\mathfrak g_\mathbb{C}$ be its complexification as a vector 
-	space. Then the bracket $[\cdot, \cdot]$ extends uniquely to $\mathfrak g_\mathbb{C}$ by:
-	\begin{equation}
-		[X_1 + iX_2, Y_1 + iY_2] := ([X_1, Y_1] - [X_2, Y_2]) + i([X_2, Y_1] + [X_1, Y_2])
-	\end{equation}
-	making $\mathfrak g_\mathbb{C}$ into a Lie algebra. 
-\end{theorem}
-
-\begin{prop}
-	Let $\mathfrak g\subset M_n(\mathbb C)$ be a real Lie algebra, and suppose that $iX\not\in\mathfrak g$ for $X\in\mathfrak g$. 
-	Then $\mathfrak g_\mathbb{C}$ is isomorphic to the set of matrices in $M_n(\mathbb C)$ of the form $X + iY$ with $X, Y\in
-	\mathfrak g$. 
-\end{prop}
-
-\begin{theorem}
-	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$, and let $\iota : \mathfrak g\rightarrow
-	\mathfrak g_\mathbb{C}$ be the canonical inclusion. Then $\mathfrak g$ is universal in the sense that if $\mathfrak h$ is any 
-	complex Lie algebra and $f : \mathfrak g\rightarrow\mathfrak h$ is a Lie algebra homomorphism, then we can factor $f$ through 
-	$\mathfrak g_\mathbb{C}$:
-	\[\begin{tikzcd}
-		\mathfrak g\arrow[r, "\iota"]\arrow[dr, swap, "f"] & \mathfrak g_\mathbb{C}\arrow[d, "\overline{f}"] \\
-		& \mathfrak h \\
-	\end{tikzcd}\]
-\end{theorem}
-Some common complexifications which are useful are:
-\begin{itemize}
-	\item $\mathfrak u(N)_\mathbb{C}\cong gl(N; \mathbb C)$
-	\item $\mathfrak su(N)_\mathbb{C}\cong \mathfrak{sl}(N; \mathbb C)$
-\end{itemize}
-
-Complexification leaves irreps invariant, so studying the irreps of a complexified Lie algebra is equivalent to studying the irreps of the 
-original algebra. This will be very useful as it will allow us to study the irreps of $\mathfrak{su}(N)$ through the irreps of $\mathfrak{sl}(n; 
-\mathbb C)$. 
-
-\begin{theorem}
-	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$. Then every finite dimensional complex 
-	representation $\pi$ of $\mathfrak g$ has a unique extension to a complex representation of $\mathfrak g_{\mathbb C}$ by linearity, 
-	also denoted $\pi$. Furthermore, $\pi$ is irreducible as a representation of $\mathfrak g_{\mathbb C}$ iff it is irreducible as a 
-	representation of $\mathfrak g$. 
-\end{theorem}
-
-\subsection{Sums}
-
-Recall the direct sum $V_1\oplus V_2$ of two vector spaces $V_1$ and $V_2$ is simply a fancy way of writing 
-the Cartesian product $V_1\times V_2$ after we give it a vector space structure. 
-Let $G$ be a Lie group with two representations $\pi_1 : G\rightarrow V_1$ and $\pi_2 : G\rightarrow V_2$. 
-Then we can form a representation of $G$ on $V_1\oplus V_2$ in the obvious way:
+Finally, we must discuss some notation. We will often denote a representation by its dimension 
+by simply writing a number for the representation. For example, the adjoint of $SU(3)$ is 8-dimensional, the fundamental 
+and anti-fundamental representations are 3-dimensional, and the singlet (trivial) representation is 1-dimensional. We denote the 
+adjoint by $\bf{8}$, the fundamental by $\bf 3$, the anti-fundamental by $\bf{bar 3}$, and the singlet by $\bf 1$. One will often 
+see equations written out in physics books that look like:
 \begin{equation}
-	\pi_1\oplus\pi_2 : G\rightarrow Aut(V_1\oplus V_2)
+	\bf 3\otimes \bar{3} = 8\oplus 1
 \end{equation}
-where $\pi_1\oplus\pi_2(g)$ acts on elements $(v_1, v_2)\in V_1\oplus V_2$ by:
-\begin{equation}
-	[(\pi_1\oplus \pi_2)g] (v_1, v_2) := ((\pi_1g)v_1, (\pi_2g)v_2)
-\end{equation}
-We define this in an analogous way for a representation of a Lie algebra. 
+All this means is that if we tensor together the fundamental with the anti-fundamental, it splits as a direct sum of the adjoint 
+plus the singlet. We will discuss some of the common irreps of Lie groups in the following subsections.
 
-When we sum together two representations, their dimensions are additive because the direct sum adds 
-dimensions of vector spaces:
-\begin{equation}
-	dim(\pi_1\oplus\pi_2) = dim(\pi_1) + dim(\pi_2)
-\end{equation}
+\subsection{The Fundamental Representation of $SU(N)$}
 
-\subsection{Products}
-
-Suppose that we have representations of groups $G$ and $H$, namely $\Pi_1 : G\rightarrow Aut(V)$ and 
-$\Pi_2 : H\rightarrow Aut(W)$. Then we can define a canonical representation of $G\times H$ by:
-\begin{equation}
-	\Pi_1\otimes\Pi_2 : G\times H\rightarrow Aut(V\otimes W)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
-	(g, h)\mapsto (\Pi_1 g)\otimes (\Pi_2 h)
-\end{equation}
-where we see that $(\Pi_1 g)\otimes (\Pi_2 h)$ is a morphism on the space $V\otimes W$ by its 
-definition. 
-
-Now, further suppose that $H = G$, and so we have two representations of $G$, $\Pi_1 : G\rightarrow V$ 
-and $\Pi_2 : G\rightarrow W$. Then using the previous construction, we can embed $G$ into $G\times G$:
-\begin{equation}
-	G\hookrightarrow G\times G \xrightarrow{\Pi_1\otimes\Pi_2} Aut(V\otimes W)
-\end{equation}
-to form a new representation of $G$, one which acts on $V\otimes W$ as $(\Pi_1\otimes\Pi_2)(g) = 
-(\pi_1 g)\otimes (\pi_2 g)$. Note the dimensionality of the new representation is: 
-\begin{equation}
-	dim(\Pi_1\otimes\Pi_2) = dim(\Pi_1)dim(\Pi_2)
-\end{equation}
-In general, the product of irreducible representations is not reducible, and 
-the factorization of the product of irreps into a sum of irreps is the basis for the Clebsch-Gordan theory 
-often studied in the context of adding angular momentum in quantum mechanics. For example, consider 
-the irreps of $SU(3)$. Then $3\otimes\bar 3$ (the fundamental times the antifundamental) is reducible, 
-and in fact $3\otimes\bar 3 = 8\oplus 1$, i.e. it splits as the sum of the adjoint $8$ and the singlet $1$. 
-
-There is a corresponding induced representation of the Lie algebra on the tensor product. If we have two 
-Lie algebra representations $\pi_1 : \mathfrak g\rightarrow End(V)$ and $\pi_2 : \mathfrak g\rightarrow End(W)$, 
-then the tensor product representation of $\mathfrak g$ is the representation:
-\begin{align}
-	\pi_1\otimes\pi_2: \mathfrak g &\rightarrow End(V\otimes W)\\
-	(\pi_1\otimes\pi_2)(X) &= \pi_1(X)\otimes I + I\otimes\pi_2(X)
-\end{align}
-Although this looks a bit clunky, this exponentiates to the correct representation of G since $[\pi_1(X)\otimes I, I\otimes\pi_2(X)] = 0$.
-\begin{equation}
-	e^{i(\pi_1\otimes\pi_2)(X)} = e^{i\pi_1(X)\otimes I + iI\otimes\pi_2(X)} = e^{i\pi_1(X)}\otimes e^{i\pi_2(X)}
-\end{equation}
-
-\subsection{Conjugate (dual) representations}
-
-\section{Finite Groups and Characters}
-
-\section{Common Irreducible Representations}
-
-Because irreps can be combined together to form new representations, we will now discuss some of the 
-irreps that are seen very often in physics. 
-
-\subsection{The Fundamental Representation}
+$SU(N)$ plays a central role in the Standard model, so its representations are very relevant. 
+Although we will describe its full representation theory later in Section~\ref{sec:su_n}, there we will 
+describe one of its specific representations here. Called the \textbf{fundamental representation} of 
+$SU(N)$, this is the representation $(\pi, V)$ of order $N$. 
 
 \subsection{The Adjoint Representation}
 
 The adjoint representation is perhaps the most canonical of representations because every Lie 
-algebra admits an adjoint representation on itself. For $X\in\mathfrak g$, we define the adjoint 
-operator $ad_X : \mathfrak g\rightarrow\mathfrak g$ by:
+algebra admits an adjoint representation on itself. For $X\in\mathfrak g$, recall we defined the adjoint 
+map $ad_X : \mathfrak g\rightarrow\mathfrak g$ by:
 \begin{equation}
 	ad_X(Y) := [X, Y]
 \end{equation}
@@ -564,7 +518,234 @@ And secondly, how the entire matrix $X$ transforms:
 	X\mapsto VXV^\dagger
 \end{equation}
 
-\subsection{Irreps of $\mathfrak{sl}(2; \mathbb C)$}
+\newpage
+\section{Constructions}
+
+\subsection{Complexification}
+
+It is often useful to study a real Lie algebra by complexifying it and studying the algebra as a complex 
+vector space instead of a real vector space. 
+\begin{definition}[Complex Lie group]
+	A Lie group $G$ is \textbf{complex} if its Lie algebra $\mathfrak g$ is a vector space over $\mathbb C$, 
+	i.e. if $iX\in\mathfrak g$ for each $X\in\mathfrak g$. 
+\end{definition}
+
+We will next define how to complexify a real vector space and treat it as a $\mathbb C$-vector space. This 
+will extend naturally to any Lie algebra (as a Lie algebra has a vector space structure in addition to its Lie 
+bracket) in a functorial manner. 
+\begin{definition}[Complexification]
+	Let $V$ be a vector space over $\mathbb R$. Then the \textbf{complexification} of $V$, denoted $V_\mathbb{C}$, is the set of 
+	formal linear combinations:
+	\begin{equation}
+		V_\mathbb{C} = \{v_1 + iv_2 : v_1, v_2\in V\}
+	\end{equation}
+	We endow $V_\mathbb{C}$ with a vector space structure by defining for $v_1 + iv_2\in V_\mathbb{C}$:
+	\begin{equation}
+		i(v_1 + iv_2) := -v_2 + iv_1
+	\end{equation}
+	This extends by linearity to all of $V_\mathbb{C}$, making it into a vector space over $\mathbb C$. 
+\end{definition}
+
+The complexification of a vector space is in itself also a real vector space of dimension $2dim(V)$, since as a set it is isomorphic to 
+the direct sum $V\oplus V$. For a Lie algebra, we can use this construction to complexify the structure of the algebra as a vector 
+space, and also extend the bracket to this new complex space. The complexification is also the ``best" way we can embed a real 
+Lie algebra into a complex Lie algebra, in the sense that it is a universal attractor in the category of maps $\mathfrak g\rightarrow 
+h$, where $h$ is a complex Lie algebra. 
+
+\begin{theorem}
+	Let $\mathfrak g$ be a finite dimensional real Lie algebra. Let $\mathfrak g_\mathbb{C}$ be its complexification as a vector 
+	space. Then the bracket $[\cdot, \cdot]$ extends uniquely to $\mathfrak g_\mathbb{C}$ by:
+	\begin{equation}
+		[X_1 + iX_2, Y_1 + iY_2] := ([X_1, Y_1] - [X_2, Y_2]) + i([X_2, Y_1] + [X_1, Y_2])
+	\end{equation}
+	making $\mathfrak g_\mathbb{C}$ into a Lie algebra. 
+\end{theorem}
+
+\begin{prop}
+	Let $\mathfrak g\subset M_n(\mathbb C)$ be a real Lie algebra, and suppose that $iX\not\in\mathfrak g$ for $X\in
+	\mathfrak g$. Then $\mathfrak g_\mathbb{C}$ is isomorphic to the set of matrices in $M_n(\mathbb C)$ of the form $X + iY$ 
+	with $X, Y\in\mathfrak g$. 
+\end{prop}
+
+\begin{theorem}
+	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$, and let $\iota : \mathfrak g\rightarrow
+	\mathfrak g_\mathbb{C}$ be the canonical inclusion. Then $\mathfrak g$ is universal in the sense that if $\mathfrak h$ is any 
+	complex Lie algebra and $f : \mathfrak g\rightarrow\mathfrak h$ is a Lie algebra homomorphism, then we can factor $f$ 
+	through $\mathfrak g_\mathbb{C}$:
+	\[\begin{tikzcd}
+		\mathfrak g\arrow[r, "\iota"]\arrow[dr, swap, "f"] & \mathfrak g_\mathbb{C}\arrow[d, "\overline{f}"] \\
+		& \mathfrak h \\
+	\end{tikzcd}\]
+\end{theorem}
+Some common complexifications which are useful are:
+\begin{itemize}
+	\item $\mathfrak u(N)_\mathbb{C}\cong gl(N; \mathbb C)$
+	\item $\mathfrak su(N)_\mathbb{C}\cong \mathfrak{sl}(N; \mathbb C)$
+\end{itemize}
+
+Complexification leaves irreps invariant, so studying the irreps of a complexified Lie algebra is equivalent to studying the irreps of 
+the original algebra. This will be very useful as it will allow us to study the irreps of $\mathfrak{su}(N)$ through the irreps of 
+$\mathfrak{sl}(n; \mathbb C)$. 
+
+\begin{theorem}
+	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$. Then every finite dimensional 
+	complex representation $\pi$ of $\mathfrak g$ has a unique extension to a complex representation of 
+	$\mathfrak g_{\mathbb C}$ by linearity, also denoted $\pi$. Furthermore, $\pi$ is irreducible as a representation of 
+	$\mathfrak g_{\mathbb C}$ iff it is irreducible as a representation of $\mathfrak g$. 
+\end{theorem}
+
+\subsection{Sums}
+
+Recall the direct sum $V_1\oplus V_2$ of two vector spaces $V_1$ and $V_2$ is simply a fancy way of writing 
+the Cartesian product $V_1\times V_2$ after we give it a vector space structure. 
+Let $G$ be a Lie group with two representations $\pi_1 : G\rightarrow V_1$ and $\pi_2 : G\rightarrow V_2$. 
+Then we can form a representation of $G$ on $V_1\oplus V_2$ in the obvious way:
+\begin{equation}
+	\pi_1\oplus\pi_2 : G\rightarrow Aut(V_1\oplus V_2)
+\end{equation}
+where $\pi_1\oplus\pi_2(g)$ acts on elements $(v_1, v_2)\in V_1\oplus V_2$ by:
+\begin{equation}
+	[(\pi_1\oplus \pi_2)g] (v_1, v_2) := ((\pi_1g)v_1, (\pi_2g)v_2)
+\end{equation}
+We define this in an analogous way for a representation of a Lie algebra. 
+
+When we sum together two representations, their dimensions are additive because the direct sum adds 
+dimensions of vector spaces:
+\begin{equation}
+	dim(\pi_1\oplus\pi_2) = dim(\pi_1) + dim(\pi_2)
+\end{equation}
+
+An important thing to note is that the direct sum of representations is not the same things as the direct 
+sum of Lie algebras or Lie groups. While the operation is still defined in this case, it acts on different objects, 
+and can have profound differences. Namely, note that (of course) the direct sum of irreps is not an irrep, 
+because doing this gives an explicit decomposition of the representation. However, when we take a direct 
+sum of Lie algebras, then in fact there is a way to get irreps from their individual irreps.
+\begin{theorem}
+	Let $\mathfrak g, \mathfrak h$ be two Lie algebras. Then the irreps of $\mathfrak g\oplus\mathfrak h$ are 
+	precisely the tensor products of the irreps of $\mathfrak g$ and of $\mathfrak h$. In other words, if 
+	$(\pi_a, V_a)$ are the irreps of $\mathfrak g$ and $(\phi_b, W_b)$ are the irreps of $\mathfrak h$, then 
+	the irreps of $\mathfrak g\oplus\mathfrak h$ are precisely the tensor products:
+	\begin{equation}
+		\{(\pi_a\otimes\phi_b, V_a\otimes W_b)\}_{a, b}
+	\end{equation}
+\end{theorem}
+
+\subsection{Products}
+
+Suppose that we have representations of groups $G$ and $H$, namely $\Pi_1 : G\rightarrow Aut(V)$ and 
+$\Pi_2 : H\rightarrow Aut(W)$. Then we can define a canonical representation of $G\times H$ by:
+\begin{equation}
+	\Pi_1\otimes\Pi_2 : G\times H\rightarrow Aut(V\otimes W)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+	(g, h)\mapsto (\Pi_1 g)\otimes (\Pi_2 h)
+\end{equation}
+where we see that $(\Pi_1 g)\otimes (\Pi_2 h)$ is a morphism on the space $V\otimes W$ by its 
+definition. 
+
+Now, further suppose that $H = G$, and so we have two representations of $G$, $\Pi_1 : G\rightarrow V$ 
+and $\Pi_2 : G\rightarrow W$. Then using the previous construction, we can embed $G$ into $G\times G$ 
+via the diagonal map:
+\begin{equation}
+	G\hookrightarrow G\times G \xrightarrow{\Pi_1\otimes\Pi_2} Aut(V\otimes W)
+\end{equation}
+to form a new representation of $G$, one which acts on $V\otimes W$ as $(\Pi_1\otimes\Pi_2)(g) = 
+(\pi_1 g)\otimes (\pi_2 g)$. Note the dimensionality of the new representation is: 
+\begin{equation}
+	dim(\Pi_1\otimes\Pi_2) = dim(\Pi_1)dim(\Pi_2)
+\end{equation}
+In general, the product of irreducible representations is not reducible, and 
+the factorization of the product of irreps into a sum of irreps is the basis for the Clebsch-Gordan theory 
+often studied in the context of adding angular momentum in quantum mechanics. For example, consider 
+the irreps of $SU(3)$. Then $\bf 3\otimes\bar 3$ (the fundamental times the antifundamental) is reducible, 
+and in fact $\bf 3\otimes\bar 3 = 8\oplus 1$, i.e. it splits as the sum of the adjoint $8$ and the singlet $1$. 
+
+There is a corresponding induced representation of the Lie algebra on the tensor product. If we have two 
+Lie algebra representations $\pi_1 : \mathfrak g\rightarrow End(V)$ and $\pi_2 : \mathfrak g\rightarrow End(W)$, 
+then the tensor product representation of $\mathfrak g$ is the representation:
+\begin{align}
+	\pi_1\otimes\pi_2: \mathfrak g &\rightarrow End(V\otimes W)\\
+	(\pi_1\otimes\pi_2)(X) &= \pi_1(X)\otimes I + I\otimes\pi_2(X)
+\end{align}
+Although this looks a bit clunky, this exponentiates to the correct representation of G since $[\pi_1(X)\otimes I, I\otimes\pi_2(X)] = 0$.
+\begin{equation}
+	e^{i(\pi_1\otimes\pi_2)(X)} = e^{i\pi_1(X)\otimes I + iI\otimes\pi_2(X)} = e^{i\pi_1(X)}\otimes e^{i\pi_2(X)}
+\end{equation}
+
+\subsection{Conjugate (dual) representations}
+
+Finally, given a complex representation $(\pi, V)$ of a Lie algebra $\mathfrak g$, we can construct a conjugate representation. 
+Then the \textbf{conjugate representation} to $(\pi, V)$ is the representation $\pi^* : \mathfrak g\rightarrow End(V^*)$ (where 
+$V^*$ is the dual space of $V$) defined as:
+\begin{equation}
+	\pi^*(X) := -\pi(X)^T
+\end{equation}
+Note that for the case where the generators $\{\pi(X)\}$ are unitary (as in the case of the fundamental representation of 
+$SU(N)$), then $-\pi(X)^T = -\pi(X)^*$ where $*$ is the conjugate, so one will often see this definition. For representations of 
+Lie groups $(\Pi, V)$, this induces the representation $\Pi^* : G\rightarrow Aut(V^*)$ defined as:
+\begin{equation}
+	\Pi^*(g) = \Pi(g^{-1})^T
+\end{equation}
+
+In physics, we will often see the generators of the fundamental representation written with less jargon. If $T^a_r = \pi(X^a)$ are 
+the images of the generators $\{X^a\}$ of a Lie algebra $\mathfrak g$ in a representation $r$, then the generators of the conjugate 
+representation $T^a_{\bar r}$ are:
+\begin{equation}
+	(T^a_{\bar r})_{ij} = - (T^a_r)^*_{ij} = -(T^a_r)_{ji}
+\end{equation}
+As a point of notation, if $\bf{r}$ is denoting a representation of $G$ (i.e. for $SU(3)$ we denote the fundamental by $\bf{3}$) then 
+we will denote its conjugate representation by $\bf{\bar r}$. The conjugate of the fundamental representation is called the 
+\textbf{anti-fundamental} representation. 
+
+We define a representation to be \textbf{real} if it equals its conjugate representation. In the case of $SU(N)$, for $N > 2$ the 
+fundamental representation is complex. For arbitrary $SU(N)$, the adjoint representation is always a real representation. 
+
+\newpage
+\section{Finite Groups and Characters}
+
+Almost all of the theory we have discussed so far is in application to Lie groups and Lie algebras, which is the basis for how we 
+study continuous symmetries in physics. However, it is also important to consider representations of finite groups, as these 
+correspond to discrete symmetries. The representation theory of finite groups takes on a slightly different flavor than that of 
+Lie groups; it is a bit more combinatorial, and we need to use different machinery than described above with Lie groups and 
+algebras. To emphasize we are using a finite group, when we discuss a representation of a finite group $G$ we will use the 
+notation:
+\begin{equation}
+	D : G\rightarrow Aut(V)
+\end{equation}
+and refer to $(D, V)$ as the representation of $G$. There are a few immediate theorems right off the bat pertaining to finite groups 
+that we will not prove.
+\begin{theorem}
+	Every representation of a finite group is equivalent to a unitary representation.
+\end{theorem}
+This fact means that for a finite group $G$, every representation $(D, V)$ of $G$ is completely reducible. So, if we can 
+develop the machinery to classify all the irreps of $G$, then we can know exactly every representation of $G$. 
+
+\subsection{The Regular Representation}
+
+\subsection{Symmetric groups}
+
+\section{Invariants}
+
+\section{Roots and Weights}
+
+\label{sec:su_n}
+\section{Representations of $SU(N)$}
+
+$SU(N)$ is the special unitary group of $N\times N$ matrices. Specifically, a matrix $A\in M_{N}(\mathbb C)$ is 
+in the \textbf{unitary group} of order $N$, denoted $U(N)$, if $A$ is unitary, i.e. $A^\dagger A = AA^\dagger = 1$. 
+$A\in U(N)$ is in the \textbf{special unitary group} if it has unit determinant, $det(A) = 1$. The group $U(1)$ is 
+simply the unit circle in the complex plane, and for each $N$ we have:
+\begin{equation}
+	U(N) = U(1)\times SU(N)
+\end{equation}
+The dimension of $U(N)$ as a real Lie group is $N^2$, and the dimension of $SU(N)$ is thus $N^2 - 1$. 
+
+When discussing the representation theory of $SU(n)$, one will often encounter the algebras $\mathfrak{sl}(N; 
+\mathbb C)$, and it behaves in quite a similar manner to $\mathfrak{su}(N)$. These $\mathfrak{sl}(N; \mathbb C)$ 
+algebras are simply the complexification of the real valued $\mathfrak{su}{N}$ algebras, i.e. 
+$\mathfrak{sl}(N; \mathbb C)\cong \mathfrak{su}(N)_\mathbb{C}$, and as we have discussed earlier, this implies 
+that they share the same irreps as $\mathfrak{su}(N)$. So, if you encounter an article about the irreps of 
+$\mathfrak{sl}(N; \mathbb C)$, fear not-- for all intents and purposes, the article is about $\mathfrak{su}(N)$. 
+
+\subsection{$SU(2)$ and Angular Momentum}
 
 This section will perform the classification of angular momentum done in quantum mechanics in a 
 much more abstract sense. The Lie algebra $\mathfrak{sl}(2; \mathbb C)$ is simply the complexification 
@@ -586,16 +767,6 @@ direct sum of irreps of $SU(2)$. For example, the equation for adding angular mo
 allows one to fully unravel the addition of angular momentum in quantum mechanics. This may be viewed as a mathematical 
 statement about adding representations; when the tensor product representation $\pi_{2j_1}\otimes\pi_{2j_2}$ of $\mathfrak{su}(2)$ 
 is formed, it can be decomposed into the direct sum representation $\pi_{|j_1 - j_2|}\oplus ...\oplus\pi_{j_1 + j_2}$ of $\mathfrak{su}(2)$. 
-
-\subsection{Irreps of $\mathfrak{sl}(3; \mathbb C)$}
-
-\section{Invariants}
-
-\section{Roots and Weights}
-
-\section{Representations of $SU(N)$}
-
-\subsection{$SU(2)$ and Angular Momentum}
 
 \subsection{$SU(3)$ and the Quark Model}
 
