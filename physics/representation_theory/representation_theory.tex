@@ -9,7 +9,9 @@
 \usepackage{amsmath}
 \usepackage[shortlabels]{enumitem}
 \usepackage{float}
+\usepackage{subcaption}
 \usepackage{tikz-cd}
+\usepackage{tikz}
 
 \usepackage{amsthm}
 \theoremstyle{definition}
@@ -39,9 +41,9 @@
 These notes will cover the basics of representation theory and its applications to physics. Most of the 
 theory that we discuss will have a large range of applications, and you will almost certainly see it in 
 a course on quantum field theory. This subject is integral to all of physics because representation 
-theory provides a mathematical framework to study symmetries, both discrete and continuous. Indeed, 
-whenever a physicist says the words ``group theory" they really mean ``representation theory", and 
-it is really impossible to study subjects like quantum field theory without at least a working knowledge 
+theory provides a mathematical framework to study symmetries, both discrete and continuous. 
+Whenever a physicist says the words ``group theory" he or she really means ``representation theory", and 
+it really is impossible to study subjects like quantum field theory without at least a working knowledge 
 of representation theory. 
 
 Although I'm writing these notes as a background for physics, I tend to write my notes more like a 
@@ -53,7 +55,7 @@ proof is there, it is generally pretty easy or will introduce methods that will 
 assume background knowledge in algebra (specifically group theory and linear algebra) and some 
 knowledge of topology, specifically smooth manifolds. 
 
-Now, on to some common notation. For a field $\mathbb K$, we let  $M_{n\times m}(\mathbb K)$ 
+Now for some common notation. For a field $\mathbb K$, we let  $M_{n\times m}(\mathbb K)$ 
 denote the set of all $m\times n$ matrices with values in $\mathbb K$ (usually here $\mathbb K$ will 
 be either $\mathbb R$ or $\mathbb C$). Group representations will typically be denoted by $\Pi$ or 
 by $D$ depending on whether the group is a Lie group or finite group, and Lie algebra representations 
@@ -62,13 +64,19 @@ the set of morphisms between them will be denoted $Hom(M, N)$.
 
 Let $V$ be a $n$-dimensional $\mathbb K$-vector space. We denote its dual by $V^*$, and recall for 
 finite dimensional vector spaces there is an isomorphism $V\rightarrow V^*$. An \textbf{endomorphism} 
-of $V$ is an homomorphism $\phi : V\rightarrow V$. If $\phi$ is continuous (an isomorphism $V\rightarrow 
+of $V$ is an homomorphism $\phi : V\rightarrow V$. If $\phi$ is invertible (an isomorphism $V\rightarrow 
 V$) then we will call $\phi$ an \textbf{automorphism}. We will denote its automorphism group of $V$ by $Aut(V)$ 
 and its endomorphism ring by $End(V)$. The group $Aut(V)$ is naturally isomorphic to the group 
 $GL(V) := GL(\mathbb K^n)$ of $n\times n$ invertible matrices with values in $\mathbb K$ (as once 
 a basis is chosen for $V$, invertible linear maps $V\rightarrow V$ are in bijection with invertible matrices), 
 and the group $End(V)$ is naturally isomorphic to $gl(V) := gl(\mathbb K^n)$, the set of all $n\times n$ 
 matrices with values in $\mathbb K$. 
+
+Most of these notes will go over general theory with occasional examples in each section to provide insight into 
+when these theorems and definitions will be relevant in physics. We will primarily be discussing Lie groups, but 
+after discussing Lie groups there will be some sections on the representation theory of finite groups and character 
+theory. We will also explicitly delve into some important examples for physics, including the representation theory 
+of $SU(N)$, the Poincar\'e group, and the hypercubic group.
 
 \newpage
 \section{Lie Groups, Algebras and Representations}
@@ -174,8 +182,8 @@ of operators $A, B\in End(V)$.
 	algebra homomorphism\footnote{Meaning it preserves $+$ and $[\cdot, \cdot$]}  
 	$\mathfrak g\rightarrow End(V)$. A representation of a Lie group $G$ is a Lie group 
 	homomorphism $G\rightarrow Aut(V)$, where $Aut(V)$ denotes the space of vector space 
-	automorphisms on $V$. Every Lie algebra homomorphism can be extended in the 
-	obvious manner to a Lie group homomorphism.
+	automorphisms on $V$. If a representation is injective then we call it \textbf{faithful}, in which 
+	case different group elements map to different matrices in $Aut(V)$. 
 \end{definition}
 
 \begin{definition}[Dimension]
@@ -191,12 +199,6 @@ of operators $A, B\in End(V)$.
 		\Pi(g) = S\Pi(g) S^{-1}~
 		\label{eq:equivalent}
 	\end{equation}
-\end{definition}
-
-\begin{definition}[Faithful]
-	A representation $\Pi : G\rightarrow Aut(V)$ is \textbf{faithful} if $\Pi$ is injective. In other words, if 
-	$\Pi$ is a faithful representation, then different group elements will map to different matrices in 
-	$Aut(V)$. 
 \end{definition}
 
 Equivalent representations are essentially the same representation, since a conjugation like in 
@@ -264,8 +266,8 @@ the converse only holds in certain cases where the Lie group has a simple struct
 $\mathfrak g$ and $G$ by exponentiation, $X\mapsto \exp(iX)$, and consider the following theorem.
 \begin{theorem}
 	Let $G$ and $H$ be Lie groups with algebras $\mathfrak g$ and $\mathfrak h$, and let $\Phi : G\rightarrow H$ be a 
-	Lie group homomorphism. Then, there is an unique homomorphism of Lie algebras $\phi : \mathfrak g\rightarrow\mathfrak 
-	h$ such that:
+	Lie group homomorphism. Then, there is an unique homomorphism of Lie algebras $\phi : 
+	\mathfrak g\rightarrow\mathfrak h$ such that:
 	\begin{equation}
 		\Phi(e^{iX}) = e^{i\phi(X)}
 	\end{equation}
@@ -324,11 +326,11 @@ You should know this fact inherently from physics: it is the statement that rota
 differently than 3D rotations, i.e. a full $2\pi$ rotation of a spin state is not the identity. The representations of $SU(2)$ are 
 exactly the different angular momentum systems; a system with angular momentum $j$ has Hilbert space $V_m$ with 
 $m = 2j$, as the dimension of the Hilbert space is $2j + 1 = m + 1$. The angular momentum operators on this Hilbert space 
-are $\frac{1}{2}\pi_m(\sigma_i)$, where $\sigma_i$ are the Pauli matrices which generate $\mathfrak{su}(2)$. So, a system with 
-integer angular momentum $j$ ($m$ even) has is described representation of $\mathfrak{su}(2)\cong\mathfrak{so}(3)$ which is 
-induced by a representation of the 3D rotation group $SO(3)$, and thus these rotations must behave like 3D rotations. In the 
-half integer case, there is no corresponding representation $\Sigma_m$ of $SO(3)$, and thus quantum mechanical rotations 
-do not need to behave like rotations in $SO(3)$. 
+are $\frac{1}{2}\pi_m(\sigma_i)$, where $\sigma_i$ are the Pauli matrices which generate $\mathfrak{su}(2)$. So, a system 
+with integer angular momentum $j$ ($m$ even) has is described representation of $\mathfrak{su}(2)\cong\mathfrak{so}(3)$ 
+which is induced by a representation of the 3D rotation group $SO(3)$, and thus these rotations must behave like 3D rotations. 
+In the half integer case, there is no corresponding representation $\Sigma_m$ of $SO(3)$, and thus quantum mechanical 
+rotations do not need to behave like rotations in $SO(3)$. 
 
 \newpage
 \section{Irreducible Representations}
@@ -354,9 +356,7 @@ then we call $\pi$ an \textbf{irreducible representation}.
 \end{definition}
 
 Note that saying $V$ is an irreducible subspace of itself is the same as saying that the representation $V$ 
-is irreducible. 
-
-Because we are studying Lie theory in the context of physics, we are interested in representations of 
+is irreducible. Because we are studying Lie theory in the context of physics, we are interested in representations of 
 symmetry groups. In particular, these groups are unitary, and so are the representations of these groups.
 \begin{definition}[Unitary]
 	Let $\Pi : G\rightarrow Aut(V)$ be a representation. Then $\Pi$ is an \textbf{unitary representation} if $\Pi(g)$ 
@@ -451,13 +451,6 @@ see equations written out in physics books that look like:
 All this means is that if we tensor together the fundamental with the anti-fundamental, it splits as a direct sum of the adjoint 
 plus the singlet. We will discuss some of the common irreps of Lie groups in the following subsections.
 
-\subsection{The Fundamental Representation of $SU(N)$}
-
-$SU(N)$ plays a central role in the Standard model, so its representations are very relevant. 
-Although we will describe its full representation theory later in Section~\ref{sec:su_n}, there we will 
-describe one of its specific representations here. Called the \textbf{fundamental representation} of 
-$SU(N)$, this is the representation $(\pi, V)$ of order $N$. 
-
 \subsection{The Adjoint Representation}
 
 The adjoint representation is perhaps the most canonical of representations because every Lie 
@@ -534,8 +527,8 @@ We will next define how to complexify a real vector space and treat it as a $\ma
 will extend naturally to any Lie algebra (as a Lie algebra has a vector space structure in addition to its Lie 
 bracket) in a functorial manner. 
 \begin{definition}[Complexification]
-	Let $V$ be a vector space over $\mathbb R$. Then the \textbf{complexification} of $V$, denoted $V_\mathbb{C}$, is the set of 
-	formal linear combinations:
+	Let $V$ be a vector space over $\mathbb R$. Then the \textbf{complexification} of $V$, denoted $V_\mathbb{C}$, is the 
+	set of formal linear combinations:
 	\begin{equation}
 		V_\mathbb{C} = \{v_1 + iv_2 : v_1, v_2\in V\}
 	\end{equation}
@@ -546,15 +539,15 @@ bracket) in a functorial manner.
 	This extends by linearity to all of $V_\mathbb{C}$, making it into a vector space over $\mathbb C$. 
 \end{definition}
 
-The complexification of a vector space is in itself also a real vector space of dimension $2dim(V)$, since as a set it is isomorphic to 
-the direct sum $V\oplus V$. For a Lie algebra, we can use this construction to complexify the structure of the algebra as a vector 
-space, and also extend the bracket to this new complex space. The complexification is also the ``best" way we can embed a real 
-Lie algebra into a complex Lie algebra, in the sense that it is a universal attractor in the category of maps $\mathfrak g\rightarrow 
-h$, where $h$ is a complex Lie algebra. 
+The complexification of a vector space is in itself also a real vector space of dimension $2dim(V)$, since as a set it is 
+isomorphic to the direct sum $V\oplus V$. For a Lie algebra, we can use this construction to complexify the structure of the 
+algebra as a vector space, and also extend the bracket to this new complex space. The complexification is also the ``best" way 
+we can embed a real Lie algebra into a complex Lie algebra, in the sense that it is a universal attractor in the category of maps 
+$\mathfrak g\rightarrow h$, where $h$ is a complex Lie algebra. 
 
 \begin{theorem}
-	Let $\mathfrak g$ be a finite dimensional real Lie algebra. Let $\mathfrak g_\mathbb{C}$ be its complexification as a vector 
-	space. Then the bracket $[\cdot, \cdot]$ extends uniquely to $\mathfrak g_\mathbb{C}$ by:
+	Let $\mathfrak g$ be a finite dimensional real Lie algebra. Let $\mathfrak g_\mathbb{C}$ be its complexification as a 
+	vector space. Then the bracket $[\cdot, \cdot]$ extends uniquely to $\mathfrak g_\mathbb{C}$ by:
 	\begin{equation}
 		[X_1 + iX_2, Y_1 + iY_2] := ([X_1, Y_1] - [X_2, Y_2]) + i([X_2, Y_1] + [X_1, Y_2])
 	\end{equation}
@@ -563,15 +556,15 @@ h$, where $h$ is a complex Lie algebra.
 
 \begin{prop}
 	Let $\mathfrak g\subset M_n(\mathbb C)$ be a real Lie algebra, and suppose that $iX\not\in\mathfrak g$ for $X\in
-	\mathfrak g$. Then $\mathfrak g_\mathbb{C}$ is isomorphic to the set of matrices in $M_n(\mathbb C)$ of the form $X + iY$ 
-	with $X, Y\in\mathfrak g$. 
+	\mathfrak g$. Then $\mathfrak g_\mathbb{C}$ is isomorphic to the set of matrices in $M_n(\mathbb C)$ of the form 
+	$X + iY$ with $X, Y\in\mathfrak g$. 
 \end{prop}
 
 \begin{theorem}
-	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$, and let $\iota : \mathfrak g\rightarrow
-	\mathfrak g_\mathbb{C}$ be the canonical inclusion. Then $\mathfrak g$ is universal in the sense that if $\mathfrak h$ is any 
-	complex Lie algebra and $f : \mathfrak g\rightarrow\mathfrak h$ is a Lie algebra homomorphism, then we can factor $f$ 
-	through $\mathfrak g_\mathbb{C}$:
+	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$, and let $\iota : \mathfrak 
+	g\rightarrow\mathfrak g_\mathbb{C}$ be the canonical inclusion. Then $\mathfrak g$ is universal in the sense that if 
+	$\mathfrak h$ is any complex Lie algebra and $f : \mathfrak g\rightarrow\mathfrak h$ is a Lie algebra homomorphism, 
+	then we can factor $f$ through $\mathfrak g_\mathbb{C}$:
 	\[\begin{tikzcd}
 		\mathfrak g\arrow[r, "\iota"]\arrow[dr, swap, "f"] & \mathfrak g_\mathbb{C}\arrow[d, "\overline{f}"] \\
 		& \mathfrak h \\
@@ -583,9 +576,9 @@ Some common complexifications which are useful are:
 	\item $\mathfrak su(N)_\mathbb{C}\cong \mathfrak{sl}(N; \mathbb C)$
 \end{itemize}
 
-Complexification leaves irreps invariant, so studying the irreps of a complexified Lie algebra is equivalent to studying the irreps of 
-the original algebra. This will be very useful as it will allow us to study the irreps of $\mathfrak{su}(N)$ through the irreps of 
-$\mathfrak{sl}(n; \mathbb C)$. 
+Complexification leaves irreps invariant, so studying the irreps of a complexified Lie algebra is equivalent to studying the 
+irreps of the original algebra. This will be very useful as it will allow us to study the irreps of $\mathfrak{su}(N)$ through the 
+irreps of $\mathfrak{sl}(n; \mathbb C)$. 
 
 \begin{theorem}
 	Let $\mathfrak g$ be a real Lie algebra with complexification $\mathfrak g_\mathbb{C}$. Then every finite dimensional 
@@ -627,7 +620,8 @@ sum of Lie algebras, then in fact there is a way to get irreps from their indivi
 	the irreps of $\mathfrak g\oplus\mathfrak h$ are precisely the tensor products:
 	\begin{equation}
 		\{(\pi_a\otimes\phi_b, V_a\otimes W_b)\}_{a, b}
-	\end{equation}
+	\end{equation}~
+	\label{theorem:sum_irreps}
 \end{theorem}
 
 \subsection{Products}
@@ -665,7 +659,8 @@ then the tensor product representation of $\mathfrak g$ is the representation:
 	\pi_1\otimes\pi_2: \mathfrak g &\rightarrow End(V\otimes W)\\
 	(\pi_1\otimes\pi_2)(X) &= \pi_1(X)\otimes I + I\otimes\pi_2(X)
 \end{align}
-Although this looks a bit clunky, this exponentiates to the correct representation of G since $[\pi_1(X)\otimes I, I\otimes\pi_2(X)] = 0$.
+Although this looks a bit clunky, this exponentiates to the correct representation of G since $[\pi_1(X)\otimes I, 
+I\otimes\pi_2(X)] = 0$.
 \begin{equation}
 	e^{i(\pi_1\otimes\pi_2)(X)} = e^{i\pi_1(X)\otimes I + iI\otimes\pi_2(X)} = e^{i\pi_1(X)}\otimes e^{i\pi_2(X)}
 \end{equation}
@@ -685,46 +680,18 @@ Lie groups $(\Pi, V)$, this induces the representation $\Pi^* : G\rightarrow Aut
 	\Pi^*(g) = \Pi(g^{-1})^T
 \end{equation}
 
-In physics, we will often see the generators of the fundamental representation written with less jargon. If $T^a_r = \pi(X^a)$ are 
-the images of the generators $\{X^a\}$ of a Lie algebra $\mathfrak g$ in a representation $r$, then the generators of the conjugate 
-representation $T^a_{\bar r}$ are:
+In physics, we will often see the generators of the fundamental representation written with less jargon. If $T^a_r = \pi(X^a)$ 
+are the images of the generators $\{X^a\}$ of a Lie algebra $\mathfrak g$ in a representation $r$, then the generators of the 
+conjugate representation $T^a_{\bar r}$ are:
 \begin{equation}
 	(T^a_{\bar r})_{ij} = - (T^a_r)^*_{ij} = -(T^a_r)_{ji}
 \end{equation}
-As a point of notation, if $\bf{r}$ is denoting a representation of $G$ (i.e. for $SU(3)$ we denote the fundamental by $\bf{3}$) then 
-we will denote its conjugate representation by $\bf{\bar r}$. The conjugate of the fundamental representation is called the 
+As a point of notation, if $\bf{r}$ is denoting a representation of $G$ (i.e. for $SU(3)$ we denote the fundamental by $\bf{3}$) 
+then we will denote its conjugate representation by $\bf{\bar r}$. The conjugate of the fundamental representation is called the 
 \textbf{anti-fundamental} representation. 
 
 We define a representation to be \textbf{real} if it equals its conjugate representation. In the case of $SU(N)$, for $N > 2$ the 
 fundamental representation is complex. For arbitrary $SU(N)$, the adjoint representation is always a real representation. 
-
-\newpage
-\section{Finite Groups and Characters}
-
-Almost all of the theory we have discussed so far is in application to Lie groups and Lie algebras, which is the basis for how we 
-study continuous symmetries in physics. However, it is also important to consider representations of finite groups, as these 
-correspond to discrete symmetries. The representation theory of finite groups takes on a slightly different flavor than that of 
-Lie groups; it is a bit more combinatorial, and we need to use different machinery than described above with Lie groups and 
-algebras. To emphasize we are using a finite group, when we discuss a representation of a finite group $G$ we will use the 
-notation:
-\begin{equation}
-	D : G\rightarrow Aut(V)
-\end{equation}
-and refer to $(D, V)$ as the representation of $G$. There are a few immediate theorems right off the bat pertaining to finite groups 
-that we will not prove.
-\begin{theorem}
-	Every representation of a finite group is equivalent to a unitary representation.
-\end{theorem}
-This fact means that for a finite group $G$, every representation $(D, V)$ of $G$ is completely reducible. So, if we can 
-develop the machinery to classify all the irreps of $G$, then we can know exactly every representation of $G$. 
-
-\subsection{The Regular Representation}
-
-\subsection{Symmetric groups}
-
-\section{Invariants}
-
-\section{Roots and Weights}
 
 \label{sec:su_n}
 \section{Representations of $SU(N)$}
@@ -740,7 +707,7 @@ The dimension of $U(N)$ as a real Lie group is $N^2$, and the dimension of $SU(N
 
 When discussing the representation theory of $SU(n)$, one will often encounter the algebras $\mathfrak{sl}(N; 
 \mathbb C)$, and it behaves in quite a similar manner to $\mathfrak{su}(N)$. These $\mathfrak{sl}(N; \mathbb C)$ 
-algebras are simply the complexification of the real valued $\mathfrak{su}{N}$ algebras, i.e. 
+algebras are simply the complexification of the real valued $\mathfrak{su}(N)$ algebras, i.e. 
 $\mathfrak{sl}(N; \mathbb C)\cong \mathfrak{su}(N)_\mathbb{C}$, and as we have discussed earlier, this implies 
 that they share the same irreps as $\mathfrak{su}(N)$. So, if you encounter an article about the irreps of 
 $\mathfrak{sl}(N; \mathbb C)$, fear not-- for all intents and purposes, the article is about $\mathfrak{su}(N)$. 
@@ -765,29 +732,454 @@ direct sum of irreps of $SU(2)$. For example, the equation for adding angular mo
 	\bf{j_1}\otimes j_2 = \bigoplus_{j = |j_1 - j_2|}^{j_1 + j_2} j
 \end{equation}
 allows one to fully unravel the addition of angular momentum in quantum mechanics. This may be viewed as a mathematical 
-statement about adding representations; when the tensor product representation $\pi_{2j_1}\otimes\pi_{2j_2}$ of $\mathfrak{su}(2)$ 
-is formed, it can be decomposed into the direct sum representation $\pi_{|j_1 - j_2|}\oplus ...\oplus\pi_{j_1 + j_2}$ of $\mathfrak{su}(2)$. 
+statement about adding representations; when the tensor product representation $\pi_{2j_1}\otimes\pi_{2j_2}$ of 
+$\mathfrak{su}(2)$ is formed, it can be decomposed into the direct sum representation $\pi_{|j_1 - j_2|}\oplus ...\oplus
+\pi_{j_1 + j_2}$ of $\mathfrak{su}(2)$. 
 
 \subsection{$SU(3)$ and the Quark Model}
 
-\subsection{$SU(N)$}
+The basic idea behind classifying the representations of $SU(3)$ is to reduce the problem down to two copies of $SU(2)$. 
+Although this is not immediate from looking at the algebra, there is an analogy in $SU(3)$ to raising and lowering operators. 
+In fact, there are two raising and two lowering operators for $SU(3)$, and we will show that we can label the states of 
+a $SU(3)$ representationwith two indices $(\mu_1, \mu_2)$, as opposed to the single index $m$ we needed to label the 
+states of a $SU(2)$ representation. After we study this classification, the next section (Section~\ref{sec:weights}) will 
+generalize this study greatly.
 
-\section{Representations of other groups}
+Note that in this section we will work in the complexification $\mathfrak g := \mathfrak{sl}(3; \mathbb C) = 
+\mathfrak{su}(3)_\mathbb{C}$ of $\mathfrak{su}(3)$. In general, we will need to work in the complexification to create the 
+raising and lowering operators. $\mathfrak{g}$ is an 8 dimensional algebra, and we will work with the following basis 
+elements. First, the two elements in the Cartan subalgebra, which we will later define:
+\begin{equation}
+	H_1 = \begin{pmatrix} 1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 0 \end{pmatrix} \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;  H_2 = 
+	\begin{pmatrix}0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1\end{pmatrix} 
+\end{equation}
+Next, the raising and lowering operators. The raising operators will be the first two $X_i$ matrices in this list:
+\begin{equation}
+	X_1 = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \;\;\;\;\;\;\;\;\;\;\;\;\; X_2 = \begin{pmatrix} 0 & 0 & 0 \\ 
+	0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix} \;\;\;\;\;\;\;\;\;\;\;\;\; X_3 = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 
+	\end{pmatrix} 
+\end{equation}
+and the lowering operators will be the first two $Y_i$ matrices found here:
+\begin{equation}
+	Y_1 = \begin{pmatrix} 0 & 0 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \;\;\;\;\;\;\;\;\;\;\;\;\; Y_2 = \begin{pmatrix} 0 & 0 & 0 \\ 
+	0 & 0 & 0 \\ 0 & 1 & 0 \end{pmatrix} \;\;\;\;\;\;\;\;\;\;\;\;\; Y_3 = \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 1 & 0 & 0 
+	\end{pmatrix}
+\end{equation}
+
+I will not list out all the commutation relations for $\mathfrak{g}$, only the ones which are relevant to us, namely 
+how the relations deal with the Cartan subalgebra $\{H_i\}$. The defining property of these matrices is that they commute with 
+one another, and clearly $[H_i, H_j] = 0$. The important part about the Cartan subalgebra is that the two basis elements 
+$H_1$ and $H_2$ can be simultaneously diagonalized. While this is obvious here because of how we chose the basis the 
+matrices are written in, it is less obvious in a general Lie algebra, but the principle still holds.
+
+For $i\in\{1, 2\}$, we are also interested in how the matrices commute with the elements of the Cartan algebra:
+\begin{equation}
+	[H_i, X_i] = 2X_i\;\;\;\;\;\;\;\;\;\;\;\;\; [H_i, Y_i] = -2Y_i \;\;\;\;\;\;\;\;\;\;\;\;\; [X_i, Y_i] = H_i
+\end{equation}
+
+Suppose that $(\pi, V)$ is an representation of $\mathfrak g$. Then note that $[\pi(H_i), \pi(H_j)] = \pi([H_i, H_j]) = 0$, so 
+no matter what the representation $\pi$ is, we can simultaneously diagonalize $\pi(H_1)$ and $\pi(H_2)$. We define 
+a \textbf{weight} to be a simultaneous eigenvalue $\mu\in\mathbb C^2$ of $\{H_1, H_2\}$, i.e. a weight is a pair 
+$\mu = (m_1, m_2)$ such that there is $v\in V\setminus\{0\}$ satisfying:
+\begin{align}
+	\pi(H_1) v &= m_1 v \\
+	\pi(H_2) v &= m_2 v
+\end{align}
+Such a nonzero $v$ is called a \textbf{weight vector} corresponding to $\mu$. Note that the set of such $v$'s (along with 
+the $0$ vector) form a subspace of $V$, and we will call this the \textbf{weight space} of $\mu$. The dimension of the weight 
+space of $\mu$ is called the \textbf{multiplicity} of the weight $\mu$. The following lemma are useful.
+\begin{lemma}
+	Let $(\pi, V)$ be a representation of $\mathfrak g$. 
+	\begin{enumerate}
+		\item $(\pi, V)$ has at least one weight.
+		\item If $\mu = (m_1, m_2)$ is a weight for $(\pi, V)$, then $m_1$ and $m_2$ are both integers.
+	\end{enumerate}
+\end{lemma}
+The first part follows from simultaneously diagonalizing $\pi(H_1)$ and $\pi(H_2)$ and using the fact that every operator on 
+a complex vector space has an eigenvalue because $\mathbb C$ is algebraically closed. The second part of the lemma 
+follows from the commutation relations of $\mathfrak g$, and is very similar to how for each representation $\pi_2$ of 
+$\mathfrak{su}(2)$, $\pi_2(J_3)$ has integer eigenvalues. Indeed, in the case of $\mathfrak{su}(2)$, $J_3$ is the analog 
+of the Cartan elements $H_1$ and $H_2$, and its eigenvalues $m$ are the weights of the representation. The difference now 
+is that we have two ``copies" of this operator, and so now our weights are ordered pairs!
+
+Weights are representation dependent, and we will soon see how the weights of a representation fully describe it, 
+and how to compute the weights. Before doing this, we should look for an analog of weights that are intrinsic to the algebra 
+$\mathfrak g$ and which does not depend on the representation. This is called a root, and a root will essentially tell us 
+the direction that we can ``raise and lower" states in for any representation of $\mathfrak g$. 
+
+\begin{figure}[H]
+% \[ \] also works
+\centering
+    \begin{subfigure}[t]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+    	%\node[shape = circle, draw = black, fill] (A) at (-1,0) {};
+    	\node (A) at (-.5,0) {};
+    	\node (B) at (.5,0) {};
+    	\node (C) at (0, -.866) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(1, 0) = \bf{3}$}
+    \end{subfigure}
+~
+	\begin{subfigure}[t]{.3\textwidth}
+	\centering
+    	\begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+    	%\node[shape = circle, draw = black, fill] (A) at (-1,0) {};
+    	\node (A) at (-1,0) {};
+	\node (B) at (-.5, .866) {};
+    	\node (C) at (0,0) [label = below:{2}] {};
+	\node (D) at (.5, .866) {};
+    	\node (E) at (1,0) {};
+	\node (F) at (-.5, -.866) {};
+	\node (G) at (.5, -.866) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(1, 1) = \bf 8$}
+	\end{subfigure}
+~
+    \begin{subfigure}[t]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+    	%\node[shape = circle, draw = black, fill] (A) at (-1,0) {};
+    	\node (A) at (-.5,0) {};
+    	\node (B) at (.5,0) {};
+    	\node (C) at (0, .866) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(0, 1) = \bf{\overline{3}}$}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+% \[ \] also works
+\centering
+    \begin{subfigure}[t]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+   	\node (A) at (-.5,0) {};
+    	\node (B) at (.5,0) {};
+    	\node (C) at (0, .866) {};
+	\node (D) at (-1, .866) {};
+	\node (E) at (1, .866) {};
+	\node (F) at (0, -.866) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(2, 0) = \bf{6}$}
+    \end{subfigure}
+~
+	\begin{subfigure}[t]{.3\textwidth}
+	\centering
+    	\begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+   	\node (A) at (-.5, .433) [label = below:{2}] {};
+    	\node (B) at (.5, .433) [label = below:{2}] {};
+    	\node (C) at (0, 1.299) {};
+	\node (D) at (-1, 1.299) {};
+	\node (E) at (1, 1.299) {};
+	\node (F) at (0, -.433) [label = below:{2}] {};
+	\node (G) at (-1, -.433) {};
+	\node (H) at (1, -.433) {};
+   	\node (I) at (-1.5, .433) {};
+    	\node (J) at (1.5, .433) {};
+   	\node (K) at (-.5, -1.299) {};
+    	\node (L) at (.5, -1.299) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(2, 1) = \bf 15$}
+	\end{subfigure}
+~
+    \begin{subfigure}[t]{.3\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style = {draw = black, shape = circle, fill, inner sep = 0pt, minimum size = .2cm}]
+    	%\node[shape = circle, draw = black, fill] (A) at (-1,0) {};
+    	\node (A) at (0, .433) {};
+    	\node (B) at (-.5, -.433) {};
+    	\node (C) at (.5, -.433) {};
+	\node (D) at (-1, .433) {};
+	\node (E) at (1, .433) {};
+    	\node (F) at (-.5, 1.299) {};
+    	\node (G) at (.5, 1.299) {};
+    	\node (H) at (-1.5, 1.299) {};
+    	\node (I) at (1.5, 1.299) {};
+	\node (J) at (0, -1.299) {};
+    \end{tikzpicture}
+    \vspace{.3cm}
+    \caption*{$(3, 0) = \bf{\overline{10}}$}
+    \end{subfigure}
+\end{figure}
+
+\subsection{Fundamental Representation of SU(N)}
+
+\subsection{General Representations of $SU(N)$}
+
+\subsection{Young Diagrams}
+
+
+\section{Roots and Weights}
+\label{sec:weights}
+
+The general theory of roots and weights we studied in detail for $SU(3)$ will be expanded on in this section.
+
+TODO: relationship between the Cartan subalgebra and Casimir operators? Cartan algebra gives the weights of a 
+representation, and for a semisimple algebra the highest weight can be used to label the representation. Casimirs 
+also provide a label for the representation though, right?
+
+\section{Symmetries of Spacetime}
 
 \subsection{The Lorentz Group}
 
-Let $g_{\mu\nu} := diag(1, -1, -1, -1)$ be the standard Minkowski metric. The \textbf{Lorentz group}, denoted $SO(1, 3)$, is the subgroup 
-of $M_{4\times 4}(\mathbb R)$ which leaves $g$ invariant under conjugation, i.e. a 4 by 4 matrix $\Lambda$ is in $SO(1, 3)$ iff:
+Let $g_{\mu\nu} := diag(1, -1, -1, -1)$ be the standard Minkowski metric. The \textbf{Lorentz group}, denoted $SO(3, 1)$, is the 
+subgroup of $M_{4\times 4}(\mathbb R)$ which leaves $g$ invariant under conjugation, i.e. a 4 by 4 matrix $\Lambda$ is in 
+$SO(3, 1)$ iff:
 \begin{equation}
 	\Lambda^T g\Lambda = g
 \end{equation}
-As you know from Special Relativity, flat spacetime has a Minkowski metric and elements of the Lorentz group boost states into different frames. 
-One also may have studied the transformation properties of the Lorentz group in a quantum mechanics class; of primary interest to us is its 
-Lie algebra. The algebra $\mathfrak{so}(1, 3)$ has 6 generators, $J_i$ and $K_i$ for $i\in\{1, 2, 3\}$. They satisfy:
+
+As you know from Special Relativity, flat spacetime has a Minkowski metric and elements of the Lorentz group boost states 
+into different frames. One also may have studied the transformation properties of the Lorentz group in a quantum mechanics 
+class; of primary interest to us is its Lie algebra. The algebra $\mathfrak{so}(3, 1)$ has 6 generators, $J_i$ and $K_i$ for 
+$i\in\{1, 2, 3\}$. They satisfy the algebra:
+\begin{align}
+	[J_i, J_j] &= i\epsilon_{ijk} J_k \nonumber\\
+	[J_i, K_j] &= i\epsilon_{ijk} K_k \label{eq:lorentz_algebra} \\
+	[K_i, K_j] &= -i\epsilon_{ijk} J_k\nonumber
+\end{align}
+The elements $J_i$ generate \textbf{rotations} (note their algebra is $\mathfrak{so}(3)$) and hence are generators of 
+$SO(3)$, while the $K_i$ elements generate boosts. 
+
+Because the Lorentz group implements Lorentz transformations, understanding its representation theory is crucial. 
+Fortunately, you've likely been using representations of the Lorentz group without even knowing it. In particular, scalars, 
+vectors, and tensors transform in different representations of the Lorentz group. Consider a vector $V_\mu$. This lives 
+in $\mathbb R^4$, and we allow a Lorentz transformation $\Lambda\in SO(3, 1)$ to act on the vector as:
+\begin{equation}
+	V^\mu\mapsto \Lambda^\mu_\nu V^\nu
+\end{equation}
+Suppressing the indices, this looks like $V\mapsto D(\Lambda) V$, where $D(\Lambda)$ has the components 
+$\Lambda^{\mu\nu}$, i.e. $D$ is simply the identity. Thus whenever we work with vectors in special relativity, we are 
+simply using the \textbf{fundamental representation} of the Lorentz group. Written out explicitly, this representation is 
+$id : SO(3, 1)\rightarrow Aut(\mathbb R^4)$, $\Lambda\mapsto \Lambda_{\mu\nu}$. Here we are viewing $\Lambda
+\in SO(3, 1)$ as an abstract element of a group (which is defined as a matrix group), and we explicitly view $id(\Lambda)$ 
+as a $4\times 4$ matrix which has components $\Lambda^{\mu\nu}$. We will denote this fundamental representation 
+by $\bf{4}$, its dimension.
+
+In a similar way, scalars and tensors are also representations of the Lorentz group. Scalars obviously live in the singlet 
+representation $\bf{1}$ since a scalar $\phi$ does not transform, i.e $D(\Lambda)\phi = \phi$. 2-tensors $T^{\mu\nu}$ live in 
+the tensor product representation $\bf 16 = 4\otimes 4$, since under a Lorentz transformation $\Lambda\in SO(3, 1)$ they 
+transform as:
+\begin{equation}
+	T^{\mu\nu}\mapsto \Lambda^\mu_\rho \Lambda^\nu_\sigma T^{\rho\sigma}
+\end{equation}
+This can be written out as a matrix equation $T\mapsto D(\Lambda) T$, where $T$ is viewed as a 16 dimensional vector 
+and $D(\Lambda) = \Lambda\otimes\Lambda\in Aut(\mathbb R^{16})$ (viewing $\Lambda$ as a matrix) is a $16\times 16$ 
+dimensional matrix. Thus 2-tensors $T^{\mu\nu}$ live in the representation $\bf 16$. 
+
+Unlike the representations $\bf 1$ and $\bf 4$ that we have seen previously, the representation $\bf 16$ is a reducible 
+representation. Let $(D_{16}, V_{16})$ be this representation. We can define 3 subspaces of $V_{16}$ as follows:
+\begin{align}
+	W &:= \left\{\frac{1}{4}T^\alpha_\alpha g^{\mu\nu} : T^{\mu\nu}\in V_{16}\right\}\nonumber \\
+	A &:= \left\{\frac{1}{2}(T^{\mu\nu} - T^{\nu\mu}) : T^{\mu\nu} \in V_{16}\right\} \label{eq:sixteen_irreps} \\
+	S &:= \left\{\frac{1}{2}(T^{\mu\nu} + T^{\nu\mu}) - \frac{1}{4} T^\alpha_\alpha g^{\mu\nu}: T^{\mu\nu} \in V_{16}\right\} 
+	\nonumber
+\end{align}
+These are respectively the subspaces of traces, antisymmetric tensors, and traceless symmetric tensors. Note that $dim(W) = 
+1$, $dim(A) = 6$, and $dim(S) = 9$, so we will denote them respectively by $\bf 1$, $\bf 4$, and $\bf 9$. 
+
+The space $V_{16}$ of all 2-tensors splits as a direct sum of these subspaces, as each 
+tensor $T^{\mu\nu}$ can be written as a sum of a symmetric and antisymmetric component, and the symmetric component 
+can further be split into a trace part and a traceless part. Thus we have the decomposition:
+\begin{equation}
+	V_{16} = W\oplus A\oplus S
+\end{equation}
+which is written as $\bf 16 = 1\oplus 6\oplus 9$ if we denote them by their dimensionalities. Furthermore, each of these 
+subspaces is invariant under the action of the Lorentz group because tensor transformations preserve symmetry and 
+antisymmetry, and trace is a Lorentz singlet. The representation $\bf 6$ of antisymmetric tensors is the adjoint representation 
+because the Lorentz group has 6 generators, and we will later see its decomposition into irreps. The representation $\bf 9$ 
+of symmetric traceless tensors is irreducible. $\bf 9$ plays an important role in QFT, as 
+we will often attempt to decompose tensor operators into a sum of tensors which live in irreps of the Lorentz group\footnote{In 
+quantum mechanics, this procedure carried out for 
+Euclidean tensors $V_{ij}$ gives a similar decomposition, and the corresponding decomposition of symmetric and 
+traceless tensors gives an irreducible tensor operator for which you can apply the Wigner-Eckart theorem (although because 
+the dimensions are different this subspace is only 5 dimensional in QM)}. 
 
 
-\subsection{The Poincar\'{e} Groups}
+We now turn to the question of the irreps of the Lorentz group. Consider the following combination of the generators of 
+$\mathfrak{so}(3, 1)$:
+\begin{equation}
+	J_i^\pm := \frac{1}{2}(J_i \pm iK_i)
+\end{equation}
+These $\{J_i^\pm\}$ also generate $\mathfrak{so}(3, 1)$. More importantly, their algebra is easier to deal than how the 
+Lorentz algebra was previously cast:
+\begin{equation}
+	[J_i^\pm, J_j^\pm] = i\epsilon_{ijk} J_k^\pm \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+	[J_i^\pm, J_j\mp] = 0
+\end{equation}
+This makes it explicit that $\{J_i^+\}$ and $\{J_i^-\}$ each generate their own independent $\mathfrak{su}(2)$ subalgebra 
+of $\mathfrak{so}(3, 1)$. Because of this, the entire algebra $\mathfrak{so}(3, 1)$ has a decomposition as a sum:
+\begin{equation}
+	\mathfrak{so}(3, 1) = \mathfrak{su}(2)\oplus\mathfrak{su}(2)
+\end{equation}
+
+From this decomposition, we can classify \textbf{all} the irreps of $\mathfrak{so}(3, 1)$ using 
+Theorem~\ref{theorem:sum_irreps}, which tells us that the irreps of a sum of Lie algebras are exactly the tensor products 
+of their individual irreps. Although we are summing two algebras together, their corresponding irreps are tensor products, not 
+sums. We previously classified the irreps of $\mathfrak{su}(2)$ completely and showed we could label each irrep with a 
+(half) integer $p\in\{0, \frac{1}{2}, 1, \frac{3}{2}, ...\}$ (the label $p$ was previously denoted by $j$ and identified as the 
+angular momentum), and the corresponding irrep $\pi_p$ has dimension $2p + 1$. Thus, \textbf{we can label all the irreps 
+of $SO(3, 1)$ by a pair}:
+\begin{equation}
+	(p, q)
+\end{equation}
+with $p, q\in\{0, \frac{1}{2}, 1, \frac{3}{2}, ...\}$, and $(p, q)$ denoting the tensor product representation $\pi_p\otimes\pi_q$. 
+We also see that the irrep $(p, q)$ has a dimensionality $D^{p, q}$ given by:
+\begin{equation}
+	D^{p, q} = dim(\pi_p\otimes\pi_q) = (2p + 1)(2q + 1)
+\end{equation}
+and furthermore, that the irrep of dimension $\bf k$ is the unique such irrep of that dimension.
+
+The fundamental irrep $\bf 4$ can be denoted in this convention as $(\frac{1}{2}, \frac{1}{2})$, and the irrep 
+$\bf 9$ of symmetric traceless tensors is denoted $(1, 1)$. If $p + q$ is an integer we call the irrep $(p, q)$ a \textbf{tensor 
+representation} and if $(p, q)$ is a half integer we call the irrep a \textbf{spinor representation}. The reason for this comes 
+from QFT. If a field lives in a tensor irrep, then it will have a Lorentz index, which is why a spin $1$ particle like the photon 
+$A_\mu$ will have a single Lorentz index. 
+
+On the other hand, a spinor representation $(p, q)$ will have spinor indices and not Lorentz indices. The example of this 
+which should come to mind is Dirac spinors. The representations $(\frac{1}{2}, 0)$ and $(0, \frac{1}{2})$ are equivalent 
+the spin $\frac{1}{2}$ representations of $\mathfrak{su}(2)$, and so they are 2 dimensional and $J_i^+$ and $J_i^-$ 
+are represented on each by either the Pauli matrices, or zero. Physically, these correspond to right and left handed 
+spinors $\psi_L$ and $\psi_R$, which is why these spinors have 2 components. The \textbf{Dirac representation} 
+of $SO(3, 1)$ (also called the \textbf{bispinor} representation) is the sum $(\frac{1}{2}, 0)\oplus (0, \frac{1}{2})$, 
+and this is the representation that we typically use to study spin $\frac{1}{2}$ particles in QFT. The basis that shows 
+this decomposition of $(\frac{1}{2}, 0)\oplus (0, \frac{1}{2})$ explicitly is the Weyl basis, which is why Weyl spinors 
+decouple into 2 dimensional left and right spinors. 
+
+Of particular interest is the adjoint representation $\bf 6$. Although $D^{\frac{1}{2}, 1} = 6$, it is important to note that 
+$(\frac{1}{2}, 1)$ and $\bf 6$ are different representations. $\bf 6$ can actually be decomposed into a direct sum $\bf 6 = (1, 
+0)\oplus (0, 1)$, and so in fact $6$ is a reducible tensor representation. This should make physical sense, because the 
+antisymmetric field strength tensor $F_{\mu\nu}$ must live in a tensor representation because it is constructed from the 
+photon field $A_\mu$. One can decompose $F_{\mu\nu}$ into this invariant decomposition $(1, 0)\oplus (0, 1)$ by 
+taking specific linear combinations of $\vec E$ and $\vec B$ which rotate into themselves under boosts, as these spatial 
+vectors live in the representations $(1, 0)$ and $(0, 1)$ which each have dimension 3. 
+
+Now, consider a massive (or massless) vector field $A_\mu(x)$ like the photon. Because it is a vector field, it lives in the 
+fundamental $\bf 4$ of the Lorentz group. From QFT, we know that $A_\mu(x)$ will describe a spin 1 particle, which as 3 
+degrees of freedom if massive and 2 degrees of freedom if massless. How do these degrees of freedom relate to the 
+dimension of the representation $\bf 4$? We will see this in the next section when we study the Poincar\'e group: spin 
+embeds itself into fields via the \textbf{little group}, which is a subset of symmetries of the Poincar\'e group. In particular, the 
+fundamental representation $\bf 4$ of the Lorentz group decomposes into a sum $\bf 1\oplus 3$ of $SO(3)$, the little group 
+for massive spin 1 particles, and as these irreps correspond to angular momentum 0 and 1, we are able to embed scalar and 
+spin 1 particles into this particular representation of the Lorentz group. 
+ 
+
+\subsection{The Poincar\'{e} Group}
+
+The Poincar\'e group is perhaps one of the most important groups in physics; it is the group of all isometries of Minkowski 
+spacetime. Its representations are the setting of QFT, and at its core QFT is simply the best framework we have to combine 
+the laws of quantum mechanics with the Poincar\'e symmetry. This group is denoted $ISO(3, 1)$, and contains the 
+Lorentz group as a subgroup; in addition to the Lorentz group, the Poincar\'e group also contains space-time translations. 
+Its dimension is thus $10$, with $SO(3, 1)$ being identified as a 6 dimensional subgroup of $ISO(3, 1)$. 
+
+The Poincar\'e group must therefore have 10 generators. We will soon redefine some of these generators to form 
+the generators $\{J_i\}$, $\{K_i\}$ of the Lorentz group, but the Lorentz algebra, Equation~\ref{eq:lorentz_algebra}, 
+is not written covariantly. The generators of the Poincar\'e group are an antisymmetric tensor $J^{\mu\nu}$ (6 
+independent componenets) and a vector $P^\mu$ (4 independent components). These satisfy the Lie algebra:
+\begin{align}
+	i[J^{\mu\nu}, J^{\rho\sigma}] &= g^{\nu\rho} J^{\mu\sigma} - g^{\mu\rho} J^{\nu\sigma} - g^{\sigma\mu} J^{\rho\nu} 
+	+ g^{\sigma\nu} J^{\rho\mu} \nonumber \\
+	i[P^\mu, J^{\rho\sigma}] &= g^{\mu\rho} P^\sigma - g^{\mu\sigma} P^\rho \label{eq:poincare_algebra} \\
+	[P^\mu, P^\sigma] &= 0 \nonumber
+\end{align}
+
+To show the Lorentz algebra is embedded in the Poincar\'e group's Lie algebra, one can define the three vectors:
+\begin{equation}
+	\vec J := (J^{23}, J^{31}, J^{12}) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+	\vec K := (J^{01}, J^{02}, J^{03})
+\end{equation}
+and with these definitions, $\vec J$ and $\vec K$ reproduce the algebra in Equation~\ref{eq:lorentz_algebra}. The 
+vector $P^\mu$ is the new addition to this group; this is the four-momentum that we all know and love. The spatial 
+parts $P^i$ generate spatial translations (so $P^i$ is the 3-momentum) and the timelike part $H := P^0$ is the Hamiltonian 
+and generates time translation. Written out in this form, in addition to the relations in Equation~\ref{eq:lorentz_algebra}, 
+the Poincar\'e algebra includes:
+\begin{align}
+	[J_i, P_j] &= i\epsilon_{ijk} P_k \nonumber \\
+	[K_i, P_j] &= -iH\delta_{ij} \nonumber \\
+	[J_i, H] &= 0 \label{eq:poincare_algebra_2} \\
+	[P_i, H] &= 0 \nonumber \\
+	[K_i, H] &= -i P_i\nonumber
+\end{align}
+
+Particles in QFT live in the irreps of the Poincar\'e group, and as such they have labels which detail the irrep that they 
+live in. Because the Poincar\'e group is not compact, its unitary irreps are not finite dimensional. 
+
+These labels are the mass and the spin of the particle. TODO.
+
+\newpage
+\section{Finite Groups and Characters}
+
+Almost all of the theory we have discussed so far is in application to Lie groups and Lie algebras, which is the basis for how 
+we study continuous symmetries in physics. However, it is also important to consider representations of finite groups, as 
+these correspond to discrete symmetries. The representation theory of finite groups takes on a slightly different flavor than 
+that of Lie groups; it is a bit more combinatorial, and we need to use different machinery than described above with Lie groups 
+and algebras. However, the theorems that we are able to prove for finite groups are quite powerful and allow us to 
+easily characterize irreps in terms of the order of the group. 
+
+Let $G$ be a finite group, and let $\{D_a : G\rightarrow Aut(V_a)\}_{a\in R(G)}$ be all the irreducible representations of $G$, 
+with $R(G)$ indexing the all of these irreps. We will be working towards showing the following results, which will allow us to 
+constrain the structure of irreps of $G$ significantly.
+ \begin{itemize}
+ 	\item The set of irreps of $G$ is in bijection with the set of conjugacy classes of $G$. If $Conj(G)$ is the set of conjugacy 
+	classes, then:
+	\begin{equation}
+		|R(G)| = |Conj(G)|
+	\end{equation}
+	\item For every finite group, we have:
+	\begin{equation}
+		|G| = \sum_{a\in R(G)} dim(D_a)^2
+	\end{equation}
+ \end{itemize}
+
+There are a few immediate theorems right off the bat pertaining to finite groups that we will not prove.
+\begin{theorem}
+	Every representation of a finite group is equivalent to a unitary representation.
+\end{theorem}
+Since unitary representations are completely reducible, this means that every representation $(D, V)$ of a finite group $G$ is 
+completely reducible. So, if we can classify all the irreps of $G$, then we can know exactly every representation of $G$. 
+
+\subsection{Characters}
+
+\subsection{The Regular Representation}
+
+Given a finite group $G$, there is a canonical representation of dimension $N = |G|$, called the \textbf{regular representation} 
+of $G$, which we can construct as follows. Label an orthonormal basis of $\mathbb R^N$ by the elements in the group 
+$|g\rangle$, so $R^N = span\{|g\rangle\}_{g\in G}$. We define the regular representation $D_R : G\rightarrow 
+Aut(\mathbb R^N)$ to act on this basis as follows: 
+\begin{equation}
+	D_R(g)|h\rangle := |gh\rangle
+\end{equation}
+i.e. $D_R$ implements the group multiplication law. Note that $D_R$ is not an irrep, and as an explicit example of this 
+the subspace spanned by $\sum_{g\in G}|g\rangle$ is a proper invariant subspace of $\mathbb R^N$ (this gives the 
+trivial irrep). In fact, every irrep of $G$ can be embedded into the regular representation. 
+
+\subsection{Young Diagrams for Finite Groups}
+
+Young diagrams give a nice way to write down the irreducible representations of permutation groups. 
+
+\section{Examples of Finite Groups}
+
+\subsection{The Symmetric Group}
+
+\subsection{The Octahedral Group}
+
+This is the group of symmetries of the 3 dimensional cube, which consists of all the ways one can rotate, twist, and otherwise 
+permute the cube. We will consider the group of proper symmetries of the cube, in which parity is not included. This is 
+known as the proper octahedral group and we will denote it by $O_h^+$, as opposed to the full octahedral group, which 
+is denoted by $O_h$. The order of $O_h^+$ is 24, and it has 5 conjugacy classes, hence 5 irreps. 
+
+TODO extend to $O_h$. 
 
 \subsection{The Hypercubic Group}
+
+The proper hypercubic group $H(4)^+$ (not including parity) has order 192 and 13 conjugacy classes, hence 13 irreducible 
+representations. By adding parity to $H(4)^+$, we get the full hypercubic group $H(4)$. We first discuss the irreps of 
+$H(4)^+$, then we will discuss how to extend them to $H(4)$, which is more complicated than the cubic case. 
 
 \end{document}
