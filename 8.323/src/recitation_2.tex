@@ -1,0 +1,300 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 2: Canonical quantization}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+\vspace{10mm}
+
+\begin{answerbox}
+{\centering \textbf{Why QFT?} } \\
+
+\raggedright
+
+In quantum mechanics class, you've worked primarily with non-relativistic objects: the Hamiltonians you write down that are of the form:
+\begin{equation}
+	H = \frac{\bm p^{2}}{2m} + V(\bm x)
+\end{equation}
+use the non-relativistic dispersion relation $E = \bm p^2 / 2m$. If we wanted to include relativity, we would need to use the full dispersion $E^2 = (c\bm p)^2 + (mc^2)^2$. We'll talk more about this later in the course, but it's good to remember that most of the QM you've studied previously is non-relativistic. Let's use the uncertainty relations we know from non-relativistic quantum mechanics and combine them with relativity to get a heuristic feel for why QFT is weird and when it comes into play:
+\begin{itemize}
+	\item $\Delta x \cdot \Delta p\gtrsim \hbar$ (non-relativistic QM is not valid at short-distances). Consider an electron of mass $m$ in a box of length $L$. QM works well to describe the physics of the electron when it is not relativistic, but if the box becomes too small then the electron must become relativistic. We can see from the uncertainty relation: the smaller the box is, the smaller $\Delta x$ is, and so the larger the uncertainty $\Delta p$ is to compensate. When $\Delta p$ is on the order of $mc$, the electron is relativistic, i.e. when the box is of size:
+\begin{equation}
+	L \sim \frac{\hbar}{mc}\equiv \lambda_c,
+	\label{eq:compton}
+\end{equation}
+the system must be treated relativistically. This length scale is called the \textbf{Compton wavelength}.
+	
+	\item $\Delta E\cdot \Delta t\gtrsim\hbar$ (QM + relativity implies virtual particles). Consider probing a section of the vacuum somewhere in space for some characteristic timescale $\tau$. As you make $\tau$ smaller and look at the vacuum for shorter and shorter periods of time, this uncertainty relation implies that $\Delta E$ gets larger and larger-- there are large energy fluctuations in the area that you're probing. Now, relativity factors into this because it tells us that \textit{energy and mass are the same}; as such, these large energy fluctuations can actually be interpreted as massive particles, with $\Delta E\sim Mc^2$. These particles only exist for a very short amount of time, and are constantly popping into and out of existence; the vacuum in QFT is not static and boring, but rather is dynamic and has its own interesting physics. 
+	
+\end{itemize}
+\end{answerbox}
+
+\section*{Heisenberg and Schr\"odinger}
+\begin{itemize}
+
+	\item The Heisenberg and Schr\"odinger pictures are two complementary views of looking at QM. 
+	\begin{itemize}
+		\item \textbf{Schr\"odinger picture}: states $|\psi(t)\rangle_S$ evolve with time and the operators $\mathcal{O}_S$ stay constant (up to explicit time dependence). 
+		\item \textbf{Heisenberg picture}: states $|\psi\rangle_H$ stay constant, but the operators evolve with time, $\mathcal{O}_H(t)$.
+	\end{itemize}
+	
+	\item The correspondence between these two occurs because the physics must be the same, regardless of how we factor the time dependence into the operator or the states. We set both pictures equal at some reference time, which we conventionally take to be $t = 0$ to simplify things. This yields:
+	\begin{align}
+		|\psi(t = 0)\rangle_S = |\psi\rangle_H && \mathcal O_S = \mathcal O_H(t = 0).
+	\end{align}
+	
+	\item Time evolution: The time evolution operator in QM is given by a unitary operator $U(t)$. When the Hamiltonian is time-independent, the Schr\"odinger equation yields $U(t) = \exp\left(-i H t\right)$. States in the Schr\"odinger picture transform by the action of $U(t)$:
+	\begin{equation}
+		|\psi(t)\rangle_S = U(t) |\psi(t = 0)\rangle_S.
+	\end{equation}
+	Guaranteeing that the physics is equal implies that the expectation value of an operator in any state must be equal between the Schr\"odinger and Heisenberg pictures, $\langle\psi(t)| \mathcal{O} |\psi(t)\rangle_S = \langle\psi | \mathcal{O}(t) | \psi\rangle_H$, which immediately shows us how operators in the Heisenberg picture evolve with time:
+	\begin{equation}
+		\mathcal{O}_H(t) = U^\dagger(t) \mathcal{O}_H(0) U(t).\label{eq:heisenberg_ops}
+	\end{equation}
+	
+	\item In the Heisenberg picture, we can derive an evolution equation for operators by differentiating Eq.~(\ref{eq:heisenberg_ops}). This yields the \textbf{Heisenberg equations of motion} for the operator $\mathcal O_H$ (valid in field theory as well):
+	\begin{equation}
+		\frac{d\mathcal O_H}{dt} = -i [\mathcal O_H, H] + \underbrace{\frac{\partial O_H}{\partial t}}_{\mathrm{explicit}}.
+	\end{equation}
+
+\end{itemize}
+
+% I like the idea of going and talking about classical / QM a bit, then going into quantization. 
+\section*{Classical vs quantum mechanics}
+
+\begin{itemize}
+
+	\item Hamiltonian mechanics looks surprisingly like quantum mechanics in the Heisenberg picture! For coordinates $q_i$, the Lagrangian is $L(q, \dot q)$. The \textbf{momenta conjugate to $q_i$} and the \textbf{Hamiltonian} are:
+	\begin{align}
+		p_i\equiv \frac{\partial L}{\partial \dot q_i} && H = p_i \dot q_i - L.
+	\end{align}
+	An \textbf{classical observable} is a function $A(q_i, p_j, t)$. 
+	
+	\item \textbf{Poisson brackets} are the classical analog of commutators. For two observables $A, B$, we define:
+	\begin{equation}
+		\{A, B\} = \frac{\partial A}{\partial q_i} \frac{\partial B}{\partial p_i} - \frac{\partial A}{\partial p_i} \frac{\partial B}{\partial q_i}
+	\end{equation}
+	Note that $q_i$ and $p_j$ satisfy the following relations:
+	\begin{align}
+		\{q_i, p_j\} = \delta_{ij} && \{q_i, q_j\} = 0 = \{p_i, p_j\}
+	\end{align}
+	
+	\item Time evolution: the Poisson bracket is useful because it \textbf{generates time translation} in classical mechanics. For an observable $A(q_i, p_i, t)$, Hamilton's equations and the chain rule imply:
+	\begin{align}
+		\frac{dA}{dt} = \frac{\partial A}{\partial q_i} \dot q_i + \frac{\partial A}{\partial p_i} \dot p_i + \frac{\partial A}{\partial t} = \{A, H\} + \frac{\partial A}{\partial t}
+	\end{align}
+	
+	\item The \textbf{main idea behind quantization} is to promote the coordinates $q_i$ and $p_j$ into operators which satisfy the canonical commutation relations. Poisson brackets between observables are promoted into commutators:
+	\begin{equation}
+		\{\cdot, \cdot\}\mapsto -i [\cdot, \cdot].
+	\end{equation}
+	This isn't a rigorous axiom, but rather a rule of thumb. As another example, the angular momentum $\bm L = \bm x \times \bm p$ satisfies $\{L_i, L_j\} = \epsilon_{ijk} L_k$, which goes into the QM angular momentum commutation relations.
+	
+	\item Normal coordinates in SHO ($m = 1$): The simple harmonic oscillator is described by the Lagrangian $L = \frac{1}{2} \dot x^2 - \frac{1}{2} \omega^2 x^2$, which yields the EoM of $\ddot x - \omega^2 x = 0$. The conjugate momentum is $p = \partial L / \partial \dot{x} = \dot x$, and the Hamiltonian is $H = p^2 / 2 + \omega^2 x^2 / 2$. We'll perform a coordinate transformation to a system of \textbf{normal coordinates}, defined as:
+	\begin{align}
+		a = \frac{\omega x + i p}{\sqrt{2\omega}} && a^* = \frac{\omega x - i p}{\sqrt{2\omega}}.
+	\end{align}
+	In normal coordinates, we can rewrite the Hamiltonian as:
+	\begin{equation}
+		H = \omega a a^*. \label{eq:normal_coord_hamiltonian}
+	\end{equation}
+	The point of normal coordinates is that they are the analog of creation and annihilation operators. There's a way to write a classical Hamiltonian in terms of them, and if we want to quantize the theory we can \textbf{either} promote $x$ and $p$ to operators, \textbf{or} we can promote $a$ and $a^\dagger$ to operators-- these are equivalent. What should the commutation relations between $a$ and $a^\dagger$ be? Well, let's evaluate the Poisson bracket:
+	\begin{equation}
+		\{a, a^*\} = \frac{\partial a}{\partial x} \frac{\partial a^*}{\partial p} - \frac{\partial a}{\partial p} \frac{\partial a^*}{\partial x} = \sqrt{\frac{\omega}{2}} \frac{-i}{\sqrt{2\omega}} - \frac{i}{\sqrt{2\omega}} \sqrt{\frac{\omega}{2}} = -i
+	\end{equation}
+	So, to quantize the SHO, we take $[\hat a, \hat a^\dagger] = 1$. We see there are two equivalent quantization prescriptions:
+	\begin{itemize}
+		\item Promote $x, p\mapsto \hat x, \hat p$ satisfying the canonical commutation relations $[x, p] = i$. 
+		\item Promote $a, a^*\mapsto \hat a, \hat a^\dagger$ satisfying $[a, a^\dagger] = 1$. 
+	\end{itemize}
+	
+	% mention the EoM, and the fact that we can either promote $x$ and $p$ to operators, or we can promote $a$ and $a^\dagger$ to operators. Either is equivalent. 
+	
+	\item \textbf{Normal ordering}: The quantization prescription has one big ambiguity: what do we do with products of operators? If the Hamiltonian contains a term like $xp$, what do we do with it? $c$-numbers commute, so we can equally well write $xp$ or $px$ before quantization: either is fine, but will result in different terms in the quantum Hamiltonian, since $\hat x \hat p\neq \hat p\hat x$. We can see this in Eq.~(\ref{eq:normal_coord_hamiltonian}) with $a$ and $a^*$. 
+	
+	We need a convention to do the ordering, and we will pick one called \textbf{normal ordering}. We define a normal ordered product of operators $a$ and $a^\dagger$ to put all the $a$'s on the right, and all the $a^\dagger$'s on the left. We do this so that the ground state energy $\langle 0 | H | 0\rangle$ vanishes (in QFT, this takes care of the infinite ZPE that was presented in lecture). We denote this with colons surrounding the normal ordered expression:
+	\begin{equation}
+		H = \omega :a^\dagger a: = \omega :aa^\dagger : = \omega a^\dagger a.
+	\end{equation}
+	
+	\item \textbf{Quantization prescription}: 
+	\begin{enumerate}
+		\item Identify the generalized coordinates of your system, $q_i$.
+		\item From the Hamiltonian, derive the conjugate momentum $p_i$. These satisfy:
+		\begin{equation}
+			\{q_i, p_j\} = \delta_{ij}
+		\end{equation}
+		\item Quantize: promote $q_i, p_i$ into \textbf{operators} $\hat q_i, \hat p_i$ that satisfy the canonical commutation relations:
+		\begin{equation}
+			[\hat{q}_i, \hat{p}_j] = i\delta_{ij}
+		\end{equation}
+		%\item When there is any ambiguity in the definition of an operator (i.e. the term $q_i p_i$), follow the prescription of \textbf{normal ordering}.
+	\end{enumerate}
+	
+\end{itemize}
+
+\section*{Canonical quantization}
+
+% make sure I'm prepared to compare this to Hong's method (page 3 of notes 2, steps 1 - 4). 
+
+\begin{itemize}
+	
+	\item The quantization prescription for classical mechanics ports over to allow us to quantize a field theory. The whole problem in field theory, and the reason that this is a separate subject from quantum mechanics, is how you deal with quantizing systems that have an infinite number of degrees of freedom, but the general principle of promoting the coordinates and momenta to operators holds for field theory. In fact, a \textbf{quantum field} is just an operator-valued field. 
+	
+	% normal ordering-- how to get an unambiguous map to a quantum system
+	
+	\item \textbf{Free scalar field}: As we've been studying in lecture, the free scalar field has Lagrangian density and EoM:
+	\begin{align}
+		\mathcal L = -\frac{1}{2} (\partial\phi)^2 - m^2 \phi^2 && (\partial^2 - m^2)\phi(x) = 0.
+	\end{align}
+	Here the conjugate momentum to $\phi(x)$ is $\pi(x) = \dot{\phi}(x)$, which gives us the Hamiltonian density:
+	\begin{equation}
+		\mathcal H = \frac{1}{2} \pi^2 + \frac{1}{2} (\nabla \phi)^2 + \frac{1}{2} m^2 \phi^2. 
+	\end{equation}
+	To quantize the field, we need to find the q's and the p's for this theory. The easiest way to do this is in momentum space, where the Fourier components $\tilde\phi(\bm k, t)$ obey the EoM for a harmonic oscillator:
+	\begin{equation}
+		(-\partial_t^2 + \omega_{\bm k}^2)\tilde\phi(\bm k, t) = 0.
+	\end{equation}
+	The point of this is that we get a \textbf{harmonic oscillator} for every (continuous) momentum value-- free theories in QFT are nothing but harmonic oscillators! So, the natural expansion for $\phi(\bm x, t)$ is in terms of the corresponding creation and annihilation operators for each mode:
+	\begin{equation}
+		\phi(\bm x, t) = \int \frac{d^3\bm k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\bm k}}} \left(\hat{a}_{\bm k} e^{i\bm k\cdot\bm x - i\omega_{\bm k} t} + \hat{a}^\dagger_{\bm k} e^{-i\bm k\cdot x + i\omega_{\bm k} t}\right)
+	\end{equation}
+	This is one of the central equations that we'll be using for canonical quantization of a scalar field theory. 
+	
+	\item Conjugate momentum and canonical commutation relations: The usual relation holds to derive $\pi(\bm x, t)$:
+	\begin{equation}
+		\pi(\bm x, t) = \dot{\phi} = -i\int \frac{d^3\bm k}{(2\pi)^3} \sqrt{\frac{\omega_{\bm k}}{2}} \left(\hat{a}_{\bm k} e^{i\bm k\cdot\bm x - i\omega_{\bm k} t} - \hat{a}^\dagger_{\bm k} e^{-i\bm k\cdot x + i\omega_{\bm k} t}\right)
+	\end{equation}
+	Like we saw in the previous section, the canonical quantization relations must hold when we quantize the theory. In this case, these take the form of:
+	\begin{align}
+		[\phi(\vec x, t), \pi(\vec y, t)] = i\delta^{(3)}(\vec x - \vec y) && [\phi(\vec x, t), \phi(\vec y, t)] = 0 = [\pi(\vec x, t), \pi(\vec y, t)]
+	\end{align}
+	% do one related computation to the pset: maybe take the a_k, a_k^dagger commutation relations and show that they imply the canonical commutation relations
+
+	%\begin{equation}
+	%	\phi(\bm k, t) = \frac{1}{\sqrt{2\omega_{\bm k}}} (\hat{a}_{\bm k} e^{-i\omega_{\bm k} t} + 
+	%\end{equation}
+	
+	\item What's novel in QFT? Creation and annihilation. In the SHO in QM, $a^\dagger |0\rangle$ just raises the energy state that we're using. In QFT, the interpretation of this is different. if I apply $a_{\bm k}^\dagger |0\rangle$ in QFT, we interpret it as creating a single-particle state with momentum $\bm k$. 
+	
+	\item Derivation of the canonical commutation relations from $[\hat a_{\bm k}, \hat a_{\bm k}^\dagger] = (2\pi)^3 \delta^{(3)}(\bm k - \bm k')$ and $[a_{\bm k}, a_{\bm k}] = 0 = [a_{\bm k}^\dagger, a_{\bm k}^\dagger]$. 
+	
+	\item Derivation of the momentum operator from 
+	\begin{equation}
+		P^i = \int d^3\bm x \; T^{0i} = - \int d^3\bm x (\dot{\phi}\partial^i \phi^* + \dot{\phi^*} \partial^i\phi).
+	\end{equation}
+	
+\end{itemize}
+
+% Possible other topics: should check out what's on the pset as well
+% - Review of the different pictures of QM-- Schrodinger / Heisenberg, and interaction
+% - Map between classical mechanics and QM: poisson brackets --> commutator, etc. 
+% - Contour integration
+% - Hole theory
+
+\end{document}

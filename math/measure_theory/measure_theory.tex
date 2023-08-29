@@ -1,32 +1,5 @@
-\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
-\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
-%\geometry{landscape}                		% Activate for rotated page geometry
-%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
-\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage[shortlabels]{enumitem}
-\usepackage{float}
-
-\usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{prop}{Proposition}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-
-%SetFonts
-
-%SetFonts
-
+\def \root {../../}			% path to root (/notes)
+\input{\root/template/preamble.tex}
 
 \title{Measure Theory}
 \author{Patrick Oare}
@@ -34,6 +7,14 @@
 
 \begin{document}
 \maketitle
+
+\begin{resources}
+These notes are primarily based off of Berkeley's Math 202A, taught by Professor Marc Rieffel. Here are some additional resources that the notes are based on.
+\begin{itemize}
+	\item \textit{Real and Functional Analysis} by Serge Lang.
+	\item \textit{Measure Theory} by Paul Halmos.
+\end{itemize}
+\end{resources}
 
 \section*{Introduction}
 
@@ -55,6 +36,7 @@ measure actually gives one all the tools necessary to define integration. Integr
 Darboux sums, which take a form similar to $\sum_j f(x_j)\Delta x_j$. In these sums the term $\Delta x_j$ is a notion of length, and so 
 it should not be surprising that a measure on a space induces an integral.
 
+\newpage
 \section{General Definitions}
 
 	Given a set $X$, let $\mathcal M$ be a collection of subsets of $X$. Our goal is to define a way to ``add sizes" in the 
@@ -125,12 +107,12 @@ it should not be surprising that a measure on a space induces an integral.
 		We say that $\mu$ is \textbf{finitely additive} if whenever $\{E_i\}_{i = 1}^n$ is a finite collection of pairwise disjoint 
 		subsets of $A$, we have:
 		$$
-			\mu(\bigoplus_{i = 1}^n E_i) = \sum_{i = 1}^n\mu(E_i)
+			\mu \left( \bigoplus_{i = 1}^n E_i \right) = \sum_{i = 1}^n\mu(E_i)
 		$$
 		We say that $\mu$ is \textbf{countably additive} if $\mu$ is finitely additive and whenever $\{E_i\}_{i = 1}^\infty$ are 
 		pairwise disjoint subsets of $A$, we have:
 		$$
-			\mu(\bigoplus_{i = 1}^\infty E_i) = \sum_{i = 1}^\infty\mu(E_i)
+			\mu \left(\bigoplus_{i = 1}^\infty E_i \right) = \sum_{i = 1}^\infty\mu(E_i)
 		$$
 	\end{definition}
 	
@@ -184,7 +166,7 @@ it should not be surprising that a measure on a space induces an integral.
 	\begin{prop}
 		Let $P$ be a semiring of subsets of $X$. If $F, F_1, ..., F_n\in P$, then:
 		$$
-			F\setminus (\bigcup_{i = 1}^n F_i) = \bigoplus_{j = 1}^m G_j
+			F\setminus \left(\bigcup_{i = 1}^n F_i \right) = \bigoplus_{j = 1}^m G_j
 		$$
 		with $G_j\in P$. 
 	\end{prop}
@@ -211,7 +193,7 @@ it should not be surprising that a measure on a space induces an integral.
 	\begin{proof}
 		We prove the first proposition. We have:
 		$$
-			\bigoplus_{j = 1}^n F_j = E\oplus(\bigoplus_{j = 1}^n F_j\setminus E) = E\oplus (\bigoplus_{k = 1}^m G_k)
+			\bigoplus_{j = 1}^n F_j = E\oplus \left(\bigoplus_{j = 1}^n F_j\setminus E \right) = E\oplus \left(\bigoplus_{k = 1}^m G_k \right)
 		$$
 		Hence:
 		$$
@@ -287,7 +269,7 @@ it should not be surprising that a measure on a space induces an integral.
 	R^+\{\infty\}$ be any map. Let $A\in\mathcal H(\mathcal F)$. We define $\mu^* : \mathcal H(\mathcal F)\rightarrow
 	\mathbb R^+\{\infty\}$ by:
 	$$
-		\mu^*(A) := \inf\{\sum_{j = 1}^\infty\mu(F_j) : A\subseteq\bigcup_{j = 1}^\infty, F_j\in\mathcal F\}
+		\mu^*(A) := \inf \left\{\sum_{j = 1}^\infty\mu(F_j) : A\subseteq\bigcup_{j = 1}^\infty, F_j\in\mathcal F \right\}
 	$$
 	Note that because $A\in\mathcal H(\mathcal F)$, $A$ is countably covered by at least one subset $\{F_j\}_{j = 1}^\infty$, 
 	and so this set is non-empty and the infimum exists. The function $\mu^*$ essentially assigns $A$ the size of the smallest 
@@ -457,9 +439,9 @@ it should not be surprising that a measure on a space induces an integral.
 	
 	\begin{definition}[Simple Measurable Function]
 		A function $f : X\rightarrow B$ is a \textbf{simple S-measurable function} (SMF) if the range of $f$ is finite, and for 
-		every $b\in im(f), b\neq 0$, we have $\{x : f(x) = b\}\in S$. Then $f$ can be written:
+		every $b\in \mathrm{im}(f), b\neq 0$, we have $\{x : f(x) = b\}\in S$. Then $f$ can be written:
 		$$
-			f = \sum_{j = 1}^n b_j \chi_{E_j}
+			f = \sum_{j = 1}^n b_j \, \chi_{E_j}
 		$$
 		with the $b_j$'s distinct and the $E_j$'s disjoint and measurable (or $f\equiv 0$ everywhere, but this is an edge 
 		case).
@@ -473,7 +455,7 @@ it should not be surprising that a measure on a space induces an integral.
 		We say $f$ is a \textbf{simple integrable function (SIF)} if $f = \sum_{j = 1}^nb_j\chi_{E_j}$ is a SMF with 
 		$\mu(E_j) < \infty$ for each $j$. If $f$ is a SIF, we define:
 		$$
-			\int fd\mu := \sum_{j = 1}^nb_j\mu(E_j)
+			\int fd\mu := \sum_{j = 1}^nb_j \, \mu(E_j)
 		$$
 	\end{definition}
 	
@@ -510,7 +492,7 @@ it should not be surprising that a measure on a space induces an integral.
 	
 	For $f$ a $B$-valued SIF, define:
 	$$
-		||f||_1 = \int (x\mapsto ||f(x)||_B)d\mu = \int ||f(x)||_Bd\mu(x)
+		||f||_1 = \int (x\mapsto ||f(x)||_B)d\mu = \int ||f(x)||_B \, d\mu(x)
 	$$
 	\begin{prop}
 		Let $f, g\in SIF(X, B)$. Then:
@@ -524,17 +506,17 @@ it should not be surprising that a measure on a space induces an integral.
 	\begin{definition}[Carrier]
 		Let $f : X\rightarrow B$. We define the \textbf{carrier} of $f$ to be:
 		$$
-			carrier(f) := \{x\in X : f(x)\neq 0\}
+			\mathrm{carrier}(f) := \{x\in X : f(x)\neq 0\}
 		$$
 	\end{definition}
 	
-	If $f$ is a SIF, then $carrier(f)\in S$ is measurable. In topology, the support $supp(f) = \overline{carrier(f)}$, so we 
+	If $f$ is a SIF, then $carrier(f)\in S$ is measurable. In topology, the support $\mathrm{supp}(f) = \overline{carrier(f)}$, so we 
 	have already developed some intuition for this. Now, define:
 	$$
-		\eta := \{f : f\in SIF(X, B)\textnormal{ and } \mu(carrier(f)) = 0\}
+		\eta := \{f : f\in SIF(X, B)\textnormal{ and } \mu(\mathrm{carrier}(f)) = 0\}
 	$$
 	
-	$\eta$ is a vector subspace of $SIF(X, B)$ because $carrier(f + g)\leq carrier(f) + carrier(g)$. Intuitively, $\eta$ is 
+	$\eta$ is a vector subspace of $SIF(X, B)$ because $\mathrm{carrier}(f + g)\leq \mathrm{carrier}(f) + \mathrm{carrier}(g)$. Intuitively, $\eta$ is 
 	all the SIFs whose carrier is a null set. In English, that means that if $f\in\eta$, then $f$ is equal to $0$ except 
 	on a null set, i.e. $f = 0$ almost everywhere. On $\mathbb R$ with the Lebesgue measure, $\eta$ is the set of functions 
 	which are nonzero at only a countable number of points. 
@@ -622,7 +604,7 @@ it should not be surprising that a measure on a space induces an integral.
 	functions with $im(f_n)$ separable for each $n$ and $f_n\rightarrow f$ pointwise, then $im(f)$ is separable as well. 
 	This is because:
 	$$
-		E = \overline{\bigcup_{n = 1}^\infty im(f_n)}
+		E = \overline{\bigcup_{n = 1}^\infty \mathrm{im}(f_n)}
 	$$
 	is a countable union of separable sets and hence separable, and because $im(f)\subseteq E$, $im(f)$ is separable as 
 	well. This leads to the following corollary:
@@ -1179,7 +1161,7 @@ it should not be surprising that a measure on a space induces an integral.
 	but we can make $||f_n - f_m||_1$ arbitrarily small since $(f_n)$ is mean Cauchy, hence $(Tf_n)$ is mean Cauchy and 
 	so $Tf\in\mathcal L^1(X, S, \mu, W)$. Furthermore, if $f_n\rightarrow f$ a.e. with $(f_n)$ mean Cauchy, then:
 	$$
-		\int Tfd\mu = \lim\int Tf_nd\mu = \lim T\int f_nd\mu = T(\lim\int f_nd\mu) = T(\int fd\mu)
+		\int Tf \, d\mu = \lim\int Tf_n\, d\mu = \lim T\int f_n\, d\mu = T(\lim\int f_n \,d\mu) = T(\int f\, d\mu)
 	$$
 	where we were able to pull $T$ out of the integral because it is simply a sum, as each $f_n$ is a SIF. So, we can 
 	make the following proposition.
@@ -1187,17 +1169,16 @@ it should not be surprising that a measure on a space induces an integral.
 	\begin{prop}
 		Let $f\in\mathcal L^1(X, S, \mu, V)$ and $T : V\rightarrow W$. Then $Tf\in\mathcal L^1(X, S, \mu, W)$ and:
 		$$
-			\int(Tf)d\mu = T(\int fd\mu)
+			\int(Tf) \,d\mu = T\left(\int f\, d\mu \right).
 		$$
 	\end{prop}
-	
 	Note that $||Tf||_1\leq ||T||\cdot ||f||_1$ by definition of $||T||$, and $T(f + g) = Tf + tg$. So define:
 	$$
-		\Phi_T(f) := Tf
+		\Phi_T(f) := Tf.
 	$$
 	Then $\Phi_T\in B(L^1(X, S, \mu, V), L^1(X, S, \mu, W))$, and:
 	$$
-		||\Phi_T||\leq ||T||
+		||\Phi_T||\leq ||T||.
 	$$
 	
 	\subsection{The Continuous Dual}
@@ -1229,9 +1210,9 @@ it should not be surprising that a measure on a space induces an integral.
 		Let $g : X\rightarrow V$ be measurable. We say that $g$ is \textbf{essentially bounded} if there is a constant $c$ 
 		such that:
 		$$
-			\mu(\{x\in X : ||g(x)|| > c\}) = 0
+			\mu(\{x\in X : ||g(x)|| > c\}) = 0.
 		$$
-		If $g$ is essentially bounded, set $||g||_\infty$ to be the smallest $c$ for which this holds. Let $\mathcal L^\infty(X, 
+		If $g$ is essentially bounded, set $||g||_\infty$ to be the infimum over all $c$ for which this holds. Let $\mathcal L^\infty(X, 
 		S, \mu, V)$ be the vector space of all essentially bounded functions equipped with the seminorm $||\cdot||_\infty$.
 	\end{definition}
 	

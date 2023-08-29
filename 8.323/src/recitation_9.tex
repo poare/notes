@@ -1,0 +1,447 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{simpler-wick}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 9: Chirality and Propagators}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\usepackage{pdfpages}
+
+\begin{document}
+%\maketitle
+
+%\includepdf[page=-]{Recitation7_handwritten.pdf}
+
+%\newpage
+%\clearpage
+%\setcounter{page}{1}
+
+\section*{Chirality}
+
+\textbf{$\gamma_5$ and axial transformations}
+
+\begin{itemize}
+
+	\item For this section, we'll be working in the Weyl representation, where the $\gamma$ matrices look like:
+	\begin{align}
+		\gamma^0 = \begin{pmatrix} 0 & i \\ i & 0 \end{pmatrix} && \gamma^i = \begin{pmatrix} 0 & -i\sigma^i \\ i\sigma^i & 0 \end{pmatrix} && \gamma^5 = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+	\end{align}
+	The Weyl basis is used when discussing chirality because $\gamma^5$ is diagonal, and its eigenvalues are immediately clear. The $+1$ eigenspace is the \textbf{left-handed} chiral subspace and is spanned by Dirac spinors which are nonzero in their top two components, and the $-1$ eigenspace is the \textbf{right-handed} chiral subspace and spanned by spinors which are nonzero in their bottom two components. We typically describe these eigenspaces with $1/2$ time the eigenvalue of $\gamma_5$, which is called the \textbf{helicity} $h$ and is either $+\frac{1}{2}$ or $-\frac{1}{2}$. 
+
+	\item $\gamma_5$ satisfies the following properties, which you'll prove on the problem set:
+	\begin{align}
+		(\gamma_5)^\dagger = \gamma_5 && \{\gamma^\mu, \gamma_5\} = 0. \label{eq:gamma5_properties}
+	\end{align}
+
+	\item We can write an arbitrary Dirac spinor (note this also follows from last recitation, where we decomposed $\mathfrak{so}(3, 1)\cong \mathfrak{su}(2)\oplus\mathfrak{su}(2)$) as a stacked left-handed and right-handed fermion:
+\begin{equation}
+	\psi = \begin{pmatrix} \psi_L \\ \psi_R \end{pmatrix} \label{eq:psi_decomp}
+\end{equation}
+	where $\psi_L$ ($\psi_R$) is a left-handed (right-handed) Weyl fermion. 
+	
+	\item \textbf{Chiral projectors}: We can \textbf{project} $\Psi$ onto its left-or right-handed components with projectors:
+	\begin{align}
+		P_L = \frac{1 + \gamma_5}{2} && P_R = \frac{1 - \gamma_5}{2}.
+	\end{align}
+	These projection operators are actually extremely important in the Standard Model; it's a chiral gauge theory, which means that it has different couplings to left-handed fermions vs right-handed fermions. As a result, there are $P_L$ and $P_R$ factors everywhere, since you need to be able to isolate the components of a fermion which have a given handedness. Note that these are orthogonal projectors, i.e.
+	\begin{align}
+	P_L^2 = P_L && P_R^2 = P_R && P_L P_R = P_R P_L = 0 && P_L + P_R = 1
+	\end{align}
+	
+	\item The Dirac Lagrangian,
+	\begin{equation}
+		\mathcal L = -i \overline{\psi} (\slashed \partial - m)\psi \label{eq:dirac_lagrangian}
+	\end{equation}
+	is invariant under the \textbf{vector transformation} $\psi(x)\mapsto e^{i\alpha} \psi(x)$, and the conserved current is called the \textbf{vector current}:
+	\begin{equation}
+		j_V^\mu = \overline{\psi} \gamma^\mu \psi.
+	\end{equation}
+	From the expansion of $\psi$ into left-and right-handed spinors, Eq.~(\ref{eq:psi_decomp}), we can see what the action of this symmetry is on Weyl spinors, the transformation just treats each handedness equally:
+	\begin{align}
+		\psi_L\mapsto e^{i\alpha} \psi_L && \psi_R\mapsto e^{i\alpha} \psi_R.
+	\end{align}
+	
+	\item The \textbf{axial transformation} is the phase transformation which rotates $\psi_L$ and $\psi_R$ in opposite directions. We can write it with Dirac spinors as,
+	\begin{equation}
+		\psi\mapsto e^{i\alpha\gamma_5} \psi, \label{eq:axial_transformation}
+	\end{equation}
+	or with Weyl spinors as,
+	\begin{align}
+		\psi_L\mapsto e^{i\alpha} \psi_L && \psi_R\mapsto e^{-i\alpha}\psi_R.
+	\end{align}
+	$\gamma_5$ allows us to perform opposite phase rotations on the left-and right-handed components of the Dirac spinor. With a massive Dirac field (Eq.~(\ref{eq:dirac_lagrangian})) the mass term prevents the axial transformation from being a symmetry of the theory, using the relations of Eq.~(\ref{eq:gamma5_properties}), 
+	\begin{equation}
+		m\overline\psi\psi = m \psi^\dagger\gamma^0 \psi \mapsto m \psi^\dagger e^{-i \alpha \gamma_5} \gamma^0 e^{i\alpha\gamma_5} \psi = m\psi^\dagger \gamma^0 e^{2i\alpha(\gamma_5)^2} \psi = e^{2i\alpha} m\overline{\psi} \psi.
+	\end{equation}
+	However, if we set the mass term to zero, then the axial transformation is a symmetry. The reason for this is that the kinetic term $\overline\psi \slashed \partial \psi$ has two $\gamma$ matrices in between $\psi^\dagger$ and $\psi$ (since $\overline\psi = \psi^\dagger\gamma^0$), so the sign flips on the $e^{i\alpha\gamma_5}$ that we get from the axial transformation cancel out:
+	\begin{align}\begin{split}
+		\mathcal L_{m=0} &= -i\overline{\psi} \slashed\partial \psi \\ 
+		&\mapsto -i \psi^\dagger e^{-i\alpha\gamma_5} \gamma^0 \gamma^\mu e^{i\alpha\gamma_5} \partial_\mu \psi = -i\psi^\dagger\gamma^0\gamma^\mu e^{-i\alpha\gamma_5} e^{i\alpha\gamma_5} \partial_\mu\psi = \mathcal L_{m = 0}
+	\end{split}\end{align}
+	
+	\item Using $\{\gamma^\mu, \gamma_5\} = 0$, note that everytime we push a chiral projector through a $\gamma$ matrix, it swaps chirality:
+	\begin{align}
+		P_L\gamma^\mu = \gamma^\mu P_R && P_R \gamma^\mu = \gamma^\mu P_L. \label{eq:projector_comm}
+	\end{align}
+	Let's abuse notation a bit and denote $\psi_L = P_L \psi$ and $\psi_R = P_R \psi$\footnote{Really, $P_L\psi$ is still a Dirac spinor, and not equal to $\psi_L$, since $P_L\psi = \begin{pmatrix} \psi_L \\ 0 \end{pmatrix}$; here we're identifying the 2-component Weyl spinor $\psi_L$ with the 4-component Dirac spinor $P_L \psi$. }. Then, Eq.~(\ref{eq:projector_comm}) implies that
+	\begin{align}
+		\overline{\psi_L} = \overline{P_L\psi} = (P_L\psi)^\dagger \gamma^0 = \psi^\dagger P_L \gamma^0 = \overline{\psi} P_R && \overline{\psi_R} = \overline\psi P_L.
+	\end{align}
+	What these equations mean is that the antifermion associated with a left-handed fermions is right-handed, and vice versa. For example, in nature we've only ever observed left-handed neutrinos (which by itself is an interesting topic of discussion). This implies that any antineutrino we've seen must be right-handed. 
+
+	We can use these equations to easily decompose any term with fermions into left-and right-handed components, and then immediately see if the term respects chiral symmetry. For example, 
+	\begin{align}
+		\overline\psi \psi = \overline\psi (P_L + P_R) \psi = \overline\psi P_L P_L \psi + \overline\psi P_R P_R \psi = \overline\psi_R \psi_L + \overline\psi_L \psi_R \label{eq:mass_term_chiral}
+	\end{align}
+	This term is clearly not invariant under an axial transformation (we will also say it is not invariant under \textbf{chiral symmetry}) because $\psi_R$ and $\psi_L$ rotate in opposite directions, so the term picks up a nonzero phase under an axial transformation. In other words, the mass term \textbf{couples $\psi_L$ to $\psi_R$, and vice versa}. 
+	
+	We can also decompose the kinetic term using this method:
+	\begin{align}\begin{split}
+		\overline\psi\slashed\partial\psi &= \overline\psi\slashed\partial (P_L + P_R) \psi = \overline\psi\slashed\partial P_L P_L \psi + \overline\psi\slashed\partial P_R P_R \psi = \overline\psi P_R \slashed\partial P_L \psi + \overline\psi P_L \slashed\partial P_R \psi \\
+		&= \overline\psi_L \slashed\partial \psi_L + \overline\psi_R \slashed\partial \psi_R
+	\end{split}\end{align}
+	
+	As perhaps an easier way to see this, consider the action of this term under a transformation by $(\alpha_L, \alpha_R)$,
+	\begin{align}
+		\psi_L\mapsto e^{i\alpha_L} \psi_L && \psi_R\mapsto e^{i\alpha_R} \psi_R,
+	\end{align}
+	where we rotate $\psi_L$ and $\psi_R$ independently. If there is a term which couples together $\psi_L$ and $\psi_R$ (as in the mass term), then for independent $\alpha_L$ and $\alpha_R$, this is not a symmetry of the theory. The only symmetry which is valid is when they're both equal, $\alpha_L = \alpha_R$, which is the \textit{vector symmetry}. In a term which only couples $\psi_L$ to $\psi_L$ and vice versa, this is still a symmetry, because $\psi_L$ and $\psi_R$ are independent. This shows us that \textbf{chiral symmetry is present in systems in which $\psi_L$ from $\psi_R$ are decoupled.}
+	
+	\item In the massless case, we can apply the Noether procedure to get a conserved current:
+	\begin{align} 
+		\psi \mapsto e^{i\alpha\gamma_5} \psi(x)\sim \psi + i\alpha\gamma_5 \psi + ... \implies \Delta\psi_\alpha = i(\gamma_5\psi)_\alpha &&
+		\frac{\partial\mathcal L}{\partial (\partial_\mu\psi_\alpha)} = -i (\overline\psi \gamma^\mu)_\alpha
+	 \end{align}
+	Putting these together gives us the \textbf{axial current} $j_A$:
+	\begin{equation}
+		j_A^\mu = \overline\psi \gamma^\mu\gamma_5 \psi.
+	\end{equation}
+	
+\end{itemize}
+	
+\textbf{Index notation for spinors}
+
+A great resource for all that we'll talk about in this section is Srednicki's QFT book, chapters 33 - 36. This topic is not usually discussed in QFT classes at all (maybe a little bit in QFT III depending on the professor you have), but I find it really helps to illuminate why Majorana fermions look the way they do, and why the matrices $i\sigma^2$ and $\gamma^2$ pop up everywhere! But again, I want to emphasize that this is beyond the scope of this course-- this is very technical material, and the goal of putting it here is to give you exposure to it and perhaps enable you to make a few connections you might otherwise not be able to see. 
+
+\begin{itemize}
+	
+	\item Recall: The Lorentz algebra $\mathfrak{so}(3, 1)$ factors into two $\mathfrak{su}(2)$ subalgebras,
+	\begin{equation}
+		\mathfrak{so}(3, 1)\cong \mathfrak{su}(2)\oplus \mathfrak{su}(2),
+	\end{equation}
+	which allows us to write each irrep of the $\mathfrak{so}(3, 1)$ as $(j_+, j_-)$, where $j_+, j_-\in \{0, \frac{1}{2}, 1, \frac{3}{2}, ...\}$ enumerate the irreducible representations (irreps) of $\mathfrak{su}(2)$. We'll focus on the left-and right-handed Weyl irreps, which have the labels $(\frac{1}{2}, 0)$ and $(0, \frac{1}{2})$, i.e. are composed copies of the spin-$\frac{1}{2}$ representation of $SU(2)$:
+	\begin{align} 
+		s_L = \left(\frac{1}{2}, 0\right) && s_L(J_i^+) = \frac{1}{2} \sigma_i && s_L(J_i^-) = 0 \\
+		s_R = \left(0, \frac{1}{2}\right) && s_R(J_i^+) = 0 && s_r(J_i^-) = \frac{1}{2} \sigma_i.
+	\end{align}
+	Likewise, the corresponding Lorentz transformations are determined by the above equations as:
+	\begin{align}
+		S_L(\Lambda) = e^{-\frac{i}{2}\omega_{\mu\nu} s_L(\mathcal J^{\mu\nu})} \equiv e^{-\frac{i}{2} \omega_{\mu\nu} \Sigma_L^{\mu\nu}} && S_R(\Lambda) = e^{-\frac{i}{2}\omega_{\mu\nu} s_R(\mathcal J^{\mu\nu})} \equiv e^{-\frac{i}{2} \omega_{\mu\nu} \Sigma_R^{\mu\nu}}
+	\end{align}
+	Here we've defined the generators in the LH and RH Weyl representations, $\Sigma_L^{\mu\nu}\equiv s_L(\mathcal J^{\mu\nu})$ and likewise $\Sigma_R^{\mu\nu}$. This is very similar to the notation we're using in class for $\Sigma^{\mu\nu} = \frac{i}{4} [\gamma^\mu, \gamma^\nu]$, which is the generator of Lorentz transformations in the Dirac (bispinor) representation. In fact, since the Dirac representation is just a direct sum of the LH and RH Weyl representations, we can write $\Sigma^{\mu\nu} = \Sigma_L^{\mu\nu}\oplus \Sigma_R^{\mu\nu} = \mathrm{diag}(\Sigma_L^{\mu\nu}, \Sigma_R^{\mu\nu})$.
+	
+	\begin{answerbox}
+		{\centering \textbf{The chiral anomaly} } \\
+	
+	\raggedright
+	The axial current is very interesting because although it should be conserved from Noether's theorem, it's actually not! The symmetry breaks once quantum fluctuations are included. Essentially, 
+	\begin{equation}
+		\partial_\mu j_A^\mu = 0 + \mathcal O(\alpha)
+	\end{equation}
+	where $\alpha$ is the fine-structure constant. At tree level, $j_A^\mu$ is conserved, but if you compute it in perturbation theory at one-loop order you'll find that the current is no longer divergenceless. This divergence is proportional to a wedge product of the QED field strength $F_{\mu\nu}$:
+	\begin{equation}
+		\partial_\mu j_A^\mu = \frac{\alpha}{4\pi} \epsilon^{\mu\nu\alpha\beta} F_{\mu\nu} F_{\alpha\beta}.
+	\end{equation}
+	A symmetry of the theory at the classical level which is not a symmetry of the full quantum theory is called an \textbf{anomaly}, and this specific anomaly in the axial current is called the \textbf{chiral anomaly}. Anomalies happen in symmetries all over the place in QFT, and you'll see a lot of examples of them as you get more QFT under your belt. They also yield a lot of very interesting physics; for example, the chiral anomaly heavily constrains the matter structure of the Standard Model.
+	\newline\newline
+	If the point of a conserved current is that the action is invariant under the transformation, then how do anomalies enter the theory? It's easiest to see where they enter using the path integral. Consider the partition function for a theory under a symmetry of the action, $(\psi, \overline\psi)\mapsto (\psi', \overline\psi')$:
+	\begin{equation}
+		\mathcal Z = \int D\psi D\overline\psi e^{iS[\psi, \overline\psi]} \mapsto \mathcal Z' = \int D\psi' D\overline\psi' e^{iS[\psi', \overline\psi']} = \mathcal Z.
+	\end{equation}
+	$\mathcal Z' = \mathcal Z$ because it's just a change of variables in the integral. Since this is a symmetry, the action changes by a surface term, i.e. 
+	\begin{equation}
+		S[\psi', \overline\psi'] = S[\psi, \overline\psi] + \int d^4 x\, \partial_\mu j^{\mu}_5(x)
+	\end{equation}
+	and from the Noether procedure we can usually construct $j_5^\mu$ with a vanishing divergence. However, the underlying assumption that $\partial_\mu j^\mu = 0$ when using the Noether procedure is that \textbf{the measure $D\psi D\psi'$ is not invariant under the symmetry}, so we can equate $\partial_\mu j^\mu$ with 0. In most cases, this holds; but when there is an anomaly, this is no longer true. In this case, the change in measure can be parameterized WLOG as the following, 
+	\begin{equation}
+		D\psi' D\overline\psi' = D\psi D\overline\psi + \int d^4 x\,\Delta
+	\end{equation}
+	which gives the anomaly,
+	\begin{equation}
+		\partial_\mu j_5^\mu = \log(\Delta)
+	\end{equation}
+	The "conserved current" $j_5^\mu$ is \textbf{no longer conserved!}
+	\end{answerbox}
+	
+	\item $\mathfrak{su}(2)$ index notation for spin $\frac{1}{2}$:  To understand how to work with the irreps of the Lorentz group, we need to understand how the fundamental representation of $\mathfrak{su}(2)$ operates. Recall that the fundamental representation of $\mathfrak{su}(2)$ is:
+	\begin{align}
+		d_\frac{1}{2}(J_i) = \frac{1}{2} \sigma_i && D_{\frac{1}{2}}(U) = e^{\frac{i}{2} \theta_i \sigma_i}
+	\end{align}
+	where $U = e^{i\theta_i J_i}$ is an arbitrary element of $SU(2)$. We'll use index notation here and be careful about the placement of the indices (we'll see why in a second), so we can write these as:
+	\begin{align}
+		\left(d_\frac{1}{2}(\bm J)\right)_a^{\,\,b} = \left(\frac{1}{2} \bm\sigma\right)_a^{\,\, b} && \left(D_{\frac{1}{2}}(U)\right)_a^{\,\, b} = \left(e^{\frac{i}{2}\bm \theta\cdot \bm \sigma}\right)_a^{\,\, b}.
+	\end{align}
+	A vector $v\in \mathbb C^2$ transforms under $SU(2)$ by the appropriate multiplication,
+	\begin{equation}
+		v_a\xrightarrow{U} D(U)_a^{\,\, b} v_b.
+	\end{equation}
+	We'll also define a raised-index version of this in a second, but first we need to talk about the Levi-Civita symbol.
+	
+	The point of using index notation is that for $SU(2)$, \textbf{the Levi-Civita symbol $\epsilon_{ab}$ functions as the metric} when we use index notation. Just like the equation $\Lambda^T \eta \Lambda = \eta$ that we've been working with all semester for the Lorentz group, we have the equation,
+	\begin{align}
+		D(U)_a^{\;\; c} D(U)_b^{\;\; d} \epsilon_{cd} = \epsilon_{ab} && \epsilon_{ab} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}. \label{eq:metric_su2}
+	\end{align}
+	If you want to convince yourself of this, I would recommend starting with a rotation $D(U(\hat{z}, \theta)) = e^{i\theta_3 \sigma_3}$, since $\sigma_3$ is diagonal. $\epsilon_{ab}$ therefore functions like a metric, with one important caveat to what we've seen before: its inverse $\epsilon^{ab}$ is:
+	\begin{align}
+		\epsilon^{ab} = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix} && \epsilon_{ab}\epsilon^{bc} = \delta_a^{\;\; c} && D(U)^{\;\; a}_{ c} D(U)^{\;\; b}_{d} \epsilon^{cd} = \epsilon^{ab}
+	\end{align}
+	which is not the same as $\epsilon_{ab}$.
+	\item The Levi-Civita symbol is used to \textbf{raise and lower $\mathfrak{su}(2)$ indices}:
+	\begin{align}
+		v^a \equiv \epsilon^{ab} v_b && v_a = \epsilon_{ab} v^b.
+	\end{align}
+	
+	Why do we care about all this? This is all we need to implement a well-functioning index notation for $SU(2)$; the important property is that the "metric" $\epsilon_{\alpha\beta}$ is unchanged by $SU(2)$ transformations. The reason we want an index notation is so that we can \textbf{easily form $SU(2)$ invariants}. For example, one of the huge advantages of index notation for the Lorentz group is that we know what quantities are Lorentz invariant. The important point is that \textbf{from Eq.~(\ref{eq:metric_su2}), it immediately follows that any object with contracted upper and lower indices is $SU(2)$-invariant.} For example,
+	\begin{equation}
+		v^a w_a = \epsilon^{ab} v_a w_b \xrightarrow{U} \epsilon^{ab} (D_a^{\;\; c}(U) v_c) (D_b^{\;\; d}(U) w_d) = \epsilon^{cd} v_c w_d = v^a w_a.
+	\end{equation}
+	So, we can build $SU(2)$-invariants from raising and lowering the appropriate number of indices! 
+	
+	\item \textbf{What are $i\sigma_2$ and $\gamma^2$ doing?} One last thing I want to point out before we go back to $SO(3, 1)$: what are the matrices $i\sigma_2$ and $\gamma^2$ doing, and why do they show up so much when talking about symmetries? Let's start with $i\sigma_2$ and its conjugate:
+	\begin{align}
+		i\sigma_2 = i\begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix} = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix} = \epsilon^{ab} && i\sigma_2^* = -i\sigma_2 = \epsilon_{ab}.
+	\end{align}
+	So, anytime there's a $i\sigma_2$ or $i\sigma_2^*$ in an equation, we're really raising and lowering $SU(2)$ indices! For $\gamma^2$, we can look at it in the Weyl basis,
+	\begin{align}
+		\gamma^2 = \begin{pmatrix} 0 & -i\sigma_2 \\ i\sigma_2 & 0 \end{pmatrix} = \begin{pmatrix} 0 & \epsilon_{ab} \\ \epsilon^{ab} & 0 \end{pmatrix} = -\begin{pmatrix} 0 & \epsilon^{ab} \\ \epsilon_{ab} & 0 \end{pmatrix}.
+	\end{align}
+	It's just two copies of the $\epsilon$ tensor, which mixes spinor components as appropriate with its block-diagonal structure. Charge conjugation, which uses $\gamma^2$ quite frequently, is very closely related to raising and lowering $SU(2)$ indices. 
+	
+	\item Let's move back to the Lorentz group to see how this works with the left-and right-handed Weyl representations. The idea here is that both the left-handed $(\frac{1}{2}, 0)$ representation and the right-handed $(0, \frac{1}{2})$ representation tell us how spinors transform. A LH / RH spinor just transforms in the fundamental representation of $SU(2)$, where the appropriate generators (either $\bm J^+$ for LH or $\bm J^-$ for RH) are sent to $\frac{1}{2}\bm\sigma$. This is made explicit with:
+	\begin{align}
+	\psi_L(x)\mapsto \exp\left(-\frac{i}{2} \omega_{\mu\nu}\Sigma_L^{\mu\nu}\right) \psi_L(\Lambda^{-1}x) &&
+	\psi_R(x)\mapsto \exp\left(-\frac{i}{2} \omega_{\mu\nu}\Sigma_R^{\mu\nu}\right) \psi_R(\Lambda^{-1}x)
+	\end{align}
+	(note that this immediately follows from writing out the Dirac spinor $\psi$ as $(\psi_L, \psi_R)$ and using $\Sigma^{\mu\nu} = \mathrm{diag}(\Sigma_L^{\mu\nu}, \Sigma_R^{\mu\nu})$). Let's write this out in $SU(2)$ index notation. Since $\psi_L$ and $\psi_R$ live in different representations, \textbf{they must have different types of indices}, since for example $[S_L^{\mu\nu}, \psi_R] = 0$ (they live in different spaces, $S_L$ just treats $\psi_R$ as a scalar). However, both $\psi_L$ and $\psi_R$ live in $SU(2)$ representations, thus they both need $SU(2)$ indices. We'll therefore \textbf{distinguish between left-and right-handed spinor indices with a dot, i.e. use $\psi_L^a$ for left-handed spinors, and $\psi_R^{\dot a}$ for right-handed spinors}. Thus, writing out the previous equation in index notation:
+	\begin{align}
+		\psi_L^a(x)\mapsto \exp\left(-\frac{i}{2} \omega_{\mu\nu}S_L^{\mu\nu}\right)^a_{\;\; b} \psi_L^b(\Lambda^{-1}x) &&
+		\psi_R^{\dot a}(x)\mapsto \exp\left(-\frac{i}{2} \omega_{\mu\nu}S_R^{\mu\nu}\right)^{\dot a}_{\;\; \dot b} \psi_R^{\dot b}(\Lambda^{-1}x)
+	\end{align}
+	
+	\item Hermitian conjugation: The hermitian conjugate $\dagger$ acts on the Lorentz group generators $\bm J^\pm$ as:
+	\begin{equation}
+		(\bm J^\pm)^\dagger = \bm J^\mp. 
+	\end{equation}
+	What does this imply for taking the Hermitian conjugate of a spinor, i.e $\psi_L$ or $\psi_R$? Well, this means that $\dagger$ maps a LH Weyl spinor to a RH Weyl spinor, and vice-versa. This is made explicit in index notation. Starting with $\psi_L^a$ and $\psi_R^{\dot a}$, their hermitian conjugates are 
+	\begin{align}
+		\psi_L^{\dagger \dot a} && \psi_R^{\dagger a}.
+	\end{align}
+	Note that \textbf{hermitian conjugation interchanges dotted and undotted indices, but it leaves the position of the index unchanged, i.e. an upper index stays an upper index}. 
+	
+	\item \textbf{Mass terms}: Now we've reached the punchline, and we're finally going to see a payoff for the work we've put in here. \textbf{Given Weyl spinors $\chi^a$ and $\xi_{\dot a}$\footnote{Note here we've dropped the "L" and "R" subscripts, but the dots on the indices tell us the chirality of the spinors! It's also conventional to start with a \textbf{raised} index on left-handed spinors and a \textbf{lowered} index on right-handed spinors.}, what Lorentz invariants can we form}? There are a few that we can construct by contracting the appropriate indices (and remembering that we can only contract undotted with undotted and dotted with dotted). Let's first consider the Lorentz invariants which have both fields. These are called \textbf{Dirac masses}:
+	\begin{align}
+		\xi^\dagger_a \chi^a && \chi^{\dagger \dot a} \xi_{\dot a}
+	\end{align}
+	Note that to construct a hermitian mass term for the Dirac theory, we need to add the two terms together:
+	\begin{equation}
+		\textnormal{Dirac mass} = \chi^a \xi_a^\dagger + \chi^{\dagger \dot a} \xi_{\dot a}.\label{eq:dirac_mass}
+	\end{equation}
+	
+	We can also use only the same fields, which are called \textbf{Majorana mass terms}:
+	\begin{align}
+		\chi^a \chi_{a} && \xi^{\dot a} \xi_{\dot a} && \chi^{\dagger\dot a} \chi^\dagger_{\dot a} && \xi^{\dagger a} \xi^\dagger_a
+	\end{align}
+	Let's write these out in index notation. We have:
+	\begin{align}
+		\chi^T (-i\sigma_2) \chi && \xi^T (i\sigma_2) \xi && \chi^\dagger (-i\sigma_2) \chi^* && \xi^\dagger (i\sigma_2) \xi^*.
+	\end{align}
+	Anytime you're working with spinors and see a transpose or bare conjugate (not a $\dagger$), you're probably working with Weyl spinors and suppressing the indices (check out Sections 10.6.1 and 11.3 of Schwartz for an example of this). You should find that these terms look very similar to what shows up in problem 3e and 4e on your problem set this week: it's not a coincidence. You'll show this on your problem set as well, but I'll point out here that these terms vanish \textit{unless} $\chi$ and $\xi$ are \textit{anticommuting numbers}, called \textbf{Grassmann numbers}. 
+	
+	\item Dirac fermions: It is conventional to put the LH Weyl spinor into a Dirac spinor with upper indices, and the RH Weyl spinor in with lowered indices:
+	\begin{equation}
+		\psi = \begin{pmatrix} \chi^a \\ \xi_{\dot a} \end{pmatrix}. \label{eq:dirac_spinor}
+	\end{equation}
+	We've made many claims in the last few weeks that $\overline\psi \psi$ is Lorentz invariant. We're finally in a position that we can easily see it! We get:
+	\begin{align}
+		\overline\psi\psi = \psi^\dagger\gamma^0 \psi = \begin{pmatrix} \chi^{\dagger\dot a} && \xi^\dagger_a \end{pmatrix} \begin{pmatrix} 0 & i \\ i & 0 \end{pmatrix} \begin{pmatrix} \chi^a \\ \xi_{\dot a} \end{pmatrix} = i (\chi^{\dagger \dot a} \xi_{\dot a} + \xi_a^\dagger \chi^a).
+	\end{align}
+	This is exactly the Dirac mass we constructed in Eq.~(\ref{eq:dirac_mass}), and it's manifestly Lorentz invariant because we've contracted together all the dotted and undotted indices in the correct ways! Without the $\gamma^0$ in the middle of the bilinear, we wouldn't be able to form a Lorentz invariant, since we can't contract $\chi^{\dagger\dot a}$ with $\chi^a$, they have different indices. 
+	
+	\item Charge conjugation: Charge conjugation is very easy to write down with this notation. All it does is swap the components of the Dirac spinor, Eq.~(\ref{eq:dirac_spinor}), and lower / raise the appropriate indices. Written both with and without index notation, the \textbf{charge conjugate} of $\psi$ is defined as:
+	\begin{align}
+		\psi^\mathrm{c} = \begin{pmatrix} \xi^{*a} \\ \chi^*_{\dot a} \end{pmatrix} && \psi^\mathrm{c} = \begin{pmatrix} i\sigma_2 \xi^* \\ -i\sigma_2 \chi^* \end{pmatrix}  = -\gamma^2 \psi^*
+	\end{align}
+	Charge conjugation sends column vectors to column vectors, which is why we're conjugating instead of daggering. It's significantly simpler to write down in index notation, and a lot more informative! That's the beauty of this notation: the physics is much more clear. 
+	
+	\item Majorana fermions: A Majorana fermion is what you get when you take a left-handed field $\chi^a$ and throw it in the bottom component of a Dirac spinor as well as the top component:
+	\begin{equation}
+		\psi_M = \begin{pmatrix} \chi^a \\ \chi_{\dot a}^\dagger \end{pmatrix} = \begin{pmatrix} \chi \\ -i\sigma_2 \chi^\dagger \end{pmatrix}.
+	\end{equation}
+	Plug this into the Dirac mass term and see what comes out: it'll be a Majorana mass!
+	
+\end{itemize}
+
+\section*{Propagators}
+
+\begin{itemize}
+	\item Propagators: We're getting to the point now where propagators are becoming more complicated objects, because the objects they're telling us about have additional structures that we need to worry about. For the Dirac theory, the two-point function is a \textit{matrix in spinor space}, i.e. $D_F(x, y) = D_F^{\alpha\beta}(x, y)$, where $\alpha, \beta$ are Dirac spinor indices. The propagators now tell us the probability amplitude for a specific component of $\psi_\beta(y)$ to propagate to position $x$:
+	\begin{equation}
+		D_F^{\alpha\beta}(x, y) = \langle \Omega | \mathrm{T}\{ \psi_\alpha(x) \overline\psi_\beta(y) \} |\Omega\rangle. \label{eq:prop_dfn}
+	\end{equation}
+	For the free theory, the momentum-space propagator is:
+	\begin{equation}
+		D_F^{\alpha\beta}(k) = \frac{1}{-i\slashed{k} + m - i\epsilon}.
+	\end{equation}
+	Here the $1 / (\mathrm{matrix})$ just means the inverse of the matrix. 
+	\item One way to rearrange this propagator is to multiply by the conjugate in the bottom and use $(\slashed k)^2 = k^2$:
+	\begin{align}\begin{split}
+		D_F^{\alpha\beta}(k) &= \frac{1}{-i\slashed{k} + m - i\epsilon} \left(\frac{i\slashed k + m}{i\slashed k + m}\right) \\
+		&= \frac{i\slashed k + m}{k^2 + m^2 - i\epsilon}.
+	\end{split} \end{align}
+	You've already seen this written out in class, but it's worth looking at this form a bit more thoroughly. 
+	
+	\item Let's look at a scaled version of the numerator:
+	\begin{equation}
+		\mathcal P_{\slashed k} \equiv \frac{1}{2m} (i\slashed k + m)
+	\end{equation}
+	When $k$ is on-shell, this is just a projection matrix, since it's idempotent:
+	\begin{equation}
+		\mathcal P_{\slashed k}^2 = \frac{-(\slashed k)^2 + 2im \slashed k + m^2}{(2m)^2} = \frac{1}{2m} (i\slashed k + m) = \mathcal P_{\slashed k}
+	\end{equation}
+	The question is: what space does $\mathcal P_{\slashed k}$ project onto? By the completeness relations,
+	\begin{equation}
+		\sum_s u_s(\vec k)\overline{u}_s(\vec k) = i\slashed k +  m,
+	\end{equation}
+	the projector $\mathcal P_{\slashed k}$ is just the projection onto the space spanned by the spinors $\{u_s(\vec k)\}_{s = 1, 2}$. To visualize this more concretely, at given $k^\mu$, a basis for the space of Dirac spinors is $\{u_1(\vec k), u_2(\vec k), v_1(\vec k), v_2(\vec k)\}$. We can write out an arbitrary spinor as:
+	\begin{equation}
+		\xi^\alpha = \sum_s A_s u_s^\alpha(\vec k) + \sum_r B_r v_r^\alpha(\vec k).
+	\end{equation}
+	The projection operator $\mathcal P_{\slashed k}$ projects $\xi$ onto the $u_s$ components because of the orthogonality relations $\overline{u}_s(\vec k) v_r(\vec k)$, i.e. 
+	\begin{equation}
+		\mathcal P_{\slashed k} \xi = \sum_s A_s u_s(\vec k).
+	\end{equation}
+	
+	\item Antifermion propagators: Propagators for the antiparticle $\overline{D}_F(k)$ have the same projection properties, which we can see by relabeling momentum arrows and relating it back to the propagators for the particle, since (by swapping $x, y$ in Eq.~(\ref{eq:prop_dfn}))
+	\begin{equation}
+		\overline{D}_F(k) = D_F(-k) = \frac{1}{i\slashed{k} + m - i\epsilon} = \frac{-i\slashed{k} + m}{k^2 + m^2 - i\epsilon}. 
+	\end{equation}
+	The projection operator $\overline{\mathcal P}_{\slashed k}\equiv -i\slashed k + m$ just differs from $\mathcal P_{\slashed k}$ by a relative sign, and it can be expanded in terms of the antiparticle spinors:
+	\begin{equation}
+		\sum_r v_r(\vec k)\overline{v}_r(\vec k) = -i\slashed k + m.
+	\end{equation}
+	This means that applying $\overline{\mathcal P}_{\slashed k}$ to $\xi$ will isolate the antiparticle part, $\overline{\mathcal P}_{\slashed k} \xi = \sum_r v_r(\vec k)$, so when we look at an antiparticle propagator, the projection matrix in the numerator just projects us onto the space of antiparticle spinors $\{v_r(\vec k)\}_r$. 
+	
+	\item This is not an accident. We'll see when we get to the photon that it has the same structure, and this structure holds generally for any type of field with any type of indices. A propagator can generically be written as,
+	\begin{equation}
+		D_F(x, y) = \frac{(\textnormal{projection operator})}{k^2 + m^2 - i\epsilon}.
+	\end{equation}
+	For the photon, it's described by a field with one Lorentz index $A^\mu(x)$, so the propagator will have two Lorentz indices, $(D_F)^{\mu\nu}(x, y)$. The projection operator will be a matrix in Lorentz space, and we'll see that it equals $\eta^{\mu\nu} - \frac{1}{\tau} \frac{k^\mu k^\nu}{k^2}$, where $\tau$ is an arbitrary parameter. 
+
+\end{itemize}
+
+%\section*{Fermionic path integrals}
+
+\end{document}

@@ -1,0 +1,122 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation X: TITLE}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+\section*{Section Title}
+
+
+\begin{itemize}
+	
+	\item 
+	
+\end{itemize}
+
+
+\end{document}

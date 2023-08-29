@@ -1,0 +1,373 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{simpler-wick}
+\usepackage[makeroom]{cancel}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 10: Grassmann \#s, ``electroweak'' theory}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\usepackage{pdfpages}
+
+\begin{document}
+%\maketitle
+
+%\includepdf[page=-]{Recitation7_handwritten.pdf}
+
+%\newpage
+%\clearpage
+%\setcounter{page}{1}
+
+\section*{Grassmann numbers and the fermion path integral}
+
+Resources: Zee pp. 125-127; Schwartz pp. 269-272; Peskin pp. 298 - 301.
+
+\begin{itemize}
+	\item \textbf{Grassmann numbers} $\theta, \eta$ are anticommuting numbers, $\theta\eta = -\eta\theta$. We saw in the previous problem set that they're very important to describing fermions, as \textbf{fermion fields are Grassmann-valued}! Generally we'll consider $n$ Grassmann variables $\{\eta_i\}_{i = 1}^n$, which then satisfy the anticommutative algebra:
+	\begin{equation}
+		\eta_i\eta_j = -\eta_j\eta_i.
+	\end{equation}
+	Note that this implies a single Grassmann variable \textit{must square to zero}:
+	\begin{equation}
+		\eta_i^2 = 0.\hspace{2cm}(\textnormal{no sum on } i)
+	\end{equation}
+	We can add and scalar multiply Grassmann variables like normal, so they form a vector space over $\mathbb C$. 
+	
+	\item Functions of one Grassmann variable: These are easy to describe, since Grassmann variables square to zero. We'll assume that any function $f$ of a Grassmann variable is analytic, in the sense that it can be expanded in a Taylor series. This shows us that the most general form of a function $f(\eta)$ is in fact quite restrictive, and the expansion for $f$ can be truncated at second order in $\eta$:
+	\begin{equation}
+		f(\eta) = a + b\eta + c\cancel{\eta^2} + ... = a + b\eta.
+	\end{equation}
+	Thus, \textbf{any function of one Grassmann variable is completely specified by two complex scalar coefficients $a$ and $b$}. 
+	
+	\item Functions of multiple Grassmann variables. When we have multiple Grassmann variables, things get more complicated. The general structure is still there, but it's not as simple as just specifying two scalars to specify the function. That's because now we have to worry about cross terms. For example, for three variables $\{\eta_1, \eta_2, \eta_3\}$, an arbitrary function is specified by $8 = 2^3$ parameters:
+	\begin{equation}
+		f(\eta_1, \eta_2, \eta_3) = a + b_1 \eta_1 + b_2 \eta_2 + b_3 \eta_3 + c_1 \eta_2\eta_3 + c_2\eta_3\eta_1 + c_3\eta_1\eta_2 + d\eta_1\eta_2\eta_3.
+	\end{equation}
+	This generalizes to $N$ Grassmann variables. Note $f(\eta_1, \eta_2, \eta_3)$ is an arbitrary element of the Grassmann algebra on three variables: by the "Grassmann algebra", we mean the space of all possible products of $\{\eta_1, \eta_2, \eta_3\}$. 
+	
+	\item The algebra generated by $N$ independent Grassmann variables $\{\eta_1, ..., \eta_N\}$ is $\mathcal G_N\equiv 
+	\mathbb C[\eta_1, ..., \eta_N]$. A general element $\theta\in\mathcal G_N$ can be written as:
+	\begin{equation}
+		\theta = \sum_{k = 0}^N \sum_{i_1 > ... > i_k} a_{i_1 ... i_k} \eta_{i_1} ... \eta_{i_k}.
+	\end{equation}
+	There are $\binom{N}{k}$ linearly independent degree $k$ monomials in $\mathcal G_N$, and so:
+	\begin{equation}
+		\dim\mathcal G_N = \sum_{k = 0}^N \binom{N}{k} = 2^N.
+	\end{equation}
+	Thus if we write out a function $f(\eta_1, ..., \eta_N)$ of $N$ Grassmann variables, since $f(\eta_1, ..., \eta_N)\in\mathcal G_N$, it may be specified by $2^N$ coefficients (compare this to the 3D case).
+	
+	\begin{answerbox}
+	{\centering \textbf{The exterior algebra}} \\
+	
+	\raggedright
+	The math that Grassmann developed is also called \textbf{exterior calculus}. Let's look at the mathematical construction behind this! Note that you really don't need to know any of the stuff in this box, I just think it's a fun opportunity to inject some math into these notes. Assume we have a vector space $V$. The exterior product is a construction that we put onto a tensor product of a vector space to create an anticommuting product. Let's denote $T^k V$ as the space of $k$-tensors of $V$, and $TV$ the \textbf{tensor algebra} of $V$, which is the graded algebra generated by all the $T^kV$ spaces:
+	\begin{align}
+		T^k V = \underbrace{V\otimes V\otimes ... \otimes V}_{\textnormal{k times}} = V^{\otimes k} && TV \equiv \{0\}\oplus V\oplus (V\otimes V) + ... = \bigoplus_{k = 0}^\infty T^k V.
+	\end{align}
+	The idea is that $T^kV$ allows us to formally study $k$-tensors of $V$, and $TV$ lets us study any linear combination of vectors and their tensor products in $V$. To construct the \textbf{exterior algebra} $\Lambda V$, we mod $T^k V$ out by the space generated by $x\otimes x$ and sum the corresponding spaces:
+	\begin{align}
+		\Lambda^k V \equiv T^k V / \underbrace{\langle \{x\otimes x : x\in V\} \rangle}_{\equiv I} && \Lambda V\equiv \sum_{k = 0}^\infty \Lambda^k V
+	\end{align}
+	where $\langle A \rangle$ denotes the subalgebra generated by $A$ (i.e. all elements which are linear combinations or products of the elements in $A$. As for notation, when we pass $v\otimes w$ to the quotient space $\Lambda^k V$, we denote it with a wedge product $\wedge$:
+	\begin{equation}
+		[v]\wedge [w]\equiv [v\wedge w]
+	\end{equation}
+	where $[\cdot]$ denotes equivalence class mod $I$. The nice part about this is that $\wedge$ is a \textit{well-defined, antisymmetric product}, in the sense that:
+	\begin{equation}
+		[v]\wedge [w] = -[w]\wedge [v]. 
+	\end{equation}
+	To see this for $x, y\in V$, note $(x + y)\otimes (x + y), x\otimes x, y\otimes y\in I$ by definition (these are products of vectors with themselves). Passing $(x + y)\otimes (x + y) = x\otimes x + x\otimes y + y\otimes x + y\otimes y$ to $\Lambda V$, we have:
+	\begin{align}\begin{split}
+		0 &= [x + y]\wedge [x + y] = [(x + y)\otimes (x + y)] = \cancel{[x]\wedge [x]} + [x]\wedge [y] + [y]\wedge [x] + \cancel{[y]\wedge[y]} \\
+		&\implies [x]\wedge [y] = -[y]\wedge [x].
+	\end{split}\end{align}
+	This generalizes to higher order wedge products, and thus we have constructed an algebra with an antisymmetric product, starting with $V$! If you've seen \textbf{differential forms}, you may be familiar with this construction already. In the case of differential forms, $V$ here is the cotangent space $T_p^* M$, and we look at sections $\Gamma(\cdot)$ (continuous maps) on the cotangent bundle $\Lambda^k (T^* M)\equiv \sqcup_p \Lambda^k(T^*_p M)$:
+	\begin{align}
+		\Omega^k(M) \equiv \Gamma(\Lambda^k (T^* M)) && \Omega^* = \bigoplus_{k = 0}^\infty \Omega^k(M).
+	\end{align}
+	
+	\end{answerbox}
+	
+	\item The \textbf{Grassmann integral} is defined as the unique linear functional $\int d\eta : \mathcal G_1\rightarrow\mathbb C$ which is 
+	shift-invariant and normalized. By shift-invariant and normalized, we mean that:
+	\begin{align}
+		\int d\eta\, f(\eta) = \int d\eta\, f(\eta + \theta) && \int d\eta \eta = 1
+	\end{align}
+	
+	These conditions imply that the Grassmann integral of an arbitrary function $a + b\eta$ is: 
+	\begin{align}
+		\int d\eta\, (a + b\eta) = b.
+	\end{align}
+	Note the integral equals the derivative of $a + b\eta$, where we differentiate with respect to $\eta$ the same way we 
+	would a normal $c$-number. For a function $f(\eta_1, ..., \eta_n)\in\mathcal G_n$, the integral $\int d\eta_i$ and 
+	$\partial / \partial \eta_i$ are treated as Grassmann numbers, so for example $\int d\eta_1\,d\eta_2\,\eta_1\,\eta_2 = 
+	-(\int d\eta_1\, \eta_1)(\int d\eta_2\,\eta_2)$.
+	
+	\item \textbf{Gaussian integrals of Grassmann numbers}: A Gaussian integral of $2N$ Grassmann variables $(\eta_1, ..., \eta_N)$ and $(\eta_1^*, ..., \eta_N^*)$\footnote{Note that we haven't defined complex conjugation on Grassmann variables! You can think of $\eta_1^*$ and $\eta_1$ as two independent Grassmann values, where $\eta_1^*$ "looks" like the complex conjugate of $\eta_1$. However, formally they're just two independent Grassmann variables.} can be Taylor expanded and the $N$th order term integrated to yield:
+	\begin{equation}
+	\int d^n\eta^* \, d^n\eta \, e^{-\eta^* A \eta} = \int d\eta_1^*\,d\eta_1 ... d\eta_N^*\,d\eta_N e^{-\overline\eta_i A_{ij} \eta_j} = \det(A)
+	\label{eq:gaussian_grassmann}
+	\end{equation}
+	Note the main difference between the $c$-number path integral and the Grassmann integral Eq.~(\ref{eq:gaussian_grassmann}) is the power the determinant is raised to. The generating functional for Grassmann variables is:
+	\begin{equation}
+		\mathcal Z(\theta, \theta^*) = \int d^n\eta^*\, d^n\eta\, e^{-\eta_i^* A_{ij}\eta_j + \theta^* \eta + \eta^* \theta} = \det(A) e^{\theta_i^* A^{-1}_{jk} \theta_k}
+	\end{equation}
+	
+	\item A useful identity for the homework to prove Eq.~(\ref{eq:gaussian_grassmann}) is: 
+	\begin{equation}
+		\mathcal I = \int \prod_{i=1}^N (d\theta_i^* d\theta_i) \theta_{j_1}\theta_{j_2}\dots \theta_{j_N}\theta^*_{k_1}\theta^*_{k_2}\dots \theta^*_{k_N}
+= (-1)^{N(N - 1) / 2} \epsilon_{j_1 j_2\dots j_N}\epsilon_{k_1 k_2\dots k_N}. \label{eq:integral_for_proof}
+	\end{equation}
+	The easiest way to show this is to note a few facts:
+	\begin{enumerate}
+		\item If any $j_m = j_n$ (and like wise for $k_m$ and $k_n$), then the integral vanishes, because somewhere you have two of $\theta_{j_m} = \theta_{j_n}$, so after the appropriate amount of anticommutation, they'll hit one another and give you $0$. 
+		\item Since anticommuting variables around gives negative signs, we can relate a polynomial to the $\epsilon$ tensor as:
+	\begin{equation}
+		\theta_{j_1} ... \theta_{j_N} = \epsilon_{j_1 ... j_N} \theta_1 ... \theta_N
+	\end{equation}
+	(this is pretty much the definition of $\epsilon$). 
+		\item Pairs of Grassmann values commute, i.e. if I'm looking at $d\theta_j^* d\theta_j$, I can treat this like a commuting $c$-number.
+		\item We can reorder our products of Grassmann variables as:
+		\begin{equation}
+			(\theta_1 \theta_1^*) ... (\theta_N \theta_N^*) = (-1)^{N(N - 1) / 2} (\theta_1 ... \theta_N) (\theta_1^* ... \theta_N^*). 
+		\end{equation}
+		The $(-1)^{N(N - 1) / 2}$ factor comes from $(-1)^N(-1)^{N - 1} ... (-1) = (-1)^{\sum_{k = 1}^N (N - k)} = (-1)^{N(N - 1) / 2}$, as we incur a $(-1)^{N - 1}$ factor when we shuffle the $k$th factor around. 
+	\end{enumerate}
+	So, we can write out integral as:
+	\begin{align}\begin{split}
+		\mathcal I &= \int (d\theta_1^* d\theta_1) ... (d\theta_N^* d\theta_N) (\theta_{j_1}\theta_{j_2}\dots \theta_{j_N})(\theta^*_{k_1}\theta^*_{k_2}\dots \theta^*_{k_N}) \\
+		&= \epsilon_{j_1 ... j_N} \epsilon_{k_1 ... k_N} \int (d\theta_N^* d\theta_N) ... (d\theta_1^* d\theta_1) (\theta_{1}\theta_{2}\dots \theta_{N})(\theta^*_{1}\theta^*_{2}\dots \theta^*_{N}) \\
+		&= \epsilon_{j_1 ... j_N} \epsilon_{k_1 ... k_N} \underbrace{\int (d\theta_N^* d\theta_N) ... (d\theta_1^* d\theta_1) (\theta_{1}\theta_1^*) (\theta_{2}\theta_{2}^*) \dots (\theta_{N}\theta^*_{N})}_{1}  \underbrace{(-1)^{N - 1} (-1)^{N - 2} ... (-1)}_{(-1)^{N(N - 1) / 2}} \\
+		&= (-1)^{N (N - 1) / 2} \epsilon_{j_1 ... j_N} \epsilon_{k_1 ... k_N}.
+	\end{split}\end{align}
+	In the third line, each factor of $(-1)^{N - k}$ is incurred from moving $\theta_k^*$ from the grouping of conjugate terms to be next to $\theta_k$. Then, in the line after that we just did the integral from inside out, since $\int d\theta\, \theta = 1$, so every time we see that pair we can remove it from the equation! So, that proves Eq.~(\ref{eq:integral_for_proof}): you might find this useful for Problem (3)a this week!
+	
+\end{itemize}
+
+\section*{Chirality in electroweak theory}
+
+Now that we've discussed some details about chiral symmetry, we can get into some of the weird parts about the Standard Model. We can't go too far in detail, but I want to discuss some qualitative details about neutrinos and their role in the Standard Model. Specifically, we'll be talking about electroweak theory. 
+
+\begin{itemize}
+
+	\item The electroweak sector of the Standard Model is a \textbf{chiral gauge theory} described by the gauge group $SU(2)_L \times U(1)_Y$. The "gauge" theory part of this is not important for now, since we haven't studied gauge symmetry yet: needless to say, all you basically need to know is that the electroweak Lagrangian is invariant under local $SU(2)\times U(1)$ transformations. The important part for us here is the "L" subscript on $SU(2)$, which stands for "left". This means that the $SU(2)_L$ term only acts on left-handed particles, and this is why we call the Standard Model a \textbf{chiral theory}: it treats left-handed particles different than right-handed particles. 
+	
+	\item \textbf{Toy model (symmetry structure)}: To put this in terms that we've seen before, let's consider a theory which is invariant under two global symmetries: a left-handed symmetry $U(1)_L$ is parameterized by a parameter $\alpha$, and rotates Weyl fields as:
+	\begin{align}
+		\psi_L\longrightarrow e^{i\alpha Q} \psi_L && \psi_R\longrightarrow \psi_R \label{eq:u1L_sym}
+	\end{align}
+	and a global "hypercharge" symmetry $U(1)_Y$, which is parameterized by a parameter $\beta$ and left-and right-handed fermions equally:
+	\begin{align}
+		\psi_L\longrightarrow e^{i\beta Y} \psi_L && \psi_R\longrightarrow e^{i\beta Y} \psi_R. \label{eq:u1Y_sym}
+	\end{align}
+	We have experience with the $U(1)_Y$ global symmetry (I've just labeled it slightly differently), but the chiral rotation of $U(1)_L$ is new. Here $Q$ and $Y$ are charge operators, and let us assign different charges to different particles that we study. Let's work with a theory of electrons and neutrinos. It's been observed that there are only left-handed neutrinos (more on this later) and 
+	
+	\item What effect does this symmetry structure have on the fields that are in the Standard Model? One immediate consequence from the chiral gauge structure of the SM that's rather surprising is that \textbf{fermionic matter in the Standard Model is not described as Dirac spinors, and instead is described by Weyl spinors}. To see this, let's consider a Dirac spinor which is charged under $U(1)_L$ with $Q = 1$:
+	\begin{equation}
+		\Psi = \begin{pmatrix} \psi_L \\ \psi_R \end{pmatrix}.
+	\end{equation}
+	The problem with the Dirac spinor is that the mass term is not invariant under the $U(1)_L$ symmetry:
+	\begin{equation}
+		\overline\Psi\Psi = \psi_R^\dagger\psi_L + \psi_L^\dagger \psi_R \rightarrow e^{i\alpha} \psi_R^\dagger\psi_L + e^{-i\alpha} \psi_L^\dagger \psi_R.
+	\end{equation}
+	This isn't surprising, since the mass term couples together the LH and RH components of the fermion, and the LH and RH components transform differently. Since there's no mass term, there's nothing to couple together $\psi_L$ with $\psi_R$, so instead of having one Dirac fermion $\Psi$, our Lagrangian has two independent Weyl fermions $\psi_L$ and $\psi_R$!
+	
+	\item \textbf{Toy model (matter structure)}: We need to work with Weyl fermions. We can add in a scalars and other types of particles as well, but we cannot have Dirac spinors, since massless Dirac spinors are equivalent to Weyl spinors. The interesting part here is that the Weyl spinors that we add in are decoupled, and are interpreted as distinct particles. The fermion fields that we'll work with are a LH electron, RH electron, and LH neutrino:
+	\begin{align}
+		e_L && e_R && \nu_L.
+	\end{align}
+	Note that here \textbf{$e_L$ and $e_R$ are decoupled fields: at this point, we have no reason to treat them as different chiral components of the same field}. 
+	%We'll also work with two scalar fields, which are the Higgs field ()
+	%\begin{align}
+	%	H%_1 && H_2.
+	%\end{align}
+	
+	We need to specify the charges of each field under the symmetry transformations of Eq.~(\ref{eq:u1L_sym}) and Eq.~(\ref{eq:u1Y_sym}). This is typically done in a table (the "Lorentz" section specifies if the particle is LH Weyl, RH Weyl, or a scalar):
+	\begin{table}[H]
+    	\setlength{\tabcolsep}{5pt}
+		\centering
+		\begin{tabular}{ c | ccc } \hline \hline 
+		\rule{0cm}{0.4cm} Field & $U(1)_L$ & $U(1)_Y$ & Lorentz \\
+		\hline
+		\rule{0cm}{0.4cm} $e_L$ & $-1/2$ & $-1/2$ & $(1/2, 0)$ \\
+		$e_R$ & 0 & $-1$ & $(0, 1/2)$ \\
+		$\nu_L$ & $1/2$ & $-1/2$ & $(1/2, 0)$ \\
+		%$H$ & $1/2$ & $-1/2$ & $(0, 0)$ \\
+		%$H_2$ & $-1/2$ & $-1/2$ & $(0, 0)$ \\
+    		\hline \hline 
+		\end{tabular}
+		\caption{Charge assignments to the toy model. }
+		\label{table:charges}
+	\end{table}
+	From this we can see the mass terms that we can assign these particles. We can enumerate the Lorentz invariant ways to combine these fields together into a mass term. First, we have Majorana masses (and their hermitian conjugates):
+	\begin{align}
+		e_L^T \sigma^2 e_L && e_R^T \sigma^2 e_R && \nu_L^T \sigma^2 \nu_L && e_L^T \sigma^2 \nu_L
+	\end{align}
+	These are all not invariant under one or more of the $U(1)_L$ and $U(1)_Y$ symmetries, and so they aren't valid terms in the Lagrangian. Next, we can consider the Dirac masses (and their hermitian conjugates):
+	\begin{align}
+		e_L^\dagger e_R && \nu_L^\dagger e_R
+	\end{align}
+	Note that when we $\dagger$ a field, we swap its quantum numbers, so $e_L^\dagger$ has $U(1)_L$ charge $1/2$ and $U(1)_Y$ charge $1/2$. Both of these Dirac mass terms aren't invariant under $U(1)_L$. For example, the electron Dirac mass transforms as
+	\begin{equation}
+		e_L^\dagger e_R + e_R^\dagger e_L\rightarrow e^{\frac{i}{2}\alpha} e_L^\dagger e_R + e^{-\frac{i}{2} \alpha} e_R^\dagger e_L,
+	\end{equation}
+	which is not invariant. Therefore, \textbf{any mass we construct is not invariant under the toy electroweak symmetry $U(1)_L\times U(1)_Y$}. 
+	
+	\item \textbf{The Higgs mechanism}: What gives? This is supposed to be a toy theory of the Standard Model, which has a massive electron. Why can't we add mass to the theory, and why are $e_L$ and $e_R$ separate Weyl fermions instead of being packaged together into one Dirac fermion? The answer to this ended up being worthy of winning a Nobel prize, and is one of the most pop-sciency particles that exist: the answer lies with the Higgs boson. Essentially, the Higgs boson $H$ is a scalar particle whose existence allows $e_L$ and $e_R$ to couple together. In the electroweak sector of the Standard Model, we find the following extra coupling (called a \textbf{Yukawa coupling}): 
+	\begin{equation}
+		\mathcal L_{EW}\supset \lambda (H^\dagger e_R^\dagger e_L + e_L^\dagger e_R H)
+	\end{equation}
+	From this, we can deduce its transformation properties under $U(1)_L$ and $U(1)_Y$, since $\mathcal L_{EW}$ has to be invariant under these symmetries. They are:
+	\begin{table}[H]
+    	\setlength{\tabcolsep}{5pt}
+		\centering
+		\begin{tabular}{ c | ccc } \hline \hline 
+		\rule{0cm}{0.4cm} Field & $U(1)_L$ & $U(1)_Y$ & Lorentz \\
+		\hline
+		\rule{0cm}{0.4cm} $H$ & $-1/2$ & $1/2$ & $(0, 0)$ \\
+    		\hline \hline 
+		\end{tabular}
+		\caption{Charge assignments to the toy Higgs boson. }
+		\label{table:charges}
+	\end{table}
+	Now, unfortunately we can't go too far into details on the Higgs mechanism right now, but I can give a basic description of how this coupling gives the electron mass. Through a process called \textbf{spontaneous symmetry breaking}, below the energy $v \equiv 247\;\mathrm{GeV}$, the Higgs boson takes on a ``vacuum expectation value'' (vev) and can be parameterized as:
+	\begin{equation}
+		H(x) = \frac{1}{\sqrt{2}} (v + h(x)) \label{eq:higgs_param}
+	\end{equation}
+	Here $v$ is this constant energy scale, and $h(x)$ is the \textbf{physical Higgs boson}, which is a real field. Note that parameterization is \textbf{only valid when we work at energies $E\ll v$; when we get to energy scales on the order of $\gtrsim v$, this parameterization does not hold}. However,  247 GeV is a HUGE energy scale; for context, the LHC currently probes energies around 14 TeV. The Higgs mass is around this scale too (it's $m_h = v / 2\approx 125\;\mathrm{GeV}$), and it's one of the reasons we took so long to find the Higgs: it was predicted to exist in the 1960s, but it wasn't actually found until 2012. 
+	
+	Let's then assume the parameterization of Eq.~(\ref{eq:higgs_param}) and see where we can go from there. If we plug this into $\mathcal L_{EW}$, we get:
+	\begin{align}
+		\mathcal L_{EW}\bigg|_{E\ll v} &\supset \frac{\lambda}{\sqrt 2} ((v + h)^\dagger e_R^\dagger e_L + e_L^\dagger e_R (v + h)) \\
+		&= \frac{\lambda v}{\sqrt 2} \underbrace{(e_R^\dagger e_L + e_L^\dagger e_R)}_{\textnormal{Dirac mass for }e} + \frac{\lambda}{\sqrt 2} \underbrace{(h^\dagger e_R^\dagger e_L + e_L^\dagger e_R h)}_{\textnormal{3-point couplings}} \\
+		&= \frac{\lambda v}{\sqrt 2} \overline e e + \frac{\lambda}{\sqrt 2} h \overline e e
+	\end{align}
+	where now $e$ is a Dirac spinor field for the electrons:
+	\begin{equation}
+		e = \begin{pmatrix} e_L \\ e_R \end{pmatrix}.
+	\end{equation}
+	What happens here is that \textbf{the Higgs has given the electrons mass}. By taking on a vev, it allows us to write a mass term in the Lagrangian, and treat the two Weyl fields $e_L$ and $e_R$, which we once thought were independent fields, as two chiral components of the same Dirac fermion. The actual Higgs mechanism is slightly more complicated than this, but this is the main idea: the Higgs taking a vev allows for a way to give particles mass that respects chiral gauge symmetry. 
+	
+	So, let's sum the cases up for the different energy scales we can work at:
+	\begin{enumerate}
+		\item $E\gtrsim v$ (very high energy): In this case, spontaneous symmetry breaking has not occurred. In this regime, the LH and RH electrons $e_L$ and $e_R$ are massless, independent particles.
+		\item $E\ll v$ (``low" energies\footnote{I don't want to say low energy here because they aren't really that low! That's how large the scale $v$ is. These energy scales are what we experience in everyday life, and when we do science, unless we're actively working at a particle collider.})
+	\end{enumerate}
+	
+	%\item {\color{blue} Question: Why are we treating $e_L$ and $e_R$ as separate particles? Don't they both correspond to different chiral components of the electron?}
+	
+	%\item Standard model toy couplings: $W \overline \nu_L e_L$ and vice versa.
+	
+	%\item How does the neutrino gain mass? \textbf{We don't know}. 
+	
+	\item Why are all neutrinos left-handed? The short answer: \textbf{we don't know}. There are some thoughts that at higher energies, the electroweak gauge group expands to include right-handed rotations:
+	\begin{equation}
+		SU(2)_L\times U(1)_Y\rightarrow SU(2)_L\times SU(2)_R\times U(1)_Y
+	\end{equation}
+	but we haven't seen any indication of this yet. 
+
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,357 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{simpler-wick}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 5: Correlation functions}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+% Possible topics: should check out what's on the pset as well
+% - Propagators *
+% - The path integral
+
+%\section*{Propagators}
+
+%\begin{itemize}
+
+%      	\item Green's functions are inverses of differential operators. What this means is that a Green's function $G(z, y)$ for a differential operator $K(x, z)$ satisfies:
+%        	\begin{equation}
+%        		\int d^4 z\; K(x, z) G(z, y) = \delta^{(4)}(x - y).
+%        	\end{equation}
+%	This is of the form of a matrix multiplication over a ``continuous index" on the matrix, $z$. We'll see stuff like this in QFT all the time-- in QM we would have had an honest to goodness matrix equation, without any of the integrals; however, since we have continuous degrees of freedom, the matrix multiplication turns into this. 
+	
+%	\item General form of a propagator: A \textbf{propagator} is just an inverse of the free 
+	
+%	\item Why time-ordering? We'll see later there are two big things that come out of this:
+%	\begin{itemize}
+%		\item Wick's theorem: This is what we'll use to evaluate correlation functions in the free theory.
+%		\item The path integral: When we move to the path integral formalism, we'll see that differentiating the generating functional naturally gives us time-ordered correlation functions. 
+%	\end{itemize}
+	
+%	\item Wick's theorem: Allows us to evaluate free field correlation functions. 
+	
+%\end{itemize}
+
+\section*{Path integrals for free theories}
+
+\begin{itemize}
+
+	\item Intuition for path integrals in field theory: Take the limit of the following equation:
+	\begin{equation}
+		\int D [\phi(x)] e^{i S[\phi]} \longrightarrow \lim_{n\rightarrow\infty} \int \prod_n d \phi(x_n) e^{i S[\phi(x_n)]}.
+	\end{equation}
+	Here $\{x^\mu_n\}_{n}$ enumerate some discretization of spacetime (i.e. a 4D lattice), and $d\phi(x_n)\equiv d\phi_n$ is an integration variable which allows the field at the point $x_n^\mu$ to vary over all possible values. Draw out the example in 2D. 
+
+	\item The path integral is used to compute \textbf{correlation functions} of operators\footnote{This equation holds in both a free and in an interacting theory-- however, to actually evaluate the path integral, we'll need to assume a free theory.}:
+	\begin{equation}
+		G_n\equiv \langle\Omega | \underbrace{T\{\hat{\phi}(x_n) ... \hat{\phi}(x_1) \}}_{\mathrm{operators}} |\Omega\rangle = \frac{1}{\mathcal Z_0} \int D[\phi(x)] e^{i S[\phi(x)]} \underbrace{\phi(x_n) ... \phi(x_1)}_{\mathrm{functions}},
+	\end{equation}
+	where $|\Omega\rangle$ is the vacuum state. These correlators tell us about fluctuations in the vacuum that we get in quantum field theory, which are intuitively induced by uncertainty relations between time and energy. Here $\mathcal Z_0$ is the vacuum normalization,
+	\begin{equation}
+		\mathcal Z_0 = \int D[\phi(x)] e^{i S[\phi(x)]}.
+	\end{equation}
+
+	\item Gaussian integrals with path integrals: The $n$-dimensional Gaussian integrals that we did in the previous recitation generalize to full path integrals. Let's work this out for the free scalar field, where the action is of the form:
+	\begin{align}
+		S[\phi] = \frac{1}{2} \int d^4 x\; d^4 y \, \phi(x) K(x, y) \phi(y) && K(x, y) = \delta^{(4)}(x - y) (-\partial^2 + m^2).
+	\end{align}
+	We can generalize the \textbf{generating functional} that we discussed last recitation,
+	\begin{equation}
+		\mathcal Z[J] = \int D[\phi(x)] \exp\left[ i\int d^4 x \bigg( \mathcal L(\phi, \partial_\mu\phi) + J(x) \phi(x) \bigg) \right],
+	\end{equation}
+	where $J(x)$ is a \textbf{source}. This integral is evaluated in exactly the same way that we evaluated integrals in the previous recitation, just generalizing everything to functionals:
+	\begin{align}
+		\mathcal Z[J] &= \int D[\phi(x)] \exp \left( \frac{i}{2}\int d^4 x\, d^4y \, \phi(x) K(x, y) \phi(y) + i\int d^4 x\, J(x) \phi(x) \right) \\
+		&= \frac{C}{\sqrt{\mathrm{Det}(K)}} \exp \left( \frac{i}{2} \int d^4 x\, d^4 y\, J(x) (K^{-1}) (x, y) J(y) \right).
+	\end{align}
+	Note here that $K^{-1}$ is nothing less than the time-ordered two-point correlation function $G_F(x, y)$. For correlation functions, since we divide through by $\mathcal Z[0]$, we can see that the prefactor in front will just cancel out, so we won't have to evaluate the functional determinant. To evaluate an $n$-point function, we take:
+	\begin{equation}
+		\langle 0 | T\{\phi(x_n) ... \phi(x_1) \} |0\rangle = \frac{1}{\mathcal Z_0} \left(-i\frac{\delta}{\delta J(x_n)} \right) ... \left(-i\frac{\delta}{\delta J(x_1)} \right)\bigg|_{J = 0} \mathcal Z[J].
+	\end{equation}
+	The generating functional tells us everything about the theory we're studying: if we know it, we can compute all the correlation functions of the theory. 
+	
+	\item \textbf{A note about convergence}: Here we're considering oscillatory integrands, although last week in recitation we worked with exponentially decaying integrands. We can go from one to another with impunity because for $a > 0$, the following integrals both converge to the same value:
+	\begin{align}
+		\int_{\mathbb R} du\; e^{-au^2} = \sqrt{\frac{\pi}{a}} && \int_{\mathbb R} du\; e^{iau^2} = \sqrt{\frac{\pi i}{a}}
+	\end{align}
+	This also holds for the multi-dimensional case, since this is derived from diagonalizing this matrix and forming $n$ copies of the one-dimensional case:
+	\begin{align}
+		\int d^n x\, e^{-\frac{1}{2} x_i A_{ij} x_j} = \sqrt{\frac{(2\pi)^n}{\det A}} && \int d^n x\, e^{\frac{i}{2} x_i A_{ij} x_j} = \sqrt{\frac{(2\pi i)^n}{\det A}}.
+	\end{align}
+	Many books will just use exponentially suppressed integrands interchangeably with oscillatory integrands. 
+
+	\item Wick's theorem for the path integral: Just like in the multivariate case, we can use Wick's theorem to construct correlation functions from the generating functional in a free theory. We have:
+	\begin{equation}
+		\langle 0 | T\{\phi(x_n) ... \phi(x_1) \} |0\rangle = \sum_{\mathrm{Wick}} K^{-1}(x_a, x_b) ... K^{-1}(x_c, x_d)
+	\end{equation}
+	where here $\{(x_a, x_b), ..., (x_c, x_d)\}$ sums over all Wick contractions of $\{x_1, x_2, ..., x_n\}$. The explicit form of $K^{-1}(x, y)$ is the time-ordered Green's function,
+	\begin{equation}
+		K^{-1}(x, y) = G_F(x, y) = \langle 0 | T\{\phi(x) \phi(y) \} | 0\rangle = \int\frac{d^4 k}{(2\pi)^4} \frac{-i}{k^2 + m^2 - i\epsilon} e^{i k (x - y)}
+	\end{equation}
+	
+	% Emphasize propagators
+	
+	\item Example: evaluating $\langle 0 | T\{ \phi(x_4) ... \phi(x_1) \} 0 \rangle$ in the free theory. We can just apply Wick's theorem:
+	\begin{equation}
+		\langle 0 | T\{\phi(x_4) \phi(x_3) \phi(x_2) \phi(x_1) \} | 0\rangle = G_F(x_1, x_2) G_F(x_3, x_4) + G_F(x_1, x_3) G_F(x_2, x_4) + G_F(x_1, x_4) G_F(x_2, x_3)
+	\end{equation}
+	We saw this equation before when we looked at this correlation function from the Hamiltonian perspective. For notation, another way that we typically look at this is with Wick contractions:
+	\begin{align}
+		\langle \phi(x_4) \phi(x_3) &\phi(x_2) \phi(x_1)\rangle = \langle \wick{ \c1 \phi(x_4) \c1 \phi(x_3) \c2 \phi(x_2) \c2 \phi(x_1) } \rangle + \langle \wick{ \c1 \phi(x_4) \c2 \phi(x_3) \c1 \phi(x_2) \c2 \phi(x_1) } \rangle + \langle \wick{ \c1 \phi(x_4) \c2 \phi(x_3) \c2 \phi(x_2) \c1 \phi(x_1) } \rangle \nonumber \\
+		&= \langle \phi(x_4) \phi(x_3) \rangle \langle \phi(x_2) \phi(x_1) \rangle + \langle \phi(x_4) \phi(x_2) \rangle \langle \phi(x_3) \phi(x_1) \rangle + \langle \phi(x_4) \phi(x_1) \rangle \langle \phi(x_3) \phi(x_2) \rangle,
+	\end{align}
+	where each Wick contraction represents a pairwise way to evaluate a two-point function. You can represent this diagrammatically as well, which I'll do during recitation. 
+	
+	
+	\item \textbf{Free vs interacting theories}: We've probably already said these words in class before, but I want to formalize this here. A free theory has an action which \textbf{quadratic} in the field $\phi$ (we'll see a similar thing for spinor fields later in the course). If we add any other term to the action, that term is an \textbf{interaction}, and we have an \textbf{interacting theory}, for example in a $\phi^3$ theory:
+	\begin{equation}
+		\mathcal L(\phi, \partial_\mu\phi) = \underbrace{-(\partial \phi)^2 + m^2\phi^2}_{\mathcal L_{\mathrm{free}}} + \underbrace{\frac{g}{3!} \phi^3 }_{\mathcal L_\mathrm{int}}.
+	\end{equation}
+	
+	One of the really nice things we get out of looking at a free theory is that we can \textit{do the path integral explicitly}. Free theories yield Gaussian path integrals, which we've just shown that we know how to do. The ease with which we can do path integrals for free theories means that as we go through this course, we'll be doing path integral for \textit{interacting} theories in terms of the free theory path integral, which we'll use perturbation theory to do. 
+	
+%\vspace{10mm}
+\begin{answerbox}
+	{\centering \textbf{The vacuum state} } \\
+	
+	\raggedright
+	You'll notice in the previous equation that I wrote out $|\Omega\rangle$ as the vacuum state, but previously I was writing $|0\rangle$. There's a reason for this notational difference. We'll use $|0\rangle$ to denote the vacuum state of a \textbf{free theory} (i.e. a theory which only has a kinetic term and a mass term), and $|\Omega\rangle$ to denote the vacuum state of an \textbf{interacting theory}. These are \textit{different states}, and since we know how to do QFT with a free theory, we understand the structure of $|0\rangle$ much better than we do $|\Omega\rangle$. Later in this course, we'll clarify this difference a bit more, and we'll use perturbation theory to understand the behavior of $|\Omega\rangle$ in terms of $|0\rangle$. 
+\end{answerbox}
+	
+\end{itemize}
+
+\section*{Wick rotation}
+\begin{itemize}
+	\item A \textbf{Wick rotation} is a change of variables + rotation of the integration contour that allows us evaluate oscillatory integrals as integrals in Minkowski space. You won't be heavily using this technique until you start doing loop integrals in QFT II, but it's interesting and relevant so I thought it would be fun to go over. 
+	
+	\item The motivation behind Wick rotation is to write path integral in a way that is exponentially decaying, rather than oscillating. Let's consider the vacuum normalization path integral,
+	\begin{equation}
+		\mathcal Z[0] = \int D[\phi(x)] \exp \left( i\int_\mathbb{R} dt \int d^3\vec x \mathcal L \right). 
+	\end{equation}
+	The time integral runs over $\mathbb R$, but we can use Cauchy's theorem to \textit{rotate it} to an integral over the imaginary axis. We do this for the positive and negative real numbers separately. For the positive real numbers, Cauchy's theorem implies,
+	\begin{equation}
+		\left(\int_{\mathbb R^+} + \lim_{r\rightarrow\infty} \int_{C_r} + \int_{-\mathbb I^+}\right) dt \int d^3\vec x\, \mathcal L = 0\implies \int_{\mathbb R^+} dt \int d^3\vec x \mathcal L = \int_{\mathbb I^+} dt\int d^3\vec x \mathcal L,
+	\end{equation}
+	assuming the integrand is holomorphic (which we will do). The same thing holds for the negative real numbers, and so we have successfully rotated the contour of integration,
+	\begin{equation}
+		\int_{\mathbb R} dt\int d^3\vec x\, \mathcal L = \int_{\mathbb I} dt\int d^3\vec x\, \mathcal L.  \label{eq:contour_rotation}
+	\end{equation}
+	
+	Now, we perform a variable redefinition and define $t\equiv i\tau$, where $\tau$ is the \textbf{Euclidean time}. It is named like this because in these coordinates, the metric becomes Euclidean:
+	\begin{equation}
+		ds^2 = \underbrace{ -dt^2 + d\vec x^2 }_{\mathrm{Minkowski}} = \underbrace{ d\tau^2 + d\vec x^2 }_{\mathrm{Euclidean}}.
+	\end{equation}
+	Because the metric is now $(1, 1, 1, 1)$, we can treat this space like $\mathbb R^4$, and in particular we can use identities that we expect from Euclidean space. If we use our new variable definition in Eq.~(\ref{eq:contour_rotation}), we see that the integration of $dt$ over $\mathcal I$ now just becomes an integration of $d\tau$ over $\mathbb R$, 
+	\begin{align}
+		\int_{\mathbb R} dt \int d^3\vec x \, \mathcal L_M = i \int_{\mathbb R} d\tau \int d^3\vec x \mathcal L_E && S_M = i S_E
+	\end{align}
+	where we've now put tags on the Lagrangians and actions denoting if they're evaluated in Euclidean or Minkowski space. The moral of the story is this: assuming we're integrating a holomorphic function, \textbf{we can rotate and redefine the variable integration to allow us to perform an integral in Euclidean space}. 
+	
+	\item Let's see what Wick rotation does to the path integral:
+	\begin{equation}
+		\mathcal Z[0] = \int D[\phi(x)] e^{ i S_M[\phi]} = \int D[\phi(x)]  e^{ -S_E[\phi]}.
+	\end{equation}
+	Wick rotation turns the oscillating integral into an exponentially decaying integral! Doing an exponentially decaying integral in Euclidean space can be a whole lot easier to do perform in many situations, and in many rigorous formulations of QFT, this is what is used. 
+	
+\end{itemize}
+
+\subsection*{What's in a correlation function?}
+
+\begin{itemize}
+
+	\item My research is in lattice QCD, where we try to perform the path integral numerically to evaluate correlation functions. It's an approximate method (we're discretizing spacetime, so it has to be approximate), but it's the only way we know to evaluate the path integral non-perturbatively, and we can control the systematics that enter the computation as well. The intuition behind this is to discretize (Euclidean) spacetime, and so the path integral just becomes a very high dimensional integral:
+	\begin{equation}
+		\int D[\phi(x)]\longrightarrow\prod_{n = 1}^N \int d \phi_n
+	\end{equation}
+	where here $\phi_n\equiv \phi(x_n)$ is evaluated at the lattice sites, and the number of integrals here scales like the size of the lattice, $N\sim L^3\times T$. To give you an estimate, I'm currently doing work on a $48^3\times 96$ site lattice, so the integral is 10-million dimensional. 
+	
+	\item To do integrals that are very high dimensional, we \textbf{need} to use the fact that we're in Euclidean space. That's because in Euclidean space, the action can be interpreted as a probability density,
+	\begin{equation}
+		\langle\Omega | T\{\mathcal O(x_n) ... \mathcal O(x_1) \} | \Omega\rangle = \prod_n \int \underbrace{ d\phi_n e^{-S[\phi_n]} }_{d\mathbb P} \mathcal O(x_1) ... \mathcal O(x_n),
+	\end{equation}
+	and we can evaluate this integral by sampling field configurations which obey this probability distribution $\mathcal P(\phi_n)$, and evaluating the observable on each field configuration. 
+	
+	\item Correlation functions contain all the information about the system that we need. To illustrate this, let's evaluate the correlation function of a pion interpolator:
+	\begin{equation}
+		C_2(\bm p = \bm 0, t) = \sum_{\bm x, \bm y} \langle \Omega | \chi_\pi(\bm x, t) \chi_{\pi}^\dagger(\bm y, 0) | \Omega\rangle.
+	\end{equation}
+	You can think of $\chi_{\pi}$ as the pion field, which can create or destroy pions, and the sum on $\bm x$ and $\bm y$ is doing a momentum projection to pion states which have $\bm 0$ three-momentum. We can compute a correlator like this with lattice QCD. Once we have the correlator, we can compute the \textbf{mass of the pion} by inserting a resolution of the identity,
+	\begin{equation}
+		\mathbb 1 = \sum_n \frac{1}{2 E_n} |n\rangle\langle n|,
+	\end{equation}
+	where here $|n\rangle$ are the energy eigenstates of our theory. Using the Heisenberg evolution of $\chi_\pi(\bm x, t)$ in Euclidean space as $\chi_\pi(\bm x, t) = e^{Ht} \chi_\pi(\bm x, 0) e^{-Ht}$ and acting the $e^{-Ht}$ on the set of energy eigenstates $|n\rangle$, we can write the sum out as:
+	\begin{equation}
+		C_2(\bm p = \bm 0, t) = \sum_{n} \underbrace{ \left(\frac{1}{2 E_n} \bigg| \langle \Omega | \sum_{\bm x} \chi(\bm x, 0) | n\rangle \bigg|^2\right) }_{\mathrm{time-independent}} e^{-E_n t},
+	\end{equation}
+	where $E_n$ is the energy of the state. The nice thing about this is that $E_n t$ is exponentially decaying, so if we take the large $t$ limit, we isolate the ground state of the system, in which $E_0$ is just the mass of the pion:
+	\begin{equation}
+		C_2(\bm p = \bm 0, t) \longrightarrow (\mathrm{const}) e^{-m_\pi t}
+	\end{equation}
+	We can compute $C_2(\bm p = \bm 0, t)$ explicitly using lattice QCD, and fit the data to extract the pion mass. 
+
+\end{itemize}
+
+% Lattice QCD
+
+%\section*{Units}
+
+%\begin{itemize}
+
+%	\item We've been using natural units this entire course, and now that we're approaching scattering, it's time to make things a little more concrete. 
+	
+%	\item Fundamental constants provide a unit system in which we set them equal to 1. This course will use \textbf{natural units}, in which we set $\hbar = c = 1$. This is primarily done to simplify equations, since most relations in QFT have a large number of factors of $\hbar$ and $c$. This will look strange at first, and it is! What does $c = 1$ mean-- how can you set a velocity equal to a dimensionless number? This definition sets two types of measurements equal to one another: time and length. $c = 3\times 10^8\;\mathrm{m} / \mathrm{sec}$, so $c = 1$ really means that $1\;\mathrm{sec} = 3\times 10^8$ meters. If I have a time measurement of 3 seconds, I can give it to you as 3 seconds, or equivalently as $9\times 10^9$ meters; they're equivalent under the assumption $c = 1$! 
+	
+%	\item As another example, the Compton wavelength of a mass $m$ particle is defined as $\lambda_c = 1 / m_e$ in natural units. I can measure $\lambda_c$ as an inverse energy, since $E = mc^2 = m$, so typically you'll see $\lambda_c$ quoted as an inverse energy like this, $\lambda_c = 1.9\times 10^3\;\mathrm{GeV}^{-1}$. How do we get back to a value of $\lambda_c$ in something we understand, like meters? We can \textbf{restore units} by multiplying this value with the appropriate factors of $\hbar$ and $c$, using $\hbar = 6.58\times 10^{-16}\;\mathrm{eV}\cdot \mathrm{sec}$. Multiplying this with $c$ gives us the conversion factor from $\mathrm{GeV}^{-1}$ to meters:
+%	\begin{align}
+%		\hbar c = 0.2\;\mathrm{GeV}\cdot\;\mathrm{fm} = 1 \implies \lambda_c = (1.9\times 10^3\;\mathrm{GeV}^{-1}) (0.2\;\mathrm{GeV}\cdot \mathrm{fm}) = 380\;\mathrm{fm} = 3.8\times 10^{-13}\;\mathrm{m}
+%	\end{align}
+	
+%	\item Cheat sheet for unit conversions:
+
+%\end{itemize}
+
+\section*{Scattering Overview}
+
+% Explicilty write down the definitions of $S$, $T$, and $\mathcal M$ next to one another
+{\color{red} We will likely do this next week in recitation 6. }
+
+\begin{itemize}
+
+	\item Scattering is the main way that we study interactions between particles in QFT. It gives us a way to connect what we've been doing to experiments which can be done at a collider. We'll review some of the main ideas Hong presented this week in lecture here, and then elaborate on this next week.
+	
+	\item The main setup for scattering is to prepare a state with definite 3-momentum $\vec k$ at $t = -\infty$, let it propagate and hit a (localized) potential, and see what happens to the state as $t\rightarrow+\infty$. 
+	
+	\item In QFT, the scattering process is encoded in the \textbf{S-matrix}, which is an operator that has matrix elements given between initial states $|i\rangle$ and final states $|f\rangle$:
+	\begin{equation}
+		\langle f | S |i\rangle = \langle f, t = \infty | i, t = -\infty\rangle = \langle f | U(\infty, -\infty) | i\rangle.
+	\end{equation}
+	$S$-matrix elements are essentially just matrix elements of the time-evolution operator $U(\infty, -\infty)$. The next few lectures are going to go over how we compute these $S$-matrix elements in an interacting theory. We'll see that they're intimately related to correlation functions, and 
+	
+	\item The \textbf{T-matrix}: Here "T" stands for "transfer". The $T$-matrix encodes information about the physics which is actively doing the scattering,
+	\begin{equation}
+		S = 1 + i T,
+	\end{equation}
+	and is the portion of the $S$-matrix that we'll be interested in, since the identity part just corresponds to a particle freely propagating. The \textbf{scattering amplitude} $\mathcal M_{\alpha\rightarrow\beta}$ is the non-trivial part of the $T$-matrix, 
+	\begin{equation}
+		\langle \beta | T | \alpha\rangle = \underbrace{(2\pi)^4 \delta^{(4)}(p_\alpha - p_\beta)}_{\textnormal{momentum conservation}} \mathcal M_{\alpha\rightarrow\beta}
+	\end{equation}
+	and is the portion of the $S$-matrix which we'll be trying to compute for the rest of this course. The scattering amplitude is the quantity that we'll relate to observables like the differential cross section. 
+	
+	\item Differential cross sections: 
+	
+	\item QM scattering from central force potentials: You may remember from your QM classes that we often solve central force scattering problems by determining the scattering amplitude $f$:
+	\begin{align}
+		\psi(r, \theta, \phi) \propto \frac{e^{ikr}}{r} f(\theta, \phi) &&
+		\frac{d\sigma}{d\Omega} = | f(\theta, \phi) |^2.
+	\end{align}
+	This is essentially the same formula as we have with $d\sigma / d\Omega$ in terms of $|\mathcal M_{\alpha\rightarrow\beta}|^2$. 
+
+\end{itemize}
+
+
+\end{document}

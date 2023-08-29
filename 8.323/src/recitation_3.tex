@@ -1,0 +1,233 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 3: Contour integration, symmetries}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+% Possible topics: should check out what's on the pset as well
+% - Contour integration *
+% - Propagators *
+% - Symmetry operations *
+% - Quantizing complex fields
+
+\section*{Contour integration}
+
+See handwritten notes.
+
+\section*{Symmetries}
+
+\begin{itemize}
+	
+	\item A \textbf{Lie group} $G$ is a manifold with a group structure. A \textbf{Lie algebra} $\mathfrak g$ is a vector space equipped with a Lie bracket $[\cdot, \cdot]$ (a commutator). The Lie algebra $\mathfrak g$ implements infinitesimal symmetry transformations, and the Lie group $G$ implements finite symmetry transformations. 
+	
+	\item The \textbf{exponential map} relates elements of the Lie algebra to the Lie group. If I have an element $A\in \mathfrak g$ of the Lie algebra, I can get a corresponding element of the Lie group by:
+	\begin{equation}
+		g = e^{iA}\in G\label{eq:lie_group_expansion}
+	\end{equation}
+	The nice part about this is that the Lie algebra \textit{parameterizes} the Lie group. Since $\mathfrak g$ is a vector space, we can write out $A = A^a t^a$ where $\{t^a\}$ is a basis for the Lie algebra. Then if I specify the coordinates $A^a$ (just an $n$-tuple of numbers), I can write down any symmetry operator I want. 
+	
+	\item Ex: Rotations in quantum mechanics. For a spin $1/2$ system, rotations are implemented with the exponential of the angular momentum. The rotation operator is:
+	\begin{equation}
+		U_{1/2}(\hat n, \theta) = \exp(-i\theta\hat n\cdot \bm \sigma / 2)
+	\end{equation}
+	were $\bm \sigma$ is the vector of Pauli matrices, $\bm \sigma = (\sigma_x, \sigma_y, \sigma_z)$. Here the Lie algebra is $\mathfrak{su}(2)$, and spanned by the Pauli matrices-- a basis for $\mathfrak{su}(2)$ is $\{\sigma_x, \sigma_y, \sigma_z\}$, and as such we can write \textit{any} element of $\mathfrak{su}(2)$ as $-\theta \hat n\cdot \bm \sigma / 2$. 
+	
+	\item Ex: Lorentz group. The Lorentz algebra $\mathfrak{so}(1, 3)$ is spanned by the tensor $\mathcal J^{\mu\nu}$, or equivalently the boost or rotation generators $K_i, J_i$. We saw in the first recitation that we can write down any Lorentz transformation as:
+	\begin{equation}
+		\Lambda = \exp\left(\frac{i}{2}\omega_{\mu\nu} \mathcal J^{\mu\nu}\right)
+	\end{equation}
+	where $\omega_{\mu\nu}$ contains 6 independent real parameters (boost and rotation angles) that parameterize the Lie algebra. In the context of what we're doing here, we see that $\mathfrak{so}(1, 3)$ is spanned by $\{\mathcal J^{01}, \mathcal J^{02}, \mathcal J^{03}, \mathcal J^{12}, \mathcal J^{13}, \mathcal J^{23}\}$, and so any element of the Lie algebra is written as a linear combination of these $\mathcal J^{\mu\nu}$, i.e. $\omega_{\mu\nu} \mathcal J^{\mu\nu}$. 
+	
+	\item Another example: Conserved charges $H$ and $P^i$ in QFT. These are \textbf{generators} of time and spatial translation, respectively. They generate the Lie algebra for translation, and an arbitrary element of the algebra can be written as $Ht - P^i x^i = - P_\mu x^\mu$. We exponentiate this to get finite symmetry transformations:
+	\begin{equation}
+		U_x = \exp\left(iHt - i P^i x^i \right) = e^{-iP_\mu x^\mu}
+	\end{equation}
+	
+	% Something to talk about: operators live in a representation which gets conjugated by $U_\Lambda$. 
+	\item A Lie group (algebra) is typically pretty abstractly defined. To act it on a vector space, we need a \textbf{representation} of the group or algebra. For a vector space $V$, a representation of $G$ is a map $D : G\rightarrow GL(V)$, where $GL(V)$ is the space of invertible linear transformations on $V$. Likewise, a representation of $\mathfrak g$ is a map $d : \mathfrak g\rightarrow gl(V)$, where $gl(V)$ is the space of \textit{all} linear transformations on $V$. All a representation does is it gives us a way to act a symmetry group on a vector space. 
+	
+	\item Given a representation of the algebra, we can \textit{induce} a representation of the group by:
+	\begin{equation}
+		D(g) = e^{i d(A)}
+	\end{equation}
+	where $g = e^{iA}$ as in Eq.~(\ref{eq:lie_group_expansion}). 
+	
+	% Go through a geometric interpretation for $[Q^\alpha, \phi_a] = -i f_a^\alpha$. 
+	\item Let's consider our Fock space:
+	\begin{equation}
+		H = |0\rangle\oplus \{a_{\vec k}^\dagger |0\rangle : \vec k\in\mathbb{R}^3\}\oplus \{a_{\vec k}^\dagger a_{\vec k'}^\dagger |0\rangle : \vec k, \vec k'\in\mathbb R^3\} \oplus ...
+	\end{equation}
+	To act a Lorentz transformation $\Lambda\in\mathrm{SO}(1, 3)$ on an element $|\psi\rangle\in H$, we need a representation of $SO(1, 3)$ on $H$. To specify the representation, we can simply show us where it sends the generators to, i.e. we can specify $d(\mathcal J^{\mu\nu})$, since:
+	\begin{equation}
+		U_\Lambda = D(\Lambda) = \exp \left(\frac{i}{2} \omega_{\mu\nu}\; d(\mathcal J^{\mu\nu})\right).
+	\end{equation}
+	This equation is important! Fields of different spin in QFT all correspond to different representations $d(\mathcal J^{\mu\nu})$. 
+	
+	\item Conserved charges $M_{\mu\nu}$: The representation that we use to act symmetries on our Fock space $H$ is:
+	\begin{equation}
+		d_\mathrm{Fock}(J^{\mu\nu}) = M^{\mu\nu} = -\frac{i}{2} \int \frac{d^3\vec k}{(2\pi)^3} k^\mu \left(a_{\vec k}^\dagger\partial_{k_\nu} a_{\vec k} - (\partial_{k_\nu} a_{\vec k}^\dagger ) a_{\vec k}\right) - (\mu\leftrightarrow\nu)
+	\end{equation}
+	This means that we want to act a Lorentz transformation on a state, let's say a one-particle state $|\vec k\rangle$ for concreteness, we just need to act $U_\Lambda$ on it:
+	\begin{equation}
+		|\vec k\rangle\mapsto U_\Lambda |\vec k\rangle = \exp\left(\frac{i}{2} \omega_{\mu\nu} M^{\mu\nu}\right)|\vec k\rangle.
+	\end{equation}
+	
+	\item Invariance of a state under symmetries. For a state $|\Omega\rangle$ which is \textbf{conserved} under a symmetry $U$, we require that it is unchanged by the symmetry, $U |\Omega\rangle = |\Omega\rangle$. In the language we've been using, since $U = e^{i d(A)}$ for generators $A$, invariance of $|\Omega\rangle$ implies that \textbf{generators map the state to 0}. For example, the vacuum in QFT is invariant under time-translation, spatial translation, and Lorentz transformations. This implies that:
+	\begin{equation}
+		H|0\rangle = P^i|0\rangle = M^{\mu\nu}|0\rangle = 0
+	\end{equation}
+	Note that $|0\rangle$ is the vacuum state, and $0$ is the zero vector-- these are different things!
+	
+\end{itemize}
+
+\section*{Complex fields}
+
+\begin{itemize}
+
+	\item Complex fields: For a scalar field theory with complex fields, $\phi$ and $\phi^*$ are now independent degrees of freedoms. They can both be expanded with two types of creation and annihilation operators:
+	\begin{align}
+		\phi(\vec x, t) &= \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\vec k}}} (a_{\vec k} e^{-i\omega_{\vec k} t + i\vec k \cdot\vec x} + b_{\vec k}^\dagger e^{i\omega_{\vec k} t - i\vec k \cdot\vec x}) \\
+		\phi^*(\vec x, t) &= \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\vec k}}} (b_{\vec k} e^{-i\omega_{\vec k} t + i\vec k \cdot\vec x} + a_{\vec k}^\dagger e^{i\omega_{\vec k} t - i\vec k \cdot\vec x}).
+	\end{align}
+	Here $a_{\vec k}, a_{\vec k}^\dagger$ create and destroy \textit{particles}, and $b_{\vec k}, b_{\vec k}^\dagger$ create and destroy \textit{anti-particles}. When $\phi$ was a real field, the reality constraint $\phi = \phi^*$ removed the second set of creation / annihilation operators from the equation, but when $\phi$ is complex you must include the second set of operators $b_{\vec k}$. Note that:
+	\begin{equation}
+		[a_{\vec k}, b_{\vec k}] = [a_{\vec k}^\dagger, b_{\vec k}] = [a_{\vec k}, b_{\vec k}^\dagger] = 0.
+	\end{equation}
+
+	\item Physical intuition: $a_{\vec k}^\dagger |0\rangle$ creates a particle from the vacuum with momentum $\vec k$. How do you create a particle localized at position $\vec x$? Let's see what $\phi(\vec x, t)$ does when it acts on the vacuum:
+	\begin{equation}
+		\phi(\vec x, 0)|0\rangle = \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\vec k}}} e^{-i\vec k\cdot\vec x} b_{\vec k}^\dagger |0\rangle = 
+		\underbrace{\int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{2\omega_{\vec k}} e^{-i\vec k\cdot\vec x} |\vec k\rangle_{b}}_{\textnormal{Antiparticle wave packet at $\vec x$}}
+	\end{equation}
+	So, this creates an antiparticle with momentum $\vec k$. If we want to create a particle, we instead need to act with $\phi^*$:
+	\begin{equation}
+		\phi^*(\vec x, 0) |0\rangle = \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{2\omega_{\vec k}} e^{-i\vec k\cdot\vec x} |\vec k\rangle_{a}
+	\end{equation}
+
+\end{itemize}
+
+%\section*{Propagators}
+
+%\begin{itemize}
+
+%      	\item Green's functions are inverses of differential operators. What this means is that a Green's function $G(z, y)$ for a differential operator $K(x, z)$ satisfies:
+%        	\begin{equation}
+%        		\int d^4 z\; K(x, z) G(z, y) = \delta^{(4)}(x - y).
+%        	\end{equation}
+%	This is of the form of a matrix multiplication over a ``continuous index" on the matrix, $z$. We'll see stuff like this in QFT all the time-- in QM we would have had an honest to goodness matrix equation, without any of the integrals; however, since we have continuous degrees of freedom, the matrix multiplication turns into this. 
+	
+%	\item General form of a propagator: A \textbf{propagator} is just an inverse of the free 
+	
+%	\item Why time-ordering? We'll see later there are two big things that come out of this:
+%	\begin{itemize}
+%		\item Wick's theorem: This is what we'll use to evaluate correlation functions in the free theory.
+%		\item The path integral: When we move to the path integral formalism, we'll see that differentiating the generating functional naturally gives us time-ordered correlation functions. 
+%	\end{itemize}
+%\end{itemize}
+
+\end{document}

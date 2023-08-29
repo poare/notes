@@ -1,0 +1,498 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+%SetFonts
+
+%SetFonts
+
+
+\title{8.851 Final Project: Chiral Lagrangians in Lattice QCD}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\thispagestyle{empty}
+
+\section*{Abstract}
+
+This project will discuss how to implement the chiral Lagrangian in lattice QCD. We will begin with a brief introduction to 
+lattice QCD and introduce Wilson fermions, before turning to a discussion of chiral symmetry on the lattice and introducing 
+Ginsparg-Wilson fermions. We will show how to construct the chiral Lagrangian for these types of fermions by regarding the 
+finite lattice-spacing corrections to the QCD action as external operators. A spurion analysis similar to that for the QCD mass 
+term can be conducted to add these corrections to the chiral Lagrangian, and we shall compute these spurions and present 
+the chiral Lagrangian for Wilson and Ginsparg-Wilson fermions in lattice QCD up to order $a^2$.
+
+\newpage
+\setcounter{page}{1}
+
+\section{Introduction}
+
+% TODO this is too trivial of an introduction paragraph probably
+Quantum Chromodynamics (QCD) is the theory of the strong nuclear force. It is a $SU(3)$ gauge theory coupled to 6 
+flavors of fermions-- the quarks. At low energies, the coupling of QCD is large and perturbation theory cannot be applied to 
+the theory, which means physics must be extracted by non-perturbative means. One such way to do this is to formulate 
+QCD as a \textbf{lattice gauge theory} by discretizing spacetime-- the advantage of this is that the path integral becomes a 
+finite (albeit large) dimensional integral which can be evaluated on a computer via a Monte Carlo simulation. 
+
+Unfortunately due to the complexity of QCD, it is often difficult to approximate the path integral with a low degree of 
+uncertainty. A major limitation is inverting the discretized Dirac operator $\slashed D + m_q$ as a $N^2$ dimensional matrix, 
+where $N$ is the number of lattice sites. When $m$ is small this operator is near singular, and inversions are much noisier 
+and more expensive. To reduce this cost and error, lattice computations are often done where the light quarks are taken to 
+have a larger-than-physical mass, and then extrapolated to the limit of physical quark mass.
+
+These quark mass extrapolations all rely on chiral perturbation theory ($\chi$PT), which offers us valuable insight into the 
+structure of low-energy QCD. Looking at QCD in the massless quark limit allows us to study the spontaneous breaking of 
+chiral symmetry, which yields the chiral Lagrangian. Using the chiral Lagrangian, we can analytically study the light 
+spectrum of QCD, and make predictions about how changing the light quark masses will change the physics of QCD.
+
+The chiral Lagrangian was developed for continuum studies of QCD, and as a result it does not contain any discretization 
+artifacts which are generated by discretizing spacetime and putting it on a finite lattice. As a result, it is of interest to 
+study how to put the chiral Lagrangian on the lattice. We will see that it is more difficult than in the continuum case because 
+lattice actions have a plethora of terms which break chiral symmetry. However, we can deal with these terms by treating 
+them as spurions, much like how the mass term is added to the continuum chiral Lagrangian. 
+
+We will begin with a review of chiral perturbation theory and the spurion technique. Next, we will give an overview of lattice 
+QCD and discuss its degrees of freedom. We will then use the Symanzik action as an example and show how to add 
+discretization artifacts from the action to the chiral Lagrangian. Finally, we will end by studying Ginsparg-Wilson 
+fermions in chiral perturbation theory, which are a specific type of lattice fermion that behaves nicely under chiral symmetry.
+
+\section{Preliminaries}
+
+\subsection{The chiral Lagrangian}
+
+The Lagrangian for massless QCD in the Minkowski continuum is
+\begin{equation}
+	\mathcal L = \overline\psi i\slashed D \psi = \overline\psi_L i\slashed D \psi_L + \overline\psi_R i\slashed D\psi_R
+\end{equation}
+where the left and right handed components of $\psi$ are defined as $\psi_L = \frac{1 - \gamma_5}{2}\psi$ and $\psi_R 
+= \frac{1 + \gamma_5}{2}\psi$. This decomposition makes it evident that massless QCD is invariant under the 
+symmetries $(\psi_L, \psi_R)\mapsto (L\psi_L, R\psi_R)$, where $(L, R)\in SU(N_f)_L\times SU(N_f)_R$\footnote{The 
+symmetry group here could be taken to be $U(N_f)_L\times U(N_f)_R$, but the axial $U(1)$ pieces is broken by anomalies 
+and $U(1)_V$ symmetry leads to $B - L$ conservation.} are flavor rotations and $N_f$ is the number of massless quarks. 
+The chiral symmetry of $\mathcal L$ under $G := SU(N_f)_L\times SU(N_f)_R$ is spontaneously broken by the quark 
+condensate $\langle q\overline q\rangle\neq 0$ down to the subgroup $H := SU(N_f)_V$, where $SU(N_f)_V$ is the vector 
+subgroup of $G$ given by $H = \{(V, V) \in G : V\in SU(N_f)\}$. 
+
+The chiral Lagrangian is a theory of the Goldstone bosons which result from the spontaneous symmetry breaking 
+pattern $G\rightarrow H$. It can be matched to QCD at low energies, and used to make phenomenological predictions 
+about the light degrees of freedom of QCD. To construct the chiral Lagrangian, we begin with a field $\Sigma$ for the 
+Goldstone bosons. Since Goldstone bosons live in the quotient space $G / H$, $\Sigma$ must parameterize this quotient, 
+and by exhibiting such a parameterization we can determine how $\Sigma$ must transform under a chiral rotation. 
+Let $(g_L, g_R)\;mod\; H$ be an arbitrary element in $G / H$. Then we may write:
+\begin{equation}
+	(g_L, g_R)\;mod\;H = (g_L g_R^\dagger, 1) (g_R, g_R)\;mod\; H = (g_L g_R^\dagger, 1) \;mod\; H
+\end{equation}
+as $(g_R, g_R)$ lives in the vector subgroup $H$. This means that we can parameterize $G / H$ with $\Sigma := g_L 
+g_R^\dagger\in SU(N_f)$, and hence we see that $\Sigma$ must transform under $(L, R)\in G$ as:
+\begin{equation}
+	\Sigma\mapsto L\Sigma R^\dagger
+\end{equation}
+
+We can expand $\Sigma(x) := \exp\left(\frac{2i\Pi^a(x) \tau^a}{f}\right)$, where $\tau^a$ are the generators of $SU(N_f)$, 
+and the $\Pi^a$ will be either a triplet or octet of mesons, depending on whether we take $N_f = 2$ or $N_f = 3$. The 
+lowest order chiral Lagrangian can now be written down with the most general set of terms consistent with $\Sigma
+\mapsto L\Sigma R^\dagger$, which is:
+\begin{equation}
+	\mathcal L_\chi = \frac{f^2}{4}\, tr\left\{\partial_\mu\Sigma \partial^\mu\Sigma^\dagger\right\}
+\end{equation}
+This can be expanded in the meson fields $\Pi^a$ to compute their dynamics and interactions. 
+
+We can add other interactions to this Lagrangian via a \textbf{spurion} analysis, which we will later generalize for the 
+case of lattice field theory. To do this, we will take an operator not invariant under chiral symmetry and add it to the QCD 
+Lagrangian with a Wilson coefficient which we will take to be a dynamical field instead of simply a coupling. This field is 
+called the spurion, and taken to transform under $G$ in such a way that the entire term is invariant under $G$. Once 
+this is done, this term is added to the chiral Lagrangian and set equal to its initial value. 
+
+An explicit example of this method is done by adding the QCD mass term to $\mathcal L_\chi$. The mass term $m\overline 
+\psi \psi = m(\overline\psi_L\psi_R \overline\psi_R\psi_L)$ couples together the right and left handed components of $\psi$, 
+and thus is only invariant under the vector subgroup $SU(N_f)_V$ and not the entire group $G$. To make this invariant 
+under $G$, we promote $m$ to a field $M$. We take $M$ to transform under $(L, R)\in G$ as $M\mapsto L M R^\dagger$, 
+which makes $\overline\psi_L M\psi_R + \overline\psi_R M^\dagger \psi_L$ invariant under chiral symmetry. This term 
+can now be added to $\mathcal L_\chi$ at lowest order:
+\begin{equation}
+	\Delta\mathcal L_\chi = \mu\, tr\left\{M\Sigma^\dagger + M^\dagger\Sigma\right\}
+\end{equation}
+where $\mu$ is a coupling. Once this term is added, we set it to its constant value $M_0 = diag(m_1, m_2, ...)$ and obtain:
+\begin{equation}
+	\mathcal L_\chi = \frac{f^2}{4} tr\left\{\partial_\mu\Sigma\partial^\mu\Sigma^\dagger\right\} - \mu\,tr\left\{
+	M_0\left(\Sigma + \Sigma^\dagger\right)\right\}
+\end{equation}
+When we consider the chiral Lagrangian on the lattice, we will add in discretization artifacts to the Lagrangian as spurions.
+Before we can do this, we must discuss some background from lattice gauge theory.
+
+\subsection{Lattice QCD}
+
+This section will outline the background we need to study chiral Lagrangians on the lattice; specifically, we will define our 
+theory and the operators of relevance to us. We begin by making some initial definitions: denote our spacetime lattice with 
+spacing $a$ by $\Lambda$, and Wick rotate to imaginary time so that $\Lambda$ is a Euclidean lattice\footnote{We must 
+Wick rotate so that the Boltzmann factor of $e^{iS}$ in the path integral becomes a valid probability density $e^{-S}$, in 
+order to perform any computations at all.}. In the full theory of QCD, the dynamical fields in the path integral are the quark 
+fields $\psi$ and gluon fields $A_\mu$. When we discretize QCD, we will still work with the quark fields, but instead of 
+directly working with the gauge fields $A_\mu$ we will work with \textbf{link fields} $U_\mu(x)$ which transform in the 
+following way under a gauge transformation $\Omega : \Lambda\rightarrow SU(3)$:
+\begin{equation}
+	U_\mu(x)\xrightarrow{\Omega(x)}\Omega(x) U_\mu(x)\Omega(x + a\hat{\mu})^\dagger
+\end{equation}
+Here $\hat{\mu}$ is the unit vector in the $\mu$ direction, and $x\in\Lambda$ denotes a site in the lattice. These link fields 
+are the discrete counterpart of a Wilson line in continuum QFT, and may be expanded as $U_\mu(x) = \exp(ia A_\mu(x))$. 
+They serve the role of a connection between fibers at different points in $\Lambda$, and hence they allow us to define a 
+\textbf{discrete covariant derivative} $\nabla_\mu$ as:
+\begin{equation}
+	\nabla_\mu\psi(x) := \frac{U_\mu(x)\psi(x + a\hat{\mu}) - \psi(x)}{a}
+\end{equation}
+$\nabla_\mu$ will take the place of $D_\mu = \partial_\mu + ig A_\mu$ in our lattice theory. 
+
+Using this, we can discretize the Euclidean Lagrangian $\overline\psi(\slashed D + m)\psi$. Note that discretization is not 
+unique, as different choices of lattice actions can yield the same continuum limit. The simplest choice of discretization of 
+the Dirac operator $\slashed D$ is known as the \textbf{Wilson operator} $D_W$:
+\begin{equation}
+	D_W := \frac{1}{2}\left\{\gamma^\mu (\nabla_\mu + \nabla_\mu^* - a r \nabla_\mu^*\nabla^\mu)\right\}~
+	\label{eq:D_wilson}
+\end{equation}
+where $r$ is a parameter which is typically set to 1 in lattice calculations. There are two parts to the Wilson operator: the 
+first is the naive discretization of $\slashed D$ as $\frac{1}{2}\gamma^\mu(\nabla_\mu + \nabla_\mu^*)$. The second 
+term proportional to $a\nabla_\mu^*\nabla^\mu$ is added to deal with the so-called \textbf{doubling problem}. The discrete 
+nature of the lattice gives rise to a periodic Brillouin zone in momentum space, of period $2\pi / a$. The naive discretization 
+of $\slashed D$ has a pole at $p^2 = 0$, but because of this periodicity also has poles at each edge of the Brillouin zone, 
+which correspond to unphysical particles which are called doublers. The second term in $D_W$ is added to cancel out 
+these poles and remove the doublers, leaving only the physical pole in $D_W$ at $p^2 = 0$. Adding this term to 
+$D_W$ is completely valid because it vanishes as we take the continuum limit. The Wilson operator thus gives us an 
+action for \textbf{Wilson fermions}:
+\begin{equation}
+	\mathcal S_W = a^4\sum_x \overline\psi(D_W + m_q)\psi~
+	\label{eq:wilson_fermions}
+\end{equation}
+
+% Symmetries that we allow: H(4), C, and P
+Upon discretization of our theory, the Euclidean symmetry group $O(4)$ breaks down to its finite subgroup $H(4)$. If we are 
+given a 4-vector $X^\mu$, this reduction in symmetry means that we can form more invariants under $H(4)$ from $X^\mu$ 
+than we originally had under $O(4)$. In the continuum case, the only Lorentz invariant is $X^2 = X_\mu X^\mu$, and any 
+multiple or power of this quantity. However, under $H(4)$, we can form the quantities:
+\begin{equation}
+	X^{[2n]} := \sum_\mu X_\mu^{2n}
+\end{equation}
+which will be invariant under all hypercubic symmetries for $n\in\mathbb Z$. Effectively, this means that when we examine 
+the operators that we can add to the chiral Lagrangian via a spurion analysis, we can also consider operators of this form 
+which are \textit{not} Lorentz invariants but \textit{are} $H(4)$ invariants. 
+
+% Discretization artifacts: what they look like and the Symanzik EFT
+Equation~\ref{eq:wilson_fermions} provides a simple lattice action which is quite useful in practice and allows for efficient 
+computation of observables. However, because we have mutilated our original theory of QCD by putting it on a finite lattice, 
+we also must deal with discretization artifacts. To see where these come from, let us examine a toy model of discretization 
+in 1D. We will approximate the derivative of a function $f'(x)$ with a discrete difference operator $\delta$ on a lattice 
+with spacing $a$. We may Taylor expand $f(x \pm a)$ as:
+\begin{equation}
+	f(x\pm a) = f(x) \pm a f'(x) + \frac{a^2}{2}f''(x) \pm \frac{a^3}{6} f^{(6)}(x) + \mathcal O(a^4)
+\end{equation}
+The discrete difference of $f$ thus approximates $f'(x)$ as:
+\begin{equation}
+	\delta f(x) = \frac{f(x + a) - f(x - a)}{2a} = f'(x) + \frac{a^2}{6} f^{(3)}(x) + \mathcal O(a^3)~
+	\label{eq:difference_expansion}
+\end{equation}
+Note that the $a^2$ correction is written as the continuum operator $f^{(3)}(x)$, not a discrete one. 
+
+We see that this allows us to quantify the error we impose from discretization in powers of $a$. We can also think about 
+ways to \textit{reduce} this error that we impose by adding extra terms to the difference operator in such a way 
+that correction terms come in at a higher order in $a$. For example, we can eliminate the term of order $a^2$ in the 
+difference expansion in Equation~\ref{eq:difference_expansion} by adding in a term $D^{(3)}[f]$ at order $a^2$ in the power 
+counting which proportional to $f^{(3)}(x)$ in the continuum limit. Here, we will take:
+\begin{equation}
+	D^{(3)}[f](x) = \frac{f(x + 2a) - 2f(x + a) + 2f(x - a) - f(x - 2a)}{2a^3} = f^{(3)}(x) + \mathcal O(a^2)
+\end{equation}
+It is now evident that using the modified difference operator $\Delta := \delta - \frac{a^2}{6}D^{(3)}$ will eliminate the 
+discretization artifacts in Equation~\ref{eq:difference_expansion} at order $a^2$:
+\begin{equation}
+	\Delta f(x) = f'(x) + \mathcal O(a^4)
+\end{equation}
+In such a manner, we can in principle continue to remove discetization artifacts order by order. 
+
+On the lattice, this procedure is called \textbf{Symanzik improvement}, and leads to a power counting EFT formulation 
+of corrections to the Wilson action. Modifying our difference operators amounts to adding higher dimensional continuum 
+operators to $\mathcal L_W$ and tuning the Wilson coefficients to eliminate these discretization artifacts. We will thus 
+generally expand the lattice action as a power series in $a$:
+\begin{equation}
+	S_S = a^4\sum_x\left(a^{-1} \mathcal L_{-1} + a^0 \mathcal L_0 + a^1 \mathcal L_1 + a^2 \mathcal L_2 + ...\right)
+\end{equation}
+where each $\mathcal L_k$ contains continuum operators of dimension $4 + k$. Note that $a^{-1} \mathcal L_{-1} + a^0 
+\mathcal L_0$ will be the usual Wilson Lagrangian. 
+
+\subsection{Ginsparg-Wilson fermions}
+
+Wilson fermions are cheap computationally and the simplest type of lattice fermion which are used in real computations, but 
+unfortunately they play rather poorly with chiral symmetry. To see this, note that the key relation for chiral symmetry in the 
+continuum is:
+\begin{equation}
+	\{\gamma_5, \slashed D\} = 0
+\end{equation}
+as this allows the massless QCD Lagrangian to split into a sum $\overline\psi_L \slashed D\psi_L + \overline\psi_R 
+\slashed D\psi_R$ to have independent pieces with definite chirality. 
+
+Unfortunately on the lattice, we do not have this property. For Wilson fermions governed by the Dirac operator in 
+Equation~\ref{eq:D_wilson}, we see the Wilson Dirac operator $D_W$ contains the term $a \overline\psi\nabla^2\psi$ which 
+connects the different chiral components of $\psi$. Even in the massless limit, this term will break chiral symmetry. 
+More generally, it was shown by Nielson and Ninomiya \cite{nogo} that \textit{any attempt} to remove the doublers from a 
+lattice regularized theory would result in such a breaking of this anticommutation relation, and thus the essence of chiral 
+symmetry in lattice theories must be reformulated. 
+
+Ginsparg and Wilson \cite{ginsparg} proposed an alternative symmetry on the lattice that acts as chiral symmetry, and 
+indeed goes into chiral symmetry in the continuum limit $a\rightarrow 0$. The modified anticommutation relation is known as 
+the \textbf{Ginsparg-Wilson equation}:
+\begin{equation}
+	\{\gamma_5,  D_G\} = aD_G\gamma_5 D_G~
+	\label{eq:ginsparg_wilson}
+\end{equation}
+where we will denote by $D_G$ any lattice Dirac operator which satisfies this property. The Ginsparg-Wilson equation is not 
+satisfied by Wilson Dirac operator $D_W$, but solutions of it are known to exist and can be implemented\footnote{See, for 
+example, Neuberger's \textbf{overlap operator} in Reference~\cite{neuberger}.}.
+
+Suppose that $D_G$ satisfies the Ginsparg-Wilson equation. Then $\overline\psi D_G \psi$ is invariant under a 
+modified chiral rotation of the fields defined by:
+\begin{equation}
+	\psi\mapsto \exp\left(i\epsilon\gamma_5 \left(1 - \frac{1}{2}a D\right)\right)\psi
+	\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi\mapsto\bar\psi 
+	\exp\left(i\epsilon\left(1 - \frac{1}{2}aD\right)\gamma_5\right)~
+	\label{eq:luscher_transformation}
+\end{equation}
+hence we can take the Noether current generated by this symmetry to be our new definition of a chiral current. 
+
+To make manifest the modified chiral symmetry of the Lagrangian, we follow an argument by 
+Niedermayer \cite{niedermayer} and introduce modified chiral projectors which act as the standard projectors 
+$\frac{1\pm\gamma_5}{2}$ in the continuum limit:
+\begin{equation}
+	\hat\gamma_5 := \gamma_5 (1 - a D)\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \hat P_\pm := 
+	\frac{1\pm\hat\gamma_5}{2}
+\end{equation}
+Because $D$ satisfies Equation~\ref{eq:ginsparg_wilson}, these new projectors satisfy $D\hat P_\pm = P_\mp D$, which is a 
+very similar algebra to the standard chiral projectors. This means that if we introduce modified chiral fields:
+\begin{equation}
+	\psi_L = \hat P_-\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \psi_R = \hat P_+\psi ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi_L = \bar\psi 
+	P_+ ;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \bar\psi_R = \bar\psi P_-
+\end{equation}
+then our Lagrangian splits into chiral components $\mathcal L = \bar\psi_L D\psi_L + \bar\psi_R D\psi_R$ as in the 
+continuum case, and has chiral symmetry $SU(N_f)_L\times SU(N_f)_R$ as in the continuum case. 
+
+\section{Chiral Lagrangians in Lattice QCD}
+
+\subsection{Wilson fermions}
+
+We are now in a position to put the chiral Lagrangian on the lattice. We will begin by adding Wilson fermions to the 
+chiral Lagrangian, as they are often cheaper computationally and simpler to use. We will consider discretization artifacts in 
+the Symanzik EFT as external fields, and add them to the chiral Lagrangian as spurions. We begin by examining the 
+operators which we may add to our theory. The first two terms are those making up the usual QCD Lagrangian:
+\begin{align}
+	\mathcal O(a^{-1})\;\;&:\;\;\overline\psi\psi \\
+	\mathcal O(a^{0})\;\;&:\;\; m_0\overline\psi\psi, \psi \slashed D \psi \\
+\end{align}
+Note that terms which are equal modulo a mass coefficient can be taken to be the same, as we can simply absorb these 
+extra terms into our definitions of the couplings by redefining them, i.e. above we can take $m'\overline\psi \psi := (a^{-1} + 
+m_0)\overline\psi \psi$. 
+
+The operators that contribute at order $a$ are dimension 5 operators which are invariant under $C$, $P$, and $H(4)$ 
+rotations. There are two such operators:
+\begin{equation}
+\mathcal O^{(5)}_1 = \overline\psi i\sigma_{\mu\nu} F^{\mu\nu} \psi\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
+\mathcal O^{(5)}_2 = \overline\psi \vec D^2\psi + h.c. 
+\end{equation}
+$\mathcal O_2^{(5)}$ can be eliminated using the equations of motion in favor of $m^2\overline \psi \psi$ and 
+$\mathcal O_1^{(5)}$, which can be shown to hold to all orders in perturbation theory~\cite{oa_improvement}. Therefore, 
+we need only consider $\mathcal O_1^{(5)}$, which we will call the \textbf{Pauli term}. This transforms like the mass term 
+$m\overline\psi \psi$ under chiral transformations, and we will need a corresponding spurion field for it in $\mathcal L_\chi$. 
+
+At dimension 6, we must consider two types of operators: those which break chiral symmetry, and those which do not. 
+There are six different dimension 6 operators which break chiral symmetry:
+\begin{align}
+        \mathcal O_1^{(6)} = (\overline\psi\psi)^2 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \mathcal O_2^{(6)} &= 
+        (\overline\psi\gamma_5\psi)^2\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \mathcal O_3^{(6)} = (\overline\psi\sigma_{\mu\nu}\psi)^2 
+        \nonumber \\ 
+        \mathcal O_4^{(6)} = (\overline\psi t^a \psi)^2 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;  \mathcal O_5^{(6)} &= (\overline\psi 
+        t^a\gamma_5\psi)^2 \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;  \mathcal O_6^{(6)} = (\overline\psi t^a\sigma_{\mu\nu}\psi)^2 ~
+        \label{eq:dimension_six}
+\end{align}
+Each of these symmetry breaking structures must be added to $\mathcal L_\chi$ with a spurion field. Of the operators 
+which preserve chiral symmetry, all but one can be incorporated into the chiral Lagrangian by a redefinition of couplings or 
+renormalization coefficients. The exceptional operator is:
+\begin{equation}
+	\mathcal O_7^{(6)} = \sum_\mu\overline\psi\gamma_\mu D_\mu D_\mu D_\mu\psi
+\end{equation}
+$\mathcal O_7^{(6)}$ is special because it is the first operator we have seen which breaks $O(4)$ symmetry, and this 
+symmetry breaking should be accounted for in the chiral Lagrangian at the appropriate order. 
+
+$\mathcal L_\chi$ will power count in the parameters $p^2$, $m$, and $a$. The leading order (LO) and next to leading 
+order (NLO) parts of the Lagrangian are $\mathcal L_\chi = \mathcal L_\chi^{(0)} + \mathcal L_\chi^{(1)} + ...$, where these 
+terms are:
+\begin{align}
+    \mathcal L_\chi^{(0)}&\in \mathcal O(p^2, m, a)\nonumber \\
+    \mathcal L_\chi^{(1)}&\in \mathcal O(p^4, p^2 m, p^2 a, m^2, ma, a^2)
+\end{align}
+
+Now we can move toward a spurion analysis of the LO and NLO chiral Lagrangians. First, we must ask: when are two 
+spurions to be considered equal? Each symmetry breaking term will not, in fact, contribute its own spurion. Two 
+terms which transform under chiral symmetry in the same way and have the same power counting in $m$ and $a$ will 
+contribute the same spurion to the chiral Lagrangian, as we only care about the symmetry patterns of the spurion field and 
+can always make a field redefinition to absorb another spurion which transforms identically. 
+
+We can now use this analysis to determine the general structure of the LO and NLO chiral Lagrangians. At dimension 
+5, the Pauli term contributes a spurion $A$ which is first order in the lattice spacing $a$ and transforms as:
+\begin{equation}
+	A\mapsto L A R^\dagger
+\end{equation}
+This transformation keeps the term  $A_{ij}\overline(\psi_L)_i i\sigma_{\mu\nu} F^{\mu\nu}(\psi_R)_j + h.c.$ invariant under 
+chiral transformations, and thus it can be added to the chiral Lagrangian. The $A$ field will be set to the constant value of 
+$A_0 = a I$, where $I$ is the $N_f\times N_f$ identity matrix in flavor space. 
+
+The fermion bilinears of dimension 6 will receive two types of spurions, which we will denote by $B$ and $C$. They 
+transform as:
+\begin{align}
+    B := B_1\otimes B_2&\mapsto (L B_1 R^\dagger) \otimes (L B_2 R^\dagger) \nonumber \\
+    C := C_1\otimes C_2 &\mapsto (R C_1 L^\dagger) \otimes (L C_2 R^\dagger) 
+\end{align}
+This will keep each bilinear in Equation~\ref{eq:dimension_six} invariant under chiral rotations. For example, each term 
+comprising the operator $\mathcal O_1^{(6)} = (\overline\psi_L\psi_R + \overline\psi_R\psi_L)^2$ can be kept invariant 
+by coupling to $B, C, B^\dagger$, or $C^\dagger$, as each term transforms like some variant of:
+\begin{equation}
+        B_{ijkl}(\overline\psi_L)_i(\psi_R)_j (\overline\psi_L)_k (\psi_R)_l = (\overline\psi_L B_1 \psi_R) (\overline\psi_L B_2 
+        \psi_R)
+\end{equation}
+
+Using the transformation $\Sigma\mapsto L\Sigma R^\dagger$, we can thus write out the new terms which will appear in 
+$\mathcal L_\chi$ at LO and NLO once the spurion fields are set to their constant values. These are:
+\begin{align}
+    \mathcal O(a) &:  tr\{A\Sigma^\dagger + A^\dagger\Sigma\}\rightarrow a\,tr\{\Sigma + \Sigma^\dagger\} \nonumber\\
+    \mathcal O(a^2) &: tr\{B_1\Sigma^\dagger\}tr\{B_2\Sigma^\dagger\}\rightarrow a^2 tr\{\Sigma^\dagger\}^2 \nonumber\\
+    &: tr\{B_1\Sigma^\dagger B_2 \Sigma^\dagger\}\rightarrow a^2 tr\{\Sigma^\dagger\Sigma^\dagger\} \nonumber\\
+    &: tr\{C_1\Sigma\}\,tr\{C_2\Sigma^\dagger\}\rightarrow a^2 tr\{\Sigma\}\,tr\{\Sigma^\dagger\}
+\end{align}
+Note that $\Sigma = \exp(2i\Pi / f)$ is unitary, hence $tr\{C_1\Sigma C_2\Sigma^\dagger\}\rightarrow a^2\, 
+tr\{\Sigma\Sigma^\dagger\} = a^2 N_f$ and we need not include this combination of spurions. Furthermore, we do not 
+consider terms like $tr\{B_1 C_1\}\,tr\{B_2 C_2^\dagger\}$, as these come in at order $a^4$ and will not appear in the 
+LO or NLO Lagrangian. 
+
+Using these terms and the mass spurion as $\hat m = diag(m_1, ..., m_{N_f}$, we can expand the chiral Lagrangian to NLO. 
+At first order, the chiral Lagrangian looks much like it previously did by adding the mass term, with an additional coupling 
+proportional to the lattice spacing:
+\begin{equation}
+    \mathcal L^{(0)}_\chi = \frac{f^2}{4}\left[tr\left\{\partial_\mu\Sigma\partial^\mu\Sigma^\dagger\right\} - B_0\,tr\left\{\hat m 
+    (\Sigma + \Sigma^\dagger)\right\} - a\,W_0\,tr\left\{\Sigma + \Sigma^\dagger\right\}\right]
+\end{equation}
+At NLO, we get a variety of new terms that depend on the lattice spacing. We will not expand the entire NLO Lagrangian for 
+the sake of brevity, but we will note a few pertinent factors. Here, $\mathcal L_\chi^{cont\,(1)}$ is the NLO chiral Lagrangian 
+in the continuum. The entire NLO Lagrangian can be found in Equation 22 of~\cite{bar}. 
+    \begin{align}
+        \mathcal L_\chi^{(1)} = \mathcal L_\chi^{cont\,(1)} &+ a\, W_4\,tr\left\{\partial_\mu\Sigma\partial^\mu\Sigma^\dagger\right\} \,tr\left\{\Sigma + \Sigma^\dagger\right\} + ... \\
+        ...&+ a\, W_8\, tr\left\{\hat m(\Sigma^\dagger \Sigma^\dagger + \Sigma\Sigma)\right\} +... \\
+        ...&+ a^2 W_8'\, tr\left\{\Sigma^\dagger\Sigma^\dagger + \Sigma\Sigma\right\}
+    \end{align}
+This completes our study of the chiral Lagrangian for Wilson fermions. We will next examine a different lattice action which 
+is more suited to chiral symmetry, a mixed action comprised of Wilson fermions and Ginsparg-Wilson fermions.
+
+\subsection{Mixed action}
+
+As mentioned before, Wilson fermions wreak havoc on chiral symmetry. In many cases, they perform so poorly with 
+chiral symmetry that chiral extrapolation is not even possible, because they quark masses are unable to enter the 
+regime where $\mathcal L_\chi$ describes the dominant dynamics. Because of this, it is of interest to consider other 
+types of actions which use fermions that are more chirally symmetric, for example Ginsparg-Wilson fermions. 
+Ginsparg-Wilson fermions are too expensive to model a full lattice theory with, so we will pick and choose our battles: 
+we will consider a \textbf{mixed action} with \textit{Wilson sea quarks} and \textit{Ginsparg-Wilson valence and ghost 
+quarks}. This action has the advantage that it less computationally intensive than a full Ginsparg-Wilson theory, but more 
+chiral symmetry than a theory with only Wilson fermions. 
+
+We will consider a theory with $N_f$ Wilson sea quarks and $N_V$ Ginsparg-Wilson valence quarks. The sea degrees of 
+freedom will be contained in $\psi_S$, and the valence and ghost degrees of freedom will be contained in $\psi_V$. In 
+flavor space, $\psi_S$ is a $N_f$ dimensional spinor, and $\psi_V$ is a $2N_V$ dimensional spinor, as it contains valence 
+quarks and ghosts. The action is:
+\begin{equation}
+	S = a^4\sum_x\left(\overline\psi_S D_W\psi_S + \overline\psi_V D_G\psi_V\right)
+\end{equation}
+Note that since the ghost fields in $\psi_V$ have bosonic statistics, the group of chiral symmetry transformations on 
+$\psi_V$ is \textit{not} $SU(2N_V)$, but rather $G_{val} := SU(N_V | N_V)$, where $SU(N_V | N_V)$ is the graded group of 
+superunitary transformations $U$ which leave the $2N_V\times 2N_V$ dimensional matrix $diag(1, ..., 1, -1, ..., -1)$ invariant. We 
+denote by $G_M$ the full group of chiral symmetries of the mixed action, and this is:
+\begin{equation}
+	G_M := SU(N_f + N_V | N_V)_L\times SU(N_f + N_V | N_V)_R
+\end{equation}
+
+\newpage
+\thispagestyle{empty}
+
+\begin{thebibliography}{99}
+
+\bibitem{oa_improvement}
+L\"{u}scher, M., Sint, S., Sommer, R., Weisz, P. (1996). Chiral symmetry and O(a) improvement in lattice QCD arXiv  478(1-2), 365-397. https://dx.doi.org/10.1016/0550-3213(96)00378-1
+
+\bibitem{bar}
+Bar, O.Chiral perturbation theory at O($a^2$) for lattice QCD. https://arxiv.org/abs/hep-lat/0306021v2
+
+\bibitem{nogo}
+Nielsen, H. B., \& Ninomiya, M. (1981). A no-go theorem for regularizing chiral fermions. 
+In Physics Letters B (Vol. 105). https://doi.org/10.1016/0370-2693(81)91026-1
+	
+	\bibitem{ginsparg}
+	Ginsparg, P. H., \& Wilson, K. G. (1982). A remnant of chiral symmetry on the lattice (Vol. 25). 
+	https://journals.aps.org/prd/pdf/10.1103/PhysRevD.25.2649
+	
+	\bibitem{neuberger}
+	Neuberger, H. (1999). The Overlap Dirac Operator. hep-lat/9910040v1
+	
+	\bibitem{Luscher}
+	L\"uscher, M. (1998). Exact chiral symmetry on the lattice and the Ginsparg-Wilson relation. hep-lat/9802011
+	
+	\bibitem{niedermayer}
+	Niedermayer, F. (1998). Exact chiral symmetry, topological charge and related topics. hep-lat/9810026
+
+\end{thebibliography}
+
+\end{document}

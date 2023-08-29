@@ -1,0 +1,311 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{simpler-wick}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 7: Effective Field Theory}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\usepackage{pdfpages}
+
+\begin{document}
+%\maketitle
+
+\includepdf[page=-]{Recitation7_handwritten.pdf}
+
+\newpage
+\clearpage
+\setcounter{page}{1}
+
+\textbf{Note on diagrams}: For these recitation notes (and in general in the future) when I have to draw diagrams I'll handwrite them and either include the handwritten pages in this document, or in another document in the same folder. You can draw diagrams in LaTeX with Tikz, or the Tikz-Feynman package, but generally it takes a little longer so I'm going to just handwrite them. 
+
+\section*{Momentum-space Feynman rules}
+
+These rules are specifically for scalar fields, with a coupling $-\frac{\lambda}{n!}\phi^n$. 
+
+\begin{enumerate}
+
+	\item \textbf{External legs} contribute 1 (this will change for \textit{spinor fields}).
+	
+	\item \textbf{Propagators} are denoted with solid lines of momentum $p$, and contribute:
+	\begin{equation}
+		\frac{-i}{p^2 + m^2 - i\epsilon}
+	\end{equation}
+	If you have multiple types of scalar fields in a Lagrangian, each should be denoted with its own set of lines (we'll see an example of this soon). 
+	
+	\item \textbf{Vertices} contribute a factor of $-i\lambda$. A mnemonic I like to use here is that the Feynman rule is $i$ times the coefficient in the Lagrangian. 
+	
+	\item Impose \textbf{momentum conservation} at each vertex.
+	
+	\item Use momentum conservation to solve for all \textbf{internal momenta} in terms of a set of \textit{independent} momenta. Integrate over each independent momentum $k_i$ with a factor of
+	\begin{equation}
+		\int\frac{d^4k}{(2\pi)^4}.
+	\end{equation}
+	
+	\item Divide by the symmetry factor. 
+
+\end{enumerate}
+
+One more thing I want to mention on this topic: \textbf{derivative couplings}. These are a little finnicky to get the sign right. Essentially, a coupling of $\partial_\mu\phi$ will bring down a factor of $\pm i p_\mu$ to the respective Feynman diagram, and to get the couplings right the easiest heuristic way is the mode expansion. Let's consider the coupling in your pset,
+\begin{equation}
+	\mathcal L_I = \lambda'  \chi \partial_\mu\phi \partial^\mu\phi^*,
+\end{equation}
+where $\chi$ is a real scalar field and $\phi, \phi^*$ are complex scalar fields. From the mode expansion, 
+\begin{align} \begin{split}
+	\phi(x) &= \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\vec k}}} (a_{\vec k} e^{ik\cdot x} + b_{\vec k}^\dagger e^{-ik\cdot x}) \\
+	\phi^*(x) &= \int \frac{d^3\vec k}{(2\pi)^3} \frac{1}{\sqrt{2\omega_{\vec k}}} (b_{\vec k} e^{ik\cdot x} + a_{\vec k}^\dagger e^{-ik\cdot x}),
+\end{split} \end{align}
+we see that if we want to create a particle and an antiparticle, we need to hit the $b_{\vec k}^\dagger$ and the $a_{\vec k}^\dagger$ terms with $\partial_\mu$ and $\partial^\mu$. We'll therefore pull down a factor of $(-ik_{1\mu})(-ik_2^\mu)$, where $k_1$ and $k_2$ are the corresponding momenta, and multiplying this into the $i\lambda'$ factor that we get from the coupling, we have:
+\begin{equation}
+	(\mathrm{diagram}) = -i\lambda' (k_1\cdot k_2).
+\end{equation}
+
+\section*{Effective Field Theory}
+
+\begin{itemize}
+
+	\item Consider a theory of two massive scalars, $\phi$ of mass $m$ and $\eta$ of mass $M\gg m$, with a $\phi^2\eta$ coupling,
+	\begin{equation}
+		\mathcal L_\mathrm{full}(\phi, \eta) = -\frac{1}{2}(\partial\phi)^2 + \frac{1}{2} m^2\phi^2 -\frac{1}{2}(\partial\eta)^2 + \frac{1}{2} M^2\eta^2 - \frac{g}{2} \phi^2 \eta.
+	\end{equation}
+	We can write out the modified Feynman rules, which I'll do during recitation (use a solid line for $\phi$ and a dashed line for $\eta$). Let's consider what happens with $2\rightarrow 2$ $\phi$ scattering, with total center of mass energy $E^2 = (k_1 + k_2)^2\equiv s$, using momentum-space Feynman rules. We can write the scattering amplitude $\mathcal M_\mathrm{full}(\phi\phi\rightarrow\phi\phi)$ by computing all the connected, amputated diagrams which contribute to the decay:
+	\begin{align}\begin{split}
+		\mathcal M_\mathrm{full}(\phi\phi\rightarrow\phi\phi)&\equiv \langle\phi(p_1) \phi(p_2)\phi(k_1) \phi(k_2)\rangle_\mathrm{amp} \\
+		&= (\textnormal{tree level diagrams at } g^2) + (\textnormal{loop diagrams at } g^4) + ... \\
+		&= (-ig)^2 \bigg[\frac{-i}{(k_1 + k_2)^2 + M^2 - i\epsilon} + \frac{-i}{(k_1 - p_1)^2 + M^2 - i\epsilon} + \frac{-i}{(k_1 - p_2)^2 + M^2 - i\epsilon}\bigg] + \mathcal O(g^3) \\
+		&= ig^2\left[\frac{1}{s + M^2 -i\epsilon } + \frac{1}{t + M^2-i\epsilon } + \frac{1}{u + M^2 -i\epsilon } \right] + \mathcal O(g^3)
+	\end{split}\end{align}
+	where we've defined the \textbf{Mandelstam variables} $s, t, u$ as:
+	\begin{align} 
+		s = (p_1 + p_2)^2 &&
+		t = (p_1 - k_1)^2 &&
+		u = (p_1 - k_2)^2.
+	\end{align}
+	These are just convenient variables to parameterize the problem with. Now, let's consider the case where we have low-energy scattering,
+	\begin{equation}
+		E^2\ll M^2. 
+	\end{equation}
+	$s$, $t$, and $u$ are all of order $E^2$, so we can take these to be $\ll M^2$ as well, and all the propagators reduce down:
+	\begin{equation}
+		\frac{-i}{q^2 + M^2} = \frac{-i}{M^2}\frac{1}{1 + \frac{q^2}{M^2}}\sim  \frac{-i}{M^2} \left(1 + \mathcal O\left(\frac{q^2}{M^2}\right) \right).
+	\end{equation}
+	This reduces the equation significantly, and the scattering amplitude becomes:
+	\begin{equation}
+		\mathcal M_\mathrm{full}(\phi\phi\rightarrow\phi\phi) = \frac{3ig^2}{M^2} + \mathcal O\left(\frac{E^2}{M^2}\right).
+	\end{equation}
+	
+	% what about higher order matching? You'd get a $q^2 / M^2$ term, and so you'll start to need derivative couplings
+	
+	\item \textbf{Matching}: In fact, at low energies the theory is equivalent to the following theory of a single $\phi$ field:
+	\begin{equation}
+		\mathcal L_\mathrm{EFT}(\phi) =  -\frac{1}{2}(\partial\phi)^2 + \frac{1}{2} m^2\phi^2 - \frac{C_W}{4!} \phi^4. \label{eq:eft_lagrangian}
+	\end{equation}
+	$C_W$ is just an arbitrary coupling, which we call a \textbf{Wilson coefficient}. If we compute $\mathcal M_\mathrm{EFT}(\phi\phi\rightarrow\phi\phi)$ in this theory, we can \textbf{match} the theories to one another:
+	\begin{equation}
+		\mathcal M_\mathrm{EFT}(\phi\phi\rightarrow\phi\phi) = (\mathrm{diagram}) = -iC_W.
+	\end{equation}
+	To \textbf{match to the effective theory}, we want the results in the full theory to equal the results in the effective theory at lowest order in the \textbf{expansion parameter} $E^2 / M^2$. To make this happen, we need:
+	\begin{align} \begin{split}
+		\mathcal M_\mathrm{full}(\phi\phi\rightarrow\phi\phi) &= \mathcal M_\mathrm{EFT}(\phi\phi\rightarrow\phi\phi) + \mathcal O\left(\frac{E^2}{M^2}\right) \\
+		&\implies C_W = - \frac{3g^2}{M^2}.
+	\end{split} \end{align}
+	With this matching done, the effective Lagrangian and the full Lagrangian will give the same results for energies $E\ll M$. They're effectively the same theory, with the advantage that the effective Lagrangian is \textbf{significantly simpler} than the full Lagrangian. 
+	
+	% a good example of when this becomes simpler is the Standard Model
+	
+	\item \textbf{Integrating a field out}: The partition function for this theory is an integral over both fields $\phi$ and $\eta$, and can be written as:
+	\begin{equation}
+		\mathcal Z = \int D\phi \int D\eta\, e^{i\int d^4 x\, \mathcal L_\mathrm{full}(\phi, \eta)}.
+	\end{equation}
+	In the example above, we say that we \textbf{integrated the $\eta$ field out} of the theory. Integrating a field out is a more general way to treat a heavy field, and the idea here is to do the path integral over $\eta$ explicitly by just doing the Gaussian integral with source $\frac{g^2}{2} \phi(x)^2$:
+	\begin{align} \begin{split}
+		\mathcal Z_\mathrm{full} &= \int D\phi\, e^{ i\int d^4 x\, ( -\frac{1}{2} (\partial\phi)^2 + \frac{1}{2} m^2\phi^2)} \int D\eta\, \exp\left[i\int d^4 x \, \left(-\frac{1}{2} (\partial\eta)^2 + \frac{1}{2} M^2 \eta^2 - \frac{g}{2} \phi^2\eta \right) \right] \\
+		&= \int D\phi\, e^{ i\int d^4 x\, (-\frac{1}{2} (\partial\phi)^2 + \frac{1}{2} m^2\phi^2)} \frac{C}{\sqrt{\mathrm{Det}\, K}} \exp\left[\frac{i}{2} \int d^4 x\, \int d^4 y\, \left(-\frac{g}{2} \phi(x)^2 \right) K^{-1}(x, y) \left(-\frac{g}{2} \phi(y)^2 \right)\right]
+	\end{split} \end{align}
+	where $K(x, y) = \delta^{(4)}(x - y) (\partial^2 + M^2)$ is the kernel of the Gaussian integral. Now, at low energies $E^2\ll M^2$, we can neglect the derivative term, since it scales as $\partial^2\sim E^2\ll M^2$, and we have our usual power counting:
+	\begin{equation}
+		K^{-1}(x, y)\sim \delta^{(4)}(x - y) \frac{1}{M^2} + \mathcal O\left(\frac{E^2}{M^2} \right).
+	\end{equation}
+	Plugging this in, we see that:
+	\begin{align} \begin{split}
+		\mathcal Z_\mathrm{full} &= \mathcal Z_\mathrm{EFT} + \mathcal O\left(\frac{E^2}{M^2} \right), \\
+		\mathcal Z_\mathrm{EFT} &= \int D\phi\, \exp\left[ i\int d^4 x\, \left( -\frac{1}{2} (\partial\phi)^2 + \frac{1}{2} m^2\phi^2 + \frac{g^2}{8 M^2} \phi^4 \right)\right] \\
+		&= \int D\phi\, e^{i\int d^4 x\, \mathcal L_\mathrm{EFT}(\phi)},
+	\end{split} \end{align}
+	where $\mathcal L_\mathrm{EFT}(\phi)$ is the EFT Lagrangian that we got from matching in Eq.~(\ref{eq:eft_lagrangian}).  So, what we've done here is \textbf{integrated out the dynamical field $\eta$ from our theory}. The effective partition function $\mathcal Z_{\mathrm{EFT}}$ is now an integral over a single field $\eta$, instead of an integral over two fields $\phi, \eta$, and in this regime, we've reduced the physics down to that of a single dynamical field $\phi$, directly from the path integral!
+	
+	\item Equations of motion: The equations of motion of the $\eta$ field are:
+	\begin{equation}
+		(\partial^2 + M^2)\eta - \frac{g}{2} \phi^2 = 0. \label{eq:eta_eom}
+	\end{equation}
+	It turns out that integrating a field out is \textbf{equivalent to removing it from the Lagrangian via the EoM}. We can see this by rewriting $\mathcal L_\mathrm{full}(\phi, \eta_\mathrm{cl})$, where $\eta_\mathrm{cl}$ satisfies the EoM, Eq.~(\ref{eq:eta_eom}), and again dropping terms of order $\partial^2 / M^2 = E^2 / M^2$, so that:
+	\begin{equation}
+		\eta_\mathrm{cl} = \frac{g}{2M^2} \phi^2 + \mathcal O\left(\frac{E^2}{M^2}\right).
+	\end{equation}
+	This prescription gives us:
+	\begin{align} \begin{split}
+		\mathcal L_\mathrm{full}(\phi, \eta_\mathrm{cl}) &= -\frac{1}{2} (\partial\phi)^2 + \frac{1}{2} m^2 \phi^2 + \frac{1}{2} \eta_{\mathrm{cl}} \underbrace{(\partial^2 + M^2) \eta_\mathrm{cl}}_{=\frac{g}{2}\phi^2} - \frac{g}{2} \phi^2\eta_\mathrm{cl} \\
+		&= -\frac{1}{2} (\partial\phi)^2 + \frac{1}{2} m^2 \phi^2 + \frac{g^2}{8 M^2} \phi^4 - \frac{g^2}{4 M^2} \phi^4 + \mathcal O\left(\frac{E^2}{M^2}\right) \\
+		&= \mathcal L_\mathrm{EFT}(\phi) + \mathcal O\left(\frac{E^2}{M^2}\right).
+	\end{split} \end{align}
+	This gives us another way to see the same thing that we've been doing all recitation: integrating the field out is equivalent to replacing it with its equations of motion, i.e. it's equivalent to replacing the field with its classical trajectory. This should make sense in some sense: the approximation we take when we integrate a field out is to treat it as a heavy degree of freedom that has no dynamics, and that is given entirely by its classical trajectory. It's only when the field is dynamical (i.e. if we're at energies $E\sim M$) that we can see things that take it off its classical trajectory, and get quantum effects. 
+	
+	\item Effective field theory is how we treat \textbf{scale separation} in QFT. Any problem you treat which has multiple scales will generally have an EFT expansion that you can do. The power of EFT is that the effective theory tends to be \textbf{simpler} than the full theory, and it's much easier to work with and compute things. Even though the EFT is only good in some range of validity, its power is that it's extremely accurate in this range of validity. 
+	
+	% Draw the graph here
+	
+	\item Constructing an EFT: There are two ways to do this.
+	\begin{enumerate}
+		\item \textbf{Top-down}: In this type of EFT construction, you're given a Lagrangian $\mathcal L_\mathrm{full}$ and derive its low energy limit by matching to an effective theory. This is useful when you know the full theory but see that it simplifies down in a certain regime: for example, we know the Standard Model, and at low energies, we can derive a whole host of EFTs from the Standard Model when certain parameters are small. 
+		\item \textbf{Bottom-up}: This is how theories are discovered. In this theory, you know the EFT, and you predict the full theory. We'll see an example of this with the four-Fermi theory in a bit.
+	\end{enumerate}
+	
+	\item I want to emphasize something here: in the example we did above, $\mathcal L_\mathrm{full}$ could be the effective theory derived from some other theory, which has a characteristic energy scale $\Lambda\ll M$. In general, you'll get \textbf{layers of EFTs} in different energy regimes, and to make understanding the physics easier you need to pick the appropriate EFT for the regime of phase space that you're interested in. Different EFTs will have different dynamic degrees of freedom as well. For example, in the full theory the degrees of freedom were the fields $(\phi, \eta)$ but at low energies in the EFT, the degrees of freedom are just $\phi$.  
+	
+	\item I don't think it's an exaggeration to say that you've been working with EFTs for your entire career in physics\footnote{If you do string theory or quantum gravity, there's a chance you aren't working with an EFT; but even then, who knows? Definitely not me.}. Even if you do research in particle physics, which we like to think builds up the whole universe, unfortunately the Standard Model is just an EFT of some higher-energy theory. If you do research with photons, it turns out that Quantum Electrodynamics (QED, the quantum theory of E\&M) is an effective theory too, and acts significantly differently at high energies (the full theory here is the electroweak theory). 
+	
+	\item Some examples (for each one, draw the energy diagram, and some examples of interactions in the full theory and the effective theory)
+	\begin{itemize}
+	
+		\item The four-Fermi theory of nuclear $\beta$ decay. This is one that I'll likely cover in more depth a few weeks, because it's a great introduction to doing Feynman diagrams with spinors. It's a bottom up theory; in the 1940s Enrico Fermi created this EFT from measuring $\beta$ decay in nuclei and writing down a field theory that had the same cross sections as the measured $\beta$ decay. I want to emphasize here that the part of the Standard Model which describes $\beta$ decay is \textbf{electroweak theory}, which wasn't discovered until the 1960s! The four-Fermi theory actually informed the discovery of electroweak theory, and helped to derive electroweak theory by decreeing that electroweak theory matched down to the four-Fermi theory, and you can actually derive the mass of the $W$ boson from precise measurements of the coupling for the four-Fermi theory.
+	
+		\item Nuclear EFT: This is actually what I'm currently trying to study in my research right now. The full theory of quarks and gluons is \textbf{quantum chromodynamics} (QCD), which has a characteristic scale $\Lambda_\mathrm{QCD}\sim 200\;\mathrm{MeV}$\footnote{QCD starts as a dimenionless theory, and it gains a mass scale $\Lambda_\mathrm{QCD}$ through a procedure called \textbf{dimensional transmutation}, which is the generation of a mass scale in a dimensionless theory that comes from the renormalization group.}. Below this energy, the relevant degrees of freedom of the theory changes from a theory of quarks and gluons (in the full theory, QCD) to a theory of hadrons\footnote{A hadron is any composite particle made up from quarks and gluons, for example a proton, a neutron, a pion, etc.} (in the EFT). 
+		
+		%\item QED: At high energies (by ``high" I mean $E > v = 247\;\mathrm{GeV}$, where $v$ is the vacuum expectation value of the Higgs boson), QED becomes \textbf{electroweak theory}. 
+	
+		\item The Standard Model. This is the big one. Our current understanding of particle physics is great\footnote{I don't just mean ``good", I mean absolutely \textbf{great}. The Standard Model hosts the most accurate theory-to-experiment prediction matching in the calculation of the \href{https://en.wikipedia.org/wiki/Anomalous_magnetic_dipole_moment}{anomalous magnetic moment of the electron.}}. However, we know there are things that we don't understand and can't understand with just the Standard Model alone, for example neutrino masses, dark matter, and gravity. We know there is a full theory out there beyond the Standard Model, with potential unknown fields and symmetries, that simplifies down to the Standard Model at "low" energies (we don't know what "low" means yet for the Standard Model, as we don't know the power counting parameter; it should be at least $\Lambda\gtrsim\mathrm{TeV}$). 
+	\end{itemize}
+\end{itemize}
+
+\section*{Regularization and renormalization}
+
+\begin{itemize}
+	
+	\item Loop integrals: Let's think about how loop integrals play with this formalism that we've been discussing. For a concrete example, let's do the following diagram from a $\frac{A}{3!}\phi^3$ theory:
+	\begin{equation}
+		(\mathrm{diagram}) = \frac{-i}{(k_1 + k_2)^2 + m^2} \frac{-i}{(p_1 + p_2)^2 + m^2} \underbrace{\int \frac{d^4 k}{(2\pi)^4} \frac{-i}{q^2 + m^2} \frac{-i}{(q - k_1 - k_2)^2 + m^2}}_{\mathcal I}.
+	\end{equation}
+	As we've been discussing in class, this integral is divergent. The measure goes like $q^3 dq$, and the denominator goes as $1 / q^4$, so should roughly give a contribution of $\int_0^\infty dq / q = \infty$. However, the question we should be thinking about is not ``is this integral finite", but rather, ``does this integral make sense to do at all?" From the EFT point of view, \textbf{it doesn't}! There might be some higher energy theory at scales above what we're interested in where the theory breaks down. Since the integral goes over all of $q$, we'll eventually end up doing the integral in this domain where \textbf{the theory no longer describes the physics}; this is where the divergence comes from!
+	
+	If you're looking for a natural candidate where the theory breaks down, look no further than the Planck scale. We may never be able to reach it, but if we ever do, we know things will break horribly.
+	
+	\item Regularization and renormalization: The fact that the theory breaks down at high energies gives us one way to deal with these divergences. We can introduce a \textbf{regulator} which deforms the theory in some way and cuts the integral off, rendering it finite. For example, in the integral we had above, we can introduce a hard cutoff at some large momentum $\Lambda$, and then the integral will no longer be divergent:
+	\begin{equation}
+		\mathcal I_\Lambda = \int^\Lambda \frac{d^4 k}{(2\pi)^4} \frac{-i}{q^2 + m^2} \frac{-i}{(q - k_1 - k_2)^2 + m^2}
+	\end{equation}
+	
+	Now, $\Lambda$ is just some arbitrary parameter that we introduced. As such, $\Lambda$ should have \textbf{no effect} on the physics at low energies-- there should be a decoupling between the low energy scales that we live at, and the high energy scale of $\Lambda$. It turns out that this actually works: this is the miracle of \textbf{renormalization}. Renormalization gives us a systematic prescription to disentangle this high energy scale $\Lambda$ from our calculations and render the loop integrals we do finite and physical. 
+	
+	\item To render the calculation physical, there are therefore two steps that we must take:
+	\begin{enumerate}
+		\item \textbf{Regulate} the theory by deforming it in such a way that the loop integrals become finite. This deformation of the theory should be parameterizable (in the previous example, the parameter was $\Lambda$), and this parameter is called the \textbf{regulator}. Another example of a regulator that I use every day in my research is a nonzero lattice spacing $a$, which acts similarly to the UV regulator $\Lambda$, since we only integrate over modes with $|\bm k| < a^{-1}$. 
+		\item \textbf{Renormalize} the calculation. Remove the regulator in a controlled way based on a \textbf{renormalization condition} in a given \textbf{renormalization scheme}. Every calculation must be done in a given scheme: you'll see in QFT II that a popular one is $\overline{\mathrm{MS}}$. 
+	\end{enumerate}
+	
+	\item I would love to say more, but renormalization is a very involved topic and most of QFT II is devoted to studying renormalization (so take it, it's a great class!). \textbf{If you're interested in any of these topics, feel free to ask me about them, I love talking about this stuff!}
+	
+\end{itemize}
+
+\end{document}

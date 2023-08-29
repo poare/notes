@@ -1,32 +1,4 @@
-\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
-\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
-%\geometry{landscape}                		% Activate for rotated page geometry
-%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
-\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage[shortlabels]{enumitem}
-\usepackage{float}
-\usepackage{tikz-cd}
-
-\usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
-
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-
-%SetFonts
-
-%SetFonts
-
+\input{./preamble.tex}
 
 \title{Title}
 \author{Patrick Oare}
@@ -34,6 +6,53 @@
 
 \begin{document}
 \maketitle
-\section*{Section 1}
+\section{First section}
+
+%\begin{defshaded}
+%\raggedright
+%\underline{Definition} (Definition name)
+%\newline\newline
+%Definition statement
+%\end{defshaded}
+
+\begin{definition}[Definition name]
+	Definition body.
+\end{definition}
+
+\begin{definition}
+	abcd
+\end{definition}
+
+\begin{theorem}[Theorem name]
+This theorem
+\end{theorem}
+
+\begin{cor}
+	New corollary.
+\end{cor}
+
+\begin{prop}
+	New proposition.
+\end{prop}
+
+\begin{lemma}
+	New lemma.
+\end{lemma}
+
+\begin{example}[First example]
+	Here is an example box.
+\end{example}
+
+\begin{shaded}
+	\raggedright
+	Example shaded box. 
+	\eq
+		x &= 1 \\
+		y &= x 
+		\label{eq:ex}
+	\qe
+	Reference to Eq.~\eqref{eq:ex}.
+\end{shaded}
+
 
 \end{document}

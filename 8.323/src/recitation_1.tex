@@ -1,0 +1,421 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 1: Relativity and Fields}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+\section*{Welcome to QFT I!}
+
+\begin{itemize}
+
+\item \textbf{Logistics}: all of the relevant course information can be found in the syllabus posted on Canvas. Here is my \textbf{contact info}, and the relevant times and locations for recitation and office hours:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | c | c | c | c | c | c | }
+		\hline
+		TA & Email & Recitation & Location & Office Hours & OH Location \\
+		\hline
+		Patrick Oare & \href{mailto:poare@mit.edu}{poare@mit.edu} & Fridays, 2 PM & 4-163 & Tuesdays, 2 PM & 8-308 \\
+		\hline
+	\end{tabular}
+\end{table}
+{\vspace{-5mm}I'll try to be very responsive by email, so feel free to send me emails if there's anything you want to discuss or questions you have! Please also try to use the class \textbf{Piazza} page, as I'll be monitoring that to answer questions as they crop up.}
+
+%\begin{answerbox}
+%	\textbf{Contact info:}
+%\end{answerbox}
+
+\item \textbf{Resources:} There are a lot of different textbooks out there which promise to give an ``introduction to QFT"; some of them are decent, but most are indecipherable. I'd recommend trying a few of these out in your first few weeks and seeing which ones fit your learning style better-- a lot of these books approach the same topics from different angles, and especially for a field as dense as QFT, it can be very valuable to have a few different ways to see the same problem. The main textbooks for this course are \textbf{Peskin \& Schroeder} and \textbf{Weinberg}, and I also use \textbf{Schwartz} quite a bit. There's a blurb about the most of the specific books in the syllabus, and I'd encourage you to come and ask if you have any questions regarding the different resources!
+
+%\begin{itemize}
+%	\item Peskin and Schroeder, \textit{An Introduction to Quantum Field Theory}. A well-rounded intro to QFT. Lots of detailed worked out examples (very helpful when we get to the calculation-heavy portions of the class), but can be a bit dense in places as a result.
+%	\item Schwartz, \textit{Quantum Field Theory and the Standard Model}. A good, well-written introduction to QFT that's easy to understand and ends up going quite deep into the subject. Could be more rigorous, though.
+%	\item Srednicki, \textit{Quantum Field Theory}. A good introduction book to QFT. Rigorous and precise. 
+%	\item Weinberg, \textit{The Quantum Theory of Fields (Vol 1)}. An interesting introduction to the subject, which is very rigorous and can be hard to read on a first pass. The information contained in this book is second to none, but the hard part can be understanding what it's telling you. 
+%	\item Zee, \textit{Quantum Field Theory in a Nutshell}. A book which you'll hate during this class but enjoy once you've learned QFT (this was my first QFT book!). Written at a very high level with minimal calculations, but good for understanding the bigger picture. 
+%\end{itemize}
+
+\end{itemize}
+
+\vspace{10mm}
+\begin{answerbox}
+	{\centering \textbf{Units in QFT} } \\
+	
+	\raggedright
+	Fundamental constants provide a unit system in which we set them equal to 1. This course will use \textbf{natural units}, in which we set $\hbar = c = 1$. This is primarily done to simplify equations, since most relations in QFT have a large number of factors of $\hbar$ and $c$. This will look strange at first, and it is! What does $c = 1$ mean-- how can you set a velocity equal to a dimensionless number? This definition sets two types of measurements equal to one another: time and length. $c = 3\times 10^8\;\mathrm{m} / \mathrm{sec}$, so $c = 1$ really means that $1\;\mathrm{sec} = 3\times 10^8$ meters. If I have a time measurement of 3 seconds, I can give it to you as 3 seconds, or equivalently as $9\times 10^9$ meters; they're equivalent under the assumption $c = 1$! 
+	\newline\newline
+	As another example, the Compton wavelength of a mass $m$ particle is defined as $\lambda_c = 1 / m_e$ in natural units. I can measure $\lambda_c$ as an inverse energy, since $E = mc^2 = m$, so typically you'll see $\lambda_c$ quoted as an inverse energy like this, $\lambda_c = 1.9\times 10^3\;\mathrm{GeV}^{-1}$. How do we get back to a value of $\lambda_c$ in something we understand, like meters? We can \textbf{restore units} by multiplying this value with the appropriate factors of $\hbar$ and $c$, using $\hbar = 6.58\times 10^{-16}\;\mathrm{eV}\cdot \mathrm{sec}$. Multiplying this with $c$ gives us the conversion factor from $\mathrm{GeV}^{-1}$ to meters:
+	\begin{align}
+		\hbar c = 0.2\;\mathrm{GeV}\cdot\;\mathrm{fm} = 1 \implies \lambda_c = (1.9\times 10^3\;\mathrm{GeV}^{-1}) (0.2\;\mathrm{GeV}\cdot \mathrm{fm}) = 380\;\mathrm{fm} = 3.8\times 10^{-13}\;\mathrm{m}
+	\end{align}
+\end{answerbox}
+
+\newpage
+\section*{Index notation}
+
+%{\color{red} Maybe reorganize so that I don't talk about representation theory at all}
+
+In this section, we'll briefly go over rotations in 2 dimensions as a vehicle for getting used to transformations and index notation. 
+
+\begin{itemize}
+
+	%\item The space of proper (orientation preserving) rotational symmetries in 3 dimensions is $SO(3)$. It can be formally defined as the space of all transformations of $\mathbb R^3$ which leaves the norm $r = \sqrt{x^2 + y^2 + z^2}$ invariant for all $(x, y, z)\in \mathbb R^3$ and preserves handedness. This defines the group \textit{abstractly}; to work with it, we need a \textbf{matrix representation}, which is a way to express an abstract rotation $R$ as a $d\times d$ matrix\footnote{$d$ is called the \textbf{dimension} of the representation.}. For $SO(3)$, $d = 3$ (the dimension of $\mathbb R^3$), and we write $R_{ij}$ for the $3\times 3$ matrix representing $R$. The matrices $R_{ij}$ representing $SO(3)$ are orthogonal and have determinant 1.
+	
+	%\item Continuous symmetries are implemented by \textbf{Lie groups}. The space of proper (orientation preserving) rotational symmetries in 2 dimensions is $SO(2)$. It can be formally defined as the space of all transformations of $\mathbb R^2$ which leaves the norm $r = \sqrt{x^2 + y^2}$ invariant for all $(x, y)\in \mathbb R^2$ and preserves handedness. This defines the group \textit{abstractly}; to work with it, we need a \textbf{matrix representation}, which is a way to express an abstract rotation $R$ as a matrix acting on vectors. For $SO(2)$, we want to be able to rotate vectors in $\mathbb R^2$, so we will represent $R$ as a $2\times 2$ matrix $R_{ij}$. The matrices $R_{ij}$ representing $SO(2)$ are orthogonal and have determinant 1, and can be parameterized as:
+	%\begin{equation}
+	%	R_{ij}(\theta, \hat z) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}.
+	%\end{equation}
+	
+	\item The space of proper (orientation preserving) rotational symmetries in 2 dimensions is $SO(2)$. One can represent the elements of $SO(2)$ as $2\times 2$ matrices $R_{ij}$ which are orthogonal, $R^T R = 1$, and have determinant 1, $\det R = 1$. An arbitrary $R\in SO(2)$ can be parameterized in the usual way:
+	\begin{equation}
+		R_{ij}(\theta, \hat z) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}.
+	\end{equation}
+	
+	%\item Each Lie group has a certain number of \textbf{generators}, which basically correspond to independent ways to perform the transformation. $SO(2)$ has one generator, since we only need to parameterize rotations about one axis to describe the entire group. For $SO(3)$, the space of (proper) rotations in 3 dimensions, there are $3$ generators; rotations about the $x$ axis, the $y$ axis, and the $z$ axis. 
+	
+	\item Rotations are implemented on vectors in $\mathbb{R}^2$ by a matrix product with $R_{ij}$. We will use the \textbf{Einstein summation convention}: if an index is repeated, it is assumed to be summed over. A sum on indices is called a \textbf{contraction}. For example, the action of a rotation on a vector $\bm x = (x_1, x_2)\in \mathbb R^2$ is:
+	\begin{align}
+		\bm x \mapsto R\bm x\;\;\;\; (\textnormal{vector notation}) && x_i\mapsto \sum_j R_{ij} x_j \equiv R_{ij} x_j \;\;\;\; (\textnormal{index notation}).
+	\end{align}
+	Concretely, we can write this out as:
+	\begin{equation}
+		\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} \mapsto \underbrace{\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}}_{R_{ij}} \underbrace{\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} }_{x_j} = \begin{pmatrix} x_1 \cos\theta - x_2 \sin\theta \\ x_1\sin\theta + x_2 \cos\theta \end{pmatrix} 
+	\end{equation}
+	As another example, the previous condition of orthogonality, $R^T R = I$, translates into index notation as $R_{ki} R_{kj} = \delta_{ij}$, where $\delta_{ij}$ is the Kroenecker delta. 
+	
+	%\item Transformations are implemented using index notation to explicitly write out matrix and products. We will use the \textbf{Einstein summation convention}: if an index is repeated, it is assumed to be summed over. A sum on indices is called a \textbf{contraction}. For example, the action of a rotation on a vector $\vec x = (x_1, x_2)\in \mathbb R^2$ is:
+	%\begin{equation}
+	%	x_i\mapsto \sum_j R_{ij} x_j \equiv R_{ij} x_j.
+	%\end{equation}
+	%Concretely, we can write this out as:
+	%\begin{equation}
+	%	\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} \mapsto \underbrace{\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}}_{R_{ij}} \underbrace{\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} }_{x_j} = \begin{pmatrix} x_1 \cos\theta - x_2 \sin\theta \\ x_1\sin\theta + x_2 \cos\theta \end{pmatrix} 
+	%\end{equation}
+	% Point out that each component is R_{ij} x_j
+	
+	\item Example: Orthogonal matrices $R_{ij}$ do implement rotations because we can show they leave $x^2$ invariant:
+	\begin{equation}
+	x^2 = x_i x_i \mapsto (R_{ij} x_j) (R_{ik} x_k) = x_j \underbrace{(R^\mathrm{T})_{ji} R_{ik}}_{\textnormal{matrix 
+	product}} x_k = x_j \delta_{jk} x_k = x^2.
+	\end{equation}
+	
+	\item A \textbf{metric} is an inner product on a space, and gives us a notation of distance. In physics we represent metrics as symmetric matrices $h_{ij}$, under which the inner product of two vectors $\bm x$ and $\bm y$ is $\langle\bm x | \bm y\rangle = h_{ij} x_i y_j$ (in matrix notation, this is $\bm x^\mathrm{T} h \bm y$). The Euclidean metric on $\mathbb R^2$ is the Kronecker delta $h_{ij} = \delta_{ij}$; a rotation can instead be defined as \textbf{a transformation which preserves the metric}, which is shown in the following equation:
+	\begin{align}
+	R_{ki} \delta_{kl} R_{lj} = \delta_{ij} && (R^\mathrm{T} I R = I \textnormal{ in matrix notation})
+	\label{eq:rotational_invariance}
+	\end{align}
+\end{itemize}
+% two things: index notation, and r^2 being invariant under SO(3)
+
+\section*{The Lorentz Group}
+
+\begin{itemize}
+	\item Special relativity tells us that in any reference frame with coordinates $x^\mu = (t, \bm x)$, 
+	the spacetime interval $s^2 = -t^2 + \bm x^2$ is invariant. $s$ is the norm of $x^\mu$ with respect to 
+	the \textbf{Minkowski metric}\footnote{\textbf{WARNING}: Whenever you read a book, check the metric! In particle physics it's conventional 
+	to use the ``mostly minus" convention, but in GR it's conventional to use the ``mostly positive" convention with $\mathrm{diag}(-1, 1, 1, 1)$. 
+	Even the textbooks we use in this course will have different conventions: Weinberg uses mostly $+$, while Peskin uses mostly $-$.}:
+	\begin{equation}
+		g_{\mu\nu} = \mathrm{diag}(-1, +1, +1, +1)
+	\end{equation}
+	The dot product between two vectors is $x\cdot y = g_{\mu\nu} x^\mu y^\nu$, so $s^2 = x\cdot x = 
+	g_{\mu\nu} x^\mu x^\nu$ is a norm squared. Greek letters $\mu\in \{0, 
+	1, 2, 3\}$ denote spacetime indices and Latin letters $i\in \{1, 2, 3\}$ denote spatial indices.
+	
+	\item The \textbf{Lorentz group} is the set of symmetries of spacetime which preserve the metric $g_{\mu\nu}$. 
+	The total Lorentz group has 4 disconnected components: each component contains one of $\{1, P, T, PT\}$, where $P$ 
+	is parity and $T$ is time reversal. The component containing $1$ is called the \textbf{proper orthochronous} subgroup 
+	and is denoted by $SO(1, 3)$. An element $\Lambda\in SO(1, 3)$ must satisfy (just like 
+	Eq.~(\ref{eq:rotational_invariance})):
+	\begin{equation}
+		%\Lambda_\mu^{\;\;\alpha} g_{\alpha\beta} \Lambda^\beta_{\;\;\nu} = g_{\mu\nu}
+		\Lambda^{\alpha}_{\;\;\mu} g_{\alpha\beta} \Lambda^\beta_{\;\;\nu} = g_{\mu\nu}
+		\label{eq:lorentz_metric_invariance}
+	\end{equation}
+	$SO(1, 3)$ is a 6-dimensional Lie group, meaning any Lorentz transformation can be 
+	parameterized with 6 parameters: 3 rotation angles $\theta_i$, and 3 boost parameters $\beta_i$. 
+	
+	\item \textbf{Lorentz transformations}: rotations or boosts purely along one axis can be written out explicitly:
+	\tiny
+	\begin{align}
+		R(\hat x, \theta_1) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & \cos\theta_1 & \sin\theta_1 \\ 0 & 0 & -\sin\theta_1 & \cos\theta_1 \end{pmatrix} 
+		&&
+		R(\hat y, \theta_2) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\theta_2 & 0 & -\sin\theta_2 \\ 0 & 0 & 1 & 0 \\ 0 & \sin\theta_2 & 0 & \cos\theta_2 \end{pmatrix} 
+		&&
+		R(\hat z, \theta_3) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\theta_3 & \sin\theta_3 & 0 \\ 0 & -\sin\theta_3 & \cos\theta_3 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
+		\\
+		B(\hat x, \beta_1) = \begin{pmatrix} \cosh\beta_1 & \sinh\beta_1 & 0 & 0 \\ \sinh\beta_1 & \cosh\beta_1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} 
+		&&
+		B(\hat y, \beta_2) = \begin{pmatrix} \cosh\beta_2 & 0 & \sinh\beta_2 & 0 \\ 0 & 1 & 0 & 0 \\ \sinh\beta_2 & 0 & \cosh\beta_2 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} 
+		&& 
+		B(\hat z, \beta_3) = \begin{pmatrix} \cosh\beta_3 & 0 & 0 & \sinh\beta_3 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ \sinh\beta_3 & 0 & 0 & \cosh\beta_3 \end{pmatrix} 
+	\end{align}
+	\normalsize
+	When multiple boost or rotation parameters are nonzero, one must use a matrix exponential to write $\Lambda$ 
+	down as (we have also included an infinitesimal Lorentz transformation with $\beta_i, \theta_i \ll 1$):
+	\begin{equation}
+		\Lambda = \exp(i\beta_i K_i + i \theta_i J_i) = \exp\left(\frac{i}{2}\omega_{\mu\nu} \mathcal{J}^{\mu\nu}\right)\approx 1 + \frac{i}{2}\omega_{\mu\nu} \mathcal J^{\mu\nu} + \mathcal O(\omega^2)
+		\label{eq:general_lorentz}
+	\end{equation}
+	Here $K_i$ and $J_i$ are antisymmetric $4\times 4$ matrices which generate boosts and rotations\footnote{Explicitly 
+	written as matrices in Eqs. (10.14) and (10.15) of Schwartz.}:
+	\begin{align}
+		(J_i)_{jk} = -i \epsilon_{ijk} && (K_i)_{0j} = \delta_{ij} = - (K_i)_{j0}
+	\end{align}
+	and are packaged together covariantly as a \textit{tensor} of $4\times 4$ matrices $\mathcal J^{\mu\nu}$. 
+	$\omega_{\mu\nu}$ is an antisymmetric tensor which contains the parameters $\beta_i$ and $\theta_i$:
+		\begin{align}
+		\mathcal J^{\mu\nu} = \begin{pmatrix} 0 & K_1 & K_2 & K_3 \\ -K_1 & 0 & J_3 & -J_2 \\ -K_2 & -J_3 & 0 & J_1 \\ -K_3 & J_2 & -J_1 & 0 \end{pmatrix} &&
+		\omega_{\mu\nu} = \begin{pmatrix} 0 & \beta_1 & \beta_2 & \beta_3 \\ -\beta_1 & 0 & \theta_3 & -\theta_2 \\ -\beta_1 & -\theta_3 & 0 & \theta_1 \\ 
+		-\beta_3 & \theta_2 & -\theta_1 & 0 \end{pmatrix}
+	\end{align}
+
+	%\footnote{We will go over this explicitly later in the course; for now, if you're interested you can check out Eqs. (10.13) - (10.16) in Schwartz, or we can discuss it in office hours. }
+%	down as:
+%	\begin{equation}
+%		\Lambda = \exp(i\beta_i K_i + i \theta_i J_i) = \exp\left(\frac{i}{2}\omega_{\mu\nu} \mathcal{J}^{\mu\nu}\right)\approx 1 + \frac{i}{2}\omega_{\mu\nu} \mathcal J^{\mu\nu} + \mathcal O(\omega^2)
+%	\end{equation}
+%	Here $K_i$ and $J_i$ are respectively the generators of boosts and rotations:
+%	\begin{align}
+%		J_1 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & -1 \\ 0 & 0 & 1 & 0  \end{pmatrix} &&
+%		J_2 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & -1 & 0 & 0  \end{pmatrix} &&
+%		J_3 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & -1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} \\
+%		K_1 = -i\begin{pmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} && 
+%		K_2 = -i\begin{pmatrix} 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} &&
+%		K_3 = -i\begin{pmatrix} 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0  \end{pmatrix}
+%	\end{align}
+%	and are packaged together covariantly as a tensor of $4\times 4$ matrices $\mathcal J^{\mu\nu}$. The 
+
+%\end{itemize}
+
+%\section*{Tensors}
+
+%\begin{itemize}
+
+	\item \textbf{Upper and lower indices}: Given a vector $V^\mu$, one can form its dual vector $V_\mu$ by using the 
+	metric to lower its indices, $V_\mu = g_{\mu\nu} V^\nu$. Vectors with upper indices are called \textbf{contravariant}, 
+	and vectors with lower indices are \textbf{covariant}: under Lorentz transformations $V^\mu$ and $V_\mu$ transform 
+	in a dual way to one another. Some examples we will frequently use are:
+	\begin{align}
+		x^\mu = (t, \bm x) && p^\mu = (E, \bm p) && \partial_\mu = (\partial_t, \bm \nabla).
+	\end{align}
+	%Note that as an operator in NR QM, $\bm p = -i\bm \nabla$, which is reproduced by setting $p^\mu = -i\partial^\mu$ and raising the index on $\partial_\mu$.
+
+	\item We can form multi-index \textbf{tensors} by combining upper and lower indices into 
+	one object $T^{\mu_1 ... \mu_k}_{\;\;\;\;\;\;\;\;\;\;\;\nu_1 ... \nu_\ell}$, which transforms under a Lorentz transformation $\Lambda$ as:
+	\begin{equation}
+		T^{\mu_1 ... \mu_k}_{\;\;\;\;\;\;\;\;\;\;\;\nu_1 ... \nu_\ell}\mapsto \Lambda^{\mu_1}_{\;\;\alpha_1} ... \Lambda^{\mu_k}_{\;\;\alpha_k} 
+		\Lambda_{\nu_1}^{\;\;\beta_1} ... \Lambda_{\nu_\ell}^{\;\;\beta_\ell} T^{\alpha_1 ... \alpha_k}_{\;\;\;\;\;\;\;\;\;\;\;\beta_1 ... \beta_\ell}.
+	\end{equation}
+	The number of indices $k + \ell$ is called the \textbf{rank} of the tensor. Vectors $V^\mu$ and $V_\mu$ are 
+	rank 1 tensors. Examples of rank 2 tensors are the metric $g_{\mu\nu}$, the stress-energy tensor $T_{\mu\nu}$, 
+	and the field strength $F_{\mu\nu}$.
+	
+	\item A quantity is \textbf{Lorentz invariant} if it is the same in all reference frames. A general rule is that to form 
+	a Lorentz invariant, every upper index you see must be contracted with a lower index, and every lower 
+	index with an upper index. Quantities like $x\cdot \partial = x^\mu\partial_\mu$, $\partial^2$, and $p^\mu \partial^\nu F_{\mu\nu}$ are 
+	Lorentz invariant. In particular, any \textbf{dot product or square of vectors is invariant}. An consequence of this is that \textit{for a 
+	massive particle, $p^2$ will always equal $m^2$}, since in its rest frame $p^\mu = ( m,  \bm 0 )$. 
+	
+	\item A quantity that is \textbf{Lorentz covariant} will change in different reference frames, but in a way that respects the metric (all indices must be contracted in a Lorentz invariant way), for example $\partial_\mu T^{\mu\nu}$. 
+	
+	
+	%\item Field theorists typically use the \textbf{Lagrangian} formulation of quantum mechanics as opposed to the \textbf{Hamiltonian} formulation. The reason this approach is nice is because it is manifestly Lorentz invariant: the Lagrangian is a Lorentz scalar, and therefore is the same in all frames. On the other hand, the Hamiltonian is like an energy of a system-- it therefore is not a Lorentz invariant, and by itself is \textit{not even Lorentz covariant}, and thus is more difficult to use in QFT when we're working with relativity. 
+	
+	%\item Example: The fact that $p^2$ is Lorentz invariant can be used to derive the dispersion relation of a massive 
+	%particle. In its rest frame, $p^\mu = (m, \vec 0)$, but in other frames $p^\mu = (E, \vec p)$. Equating $p^2$ in 
+	%each frame, we see:
+	%\begin{equation}
+	%	m^2 = E^2 - \vec p^{\,2}.
+	%\end{equation}
+\end{itemize}
+
+\section*{Classical Field Theory}
+
+% might not need to go much into this, since Hong is covering it-- but pull important parts. Will also want to cover locality-- may also want to link it to causality
+% check out recitation_5 notes
+
+% may want to mention the differences between $\phi_a$ and a vector field $V_\mu$; we still call $\phi_a$ a scalar field, even though it has more components-- what is important is the transformation under the Lorentz group
+
+\begin{itemize}
+
+	\item A classical \textbf{field} is a function on spacetime. $\phi$ can take different types of values, which define different types of fields. Some examples you've seen are scalar fields $\phi(x)$, three-vector fields like $\bm E(x)$, four-vector fields like $A_\mu(x)$, and tensor fields like $F_{\mu\nu}(x)$. The \textbf{Lagrangian} $L$ for a field theory can be written as an integral of a \textbf{Lagrangian density} $\mathcal L$, and from it we can construct the \textbf{action} $S$:
+	\begin{align}
+		L[\phi] = \int d^3\bm x\; \mathcal{L}(\phi, \partial_\mu\phi) && S[\phi] = \int dt \; L[\phi] = \int d^4x\; \mathcal L(\phi, \partial_\mu\phi)
+	\end{align}
+	% classical system with a continuous number of degrees of freedom
+	
+	\item \textbf{Field transformations}: A field $\phi(x)$ transforms under a Lorentz transformation $\Lambda\in\mathrm{SO}(1, 3)$ to $\phi'(x)$ such that at the transformed point $x' = \Lambda x$, the field remains the same, $\phi'(x') = \phi(x)$. This transformation law is written out as:
+	\begin{equation}
+		\phi(x)\mapsto \phi'(x) = \phi(\Lambda^{-1}x).
+	\end{equation}
+	The field can have more indices, for example the electromagnetic potential $A_\mu(x)$ or field strength $F_{\mu\nu}(x)$ from E\&M. In this case, each of the external indices transforms in the appropriate way. For an arbitrary tensor field:
+	\begin{equation}
+		T^{\mu_1 ... \mu_k}_{\;\;\;\;\;\;\;\;\;\;\;\nu_1 ... \nu_\ell}(x)\mapsto \Lambda^{\mu_1}_{\;\;\alpha_1} ... \Lambda^{\mu_k}_{\;\;\alpha_k} 
+		\Lambda_{\nu_1}^{\;\;\beta_1} ... \Lambda_{\nu_\ell}^{\;\;\beta_\ell} T^{\alpha_1 ... \alpha_k}_{\;\;\;\;\;\;\;\;\;\;\;\beta_1 ... \beta_\ell}(\Lambda^{-1}x).
+	\end{equation}
+	The way that a field transforms under Lorentz transformations classifies if we call it a scalar, vector, or tensor. For example, we can have a two-component scalar field $\phi_a(x)$, since $a$ is not a spacetime index; under a Lorentz transformation, $\phi_a(x)$ just transforms into itself. 
+	
+	%\item Example (action for a rope): 
+	
+	\item From the principle of least action, once can derive the \textbf{Euler-Lagrange equations} for a field:
+	\begin{equation}
+		\partial_\mu \left(\frac{\partial \mathcal{L}}{\partial (\partial_\mu\phi)}\right) = \frac{\partial\mathcal L}{\partial\phi}.
+	\end{equation}
+	These equations govern the evolution of the field $\phi$. %As an example of how to compute the derivatives, let's consider $\mathcal L = -\frac{1}{2} (\partial\phi)^2 - \frac{1}{2} m^2 \phi^2$, where by $(\partial\phi)^2$ we mean $(\partial_\alpha\phi) (\partial^\alpha\phi)$. When we take $\partial / \partial (\partial_\mu\phi)$, we want to change the dummy index on $(\partial\phi)^2$, which is why we used $\alpha$; we also need to make the metric explicit, so we'll write it as $g^{\alpha\beta}(\partial_\alpha\phi) (\partial_\beta\phi)$. Then:
+%	\begin{align}
+%		\frac{\partial\mathcal L}{\partial\phi} &= -m^2\phi \label{eq:diff_phi} \\
+%		\frac{\partial \mathcal{L}}{\partial (\partial_\mu\phi)} = \frac{\partial}{\partial (\partial_\mu\phi)} \left( -\frac{1}{2} g^{\alpha\beta} (\partial_\alpha \phi) (\partial_\beta\phi) \right) &= -\frac{1}{2} g^{\alpha\beta} \underbrace{\left(\delta^\mu_\alpha (\partial_\beta\phi ) + (\partial_\alpha\phi) \delta^\mu_\beta \right)}_{\textnormal{product rule}} = -\partial^\mu\phi \label{eq:diff_derivative}
+%	\end{align}
+%	Differentiating Eq.~(\ref{eq:diff_derivative}) and setting it equal to Eq.~(\ref{eq:diff_phi}) gives us the EoM $(\partial^2 - m^2)\phi(x) = 0$.
+	
+	\item A \textbf{symmetry} of a theory is a transformation which leaves the action invariant. Note that this \textit{does not imply} that the Lagrangian density is invariant, but rather that it can change by a total derivative. If this is the case, \textbf{Noether's theorem} tells us that there is a conserved current and charge associated with the symmetry. Suppose the transformation $\phi\mapsto \phi + \alpha\Delta\phi$ is a symmetry of the theory, and that the Lagrangian density changes by a total derivative, $\mathcal L\mapsto \mathcal L + \alpha\partial_\mu\mathcal{F}^\mu$. The \textbf{conserved current} is:
+	\begin{align}
+		j^\mu = \frac{\partial\mathcal L}{\partial(\partial_\mu\phi)} \Delta\phi - \mathcal F^\mu && \partial_\mu j^\mu = 0.
+	\end{align}
+	Assuming there is no net charge flow at spatial infinity, this yields a \textbf{conserved charge} $Q$ given by:
+	\begin{align}
+		Q = \int d^3\bm x \; j^0(x) && \frac{dQ}{dt} = -\int d^3\bm x \; \nabla\cdot \bm j = 0.
+	\end{align}
+	
+	\item \textbf{Example}: two decoupled scalar fields. Consider the following field theory, where $\phi(x) = \begin{pmatrix} \phi_1(x) & \phi_2(x) \end{pmatrix}$:
+	\begin{equation}
+		\mathcal L = -\frac{1}{2} (\partial_\mu\phi_a) (\partial^\mu \phi_a) - \frac{1}{2} m^2 \phi_a \phi_a.
+	\end{equation}
+	Here $a = 1, 2$ is just an extra index labeling which copy of the scalar field we're looking at. To find the EoM for this field, we can evaluate the usual derivatives, being careful to tack on an ``a" index:
+	\begin{align}
+		\frac{\partial\mathcal L}{\partial\phi_a} &= -m^2\phi_a \label{eq:diff_phi} \\
+		\frac{\partial \mathcal{L}}{\partial (\partial_\mu\phi_a)} = \frac{\partial}{\partial (\partial_\mu\phi_a)} \left( -\frac{1}{2} g^{\alpha\beta} (\partial_\alpha \phi_b) (\partial_\beta\phi_b) \right) &= -\frac{1}{2} g^{\alpha\beta} \underbrace{\left(\delta^\mu_\alpha \delta_{ab} (\partial_\beta\phi_b ) + (\partial_\alpha\phi_b) \delta^\mu_\beta \delta_{ab} \right)}_{\textnormal{product rule}} = -\partial^\mu\phi_a \label{eq:diff_derivative}
+	\end{align}
+	Differentiating Eq.~(\ref{eq:diff_derivative}) and setting it equal to Eq.~(\ref{eq:diff_phi}) gives us the EoM $(\partial^2 - m^2)\phi_a(x) = 0$, which is just two copies of the Klein-Gordon equation.
+	
+	This has an $SO(2)$ symmetry, since only the norm squared of $\phi_a$ and $\partial_\mu\phi_a$ enter the Lagrangian. Let's derive the Noether current for this symmetry by considering a rotation by angle $\alpha\ll 1$:
+	\begin{align}
+		&\begin{pmatrix} \phi_1(x) \\ \phi_2(x) \end{pmatrix} \mapsto \begin{pmatrix} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha \end{pmatrix} \begin{pmatrix} \phi_1(x) \\ \phi_2(x) \end{pmatrix} = \begin{pmatrix} 1 & -\alpha \\ \alpha & 1 \end{pmatrix} \begin{pmatrix} \phi_1(x) \\ \phi_2(x) \end{pmatrix} + \mathcal{O}(\alpha^2) \\
+		&\implies \begin{pmatrix} \Delta\phi_1 \\ \Delta \phi_2 \end{pmatrix} = \begin{pmatrix} -\phi_2 \\ \phi_1 \end{pmatrix}
+	\end{align}
+	Since the Lagrangian is invariant, $\mathcal F^\mu = 0$, so we can construct the Noether current:
+	\begin{align}
+		j^\mu = (\partial^\mu \phi_1) \phi_2 - \phi_1 (\partial^\mu \phi_2) && Q = \int d^3\bm x\; (\dot\phi_1 \phi_2 - \phi_1 \dot{\phi_2})
+	\end{align}
+	This is an angular momentum! In the 1D field theory case, $\phi_1(x), \phi_2(x)\leftrightarrow x(t), y(t)$, and $Q = \dot{x} y - x \dot{y} = \bm x \times \dot{\bm x}$, which is the angular momentum of a mass $m = 1$ particle at position $(x(t), y(t))$. 
+	
+	%\item Integration by parts: 
+	
+	
+	% focus on this example when we get to classical fields
+	%\item Ex: two decoupled scalar fields (include how to take derivatives of fields in calculations, this'll be necessary for the HW)
+	
+	%\item Locality: what is a local operator?
+	% intuition: if I disturb spacetime at a point $y$, the disturbance needs to propagate-- it can only do that by affecting its neighboring points, which will eventually get to any point $x$. But, it can't directly affect the point at $x$, it needs to go through the motions (upper speed limit too!)
+	
+	%\item Integration by parts
+
+\end{itemize}
+
+\end{document}

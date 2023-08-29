@@ -1,0 +1,162 @@
+\def \root {../..}			% path to root (/notes)
+\input{\root/template/preamble.tex}
+
+\title{Confinement}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+Confinement is a loaded word in physics that is often loosely defined. The main idea behind confinement can be easy to understand qualitatively, but a precise definition can be elusive. The idea behind confinement in QCD is that although we know the quark model works and describes the spectrum of QCD, we have never seen a lone quark. We can probe individual quarks inside of hadrons, but we will never see a quark by itself. This is the central idea behind confinement: quarks only come in pairs, or triplets, or quadruplets (and so on); QCD is a \textbf{confining} theory, in that isolated quarks do not exist, and instead quarks must be \textbf{confined} to hadrons\footnote{Hadrons are composite particles made up of quarks; they are the bound states of QCD.}. 
+
+% String breaking
+
+\begin{resources}
+These notes are based on the following texts:
+\begin{itemize}
+	\item Jeff Greensite's textbook, \textit{An Introduction to the Confinement Problem}. 
+	\item \href{https://indico.cern.ch/event/195077/contributions/1473970/attachments/283795/396817/PolyakovLoopCohen.pdf}{Lecture slides by Tom Cohen}. 
+\end{itemize}
+\end{resources}
+
+\newpage
+\section{Gauge theories}
+
+Confinement is deeply related to the structure of gauge theories, both pure gauge theories and those with matter. Before we get into the details, we begin with a few notes on the spontaneous breaking of global symmetries. For a global symmetry, the low-temperature phase in which the symmetry is broken is called the \textbf{ordered phase}, while the high-temperature phase in which the symmetry is unbroken is called the \textbf{disordered phase}. If we think about this in terms of the Ising Model, ``order" means that the spins are pointing in a concrete direction and break the $\mathbb Z_2$ symmetry, while ``disorder" means the spins are pointing in a random direction and do not break the $\mathbb Z_2$ symmetry. 
+
+However, when we consider gauge symmetries, they are in fact \textbf{unable} to break spontaneously, as the following theorem makes clear. 
+\begin{theorem}[Elitzur]
+	A gauge symmetry may not be spontaneously broken. The expectation value of any non-gauge invariant observable $\mathcal O$ must vanish, $\langle\mathcal O\rangle = 0$. 
+\end{theorem}
+In the context of global symmetries, different phases of interest (i.e. ordered and disordered) are distinguished by the spontaneous breaking of global symmetry. Gauge theories can likewise take on different phases, but these different phases cannot be distinguished so easy, since Elitzur's theorem implies that gauge symmetries cannot break spontaneously. Instead, there are other order parameters we can study to determine what phase a system is in. 
+
+\subsection{Phases of gauge theories}
+
+\subsection{Regge scaling and string breaking}
+
+\subsection{Remnant gauge symmetry}
+
+\subsection{Center symmetry}
+
+\begin{interlude}[$N$-ality of a representation]
+
+\end{interlude}
+
+\newpage
+\section{Order parameters}
+
+\subsection{Wilson loops}
+
+\subsection{Polyakov loops}
+
+\subsection{'t Hooft loops}
+
+\begin{interlude}[Linking]
+
+\end{interlude}
+
+\newpage
+\section{Higher form symmetries}
+
+{\color{red}Question we could possibly ask:} Are there any interesting theories with higher-form symmetries that are amenable to lattice Monte Carlo simulations, in which the symmetry structure of the theory informs the physics? Things to think about: 
+\begin{itemize}
+	\item The specific type of higher-form symmetries and their spontaneous breaking.
+	\item The relation between SSB of higher-form symmetries and confinement. 
+	\item There are (regular 0-form) symmetries that exist in the continuum which are broken by a lattice regulator and have a different conserved current (i.e. $j_V^\mu$): would this occur with higher-form symmetries as well, and how would we verify this (we could compute a renormalization coefficient, i.e. for the case of $j_V$ this is equivalent to the fact that $Z_V\neq 1$). 
+	\item Dimension of the base space: smaller dimensionality (i.e. $d = 2$) limits what type of higher-form symmetries you can see. 
+\end{itemize}
+
+\subsection{Regular symmetries (0-form symmetries)}
+
+\newpage
+\section{Four-fermion deformed massless Schwinger Model}
+
+This is based on Alexei Cherman's paper, \href{https://arxiv.org/pdf/2203.13156.pdf}{hep-th/2203.13156}. The key idea here is to study the symmetries of the Schwinger model with a charge $N$ fermion $\psi$,
+\begin{equation}
+	S_{\mathrm{Schwinger}} = \int d^2 x \left( \frac{1}{4e^2} f_{\mu\nu}f^{\mu\nu} + \overline\psi [\gamma^\mu (\partial_\mu + iN a_\mu)] \psi  + m_\psi \overline\psi \psi \right)
+\end{equation}
+Here $a_\mu$ is the gauge field with field strength $f_{\mu\nu}$, and the fermion has mass $m_\psi$. The gauge field is valued in $U(1)$, i.e. we are studying 2d QED in $1+1$d. Note that under gauge transformations by $e^{i\alpha}\in U(1)$,
+\begin{align}
+	a_\mu\mapsto a_\mu - \partial_\mu \alpha && \psi\mapsto e^{i N \alpha} \psi.
+\end{align}
+For this model, we typically consider the theory without a $\theta$-term. 
+
+For any value of $m_\psi$, the theory has a $\mathbb Z_N$ 1-form symmettry, which is realized by $N$ local topological operators $U_n(x)$, with action on Wilson loops $W(C)\equiv e^{iq \int_C a_\mu dx^\mu}$ given by
+\begin{equation}
+	\langle U_n(x) W(C)\rangle = \exp\left( \frac{2\pi i q n}{N} \ell(C, x)\right) \langle W(C)\rangle
+\end{equation}
+where $\ell(C, x)$ is the linking number of $C$ and $x$, which in $d = 2$ is defined to be 1 if $x\in\mathrm{int}(C)$ and $0$ otherwise. This $\mathbb Z_N$ 1-form symmetry is just like the $\mathbb Z_N$ center symmetry of $d = 4$ $SU(N)$ gauge theory, which yields a definition of confinement for the Schwinger model when $N > 1$. 
+
+The other symmetry to consider for the Schwinger model is chiral symmetry, when $m_\psi = 0$. At the classical level, the model gains an additional $U(1)_A$ symmetry, but this is broken down to the discrete subgroup $\mathbb Z_N\subseteq U(1)_A$ by the chiral anomaly, hence creating a $\mathbb Z_N$ chiral symmetry that acts on the field $\psi$ as
+\begin{equation}
+	\psi(x) \mapsto \exp\left( \frac{2\pi i \gamma_5}{2N} \right) \psi(x)
+\end{equation}
+This allows for us to discuss chiral symmetry breaking in the Schwinger model, because condensate $\overline\psi\psi\mapsto e^{2\pi i / N} \overline\psi\psi$ under chiral rotations and is not invariant under $\mathbb Z_N$ chiral symmetry. In summary, we have a $\mathbb Z_N$ 0-form \textbf{chiral symmetry}, and a $\mathbb Z_N$ 1-form \textbf{center symmetry}. 
+
+Unfortunately, here the similarities between 4d $SU(N)$ gauge theory and the 2d Schwinger model end, as they have different spontaneous symmetry breaking patterns in the massless limit $m_\psi\rightarrow 0$. In the Schwinger model, the $m_\psi\rightarrow 0$ limit yields chiral symmetry breaking, which is desired, but it also spontaneously breaks the $\mathbb Z_N$ 1-form center symmetry, which we do not want. The spontaneous breaking of center symmetry means that large Wilson loops obey a perimeter law behavior, rather than an area law behavior, which signals that the theory is not confining. In contrast, for 4d $SU(N)$ theory, only chiral symmetry is spontaneously broken, whereas center symmetry is not broken, and large Wilson loops obey an area law, signaling confinement, even in the massless limit. 
+
+The main goal of this paper is to study ways to deform the Schwinger model into a theory that continues to confine when $m_\psi\rightarrow 0$, typically for the case of $N$ even. 
+
+\begin{interlude}[The mass parameter]
+	Can we simulate the massless Schwinger model (and its four-fermion deformations) on the lattice? This will likely be without a $\theta$-term, as that is what Alexei is considering. If we can do this, we should strongly consider what the lattice-regulated mass for the massless fermion is. Na\"ively, we would just set $m_\psi = 0$, but in Igor Klebanov's paper, \href{https://arxiv.org/abs/2206.05308}{hep-th/2206.05308v3}, he shows that one should really be using the lattice mass $m_\mathrm{lat} = m - \frac{1}{8}e^2 a$, where $m$ is the continuum mass ($m = m_\psi\rightarrow 0$ in the case of the massless Schwinger model). 
+\end{interlude}
+
+\subsection{Deformations}
+
+There are two specific deformations of the Schwinger Model to consider. The first is to consider the \textbf{Schwinger-Thirring (ST)} model,
+\begin{align}
+	S_{\mathrm{ST}} = S_{\mathrm{Schwinger}} + g \int d^2 x\, \mathcal O_{jj} && \mathcal O_{jj} = \overline\psi \gamma_\mu \psi \overline\psi \gamma^\mu\psi,
+\end{align}
+which is a Schwinger model that has been deformed by an insertion of the marginal operator $\mathcal O_{jj}$ that is formed by contracting two vector currents together. In the massless limit, it is known that $g$ remains exactly marginal, even after RG flow, and for any values $g > g_*\equiv -\frac{\pi}{2}$ yields a unitary theory. However, adding $\mathcal O_{jj}$ to the action does not change the symmetries or the anomalies of the Schwinger model, and the massless theory remains in the deconfined phase with a finite mass gap and spontaneous chiral symmetry breaking for any $g > g_*$. 
+
+The other operator to consider deforming the Schwinger model with is
+\begin{equation}
+	\mathcal O_\chi = \psi_L^\dagger \psi_R (D_\mu \psi_L^\dagger)(D^\mu \psi_R).
+\end{equation}
+This operator is the lowest-dimension four-fermion operator that respects parity ($\mathbb Z_2$ symmetry) but not $\mathbb Z_N$ 0-form symmetry. We deform the Schwinger-Thirring action with this operator, yielding the 4-fermion deformation of the massless Schwinger model that is studied in this paper:
+\begin{equation}
+	S = S_{\mathrm{ST}} + \Lambda^{2 - \Delta_\chi} \int d^2x\, \mathcal O_\chi
+	\label{eq:four_fermion_deformed_action}
+\end{equation}
+where the conformal dimension $\Delta_\chi$ determines if the coupling $\Lambda$ is an IR scale or a UV scale. If $\Delta_\chi > 2$, then $\Lambda$ is a UV scale, and in this case the model is physically interesting if $e\ll \Lambda$. When $\Delta_\chi < 2$, then $\Lambda$ is a UV scale; in this case, it is often easiest to consider when $\Lambda / e \ll 1$, because one can show the bosonized theory is weakly coupled. 
+
+One may study this theory in a variety of ways. The main results are:
+\begin{itemize}
+	\item When $g\geq \pi / 2$, the theory confines fundamental test charges for $N > 2$. 
+	\item When $N$ is even, the $\mathbb Z_N$ 1-form center symmetry spontaneously breaks to $\mathbb Z_{N / 2}$ (we still have a residual center symmetry), so test charges with $q = N / 2 \mod N$ are deconfined, while others are confined. In this case, the model has $\mathbb Z_2$ chiral symmetry, which forbids a fermion mass term, and one can think of the action (Eq.~\eqref{eq:four_fermion_deformed_action}) as a variant of the massless charge $N$ Schwinger model \textbf{with confinement}. 
+	\item When $N$ is odd and $N > 1$, chiral symmetry is broken and the $\mathbb Z_N$ 1-form center symmetry is not spontaneously broken, i.e. the theory confines. A mass term can be dynamically generated since chiral symmetry is completely broken. 
+\end{itemize}
+
+%\subsection{Connection to 2d adjoint QCD}
+\newpage
+\section{2d adjoint QCD}
+
+2d adjoint QCD is studied in Alexei's paper, \href{https://arxiv.org/pdf/1908.09858.pdf}{hep-th/1908.09858v3}. The main point is that this theory is very similar to the four-fermion deformed massless Schwinger model (with even $N$), in a number of ways:
+\begin{itemize}
+	\item Adjoint QCD has a $\mathbb Z_2$ chiral symmetry when $m_q = 0$.
+	\item Adjoint QCD admits two four-fermion deformations, just like the massless Schwinger model, which are consistent with chiral symmetry. When these deformations are turned off, the theory is deconfined, but when the theory turns on, the theory confines. 
+\end{itemize}
+
+The 2d adjoint QCD theory is described by a single Majorana fermion coupled in the adjoint representation to an $SU(N)$ gauge field in 2d, with action:
+\begin{equation}
+	S = \int d^2x \left\{ \frac{1}{2g^2} \Tr\, G_{\mu\nu} G^{\mu\nu} + \Tr\, \psi^T i\gamma^\mu D_\mu \psi + \frac{c_1}{N} \Tr\, \psi_+ \psi_+ \psi_- \psi_- + \frac{c_2}{N^2} \Tr[\psi_+ \psi_-] \Tr[\psi_+ \psi_-]\right\}
+\end{equation}
+The $\gamma$ matrices in 2d are given by
+\begin{align}
+	\gamma^1 = \sigma_1 && \gamma^2 = \sigma_3 && \gamma = i\gamma^1\gamma^2
+\end{align}
+with $\gamma$ taking the role of $\gamma_5$. For $N > 2$, there are four symmetries of the theory that are unbroken by anomalies:
+\begin{enumerate}
+	\item Center symmetry $\mathbb Z_N^{[1]}$, also just referred to as $\mathbb Z_N$ 1-form symmetry. 
+	\item Charge conjugation $\mathbb Z_2^C$, $a_{ij}^\mu\mapsto -a_{ji}^\mu, \psi_{ij}\mapsto \psi_{ji}$, with $i, j = 1, ..., N$ being color indices for the adjoint representation. In $N = 2$, this transformation reduces to global $SU(2)$ symmetry, so in this case this is not an additional symmetry. 
+	\item Fermion parity $\mathbb Z_2^F$, $\psi\mapsto -\psi$. 
+	\item Chiral symmetry $\mathbb Z_2^C$, $\psi\mapsto \gamma \psi$. 
+\end{enumerate}
+
+
+
+\newpage
+\section{Effective String Theory (EST)}
+
+\end{document}

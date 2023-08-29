@@ -1,30 +1,7 @@
-\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
-\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
-%\geometry{landscape}                		% Activate for rotated page geometry
-%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
-\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage[shortlabels]{enumitem}
-\usepackage{float}
-\usepackage{tikz-cd}
+\def \root {../../}			% path to root (/notes)
+\input{\root/template/preamble.tex}
 
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{prop}{Proposition}[section]
-
-\graphicspath{{/Users/theoares/Math\ Notes/Metric\ Spaces}}
-
-%SetFonts
-
-%SetFonts
-
+\newcommand{\Cau}{\mathrm{Cau}}
 
 \title{Metric Spaces}
 \author{Patrick Oare}
@@ -39,34 +16,35 @@
 	this precise, we make a definition.
 	
 	\begin{definition}[Metric Space]
-		A \textbf{metric space} is a pair $(X, d)$ consisting of a set $X$ and a map $d : X\times X\rightarrow\mathbb R$ satisfying:
-		\begin{enumerate}
-			\item (Symmetry) For any $x, y\in X$, $d(x, y) = d(y, x)$.
-			\item (Postive-Semidefiniteness) Given $x, y\in X$, $d(x, y) \geq 0$, and $d(x, y) = 0$ if and only if $x = y$.
-			\item (Triangle Inequality) For all $x, y, z\in X$, we have:
-			$$
-				d(x, z)\leq d(x, y) + d(y, z)
-			$$
-		\end{enumerate}
-		The map $d$ is called a \textbf{metric}.
+	A \textbf{metric space} is a pair $(X, d)$ consisting of a set $X$ and a map $d : X\times X\rightarrow\mathbb R$ satisfying:
+	\begin{enumerate}
+		\item (Symmetry) For any $x, y\in X$, $d(x, y) = d(y, x)$.
+		\item (Postive-Semidefiniteness) Given $x, y\in X$, $d(x, y) \geq 0$, and $d(x, y) = 0$ if and only if $x = y$.
+		\item (Triangle Inequality) For all $x, y, z\in X$, we have:
+		\begin{equation}
+			d(x, z)\leq d(x, y) + d(y, z).
+		\end{equation}
+	\end{enumerate}
+	The map $d$ is called a \textbf{metric}.
 	\end{definition}
 	
 	The most obvious metric space is $\mathbb R^n$, equipped with the metric given by the Euclidean distance, i.e.:
-	$$
+	\begin{equation}
 		d((x_i)_{i = 1}^n, (y_i)_{i = 1}^n) = \sum_{i = 1}^n (x_i - y_i)^2
-	$$
+	\end{equation}
 	
 	However, there are many more examples, even from $\mathbb R^n$. We can give $\mathbb R^n$ a different metric space structure by specifying a 
 	different metric-- the metric that we put on a space is in general not unique. For example, any set $A$ can be turned into a metric space via the 
 	\textbf{discrete metric}, which is:
-	$$
+	\begin{equation}
 		d(x, y) = 
 		\begin{cases}
 			0 & x\neq y \\
 			1 & x = y
-		\end{cases}
-	$$
-	
+		\end{cases}.
+	\end{equation}
+
+\newpage
 \section{Open and Closed Sets}
 	
 	The purpose of this section is to motivate the study of topology, and so there is no reason to delve too deeply into metric spaces. Needless to say, many 
@@ -75,60 +53,53 @@
 	of this section, let $X$ be a metric space.
 	
 	\begin{definition}[Open and Closed Balls]
-		Let $x\in X$, and $\epsilon > 0$. Then the \textbf{open ball of radius $\epsilon$ centered at $x$} is the set $B_\epsilon(x)$ given by:
-		$$
-			B_\epsilon(x) := \{y\in X : d(x, y) < \epsilon\}
-		$$
-		Similarly, we define the \textbf{closed ball of radius $\epsilon$ centered at $x$} to be the set $\overline B_\epsilon(x)$:
-		$$
-			\overline B_\epsilon(x) := \{y\in X : d(x, y)\leq\epsilon\}
-		$$
+	Let $x\in X$, and $\epsilon > 0$. Then the \textbf{open ball of radius $\epsilon$ centered at $x$} is the set $B_\epsilon(x)$ given by:
+	\begin{equation}
+		B_\epsilon(x) := \{y\in X : d(x, y) < \epsilon\}.
+	\end{equation}
+	Similarly, we define the \textbf{closed ball of radius $\epsilon$ centered at $x$} to be the set $\overline B_\epsilon(x)$:
+	\begin{equation}
+		\overline B_\epsilon(x) := \{y\in X : d(x, y)\leq\epsilon\}.
+	\end{equation}
 	\end{definition}
 	
 	Note the only difference in these definitions is the $<$ sign vs. the $\leq$ sign. In $\mathbb R^3$, these balls are literally spheres centered at $x$ with radius 
 	$\epsilon$; the closed balls contain their boundary, and the open balls do not. We now generalize this notion further.
 	
-	\begin{definition}[Interior Points, Open Sets]
-		Let $U\subseteq X$, and let $x\in U$. We call $x$ an \textbf{interior point} of $U$ if $\exists\epsilon > 0$ such that:
-		$$
-			B_\epsilon(x)\subseteq U
-		$$
-		If every point of $U$ is an interior point, then we say that $U$ is an \textbf{open set}.
+	\begin{definition}[Interior Points, Open and Closed Sets]
+	Let $U\subseteq X$, and let $x\in U$. We call $x$ an \textbf{interior point} of $U$ if $\exists\epsilon > 0$ such that:
+	\begin{equation}
+		B_\epsilon(x)\subseteq U.
+	\end{equation}
+	If every point of $U$ is an interior point, then we say that $U$ is an \textbf{open set}.
+	\newline\newline
+	A subset $E\subset X$ is \textbf{closed} if its complement $E^c := X\setminus E$ is open.
 	\end{definition}
-	
+
 	You can simply think of open sets as being sets which do not contain their boundaries (like open balls, but with an arbitrary shape). The idea is that in an 
 	open set, no matter how close you get to the boundary, you can always find a local region around every point which is completely contained in the set $U$. 
-	Consider this picture:
+	Consider Fig.~\eqref{fig:open_set} for a pictorial representation.
 	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width = .5\textwidth]{open_set}
-		\caption{An open set in $\mathbb R^2$.}
-	\end{figure}
-	
-	Here, $x$ is a point in $U$, and we can find a small enough $\epsilon$ such that we can cram a ball with this radius centered at $x$ entirely inside the set 
-	$U$. It turns out that when you seek to define calculus rigorously, open sets are the key. To differentiate something, you need a notion of closeness, and 
+	It turns out that when you seek to define calculus rigorously, open sets are the key. To differentiate something, you need a notion of closeness, and 
 	open sets give you precisely this notion. For example, if we wish to differentiate on the interval $(0, 1]$, we \textbf{cannot} define a notion of a derivative 
 	(from both sides, at least) at the point $1$ because there is no notion of closeness directly to the right of 1 inside the interval. This is not an open set 
 	because no matter how small of a ball we try to fit around $1$, anything to the right of $1$ inside the ball will not be contained in the set. We see that 
 	because of this, we cannot define a limit of a slope on this interval, because there is no local notion of distance at this point.
-	
-	The dual notion to open sets are closed sets:
-	\begin{definition}
-		A subset $E\subset X$ is \textbf{closed} if its complement:
-		$$
-			E^c := X\setminus E
-		$$
-		is open (the backslash is set difference).
-	\end{definition}
 	
 	Closed sets are sort of the opposite to open sets, except not exactly. A set can be both open and closed (people call this being clopen, but that's a dumb 
 	word) or it can be neither open or closed. A set which is neither is $(0, 1]$, a set which is only open is $(0, 1)$, a set which is only closed is $[0, 1]$, 
 	and a set which is both is $\mathbb R$. Here is an easy theorem to prove (which is quite fun) which explains why explains the terminology about open 
 	and closed balls.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = .55\textwidth]{open_set}
+		\caption{An open set $U$ in $\mathbb R^2$. At any point in the set, we can choose some $\epsilon$ small enough such that $B_\epsilon(x)\subseteq U$. In the picture, possible choices of $\epsilon$ for the points $x, y\in U$ are $\epsilon_1, \epsilon_2$. Pictorially, the balls of these radii centered around $x$ and $y$ are denoted by the dashed green circles. Note that we do not include the boundary in the definition of $U$ (i.e. we draw $U$ with dashed lines, which means it does not contain the bounding curve). If we include the boundary, $U$ is no longer an open set, because boundary points are not interior points: at a boundary point $p$, for each $\epsilon > 0$ the ball $B_\epsilon(p)$ does not lie completely inside $U$, no matter how small $\epsilon$ is! Draw a picture of this to convince yourself.}
+		\label{fig:open_set}
+	\end{figure}
+	
 	\begin{theorem}
-		For any $x\in X$ and $\epsilon > 0$, the set $B_\epsilon(x)$ is open. Similarly, $\overline B_\epsilon(x)$ is closed.
+	For any $x\in X$ and $\epsilon > 0$, the set $B_\epsilon(x)$ is open. Similarly, $\overline B_\epsilon(x)$ is closed.
 	\end{theorem}
 	
 	\begin{proof} Exercise. \end{proof}
@@ -148,11 +119,11 @@
 	a topology, and so understanding them is quite important.
 	
 	\begin{theorem}
-		Let $\{U_\alpha\}_{\alpha\in A}$ be an arbitrary collection of open sets. Then
-		$$
-			\bigcup_\alpha U_\alpha
-		$$
-		is open.
+	Let $\{U_\alpha\}_{\alpha\in A}$ be an arbitrary collection of open sets. Then
+	\begin{equation}
+		\bigcup_\alpha U_\alpha
+	\end{equation}
+	is open.
 	\end{theorem}
 	
 	\begin{proof}
@@ -161,19 +132,19 @@
 	\end{proof}
 	
 	\begin{theorem}
-		Let $\{U_i\}_{i = 1}^n$ be a finite collection of open sets. Then 
-		$$
-			\bigcap_{i = 1}^n U_i
-		$$
-		is open.
+	Let $\{U_i\}_{i = 1}^n$ be a finite collection of open sets. Then 
+	\begin{equation}
+		\bigcap_{i = 1}^n U_i
+	\end{equation}
+	is open.
 	\end{theorem}
 	
 	\begin{proof}
 		Pick $x\in\cap_\alpha U_\alpha$. Then for each $i = 1, ..., n$, $x\in U_i$, so there exists $\epsilon_i$ such that $B_{\epsilon_i}(x)\subseteq U_i$. Take 
 		$\epsilon := \min \{\epsilon_1, ..., \epsilon_n\}$, and then $B_\epsilon(x)\subseteq B_{\epsilon_i}(x)\subseteq U_i$ for each i, so:
-		$$
-			B_\epsilon(x)\subseteq \bigcap_\alpha U_\alpha
-		$$
+		\eq
+			B_\epsilon(x)\subseteq\, \bigcap_\alpha U_\alpha
+		\qe
 		and thus $\cap_\alpha U_\alpha$ is open.
 	\end{proof}
 	
@@ -188,26 +159,21 @@
 	
 	\begin{proof}
 		Just apply DeMorgan's laws:
-		$$
-			(\bigcup_\alpha U_\alpha)^c = \bigcap_\alpha U_\alpha^c \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
-			(\bigcap_\alpha U_\alpha)^c = \bigcup_\alpha U_\alpha^c
-		$$
+		\begin{align}
+			\left(\bigcup_\alpha U_\alpha \right)^c = \bigcap_\alpha U_\alpha^c &&
+			\left(\bigcap_\alpha U_\alpha \right)^c = \bigcup_\alpha U_\alpha^c.
+		\end{align}
 	\end{proof}
 
+\newpage
 \section{Limit Points}
 
-	Limit points generalize the notion of the limit of a sequence in $\mathbb R^n$. Of course, we must start with defining a sequence.
+	Limit points generalize the notion of the limit of a sequence in $\mathbb R^n$. Of course, we must start with defining a sequence, as well as what it means for a sequence to converge. Your intuition on sequences in $\mathbb R$ should help you here; a sequence converges if its points eventually get arbitrarily close together. More precisely, we have the following definition.
 	
-	\begin{definition}[Sequence in $X$]
-		A \textbf{sequence} in $X$ is a map $x : \mathbb N\rightarrow X$. As notation, we write $x_n$ for $x(n)$, and denote the entire sequence by $(x_n)$.
-	\end{definition}
-	
-	We may define the notion of convergence of a sequence as well. Your intuition on sequences in $\mathbb R$ should help you here; a sequence converges 
-	if its points eventually get arbitrarily close together. More precisely:
-	
-	\begin{definition}[Convergence]
-		Let $(x_n)$ be a sequence in $X$. We say that $(x_n)$ \textbf{converges} to $x_0\in X$ if for every $\epsilon > 0$, there exists $N\in\mathbb N$ 
-		such that $\forall n\geq N$, $d(x_n, x_0) < \epsilon$. If $(x_n)$ converges to $x_0$, we write $(x_n)\rightarrow x_0$ or $\lim x_n = x_0$.
+	\begin{definition}[Sequence, Convergence]
+	A \textbf{sequence} in $X$ is a map $x : \mathbb N\rightarrow X$. As notation, we write $x_n$ for $x(n)$, and denote the entire sequence by $(x_n)$.
+	\newline\newline
+	Let $(x_n)$ be a sequence in $X$. We say that $(x_n)$ \textbf{converges} to $x_0\in X$ if for every $\epsilon > 0$, there exists $N\in\mathbb N$ such that $\forall n\geq N$, $d(x_n, x_0) < \epsilon$. If $(x_n)$ converges to $x_0$, we write $(x_n)\rightarrow x_0$ or $\lim x_n = x_0$.
 	\end{definition}
 	
 	This definition is just a reformulation of what we think convergence means on $\mathbb R$. If $x_n\rightarrow x_0$, then for every small tolerance $\epsilon
@@ -230,9 +196,9 @@
 	
 	\begin{definition}[Limit Point]
 		Let $A\subseteq X$ be a subset of a metric space. We call $x\in X$ a \textbf{limit point} of $A$ if for every $\epsilon > 0$, we have:
-		$$
-			A\cap(B_\epsilon(x)\setminus\{x\})\neq\emptyset
-		$$
+		\eq
+			A\cap(B_\epsilon(x)\setminus\{x\})\neq\emptyset.
+		\qe
 	\end{definition}
 	
 	In other words, $x$ is a limit point if no matter how small a neighborhood we take around $x$, we can always find a point of $A$ (which is \textbf{not} $x$, 
@@ -240,17 +206,17 @@
 	
 	\begin{theorem}
 		Let $A\subseteq X$, and $x\in X$. Then $x$ is a limit point of $A$ iff there is a sequence $(x_n)_{n\in\mathbb N}$ with values in $A$ such that:
-		$$
-			x = \lim x_n
-		$$
+		\eq
+			x = \lim x_n.
+		\qe
 	\end{theorem}
 	
 	\begin{proof}
 		We prove the forward direction; suppose that $x$ is a limit point. Then for each $n\in\mathbb N$, let $\epsilon_n := \frac{1}{n} > 0$. By the definition of 
-		a limit point, this implies that:
-		$$
-			A\cap(B_{\epsilon_n}(x)\setminus\{x\})\neq\emptyset
-		$$
+		a limit point, this implies that
+		\eq
+			A\cap(B_{\epsilon_n}(x)\setminus\{x\})\neq\emptyset.
+		\qe
 		Pick $x_n$ to be an element in this nonempty set. Then $d(x, x_n) < \epsilon_n = \frac{1}{n}$, and so $(x_n)$ converges to $x$.
 	\end{proof}
 	
@@ -259,24 +225,24 @@
 	
 	\begin{definition}[Closure]
 		The \textbf{closure} of $A$ is the set:
-		$$
-			\overline A := A\cup\{x\in X : x\textnormal{ is a limit point of $A$.}\}
-		$$
+		\eq
+			\overline A := A\cup\{x\in X : x\textnormal{ is a limit point of $A$}\}.
+		\qe
 	\end{definition}
 	
 	Now for a couple theorems to explain the importance of the notion of closure.
 	
 	\begin{theorem}
-		$A$ is closed if and only if it contains all its limit points, i.e. $A = \overline A$.
+		$A$ is closed if and only if it contains all its limit points, i.e. $A= \overline{A}$.
 	\end{theorem}
 	
 	\begin{proof}
 		Recall $A$ is closed if its complement is open. Suppose that $A$ is closed, so $A^c$ is open. Obviously $A\subseteq\overline A$, so we show the 
 		reverse inclusion. Suppose $x$ is a limit point of $A$ not in $A$. Then $x	\in A^c$, so there is an open ball of radius $\epsilon > 0$ centered at $x$ 
 		contained in $A^c$. But then:
-		$$
+		\eq
 			A\cap(B_\epsilon(x)\setminus\{x\}) = \emptyset
-		$$
+		\qe
 		which contradicts that $x$ is a limit point. Thus $x\in A$, and so $A = \overline A$. You can do the converse, if you wish.
 	\end{proof}
 	
@@ -302,6 +268,7 @@
 	So, a subset $S$ of a metric space $X$ is dense if every point in $X$ is a limit point of $S$. No matter how small we make an $\epsilon$-ball, we will always 
 	have some members of a dense subset contained in the ball.
 	
+\newpage
 \section{Functions on Metric Spaces}
 
 	\subsection{Continuity}
@@ -327,18 +294,18 @@
 	\begin{definition}[Continuity]
 		Let $f : X\rightarrow Y$ be a map between metric spaces, and let $x_0\in X$. Then $f$ is \textbf{continuous at $x_0$} if for every $\epsilon > 0$, there 
 		exists $\delta > 0$ such that:
-		$$
-			f(B_\delta(x_0))\subseteq B_\epsilon(f(x_0))
-		$$
+		\eq
+			f(B_\delta(x_0))\subseteq B_\epsilon(f(x_0)).
+		\qe
 	\end{definition}
 	
 	And the usual notions of $f$ being continuous on a set or on $X$ are the same as before when we considered functions in $\mathbb R$. Let's unpack this 
 	definition; suppose $f$ is continuous at a point $x_0$. The $\forall\epsilon > 0$, $\exists\delta > 0$ such that $f(B_\delta(x_0))\subseteq B_\epsilon(f(x_0))$. 
 	What does this mean? It is exactly what we stated above for $\mathbb R$; if $d(x, x_0) < \delta$, then $x\in B_\delta(x_0)$ and so $f(x)\in f(B_\delta(x_0))
-	\subseteq B_\epsilon(f(x_0))$. Because $f(x)\in B_\epsilon(x_0)$, we have:
-	$$
-		d(f(x), f(x_0)) < \epsilon
-	$$
+	\subseteq B_\epsilon(f(x_0))$. Because $f(x)\in B_\epsilon(x_0)$, we have
+	\eq
+		d(f(x), f(x_0)) < \epsilon.
+	\qe
 	And we see that we have an equivalent definition of continuity; $\forall\epsilon > 0$, $\exists\delta > 0$ such that $d(x, x_0) < \delta\implies d(f(x), f(x_0)) < 
 	\epsilon$. This is the definition we made above in the case of $\mathbb R$, and we see that we have successfully generalized the definition.
 	
@@ -350,13 +317,13 @@
 		\begin{enumerate}
 			\item $f$ is continuous.
 			\item Given any sequence $(x_n)$ in $X$ converging to $x_0$, we have:
-			$$
-				\lim f(x_n) = f(x_0)
-			$$
+			\eq
+				\lim f(x_n) = f(x_0).
+			\qe
 			\item $f$ pulls back open sets into open sets, i.e. for every open set $V\subseteq Y$, 
-			$$
+			\eq
 				f^{-1}(V)
-			$$
+			\qe
 			is open in $X$.
 		\end{enumerate}
 	\end{theorem}
@@ -392,9 +359,9 @@
 	\begin{definition}[Isometry]
 		Let $f : X\rightarrow Y$ be a map between metric spaces. We say $f$ is an \textbf{isometry} if $f$ preserves the metric, i.e. for each $x_1, x_2
 		\in X$, we have:
-		$$
-			d(f(x_1), f(x_2)) = d(x_1, x_2)
-		$$
+		\eq
+			d(f(x_1), f(x_2)) = d(x_1, x_2).
+		\qe
 		If $f$ is surjective, then we will view $f$ as a \textbf{metric space isomorphism}.
 	\end{definition}
 	
@@ -412,9 +379,9 @@
 	
 	\begin{definition}[Lipschitz]
 		Let $f : X\rightarrow Y$ be a map between metric spaces. We say that $f$ is \textbf{Lipschitz} if there exists a constant $k_f\in\mathbb R$ such that:
-		$$
+		\eq
 			d(f(x_1), f(x_2)) \leq k_f d(x_1, x_2)
-		$$
+		\qe
 		for each $x_1, x_2\in X$. If $f$ is Lipschitz, then the smallest such $k_f$ that satisfies this condition is called the \textbf{Lipschitz constant} of $f$, denoted 
 		$L(f)$.
 	\end{definition}
@@ -422,7 +389,8 @@
 	\begin{prop}
 		Any Lipschitz function is uniformly continuous.
 	\end{prop}
-	
+
+\newpage	
 \section{Completions}
 
 	Let $(X, d)$ be a metric space. One important property of metric spaces that we will now study is \textbf{completeness}. This property is very important, and is 
@@ -440,7 +408,7 @@
 	
 	\begin{definition}[Completion]
 		Let $(X, d)$ be a metric space. By a \textbf{completion} of $X$ we mean a complete metric space $\tilde X$ together with an isometric function $f : X
-		\rightarrow\tilde X$ such that $im(f)\subseteq\tilde X$ is dense.
+		\rightarrow\tilde X$ such that $\im(f)\subseteq\tilde X$ is dense.
 	\end{definition}
 	
 	\begin{prop}
@@ -467,9 +435,9 @@
 	\begin{proof}
 		We will construct such a $\overline f$. Let $x\in X\setminus S$. Pick a sequence $(s_n)$ such that $s_n\rightarrow x$, which we may find because 
 		$S$ is dense in $X$. Then, define:
-		$$
-			\overline f(x) := \lim f(s_n)
-		$$
+		\eq
+			\overline f(x) := \lim f(s_n).
+		\qe
 		Note that this is well defined because $(f(s_n))$ is a Cauchy sequence as $f$ is uniformly continuous and $(s_n)$ is Cauchy in $X$; then as $Y$ is 
 		complete, this limit exists. We will show that this is well defined, so let $(t_n)$ be another Cauchy sequence in $S$ converging to $x$. We will show 
 		that $\lim s_n = \lim t_n$. Because $s_n, t_n\rightarrow x$, $d(s_n, t_n)\rightarrow 0$ as $n\rightarrow\infty$. But, $f$ is uniformly continuous, so we 
@@ -478,12 +446,10 @@
 	\end{proof}
 	
 	\begin{definition}
-		For any metric space $(X, d)$, let $Cau(X)$ be the set of all Cauchy sequences in $X$. Let $(s_n), (t_n)\in Cau(X)$. We say that $(s_n)$ and $(t_n)$ 
-		are \textbf{equivalent} if $d(s_n, t_n)\rightarrow 0$ as $n\rightarrow\infty$. 
+		For any metric space $(X, d)$, let $\mathrm{Cau}(X)$ be the set of all Cauchy sequences in $X$. Let $(s_n), (t_n)\in \mathrm{Cau}(X)$. We say that $(s_n)$ and $(t_n)$ are \textbf{equivalent} if $d(s_n, t_n)\rightarrow 0$ as $n\rightarrow\infty$. 
 	\end{definition}
 	
-	Now, we will explicitly construct a completion for an arbitrary metric space using this notion of equivalence of Cauchy sequences. We will quotient $Cau(X)$ out 
-	by this relation to form a complete space that $X$ naturally embeds into. So, our goal is to prove the following:
+	Now, we will explicitly construct a completion for an arbitrary metric space using this notion of equivalence of Cauchy sequences. We will quotient $\mathrm{Cau}(X)$ out by this relation to form a complete space that $X$ naturally embeds into. So, our goal is to prove the following theorem.
 	
 	\begin{theorem}
 		Every metric space has a completion.
@@ -491,42 +457,39 @@
 	
 	\subsection{Proof: Construction of the Completion}
 	
-	Let $(X, d)$ be a metric space. We will prove the theorem above. We begin with a lemma.
+	Let $(X, d)$ be a metric space. To prove the theorem above, we begin with a lemma.
 	
 	\begin{lemma}
-		The relation $(s_n)\sim (t_n)$ iff $(s_n)$ and $(t_n)$ are equivalent is an equivalence relation on $Cau(X)$.
+		The relation $(s_n)\sim (t_n)$ iff $(s_n)$ and $(t_n)$ are equivalent is an equivalence relation on $\mathrm{Cau}(X)$.
 	\end{lemma}
 	
 	This is quite easy to show, and follows almost immediately from the definition. So, define:
-	$$
-		\tilde X := Cau(X) / \sim
-	$$
-	$$
-		j : X\rightarrow\tilde X, x\mapsto (x)_{n\in\mathbb N}\mod\sim
-	$$
+	\begin{align}
+		\tilde X := \mathrm{Cau}(X) / \sim && j : X\hookrightarrow\tilde X, x\mapsto (x_n)\; \mathrm{mod}\, \sim.
+	\end{align}
 	We have defined a new space $\tilde X$ and an embedding $j$ of $X$ into $\tilde X$. Now, we need to put a metric $\tilde d$ on 
 	$\tilde X$ which makes $j$ an isometry.
 	
 	\begin{prop}
-		Let $\tilde X = Cau(X)/\sim$ as above, and let $\xi, \eta\in \tilde X$. Pick representatives $(x_n), (y_n)\in\xi, \eta$. Then, the map:
-		$$
+		Let $\tilde X = \mathrm{Cau}(X)/\sim$ as above, and let $\xi, \eta\in \tilde X$. Pick representatives $(x_n), (y_n)\in\xi, \eta$. Then, the map:
+		\eq
 			\tilde d(\xi, \eta) := \lim d(x_n, y_n)
-		$$
+		\qe
 		defines a metric on $\tilde d$.
 	\end{prop}
 	
 	To show this indeed defines a metric, we first need to show it is well defined. So, let $(x_n'), (y_n')\in\xi, \eta$ be other representatives. Then $\lim d(x_n, x_n') 
 	= 0$ and $\lim d(y_n, y_n') = 0$, and we need to show that $\lim d(x_n, y_n) = \lim d(x_n', y_n')$. This will follow from an $\frac{\epsilon}{3}$ argument. The 
 	other properties of a metric should follow relatively easily from the definition of $\tilde d$ and the fact that $d$ is a metric. Now, 
-	note that:
-	$$
-		\tilde d(j(x), j(y)) = \lim d(x, y) = d(x, y)
-	$$
+	note that
+	\eq
+		\tilde d(j(x), j(y)) = \lim d(x, y) = d(x, y).
+	\qe
 	So we indeed have an isometry. Finally, we need to show that $j(X)\subseteq\tilde X$ is dense. Let $\xi\in\tilde X$ and let $\epsilon > 0$. Let $(x_n)\in\xi$ be a 
-	representative. Choose $N\in\mathbb N$ such that $n, m\geq N\implies d(x_n, x_m) < \frac{\epsilon}{2}$. Consider $j(x_N)$. Then we have:
-	$$
-		\tilde d(j(x_N), \xi) = \lim_{n\rightarrow\infty} d(x_N, x_n) \leq \frac{\epsilon}{2} < \epsilon
-	$$
+	representative. Choose $N\in\mathbb N$ such that $n, m\geq N\implies d(x_n, x_m) < \frac{\epsilon}{2}$. Consider $j(x_N)$. Then we have
+	\eq
+		\tilde d(j(x_N), \xi) = \lim_{n\rightarrow\infty} d(x_N, x_n) \leq \frac{\epsilon}{2} < \epsilon.
+	\qe
 	Note that to be precise, we needed to pick $\frac{\epsilon}{2}$ because a limit of numbers which are strictly less than another number $a$ can still be equal to 
 	$a$. So, this shows that $j(X)\subseteq\tilde X$ is dense. The final thing to show is that $(\tilde X, \tilde d)$ is a complete metric space. Let $(\xi_n)$ be a 
 	Cauchy sequence in $\tilde X$. For each $m\in\mathbb N$ choose $x_m$ such that $\tilde d(j(x_m), \xi_m) < \frac{1}{m}$ (we may do this by the density of $X$ 
@@ -535,15 +498,16 @@
 	
 	\subsection{Completion of a Vector Space}
 	
-	Let $V$ be a vector space with norm $||\cdot||$. We can add and scale Cauchy sequences in $Cau(V)$ pointwise, so $Cau(V)$ is a vector space itself. 
-	Let $N(V)$ be the sequence of Cauchy sequences converging to $0$ in $V$. This is a subspace of $Cau(V)$. Note that if $(v_n)\sim (w_n)$, then $||v_n - 
-	w_n||\rightarrow 0$, and so $(v_n - w_n)\in N(V)$. The converse follows as well. So, the completion of $Cau(V)$ forces all of these equivalent Cauchy 
-	sequences to be identical, and therefore it is:
-	$$
-		\tilde V = Cau(V) / N(V)
-	$$
+	Let $V$ be a vector space with norm $||\cdot||$. We can add and scale Cauchy sequences in $\Cau(V)$ pointwise, so $\Cau(V)$ is a vector space itself. 
+	Let $N(V)$ be the sequence of Cauchy sequences converging to $0$ in $V$. This is a subspace of $\Cau(V)$. Note that if $(v_n)\sim (w_n)$, then $||v_n - 
+	w_n||\rightarrow 0$, and so $(v_n - w_n)\in N(V)$. The converse follows as well. So, the completion of $\Cau(V)$ forces all of these equivalent Cauchy 
+	sequences to be identical, and therefore it is
+	\eq
+		\tilde V = \Cau(V) / N(V).
+	\qe
 	In particular, this means that the completion of a vector space is complete vector space.
-	
+
+\newpage
 \section{Examples}
 
 	We now examine some examples of metric spaces that we will often run into. First, suppose that we have a vector space $V$.
@@ -563,14 +527,14 @@
 	\mathbb C^n$, we can actually generalize the Euclidean norm a bit with the notion of a $p$-norm.
 	
 	\begin{prop}
-		Let $V = \mathbb R^n$ or $\mathbb C^n$. Then for $p\in\mathbb N$, we can define a norm by:
-		$$
-			||v||_p := (\sum_{i = 1}^n |v_i|^p)^{\frac{1}{p}}
-		$$
-		And we can also define:
-		$$
-			||v||_\infty := \sup_j\{|v_j|\}
-		$$
+		Let $V = \mathbb R^n$ or $\mathbb C^n$. Then for $p\in\mathbb N$, we can define a norm by
+		\eq
+			||v||_p := (\sum_{i = 1}^n |v_i|^p)^{\frac{1}{p}},
+		\qe
+		and we can also define
+		\eq
+			||v||_\infty := \sup_j\{|v_j|\}.
+		\qe
 		The first norm is called the \textbf{$p$-norm}, and the second norm is the \textbf{sup norm}.
 	\end{prop}
 	
@@ -579,9 +543,9 @@
 	
 	\begin{theorem}
 		Let $V$ be a vector space with norm $||\cdot||$. Then, $V$ is a metric space under metric:
-		$$
-			d(v, w) = ||v - w||
-		$$
+		\eq
+			d(v, w) = ||v - w||.
+		\qe
 	\end{theorem}
 	
 	So, any normed vector space is a metric space, which generates a lot of examples of metric spaces for us. One important examples is $C([0, 1])$ (for 
@@ -589,31 +553,36 @@
 	$C([0, 1])$, which we will see quite often. 
 	\begin{itemize}
 		\item The \textbf{$p$-norm}. For $f\in C([0, 1])$, this is:
-		$$
-			||f||_p := (\int_0^1|f(x)|^p dx)^{\frac{1}{p}}
-		$$
+		\eq
+			||f||_p := \left(\int_0^1|f(x)|^p dx\right)^{\frac{1}{p}}.
+		\qe
 		\item The \textbf{uniform norm}. For $f\in C([0, 1])$, this is:
-		$$
-			||f||_\infty := \sup_{x\in [0, 1]} \{|f(x)|\}
-		$$
+		\eq
+			||f||_\infty := \sup_{x\in [0, 1]} \{|f(x)|\}.
+		\qe
 	\end{itemize}
 	An important proposition we will use is the following.
 	\begin{prop}
 		The space $C([0, 1])$ under the uniform norm is complete.
 	\end{prop}
 	However, note that the property of being complete does depend on the metric you are using. The same space $C([0, 1])$ is not complete under either the 
-	1-norm or the 2-norm. For example, the sequence of functions $(f_n)$ in $C([0, 1])$ given by:
-	$$
+	1-norm or the 2-norm. For example, consider the sequence of functions $(f_n)$ in $C([0, 1])$ given by:
+	\eq
 		f_n(x) := \begin{cases}
 			1 & x\leq\frac{1}{2} \\
 			1 - n(x - \frac{1}{2}) & \frac{1}{2}\leq x \leq\frac{1}{2} + \frac{1}{n} \\
 			0 & \frac{1}{2} + \frac{1}{n} \leq x
-		\end{cases}
-	$$
+		\end{cases}.
+	\qe
 	This sequence is Cauchy under the 1-norm, but not under the uniform norm. To visualize the uniform norm intuitively, the best way to think of an $\epsilon$-ball 
-	with respect to $||\cdot||_\infty$ is as an $\epsilon$-tube. That is, two functions $f$ and $g$ have $||f - g||_\infty < \epsilon$ iff $|f(x) - g(x)| < \epsilon$ for each $x
-	\in [0, 1]$, so they lie in the same $\epsilon$-tube.
+	with respect to $||\cdot||_\infty$ as an $\epsilon$-tube, as in Fig.~\eqref{fig:eps_tube}. That is, two functions $f$ and $g$ have $||f - g||_\infty < \epsilon$ iff $|f(x) - g(x)| < \epsilon$ for each $x\in [0, 1]$, so they lie in the same $\epsilon$-tube.
 	
+	\begin{figure}[!htp]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{epsilon_tube}
+		\caption{Visualization of the $\epsilon$-tube around the pink function $f$, $B_\epsilon(f) := \{h\in C([0, 1]) : ||f - h||_\infty < \epsilon\}$. Intuitively, $B_\epsilon(f)$ is a tube of radius $\epsilon$ centered at $f$, given in the diagram by the blue dashed lines. Any function, for example the green function $g$, that lies within the two dashed lines is in $B_\epsilon(f)$, hence $g\in B_\epsilon(f)$. The uniform norm creates the tube because we consider the $\sup$ over $x\in [0, 1]$ of the maximum deviation from $x$; hence one way to think about $B_\epsilon(f)$ is as the space of all functions whose maximum deviation from $f$ at any point $x\in [0, 1]$ is $< \epsilon$.}
+		\label{fig:eps_tube}
+	\end{figure}
 	
 
 \end{document}

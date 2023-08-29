@@ -1,0 +1,427 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{simpler-wick}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 8: Dirac Theory}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\usepackage{pdfpages}
+
+\begin{document}
+%\maketitle
+
+%\includepdf[page=-]{Recitation7_handwritten.pdf}
+
+%\newpage
+%\clearpage
+%\setcounter{page}{1}
+
+The main questions motivating the discussion today: 
+\begin{enumerate}
+	\item What do the representations of the Lorentz group look like?
+	\item Why do we need four-component objects?
+	\item How do we write down Lorentz transformations on Dirac spinors?
+	%\item Why isn't $\psi^\dagger\psi$ Lorentz invariant? Why do we need to introduce the Dirac conjugate $\overline{\psi} = \psi^\dagger\gamma^0$?
+\end{enumerate}
+We might not have time to get to all of them, but I'm hoping to at least provide an overview of the broader framework here, and where Dirac theory fits in mathematically with the Lorentz group.
+
+\section*{Review of Dirac algebra}
+
+\begin{itemize}
+	\item The Dirac equation can be derived by decreeing that $\psi(x)$ satisfies a Lorentz covariant equation of motion which is first order in time and space, and produces the Klein-Gordon equation (as we want $\psi$ to satisfy the relativistic dispersion relation). He found that he could only do this by promoting $\psi(x)$ to a \textbf{four-component Dirac spinor} $\psi_\alpha(x)$ so that the coefficients in his equation were matrices, where $\alpha\in \{0, 1, 2, 3\}$\footnote{Note that for Dirac spinors, the location of the index is not important; upper and lower indices mean the same thing.}. The \textbf{Dirac equation} is
+	\begin{equation}
+		(\gamma^\mu\partial_\mu - m)\psi(x) = 0
+	\end{equation}
+	where $\gamma^\mu$ are the \textbf{Dirac $\gamma$ matrices} which satisfy the \textbf{Clifford algebra}:
+	\begin{equation}
+		\{\gamma^\mu, \gamma^\nu\} = 2\eta^{\mu\nu} \label{eq:clifford}
+	\end{equation}
+	(note that the RHS is really $\eta^{\mu\nu}1$, where $1$ is the $4\times 4$ identity matrix). Note that the Clifford algebra implies that
+	\begin{equation}
+		(\gamma^0)^2 = -1.
+	\end{equation}
+	$\gamma^0$ will play an important role when we talk about parity. For one last bit of notation, the \textbf{Dirac slash} of a four-vector $a^\mu$ is
+	\begin{equation}
+		\slashed a \equiv \gamma^\mu a_\mu.
+	\end{equation}
+	
+	\item Two specific representations of the $\gamma$ matrices (note that in this notation, each component is a $2\times 2$ block matrix, so when we write $i$ we really mean $i\, 1_{2\times 2}$, etc.). 
+	\begin{enumerate}
+		\item The \textbf{Dirac representation}: In this representation, $\gamma^0$ is diagonal:
+		\begin{align}
+			\gamma^0 = \begin{pmatrix} i & 0 \\ 0 & -i \end{pmatrix} && \gamma^i = \begin{pmatrix} 0 & i\sigma^i \\ -i\sigma^i & 0 \end{pmatrix}.
+		\end{align}
+		This representation is useful when studying massive objects which are close to their rest frame, because in this case $p^0 = E\gg |\vec p|$, so in momentum space the Dirac equation becomes approximately block-diagonal:
+		\begin{equation}
+			(-i\slashed p - m)\psi \approx (i p^0 \gamma^0 + m)\psi = 0.
+		\end{equation}
+		\item The \textbf{Weyl representation}, where 
+		\begin{align}
+			\gamma^0 = \begin{pmatrix} 0 & i \\ i & 0 \end{pmatrix} && \gamma^i = \begin{pmatrix} 0 & -i\sigma^i \\ i\sigma^i & 0 \end{pmatrix}.
+		\end{align}
+		This representation makes studying relativistic particles much easier, for reasons related to chirality that we'll get to. The basic idea is that chirality in the Dirac theory is intimately related to the $\gamma_5$ matrix, which is diagonal in the Weyl basis:
+		\begin{align}
+			\gamma_5 \equiv i \gamma^0 \gamma^1 \gamma^2 \gamma^3 && \gamma_5 =\bigg|_{\mathrm{Weyl}} \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+		\end{align}
+	\end{enumerate}
+	In \textit{any representation}, taking hermitian conjugates is easy:
+	\begin{equation}
+		(\gamma^\mu)^\dagger = \gamma^0 \gamma^\mu \gamma^0.
+	\end{equation}
+	
+	\item The \textbf{Dirac conjugate} of $\psi$ is,
+	\begin{equation}
+		\overline\psi\equiv \psi^\dagger\gamma^0.
+	\end{equation}
+	The $\gamma^0$ is needed for Lorentz invariance; something important to remember is that $\psi^\dagger \psi$ \textbf{is not Lorentz invariant}; however, $\overline\psi \psi$ is Lorentz invariant. The \textbf{Dirac action} is given by:
+	\begin{equation}
+		S = -i\int d^4x\, \overline{\psi} (\slashed\partial - m)\psi.
+	\end{equation}
+	
+	\item The $\Sigma^{\mu\nu}$ matrix is defined as,
+	\begin{equation}
+		\Sigma^{\mu\nu} = \frac{i}{4} [\gamma^\mu, \gamma^\nu]. \label{eq:sigma_munu}
+	\end{equation}
+	This is the \textbf{generator of Lorentz transformations in this representation!} We'll explore this more later. To perform a Lorentz transformation $\Lambda = \exp(-\frac{i}{2} \omega_{\lambda\rho} \mathcal J^{\lambda\rho})$ with parameters $\omega_{\lambda\rho}$, you use $\Sigma^{\lambda\rho}$:
+	\begin{align}
+		S(\Lambda) = \exp\left(-\frac{i}{2} \omega_{\lambda\rho} \Sigma^{\lambda\rho}\right) && \psi(x)\longrightarrow S(\Lambda) \psi(\Lambda^{-1} x).
+	\end{align}
+	These satisfy a variety of nice properties that you'll prove on the problem set, including:
+	\begin{align}
+		S(\Lambda) \gamma^\mu S(\Lambda)^{-1} = (\Lambda^{-1})^\mu_{\;\;\nu} \gamma^\nu && S(\Lambda)^\dagger = -\gamma^0 S(\Lambda)^{-1} \gamma^0.
+	\end{align}
+
+	\item \textbf{Example}: Boosting and rotation a Dirac spinor in the $z$-direction in the Weyl basis. To boost a particle by rapidity $\beta$, we set $\omega_{03} = -\omega_{30} = \beta$ and all other components of $\omega_{\lambda\rho} = 0$. This means that we need to compute $\Sigma^{03}$, which is:
+	\begin{equation}
+		\Sigma^{03} = \frac{i}{4} [\gamma^0, \gamma^3] = \frac{i}{4} \left[ \begin{pmatrix} 0 & i \\ i & 0 \end{pmatrix}, \begin{pmatrix} 0 & -i\sigma^3 \\ i\sigma^3 & 0 \end{pmatrix} \right] = \frac{i}{2} \begin{pmatrix} -\sigma^3  & 0 \\ 0 & \sigma^3 \end{pmatrix} = \frac{i}{2} \begin{pmatrix} -1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix}. 
+	\end{equation}
+	So, to act this boost on a spinor $\psi(x)$, we see that we need (the $\frac{1}{2}$ cancels from the $\omega_{30}\Sigma^{30}$ term):
+	\begin{equation}
+		S(\beta\hat{z}; \mathrm{boost}) = \exp\left(-i \beta \Sigma^{03} \right) = \begin{pmatrix} e^{-\beta / 2} & 0 & 0 & 0 \\ 0 & e^{\beta / 2} & 0 & 0 \\ 0 & 0 & e^{\beta / 2} & 0 \\ 0 & 0 & 0 & e^{-\beta / 2} \end{pmatrix}. \label{eq:boost_1}
+	\end{equation}
+
+\end{itemize}
+
+\section*{Representation theory}
+
+This section will have a bit of review from recitation 3, and introduce some new elements that we'll need.
+
+\begin{itemize}
+	\item The Lorentz algebra $\mathfrak{so}(3, 1)$ is generated by matrices $(\mathcal J^{\lambda\rho})^\mu_{\;\;\nu}$ (or equivalently, the matrices $\{J_i, K_i\}$ which generate rotations and boosts and are packaged together in $\mathcal J^{\lambda\rho}$), which satisfy the algebra,
+	\begin{equation}
+		[\mathcal J^{\alpha\beta}, \mathcal J^{\rho\lambda}] = i\left( \eta^{\alpha\lambda} \mathcal J^{\beta\rho} - \eta^{\alpha\rho} \mathcal J^{\beta \lambda} - \eta^{\beta\lambda} \mathcal J^{\alpha\rho} + \eta^{\beta\rho} \mathcal J^{\alpha\lambda} \right) , \label{eq:alg}
+	\end{equation}
+	and each Lorentz transformation $\Lambda$ in $SO(3, 1)$ can be written as an exponential of $\mathcal J$,
+	\begin{equation}
+		\Lambda = \exp\left( -\frac{i}{2} \omega_{\lambda\rho}\mathcal J^{\lambda\rho} \right).
+	\end{equation}
+	\item A \textbf{representation of the Lorentz algebra} is a map $d : \mathfrak{so}(3, 1)\rightarrow\mathfrak{gl}(V)$, where $\mathfrak{gl}(V)$ is the space of all linear transformations on a vector space $V$, such that:
+	\begin{equation}
+		[d(\mathcal J^{\alpha\beta} ), d(\mathcal J^{\lambda\rho} )] = d([\mathcal J^{\alpha\beta}, \mathcal J^{\lambda\rho}]). \label{eq:lorentz_algebra}
+	\end{equation}
+	We didn't focus much on this condition in the previous recitations, but we'll be focusing on it today. Any representation of the algebra \textbf{must respect the Lie bracket}. 
+
+	\item Any representation of $\mathfrak{so}(3, 1)$ \textbf{induces} a representation $D : \mathrm{SO}(3, 1)\rightarrow GL(V)$ of the Lorentz group, since $\Lambda = e^{-\frac{i}{2} \omega_{\lambda\rho} \mathcal J^{\lambda\rho}}$,
+	\vspace{-0.25cm}
+	\begin{align}
+		D(\Lambda) = \exp\left(-\frac{i}{2} \omega_{\lambda\rho}\; d(\mathcal J^{\lambda\rho})\right) && D(\Lambda_1)D(\Lambda_2) = D(\Lambda_1\Lambda_2). \label{eq:repr_transformation}
+	\end{align}
+	\vspace{-0.5cm}
+	
+	\item If a field $\Psi^a(x)$ lives in a representation, i.e. $\Psi^a(x)\in V$, the field transforms under Lorentz transformation $\Lambda$ as:
+	\begin{equation}
+		\Psi^a(x) \longrightarrow D(\Lambda)^{ab} \Psi^b(\Lambda^{-1} x).
+	\end{equation}
+	Intuitively, what this means is that to transform a field, we transform its internal indices according to the representation it lives in, and we transform its spacetime location by the inverse of the transformation. For example, think about scalar, vector, and tensor fields, which respectively live in the $\bm 1$, $\bm 4$, and $\bm 16$ representations of the Lorentz group\footnote{When we talk label a representation, we usually label it by its dimension. For the scalar field, $V = \mathbb R^1$, for the vector field, $V = \mathbb R^4$, and for the tensor field $V = \mathbb R^{16}$.}. The transformation law for each is,
+	\begin{align}
+		\phi(x)\rightarrow \phi(\Lambda^{-1} x) && A^\mu(x)\rightarrow \Lambda^\mu_{\;\;\nu} A^\nu(\Lambda^{-1} x) && T^{\mu\nu}(x)\rightarrow \Lambda^\mu_{\;\;\alpha} \Lambda^\nu_{\;\;\beta} T^{\alpha\beta}(\Lambda^{-1} x). 
+	\end{align}
+	What this tells us is that $D_{\bm 1}(\Lambda) = 1$ (the $1\times 1$ identity matrix), $D_{\bm 4}(\Lambda) = \Lambda^\mu_\nu$, and $D_{\bm{16}}(\Lambda) = \Lambda^\mu_{\;\;\alpha}\Lambda^{\nu}_{\;\;\beta}$. 
+	
+	\item An \textbf{invariant subspace} $W$ of a representation $V$ is one that is mapped into itself under all possible Lorentz transformations, i.e.
+	\begin{equation}
+		D(\Lambda) W = \{D(\Lambda) w : w\in W\} \subseteq W.
+	\end{equation}
+	The advantage of looking at invariant subspaces is that they are the building blocks of larger representations. If $W\leq V$ is invariant, then one can prove that $W^\perp\leq V$ is also invariant, so you can decompose $V$ into a direct sum of two subspaces,
+	\begin{equation}
+		V = W\oplus W^\perp,
+	\end{equation}
+	and because each subspace is invariant, the action of $\mathrm{SO}(3, 1)$ restricts itself to each subspace, i.e. $D(\Lambda)|_W : \mathrm{SO}(3, 1) \rightarrow GL(W)$ and $D(\Lambda)|_{W^\perp} : \mathrm{SO}(3, 1) \rightarrow GL(W^\perp)$ are both valid representations (you need to invariance condition of $W$ and $W^\perp$ so that the restriction map is well defined). 
+	
+	A representation is \textbf{irreducible} (we call it an \textbf{irrep}) if the only invariant subspaces of $V$ are $\{0\}$ and $V$ itself; in other words, there are no smaller building blocks to decompose $V$ into other than the trivial ones. Representation theory in physics often boils down to classifying the irreps of a group, since once you understand how the irreps work, you understand how all other representations work. 
+
+\vspace{0.2cm}
+\begin{answerbox}
+	{\centering \textbf{Irreps of $SU(2)$} } \\
+	
+	\raggedright
+	Pauli matrices are everywhere in Dirac theory, and this isn't accidental. The best way to understand the representations of the Lorentz group is to understand the irreps of $SU(2)$. $SU(2)$ is the Lie group of $2\times 2$ unitary matrices with determinant 1:
+	\begin{equation}
+		\mathrm{SU}(2) \equiv \{ U\in M_{2\times 2}(\mathbb C) : U^\dagger U = UU^\dagger = 1, \det U = 1\}.
+	\end{equation}
+	The corresponding Lie algebra $\mathfrak{su}(2)$ has basis $\{J_1, J_2, J_3\}$, where $J_i$ satisfy the following algebra:
+	\begin{equation}
+		[J_i, J_j] = i\epsilon_{ijk} J_k.\label{eq:su2_algebra}
+	\end{equation}
+	%\begin{align}
+	%	J_i = \frac{1}{2} \sigma_i && [J_i, J_j] = i\epsilon_{ijk} J_k.\label{eq:su2_algebra}
+	%\end{align}
+	Recall this means that for each $U\in \mathrm{SU}(2)$, we can write $U$ as an exponential $e^{i \theta_i J_i}$, as $\theta_i J_i$ is an arbitrary element of $\mathfrak{su}(2)$. In quantum mechanics, the $\bm J$ vector is just the angular momentum operator. We'll specify an irrep of $SU(2)$ by finding an irrep of $\mathfrak{su}(2)$, i.e. by finding a map $d_s : \mathfrak{su}(2)\rightarrow \mathfrak{gl}(V_r)$ such that $d_r(\bm J)$ satisfies Eq.~(\ref{eq:su2_algebra}). Here the index $s$ enumerates the irreps of $\mathfrak{su}(2)$. It turns out that \textbf{there is a unique $\mathfrak{su}(2)$ irrep for each dimension}; if $r$ is the dimension of the irrep, then $r$ can take any value $\{1, 2, 3, ...\}$. We label the irrep with $s\in \{0, \frac{1}{2}, 1, \frac{3}{2}, ...\}$, which is related to $r$ as $r = (2s + 1)$, which should look familiar! You've seen these representations before: this is just spin $s$ particle, where $r = (2s + 1)$ is the dimension of the irrep, i.e. the number of orthogonal states a spin $s$ particle has. For example\footnote{For $r = 1$ (spin 0), you get the trivial representation $d_1(\bm J) = (1)$, the $1\times 1$ identity matrix.} for spin-$1/2$:
+	\begin{align}
+		d_\frac{1}{2}(\bm J) = \frac{1}{2} \bm \sigma,
+	\end{align}
+	where $\bm \sigma$ are the Pauli matrices. Note that $\bm S = \bm \sigma / 2$ are the spin operators for spin-$1/2$. For spin 1, the irrep is 3 dimensional, and so $d_1(J_i)$ are each $3\times 3$ matrices. These are written down in terms of the Wigner $D$-matrices:
+	\begin{align}
+		d_1(J_1) = \frac{1}{\sqrt 2} \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix} &&
+		d_1(J_2) = \frac{1}{\sqrt 2} \begin{pmatrix} 0 & -i & 0 \\ i & 0 & -i \\ 0 & i & 0 \end{pmatrix} &&
+		d_1(J_3) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & -1 \end{pmatrix}
+	\end{align}
+	This applies equally well to any spin you want, and classifies all the irreps of $\mathfrak{su}(2)$. 
+\end{answerbox}
+
+	\item Example: the representation $\bm 4$ is irreducible, and called the \textbf{fundamental representation}. However, the tensor representation $\bm{16}$ is \textit{reducible}, and decomposes into three invariant subspaces:
+	\begin{enumerate}
+		\item The scalar subspace $\bm 1$, spanned by the metric $\eta^{\mu\nu}$ (since this is invariant under Lorentz transformations
+		\item The antisymmetric subspace of tensors $A^{\mu\nu} = -A^{-\nu\mu}$. This is denoted as $\bm 6$, and invariant because if $A^{\mu\nu}$ is antisymmetric, so is $D_{\bm{16}}(\Lambda) A$, since 
+		\begin{equation}
+			(D_{\bm{16}}(\Lambda) A)^{\mu\nu} = \Lambda^\mu_{\;\;\alpha} \Lambda^\nu_{\;\;\beta} A^{\alpha\beta} = - \Lambda^\mu_{\;\;\alpha} \Lambda^\nu_{\;\;\beta} A^{\beta\alpha} = - (D_{\bm{16}}(\Lambda) A)^{\nu\mu}.
+		\end{equation}
+		\item The symmetric, traceless subspace of tensors $S^{\mu\nu} = S^{\nu\mu}$, denoted $\bm 9$. 
+	\end{enumerate}
+	The decomposition of $\bm{16}$ into irreps is therefore:
+	\begin{equation}
+		\bm{16} = \bm 1 \oplus \bm 6 \oplus \bm 9.
+	\end{equation}
+	%Any tensor $T^{\mu}_{\;\;\nu}$ can be decomposed into components in each irrep, where $\frac{1}{4} T^\mu_{\;\;\mu}\in \bm 1$, $\frac{1}{2} (T^{\mu}_{\;\;\nu} - T^\nu_{\;\;\mu})\in \bm 6$, and $\frac{1}{2} (T^{\mu}_{\;\;\nu} + T^\nu_{\;\;\mu}) - (\mathrm{trace}) \in \bm 9$.
+	
+	\item Summary: This is a lot to process, and I want to highlight a few points:
+	\begin{itemize}
+		\item We typically write down representations by specifying where the generators of the representation go, i.e by specifying a vector space $V$ and a map $d : \mathfrak{so}(3, 1)\rightarrow \mathfrak{gl}(V)$ which satisfies Eq.~(\ref{eq:lorentz_algebra}). This is because once we specify $d$, we know what the group representation looks like, since we can just exponentiate the generators. 
+		\item Irreps are the building blocks of all other representations. 
+	\end{itemize}
+	
+\end{itemize}
+
+
+\section*{Representations of the Lorentz Group}
+
+\begin{itemize}
+
+	\item We'll be focusing on the Lorentz algebra, Eq.~(\ref{eq:lorentz_algebra}), to try to understand what the irreps of the Lorentz group look like. The key point in this is that \textbf{the Lorentz algebra looks like two copies of $\mathfrak{su}(2)$}. To see this, we can look at another basis $\{J_i^\pm\}$ for the Lorentz algebra,
+	\begin{equation}
+		J_i^\pm = \frac{1}{2} \left(J_i\pm i K_i \right).
+	\end{equation}
+	These $\{J_i^\pm\}$ also generate $\mathfrak{so}(1, 3)$, we just haven't looked at them yet because they don't have nice physical interpretations like the other bases we've looked at, which are $\{\mathcal J^{\lambda\rho}\}$ or $\{J_i, K_i\}$. However, they're very important for studying the representation theory of the Lorentz group. Their algebra is:
+	\begin{align}
+		[J_i^\pm, J_j^\pm] = i\epsilon_{ijk} J_k^\pm && [J_i^\pm, J_j^\mp] = 0.\label{eq:jpm_algebra}
+	\end{align}
+	I want to emphasize that this Eq.~(\ref{eq:jpm_algebra}) is equivalent to Eq.~(\ref{eq:alg}), and if we had written out the commutation relations for $\{J_i, K_i\}$, it would be equivalent to those as well. The reason that we're considering $\{J_i^\pm\}$ now is because \textbf{their algebra, Eq.~(\ref{eq:jpm_algebra}), is simply two independent copies of the $\mathfrak{su}(2)$ algebra, which we understand well!} This means that $\{J_i^+\}$ generates an algebra which is isomorphic to $\mathfrak{su}(2)$, and likewise for $\{J_i^-\}$, so the Lorentz algebra decomposes as a direct sum,
+	\begin{equation}
+		\mathfrak{so}(3, 1)\cong \underbrace{\mathfrak{su}(2)}_{\{J_i^+\}}\oplus \underbrace{\mathfrak{su}(2)}_{\{J_i^-\}}.\label{eq:su31_decomp}
+	\end{equation}
+	The reason that this is so important is that we know \textbf{exactly} how to classify the irreps of $\mathfrak{su}(2)$, so we can use this knowledge to classify the irreps of $\mathfrak{so}(3, 1)$. 
+
+\vspace{0.25cm}
+\begin{answerbox}
+	{\centering \textbf{Combining Lie algebras} } \\
+	
+	\raggedright
+	Eq.~(\ref{eq:su31_decomp}) decomposes the Lorentz algebra as a direct sum of two $\mathfrak{su}(2)$ subalgebras. In general if we have a decomposition of algebras,
+	\begin{equation}
+		\mathfrak{g} = \mathfrak{h}_1\oplus\mathfrak{h}_2,
+	\end{equation}
+	how do we relate the irreps of $\mathfrak{g}$ to the irreps of $\mathfrak{h}_1$ and $\mathfrak{h}_2$? The answer is the \textbf{tensor product}. If we enumerate the irreps of $\mathfrak{h}_1$ as $\{(d_a, V_a)\}_a$ and the irreps of $\mathfrak{h}_2$ as $\{(\delta_b, W_b)\}_b$, then the irreps of $\mathfrak g = \mathfrak{h}_1\oplus \mathfrak{h}_2$ are,
+	\begin{equation}
+		\{(d_a\otimes \delta_b, V_a\otimes W_b)\}_{a, b}.
+	\end{equation}
+	The reason for this is that each pair of irreps $(d_a, \delta_b)$ gives us a unique irrep of $\mathfrak g$, so we need to enumerate $a$ and $b$ independently, as a tensor product does. 
+\end{answerbox}
+
+	\item \textbf{Irreps of the Lorentz group}: Using what we just worked out in Eq.~(\ref{eq:su31_decomp}), we can enumerate the irreps of the Lorentz group with a label 
+	\begin{equation}
+		(j_+, j_-)
+	\end{equation}
+	where $j_+, j_-\in \{0, \frac{1}{2}, 1, \frac{3}{2}, ...\}$ label the representations of $\mathfrak{su}(2)$. We'll label the representations equivalently as $d_{j_+, j_-}$, or just with the $(j_+, j_-)$ labels. Note that the dimension of each irrep is just the product of dimensions of $j_+$ and $j_-$:
+	\begin{equation}
+		\dim(j_+, j_-) = (2j_+ + 1)(2 j_- + 1).
+	\end{equation}
+	If $j_+ + j_-$ is an integer, we call it a \textbf{tensor representation}, and if $j_+ + j_-$ is a half-integer, we call it a \textbf{spinor representation}. 
+	
+	\item Examples: The fundamental irrep $\bf 4$ can be denoted in this convention as $(\frac{1}{2}, \frac{1}{2})$, and the irrep 
+$\bf 9$ of symmetric traceless tensors is denoted $(1, 1)$. 
+
+	\item \textbf{Spinor representations}: The representations
+	\begin{align}
+		d_L\equiv \left(\frac{1}{2}, 0\right) && d_R\equiv \left(0, \frac{1}{2} \right)
+	\end{align} 
+	are called the \textbf{left-handed Weyl} and \textbf{right-handed Weyl} representations of the Lorentz group (the name should suggest a link to what we've been doing in class). The $d_L$ representation sends $\bm J^+$ to $\frac{1}{2} \bm\sigma$ and $\bm J^-$ to $\bm 0$, and from that we can work out what boosts and rotations look like:
+	\begin{align} \begin{split}
+		d_L(\bm J^+) = \frac{1}{2} \bm \sigma \hspace{2cm}& d_L(\bm J^-) = \bm 0 \\
+		d_L(\bm J) = \frac{1}{2} \bm \sigma \hspace{2cm}& d_L(\bm K) = -\frac{i}{2} \bm \sigma.
+	\end{split} \end{align}
+	The $d_R$ representation does the opposite and has $d_R(\bm J) = \frac{1}{2} \bm\sigma$, $d_R(\bm K) = \frac{i}{2} \bm \sigma$. From these equations, we know what $d_L(\mathcal J^{\mu\nu})$ and $d_R(\mathcal J^{\mu\nu})$ look like, i.e. we have:
+	\begin{equation}
+		d_L(\mathcal J^{\mu\nu}) = 
+			\frac{1}{2}\begin{pmatrix} 
+				0 & -i\sigma_1 & -i\sigma_2 & -i\sigma_3 \\
+				i\sigma_1 & 0 & \sigma_3 & -\sigma_2 \\
+				i\sigma_2 & -\sigma_3 & 0 & \sigma_1 \\
+				i\sigma_3 & \sigma_2 & -\sigma_1 & 0
+			\end{pmatrix}
+	\end{equation}
+	This means \textbf{we know how to perform Lorentz transformations on these representations}, since:
+	\begin{align}
+		D_L(\Lambda) = e^{-\frac{i}{2} \omega_{\lambda\rho} d_L(\mathcal J^{\lambda\rho}) } && D_R(\Lambda) = e^{-\frac{i}{2} \omega_{\lambda\rho} d_R(\mathcal J^{\lambda\rho}) }
+	\end{align}
+	
+	\item $d_L$ and $d_R$ are both 2-dimensional representations, and their physical interpretation is that \textbf{$d_L$ describes left-handed spin-$1/2$ particles, and $d_R$ describes right-handed spin-$1/2$ particles}. To describe particles which don't have a specific handedness, we take a direct sum:
+	\begin{equation}
+		s = d_L\oplus d_R = \left(\frac{1}{2}, 0\right)\oplus \left(0, \frac{1}{2} \right),
+	\end{equation}
+	is called the \textbf{Dirac representation}, or the \textbf{bispinor representation} if you want to sound fancy\footnote{The Dirac representation is reducible; it is not an irrep! }. Note the dimension of the representation is $2 + 2 = 4$, in other words, the elements that this representation acts on are four-component vectors. It turns out that these are one and the same of what we've been looking at with Dirac theory: the Dirac representation is exactly what we've been looking at. To see this, let's revisit the example from earlier and see what a boost of $\beta\hat z$ looks like in these representations. 
+	
+	\item \textbf{Example}: Computing the boost of Eq.~(\ref{eq:boost_1}) in the Dirac representation. In the LH and RH Weyl irreps:
+	\begin{align}
+		d_L(\mathcal J^{03}) = d_L(K_3) = -\frac{i}{2} \sigma_3 && d_R(\mathcal J^{03}) = \frac{i}{2} \sigma_3.
+	\end{align}
+	On a Dirac spinor, we take a direct sum to see what the boost looks like in the Dirac representation
+	\begin{equation}
+		s(\mathcal J^{03}) = d_L(\mathcal J^{03})\oplus d_R(\mathcal J^{03}) = \frac{i}{2} \begin{pmatrix} -\sigma_3 & 0 \\ 0 & \sigma_3 \end{pmatrix} = \Sigma^{03}.
+	\end{equation}
+	This is exactly what we should expect to see, since the bispinor irrep describes Dirac particles!
+	
+	\item \textbf{Connecting it all back}: Since we're using the bispinor representation, we can connect this back to notation that we're used to. The \textbf{generator of Lorentz transformations} in this representation is $\Sigma^{\mu\nu}$, Eq.~(\ref{eq:sigma_munu}), which is given by the algebra representation $s(\mathcal J^{\mu\nu})$ in the representation theory language:
+	\begin{equation}
+		\Sigma^{\mu\nu} = s(\mathcal J^{\mu\nu}).
+	\end{equation}
+	The group representation is given by $S(\Lambda)$, and is given by Eq.~(\ref{eq:repr_transformation}):
+	\begin{equation}
+		S(\Lambda) = e^{-\frac{i}{2} \omega_{\lambda\rho} s(\mathcal J^{\lambda\rho})} = e^{-\frac{i}{2} \omega_{\lambda\rho}\Sigma^{\lambda\rho}}.
+	\end{equation}
+
+\end{itemize}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{  c | c  c  c  }
+		\hline\hline
+		\rule{0cm}{0.4cm}Name & $(j_+, j_-)$ Label & Dimension & Irrep? \\
+		\hline
+		Singlet & $(0, 0)$ & $\bm 1$ & Y \\
+		Left Weyl ($\psi_a$) & $(\frac{1}{2}, 0)$ & $\bm 2$ & Y \\
+		Right Weyl ($\psi^{\dot a}$) & $(0, \frac{1}{2})$ & $\bm 2$ & Y \\
+		Dirac (bispinor) & $(\frac{1}{2}, 0)\oplus (0, \frac{1}{2})$ & $\bm 4$ & N \\
+		Fundamental (vector) & $(\frac{1}{2}, \frac{1}{2})$ & $\bm 4$ & Y \\
+		Antisymmetric tensor & $(1, 0)\oplus (0, 1)$ & $\bm 6$ & N \\
+		--- & $(1, \frac{1}{2})$ & $\bm 6$ & Y \\
+		Symmetric, traceless ($S_{\mu\nu}$) & $(1, 1)$ & $\bm 9$ & Y \\ 
+		\hline \hline
+	\end{tabular}
+	\caption{Low dimensional representations of the Lorentz group. The representations that we're interested in when we study Dirac theory is the Dirac representation.}
+\end{table}
+
+
+\end{document}

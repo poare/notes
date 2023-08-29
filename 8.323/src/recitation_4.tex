@@ -1,0 +1,356 @@
+\documentclass[12pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+%\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[shortlabels]{enumitem}
+\setlist{leftmargin=5.5mm}
+\usepackage{float}
+\usepackage{tikz-cd}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{mathrsfs}
+
+% Packages from other template
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+%\usepackage{titlesec}
+%\titlespacing{\section}{0pt}{12pt}{4pt}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{bbold}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\RI}{\mathrm{RI}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\TrC}{\text{Tr}_{\text{C}}}
+\newcommand{\TrD}{\text{Tr}_{\text{D}}}
+
+\usepackage{simpler-wick}
+\usepackage[compat=1.0.0]{tikz-feynman}   %note you need to compile this in LuaLaTeX for diagrams to render correctly
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 4: The Path Integral and Functionals}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\DeclareMathSymbol{\smallleftarrow}     {\mathrel}{oasy}{"20}
+\DeclareMathSymbol{\smallrightarrow}    {\mathrel}{oasy}{"21}
+\DeclareMathSymbol{\smallleftrightarrow}{\mathrel}{oasy}{"24}
+%\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\vecc}[1]{\overset{\scriptscriptstyle\smallrightarrow}{#1}}
+\newcommand{\cev}[1]{\overset{\scriptscriptstyle\smallleftarrow}{#1}}
+\newcommand{\cevvec}[1]{\overset{\scriptscriptstyle\smallleftrightarrow}{#1}}
+
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+
+% to use a box environment, use \begin{answer} and \end{answer}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+\newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\begin{document}
+%\maketitle
+
+% Possible topics: should check out what's on the pset as well
+% - Propagators *
+% - The path integral
+
+%\section*{Propagators}
+
+%\begin{itemize}
+
+%      	\item Green's functions are inverses of differential operators. What this means is that a Green's function $G(z, y)$ for a differential operator $K(x, z)$ satisfies:
+%        	\begin{equation}
+%        		\int d^4 z\; K(x, z) G(z, y) = \delta^{(4)}(x - y).
+%        	\end{equation}
+%	This is of the form of a matrix multiplication over a ``continuous index" on the matrix, $z$. We'll see stuff like this in QFT all the time-- in QM we would have had an honest to goodness matrix equation, without any of the integrals; however, since we have continuous degrees of freedom, the matrix multiplication turns into this. 
+	
+%	\item General form of a propagator: A \textbf{propagator} is just an inverse of the free 
+	
+%	\item Why time-ordering? We'll see later there are two big things that come out of this:
+%	\begin{itemize}
+%		\item Wick's theorem: This is what we'll use to evaluate correlation functions in the free theory.
+%		\item The path integral: When we move to the path integral formalism, we'll see that differentiating the generating functional naturally gives us time-ordered correlation functions. 
+%	\end{itemize}
+	
+%	\item Wick's theorem: Allows us to evaluate free field correlation functions. 
+	
+%\end{itemize}
+
+\section*{The Path Integral in QM}
+
+\begin{itemize}
+
+	\item The path integral gives us a way to evaluate correlation functions by discretizing time and breaking the amplitude for a process up into a sum on all possible paths. The equation in class that we're interested in is:
+	\begin{equation}
+		\mathcal Z\equiv \langle x_b, t_b | x_a, t_a\rangle = \int_{x(t_a) = x_a}^{x(t_b) = x_b} D[x(t)] \exp\left(i\int_{t_a}^{t_b} d\tau L(x, \dot x)\right) \label{eq:qm_path_integral}
+	\end{equation}
+	
+	\item The path integral integrates over \textbf{all possible paths}: even unphysical ones where $|\dot{x}| > c$, and paths which are not continuous! Paths that are not allowed just have an exponentially suppressed weight in the action: but they're still there. 
+	
+	\item The principle of \textbf{stationary phase} allows us to take the classical limit of Eq.~(\ref{eq:qm_path_integral}). Let's restore units:
+	\begin{equation}
+		\mathcal Z = \int D[x(t)] \exp\left(\frac{i}{\hbar} S[x(t)]\right) 
+	\end{equation}
+	The classical limit of this is $\hbar\rightarrow 0$, when the argument of the exponential gets huge. This is a highly oscillatory integral, and when $\hbar\rightarrow 0$, you'd essentially expect no contribution from most points in the region of integration. That's because in this limit, the oscillation frequency gets higher and higher, and you get destructive interference between neighboring paths. However, there are certain \textbf{stationary points} where there can actually be a contribution to the integral. 
+	
+	Let's consider the toy model from the homework:
+	\begin{equation}
+		z = \int_{\mathbb R} dx e^{i\lambda f(x)}
+	\end{equation}
+	and think about an arbitrary $f(x)$, let's pick a Gaussian for visualization purposes. In a general region $x\in [a, a + \delta]$, assuming that $f$ changes significantly (more on this in a second), the contribution to the integral from this region will vanish. That's because as $\lambda\rightarrow\infty$, variations in $f$ will make $\lambda f$ take on many possible values as $\lambda\rightarrow\infty$, and $e^{i\lambda f}$ will oscillate very frequently and cancel itself out. In this case, the contributions to the integral from neighboring points \textit{destructively interfere} with one another. 
+	
+	The other case is when $f$ has a stationary point $x_0$, where $f'(x_0) = 0$. The idea behind this is that if $f$ has no derivative at $x_0$, then then the contribution of $x_0$ and its neighboring points to the integral $z$ will \textit{constructively interfere} with one another. $f'(x_0) = 0$ means that $f$ doesn't vary around $x_0$ to first order, and therefore $e^{i\lambda f}$ actually has the time to contribute to the integral in this region before the destructive interference starts again. The way to see this (which you'll do fully on your problem set) is to Taylor expand $f(x) = f(x_0) + \frac{1}{2} (x - x_0)^2 f''(x_0) + ...$, so that:
+	\begin{align}
+		z &= \int_{\mathbb R} dx \, e^{i\lambda (f(x_0) + \frac{1}{2} (x - x_0)^2 f''(x_0) + \frac{1}{3!} (x - x_0)^3 f'''(x_0) + ...)} \nonumber \\
+		&= e^{i\lambda f(x_0)} \int_{\mathbb R} dx \, e^{\frac{i}{2}\lambda (x - x_0)^2 f''(x_0)} \left(1 + \frac{i\lambda}{3!} (x - x_0)^3 f'''(x_0) + ...\right) \\
+		&= e^{i\lambda f(x_0)} \sqrt{\frac{2\pi i}{\lambda f''(x_0)}}(1 + \underbrace{\textnormal{higher order}}_{\textnormal{pset problem 4}}) \nonumber
+	\end{align}
+	
+	You can see this in the following figure. Here the red curve is $f(x)$, where $f$ is picked to be a Gaussian. The only stationary point in this domain is at $x_0 = 2$, which is denoted by the dashed black line. The integrand $e^{i\lambda f(x)}$ is depicted on the right, and we can see that there is destructive interference everywhere except at the stationary point. 
+	\begin{figure}[H]
+		\centering
+	   	\begin{subfigure}[t]{0.48\textwidth}
+        			\includegraphics[width = \textwidth]{f_x_stationary}
+ 			\caption{$f(x) = $ a Gaussian, centered at $x_0 = 2$.}
+   		 \end{subfigure}
+   		 ~
+    		\begin{subfigure}[t]{0.48\textwidth}
+        		\includegraphics[width = \textwidth]{integrand_stationary}
+       		\caption{Integrand $e^{i \lambda f(x)}$, with $\lambda = 1000$. }
+    		\end{subfigure}
+	\end{figure}
+	
+	In the path integral, this works in the same way, except now a stationary path $x_c(t)$ is defined to be a path where the functional derivative vanishes:
+	\begin{equation}
+		\frac{\delta S}{\delta x(t)}\bigg|_{x_c} = 0.
+	\end{equation}
+	If you haven't seen the functional derivative notation before, we'll explain it in a few minutes. This is a really striking result-- it says that in the classical limit, the only paths which contribute to the path integral are the paths which don't vary the action at first order, i.e. the principle of least action! Applying the functional derivative to the general form of the action gives us the Euler-Lagrange equations for the theory. 
+	
+%	\item Correlation functions: We'll soon show in class that a correlation function can be written out as a path integral,
+%	\begin{equation}
+%		\langle 0 | \hat{x}(t_n) ... \hat{x}(t_0) | 0\rangle \propto \int D[x(t)] e^{iS[x]} x(t_n) ... x(t_0)
+%	\end{equation}
+%	This is the reason we are interested in the path integral; it provides a very nice formalism to compute correlation functions. Note here $x(t_i)$ are \textbf{functions}, while $\hat{x}(t_i)$ are \textbf{operators}. 
+	
+\end{itemize}
+
+\vspace{0.5cm}\textbf{A dictionary between discrete and continuous dofs}
+
+QFT with path integrals is essentially the same thing as doing Gaussian integrals with an infinite number of degrees of freedom. Let's think about how linear algebra, integration, and matrix equations port over when we go from a discrete number of degrees of freedom to a continuous variable. We'll use a red implication arrow to denote that we're taking a discrete expression into a continuous one, i.e ${\color{red} \implies}$. 
+% during class, go over everything for the QM path integral. Then go back over everything and port it all to field theory
+
+\begin{itemize}
+	
+	\item Degrees of freedom: the first thing to think about here is what happens to a particle when we've evaluated its position at different times $t_i$, as we take $\Delta t\rightarrow 0$. In this case, the vector $x_i$ just goes into a continuous function $x(t)$. 
+	%In the field theory case, we chop up spacetime into a 4D lattice, and we'll enumerate the lattice points with an index $n$, i.e. the points on the lattice are $x_n^\mu$, and we're evaluating $\phi$ at these points. So, we get:
+	\begin{align}
+		x_i\equiv x(t_i) \;\;\; {\color{red} \implies}\;\;\;  x(t) %&& \phi_n\equiv \phi(x^\mu_n)\longrightarrow \phi(x^\mu)
+	\end{align}
+	So we started off with a discrete vector, and when we take the continuum limit we get a \textbf{function}. The ``components" of the function (thinking about vector components like $x_i$) are just the points that we evaluate it at. 
+	
+	\item Sums: A sum just goes into an integral, so:
+	\begin{align}
+		\Delta t \sum_i \;\;\; {\color{red} \implies}\;\;\; \int dt. %&& |\Delta x| \sum_n\rightarrow \int d^4x
+	\end{align}
+	
+	\item Functions: A real-valued function of $x_i$ goes into a \textbf{functional}, which maps a function to a real number:
+	\begin{align}
+		f(x_i)\;\;\; {\color{red} \implies}\;\;\;  F[x(t)] %&& g(\phi_n)\longrightarrow G[\phi(x)]
+	\end{align}
+	The functionals that we work with will generally be an integral of some function of $x(t)$, and they can also be functions of other points $\tau$:
+	\begin{align}
+		F[x(t)] = \int_{\mathbb R} dt\; f(x(t)) && H_\tau[x(t)] = \int_{\mathbb{R}}dt\; h(\tau, t) x(t).
+	\end{align}
+	
+	\item Derivatives: These are more complicated. In finite dimensions, a derivative acts on a function of $x_i$. With continuous dimensions, a derivative becomes a \textbf{functional derivative}, which acts on functionals:
+	\begin{align}
+		\frac{\partial}{\partial x_i} = \frac{\partial}{\partial x(t_i)} \;\;\; {\color{red} \implies}\;\;\; \frac{\delta}{\delta x(t)} %&& \frac{\partial}{\partial\phi_n} = \frac{\partial}{\partial \phi(x_n^\mu)}\longrightarrow \frac{\delta}{\delta\phi(x^\mu)}
+	\end{align}
+	For the functional derivative, we'll define it akin to a normal derivative, but with a little more machinery. The idea is that to differentiate a functional $F[x(t)]$, we can perturb $x(t)$ by a \textbf{test function} $\eta(t)$ and consider how much $F$ varies. When we write out the definition of the directional derivative for a multivariate function, this may make a little more sense:
+	\begin{align}
+		&  \Delta f[ x_i, n_i ] = \lim_{\epsilon\rightarrow 0} \frac{1}{\epsilon}\left(f(x_i + \epsilon n_i) - f(x_i)\right) = \sum_i n_i \frac{\partial f}{\partial x_i} \\
+		\;\;\; {\color{red} \implies}\;\;\;  & \Delta F[x(t), \eta(t)] = \lim_{\epsilon\rightarrow 0} \frac{1}{\epsilon}\left(F[x(t) + \epsilon\eta(t)] - F[x(t)]\right) = \int dt\; \eta(t) \frac{\delta F}{\delta x(t)}
+	\end{align}
+	So, we consider the variation from perturbing the path $x(t)$ by $\epsilon\eta(t)$ (we put the $\epsilon$ in to emphasize that it's a small perturbation), and we strip off all dependence on $\eta(t)$ to define the functional derivative. 
+	
+	\item \textbf{Matrices} in finite dimensions become \textbf{operators} in continuous dimensions, since each index becomes a continuous variable:
+	\begin{equation}
+		A_{ij} \;\;\; {\color{red} \implies}\;\;\; K(t, \tau).
+	\end{equation}
+	Differential operators are often used in this context by appending a $\delta(t - \tau)$ to them. For example, a familiar one (now using the field theory language) that you've seen before is this operator:
+	\begin{equation}
+		K(x, y) = \delta^{(4)}(x - y) (-\partial^2_{(x)} + m^2). 
+	\end{equation}
+	Here the $(x)$ subscript means that it's the Laplacian with respect to the $x$ variable. 
+	
+	\item Matrix products: The sum just gets integrated over (this should explain why Hong kept calling this ``matrix multiplication" during lecture):
+	\begin{equation}
+		\sum_j A_{ij} x_j = b_i \;\;\; {\color{red} \implies}\;\;\; \int d\tau\; K(t, \tau) x(\tau) = b(t).
+	\end{equation}
+	
+	\item Matrix inverses: these just extend the usual definition, which is defined so that if you contract $A$ with $A^{-1}$, you get the identity $\delta_{ij}$ (note that the Kronecker $\delta$ becomes a Dirac delta $\delta(t - \tau)$ with continuous degrees of freedom). The defining equation for an inverse is:
+	\begin{equation}
+		\sum_j A_{ij} (A^{-1})_{jk} = \delta_{ik} \;\;\; {\color{red} \implies}\;\;\; \int d\tau\; K(t, \tau) (K^{-1})(\tau, t') = \delta(t - t').
+	\end{equation}
+	This equation should actually be familiar to you from the last few weeks. It's the definition of a \textbf{Green's function}:
+	\begin{align}
+		& \int d^4 z\; \underbrace{\delta^{(4)}(x - z) (-\partial^2_{(x)} + m^2)}_{K(x, z)} G(z, y) = \delta^{(4)}(x - y) \\
+		\longrightarrow \;\;\; & (-\partial^2 + m^2) G(x, y) = \delta^{(4)}(x - y).\label{eq:greens_fn}
+	\end{align}
+	Eq.~(\ref{eq:greens_fn}) is straight out of Hong's notes for the definition of a Green's function. 
+	
+	\item Eigenvalues and eigenvectors: we can go right from the definition:
+	\begin{equation}
+		\sum_j A_{ij} v_j = \lambda v_i \;\;\; {\color{red} \implies}\;\;\; \int d\tau K(t, \tau) f(\tau) = \lambda f(t).
+	\end{equation}
+	A good example of this is the derivative operator, $K(t, \tau) = \delta(t - \tau) \frac{d}{dt}$. Its eigenvalue equation is exactly what you'd expect,
+	\begin{equation}
+		\int d\tau \delta(t - \tau) \frac{d}{dt} f(\tau) = \frac{df}{dt}(t) = \lambda f(t),
+	\end{equation}
+	and we see that the eigenvectors are just $e^{\lambda t}$, exactly what you're used to. 
+	
+	\item Trace and determinant: These are just defined in their usual way as the sum (integral if the spectrum is continuous) or product of the eigenvalues of the operator. It'll usually end up being divergent, but in a lot of applications, you'll end up needing to consider ratios of $\mathrm{Det}(A)$ or $\mathrm{Trace}(A)$, which can be convergent. 
+	
+%	The multi-variable integrals that we saw will go into:
+%	\begin{align}
+%		\mathcal Z(J) = \int d^n x\, e^{-\frac{1}{2} \sum_{i, j} x_i A_{ij} x_j + \sum_i J_i x_i} \longrightarrow 
+%		\mathcal Z[J] = \int D[x(t)]\, e^{-\frac{1}{2} \sum_{i, j} x_i A_{ij} x_j + \sum_i J_i x_i}
+%	\end{align}
+	
+%	\begin{equation}
+%		\langle x_i ... x_k\rangle = 
+%		\frac{1}{\mathcal Z(0)} \frac{\partial}{\partial x_i} ... \frac{\partial}{\partial x_k}\bigg|_{J = 0} \mathcal Z(J)
+%	\end{equation}
+
+\end{itemize}
+
+\section*{Gaussian integrals}
+
+Resources: Zee pp. 14-16, Appendix A; Schwartz pp. 254-255.
+
+\begin{itemize}
+	
+	\item The \textbf{n$^{\mathrm{th}}$ moment of the standard Gaussian integral} is defined as:
+	\begin{equation}
+		\langle x^n\rangle = \frac{1}{\int dxe^{-\frac{1}{2}ax^2}} \int dx e^{-\frac{1}{2} ax^2} x^n.
+	\end{equation}
+	In QFT these moments of the path integral will correspond to correlation functions. The easiest way to compute 
+	$\langle x^{2n}\rangle$ is to differentiate the normalization integral $I(a)\equiv \int dx\, e^{-\frac{1}{2} ax^2} = \sqrt{2\pi / a}$ 
+	$n$ times with respect to $a$:
+	\begin{equation}
+		\langle x^{2n}\rangle = \frac{(-2)^n}{I(a)}\frac{\partial^n}{\partial a^n} \int dx\, e^{-\frac{1}{2} ax^2} = \frac{(2n - 1)!!}{a^n}.
+	\end{equation}
+	
+	\item The \textbf{generating functional} $\mathcal Z(J)$ provides us with a way to compute $\langle x^n\rangle$ 
+	that is easier to generalize to higher dimensions:
+	\begin{align}
+		\mathcal Z(J) = \int dx e^{-\frac{1}{2} ax^2 + Jx} = e^{J^2 / 2a} \sqrt{\frac{2\pi}{a}} && \langle x^n\rangle = \frac{1}{\mathcal Z(0)}\frac{\partial^n}{\partial J^n}\bigg|_{J = 0}\mathcal Z(J)
+	\end{align}
+	where the closed form can be computed by completing the square, and the expression for $\langle x^n\rangle$ can be 
+	seen by differentiating the definition of $\mathcal Z(J)$. In computing $\langle x^{2n}\rangle$, the first $\partial / 
+	\partial J$ brings down a factor of $J / a$. Since $J$ is set to 0 at the end of the computation, one of the remaining 
+	$(2n - 1)$ derivatives must hit the factor of $J$. This leaves an equation we can induct on to get the same result as 
+	before:
+	\begin{equation}
+		\langle x^n \rangle = \frac{n - 1}{a} \langle x^{n - 2}\rangle\implies \langle x^n\rangle = \frac{(n - 1)!!}{a^n}.
+	\end{equation}
+	
+	\item In $N$ dimensions with $x\in\mathbb R^N$, we can generalize the generating functional to help us perform 
+	integrals:
+	\begin{align}
+		\mathcal Z(J) = \int d^n x\, e^{-\frac{1}{2} x_i A_{ij} x_j + J\cdot x} && \langle x_i ... x_k\rangle = 
+		\frac{1}{\mathcal Z(0)} \frac{\partial}{\partial x_i} ... \frac{\partial}{\partial x_k}\bigg|_{J = 0} \mathcal Z(J)
+	\end{align}
+	where $A\in\mathbb R^{N\times N}$ is a symmetric $N\times N$ matrix and $J\in\mathbb R^N$ is the source vector. 
+	The generating functional can be computed by diagonalizing $A$ and factoring $\mathcal Z(J)$ into $N$ copies of 
+	its 1D counterpart:
+	\begin{equation}
+		\mathcal Z(J) = \sqrt{\frac{(2\pi)^n}{\det A}} e^{\frac{1}{2} J_i A^{-1}_{ik} J_k}.
+		\label{eq:gaussian_scalars}
+	\end{equation}
+	Applying the same logic as in the 1D case, $\partial / \partial x_k$ brings down $A^{-1}_{k\ell} J_\ell$. One of the 
+	remaining derivatives must eliminate the $J_\ell$ term, so summing over these possibilities yields:
+	\begin{align}
+		\langle x_i ... x_k\rangle = \sum_\mathrm{Wick} \langle x_a x_b\rangle ... \langle x_c x_d\rangle = 
+		\sum_\mathrm{Wick} A^{-1}_{ab} ... A^{-1}_{cd}.
+	\end{align}
+	We are summing over \textbf{Wick contractions} of the index set $\{i, ..., k\}$, which is the set of pairs that we can 
+	form from $\{i, ..., k\}$. We will often denote the contraction with a connector. For example:
+	\begin{equation}
+		\langle x_1 x_2 x_3 x_4\rangle = \langle \wick{\c1 x_1 \c1 x_2 \c2 x_3 \c2 x_4}\rangle + \langle \wick{\c1 x_1 \c2 x_2 \c1 x_3 \c2 x_4}\rangle  + \langle \wick{\c1 x_1 \c2 x_2 \c2 x_3 \c1 x_4}\rangle = A^{-1}_{12} A^{-1}_{34} + A^{-1}_{13} 
+		A^{-1}_{24} + A^{-1}_{14} A^{-1}_{23}.
+	\end{equation}
+	
+\end{itemize}
+
+%\section*{The Path integral in QFT}
+
+%\begin{itemize}
+	
+%	\item The path integral ports over very naturally to QFT from QM, where now we just need to add in extra dimensions and the fact that our actions now need to be Lorentz invariant. 
+%	\begin{align}
+%		x(t)\longrightarrow \phi(x^\mu)
+%	\end{align}
+	
+%\end{itemize}
+
+\end{document}

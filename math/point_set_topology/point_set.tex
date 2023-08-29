@@ -1,30 +1,5 @@
-\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
-\usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
-\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
-%\geometry{landscape}                		% Activate for rotated page geometry
-%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
-\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
-								% TeX will automatically convert eps --> pdf in pdflatex		
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage[shortlabels]{enumitem}
-\usepackage{float}
-\usepackage{tikz-cd}
-
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{prop}{Proposition}[section]
-
-\graphicspath{{/Users/theoares/Math\ Notes/Point\ Set\ Topology/}}
-
-%SetFonts
-
-%SetFonts
-
+\def \root {../../}			% path to root (/notes)
+\input{\root/template/preamble.tex}
 
 \title{Point-Set Topology}
 \author{Patrick Oare}
@@ -44,13 +19,13 @@
 		\begin{enumerate}
 			\item $X$ and $\emptyset$ are in $\tau$.
 			\item $\tau$ is closed under arbitrary unions, i.e. if $\{U_\alpha\}\subset\tau$, then:
-			$$
-				\bigcup_\alpha U_\alpha\in\tau
-			$$
+			\eq
+				\bigcup_\alpha U_\alpha\in\tau.
+			\qe
 			\item $\tau$ is closed under finite intersections, i.e. if $\{U_i\}_{i = 1}^n\subset\tau$, then:
-			$$
-				\bigcap_{i = 1}^n U_i\in\tau
-			$$
+			\eq
+				\bigcap_{i = 1}^n U_i\in\tau.
+			\qe
 		\end{enumerate}
 	We call the set $\tau$ a \textbf{topology} on the set $X$ and we call the members of $\tau$ \textbf{open sets}. 
 	\end{definition}
@@ -87,17 +62,17 @@
 	
 	\begin{prop}
 		Let $\mathcal C$ be a collection of topologies on $X$. Then:
-		$$
-			\bigcap_{\tau\in\mathcal C}\tau
-		$$
+		\eq
+			\bigcap_{\tau\in\mathcal C}\tau.
+		\qe
 		is a topology on $X$.
 	\end{prop}
 	
 	\begin{prop}
 		Let $S$ be any nonempty collection of subsets of $X$. Then there is a smallest topology on $X$ that contains $S$, namely:
-		$$
-			\tau := \bigcap\{\tau : \tau\textnormal{ a topology with } S\subseteq\tau\}
-		$$
+		\eq
+			\tau := \bigcap \left\{\tau : \tau\textnormal{ a topology with } S\subseteq\tau \right\}.
+		\qe
 	\end{prop}
 	
 	\subsection{Generalization of Metric Space Properties}
@@ -109,8 +84,8 @@
 		A subset $E\subset X$ is a \textbf{closed set} if $E^c$ is open.
 	\end{definition}
 	
-	We now define the important notion of a neighborhood of a point.
-	
+	We now define the important notion of a neighborhood of a point. A neighborhood will allow us to formally ask the question, ``what points in $X$ are close to $x$?" using the ideas we've developed of open sets. 
+	\newline
 	\begin{definition}[Neighborhood]
 		Let $x\in X$. A \textbf{neighborhood} of $x$ is an open set $U$ that contains $x$.
 	\end{definition}
@@ -118,9 +93,9 @@
 	Neighborhoods give us a practical way to show that a set is open-- suppose that we are trying to determine if $V\subset X$ is open. Then it suffices to show 
 	that given $x\in V$, we can find a neighborhood $U_x$ of $x$ contained in $V$, for if we have found such a collection of neighborhoods $\{U_x\}_{x\in V}$, 
 	then:
-	$$
-		\bigcup_{x\in V}U_x = V
-	$$
+	\eq
+		\bigcup_{x\in V}U_x = V,
+	\qe
 	for the forward containment follows because each $U_x\subseteq V$, and the reverse because $V\subseteq\{x : x\in V\}$. Because open sets are closed 
 	under arbitrary unions, if we can find such a neighborhood for every $x\in V$ it guarantees that $V$ is open, because we will have written it as a union 
 	of open sets.
@@ -135,9 +110,9 @@
 	
 	\begin{definition}[Limit Point]
 		Let $A\subseteq X$, $p\in X$. Then $p$ is a \textbf{limit point} of $A$ if for each neighborhood $p\in U$, we have:
-		$$
-			U\cap(A\setminus\{p\})\neq\emptyset
-		$$
+		\eq
+			U\cap(A\setminus\{p\})\neq\emptyset.
+		\qe
 	\end{definition}
 	
 	Subtracting $p$ out of $A$ guarantees that the points of $A$ have to be sufficiently close to $p$, and that it is not enough to just have $p\in A$ (consider 
@@ -156,9 +131,9 @@
 	
 	\begin{definition}[Closure, Dense]
 		Let $A\subseteq X$. We define the \textbf{closure} of $A$ to be the set:
-		$$
-			\overline A := A\cup\{p\in X : p \textnormal{ is a limit point of $A$}\}
-		$$
+		\eq
+			\overline A := A\cup\{p\in X : p \textnormal{ is a limit point of $A$}\}.
+		\qe
 		If $\overline A = X$, we say that $A$ is \textbf{dense} in $X$.
 	\end{definition}
 	
@@ -167,25 +142,17 @@
 	\end{theorem}
 	
 	\begin{proof}
-		Suppose $A$ is closed and $p\notin A$ is a limit point of $A$. Then $A^c$ is an open neighborhood of $p$ and is disjoint from $A\setminus\{p\}$, a 
-		contradiction to $p$ being a limit point of $A$. Conversely, suppose $A$ contains all its limit points. Then each $p\in A^c$ is not a limit point, and so 
-		we may find a disjoint open neighborhood to $A$ of $p$, $U_p$. But then $A^c = \bigcup_{p\in A^c} U_p$, and hence is open.
+		Suppose $A$ is closed and $p\notin A$ is a limit point of $A$. Then $A^c$ is an open neighborhood of $p$ and is disjoint from $A\setminus\{p\}$, a contradiction to $p$ being a limit point of $A$. Conversely, suppose $A$ contains all its limit points. Then each $p\in A^c$ is not a limit point, and so we may find a disjoint open neighborhood to $A$ of $p$, $U_p$. But then $A^c = \bigcup_{p\in A^c} U_p$, and hence is open.
 	\end{proof}
 	
-	In a sense, the closure of $A$ is the ``best" closed set that contains $A$, in that if any other closed set $B$ contains $A$, then it must contain $\overline A$ 
-	as well.
+	In a sense, the closure of $A$ is the ``best" closed set that contains $A$, in that if any other closed set $B$ contains $A$, then it must contain $\overline A$ as well.
 	
 	\begin{theorem}
 		The closure $\overline A$ is the smallest closed set containing $A$.
 	\end{theorem}
 	
 	\begin{proof}
-		We must show that $\overline A$ is closed, and that given any $A\subseteq B\subseteq X$ with $B$ closed, $\overline A\subseteq B$. We prove the 
-		latter first; if this is the case, then limit points of $A$ are also limit points of $B$, and $B$ must contain all its limit points, so $\overline A\subseteq B$. 
-		We show $\overline A$ is closed, i.e. that $\overline{\overline A} = \overline A$, or that $\overline A^c$ is open. Let $x\in \overline A^c$, so $x$ is 
-		not a limit point of $A$ and $\exists U_x$ an open neighborhood of $x$ such that $U_x\cap (A\setminus \{x\}) = U_x\cap A = \emptyset$. Now, 
-		suppose $y\in\overline A$ is in $U_x$. This is a contradiction because $U_x\cap(A\setminus\{y\}) = \emptyset$, so $y\notin U_x\implies U_x\cap
-		\overline A = \emptyset$, so $\overline A^c$ is open. 
+		We must show that $\overline A$ is closed, and that given any $A\subseteq B\subseteq X$ with $B$ closed, $\overline A\subseteq B$. We prove the latter first; if this is the case, then limit points of $A$ are also limit points of $B$, and $B$ must contain all its limit points, so $\overline A\subseteq B$. We show $\overline A$ is closed, i.e. that $\overline{\overline A} = \overline A$, or that $\overline A^c$ is open. Let $x\in \overline A^c$, so $x$ is not a limit point of $A$ and $\exists U_x$ an open neighborhood of $x$ such that $U_x\cap (A\setminus \{x\}) = U_x\cap A = \emptyset$. Now, suppose $y\in\overline A$ is in $U_x$. This is a contradiction because $U_x\cap(A\setminus\{y\}) = \emptyset$, so $y\notin U_x\implies U_x\cap \overline A = \emptyset$, so $\overline A^c$ is open. 
 	\end{proof}
 	
 	\begin{corollary}
@@ -201,18 +168,14 @@
 		A \textbf{base} for a topological space $(X, \tau)$ is a collection of open sets $B$ such that any set $A\in\tau$ is a union of open sets in $B$.
 	\end{definition}
 	
-	For example, a base for the standard topology on $\mathbb R^n$ is the collection of open balls with radius $\epsilon > 0$ centered at an arbitrary $x\in
-	\mathbb R^n$. Note that \textbf{bases are not unique} whatsoever; we can always add an extra open set to a base to make a new base. Now, let's see 
-	how we can generate a base from a family of subsets of $X$. 
+	For example, a base for the standard topology on $\mathbb R^n$ is the collection of open balls with radius $\epsilon > 0$ centered at an arbitrary $x\in\mathbb R^n$. Note that \textbf{bases are not unique} whatsoever; we can always add an extra open set to a base to make a new base. Now, let's see how we can generate a base from a family of subsets of $X$. 
 	
 	\begin{prop}
-		Let $X$ be a set, $B$ a collection of subsets of $X$. If $B$ has the property that for $U, V\in B$, $U\cap V$ is a union of elements in $B$, then the 
-		collection of unions of elements of $B$ is a topology with a base given by $B$. 
+		Let $X$ be a set, $B$ a collection of subsets of $X$. If $B$ has the property that for $U, V\in B$, $U\cap V$ is a union of elements in $B$, then the collection of unions of elements of $B$ is a topology with a base given by $B$. 
 	\end{prop}
 	
 	\begin{prop}
-		Let $X$ be a set, $S$ any collection of subsets of $X$ such that $\bigcap\{V\in S\} = X$. Then the set of finite intersections of elements of $S$ is a 
-		base for a topology (the topology in the previous proposition). Then we say that $S$ is a \textbf{subbase} for the topology.
+		Let $X$ be a set, $S$ any collection of subsets of $X$ such that $\bigcap\{V\in S\} = X$. Then the set of finite intersections of elements of $S$ is a base for a topology (the topology in the previous proposition). In this case, we say that $S$ is a \textbf{subbase} for the topology.
 	\end{prop}
 	
 	\begin{definition}[Subbase]
@@ -234,13 +197,13 @@
 	
 	\begin{definition}[Continuity]
 		A map $f : X\rightarrow Y$ between topological spaces is \textbf{continuous} if for every open set $V$ in $Y$, 
-		$$
+		\eq
 			f^{-1}(V)\subseteq X
-		$$
+		\qe
 		is open. 
 	\end{definition}
 	
-	We also define special types of maps, called open maps and closed maps, that may help us a bit when we get to homeomorphisms.
+	We also define special types of maps, called open maps and closed maps, that will help us a bit when we get to homeomorphisms. Note that these definitions are different than the ones we have for continuity in that they deal with \textit{pushing forward} sets, while continuity describes how a map \textit{pulls back} sets. 
 	
 	\begin{definition}[Open and Closed]
 		Let $f : X\rightarrow Y$ be a map. We say $f$ is \textbf{open} if $f$ maps open sets into open sets; we say $f$ is \textbf{closed} if $f$ maps closed sets 
@@ -261,9 +224,9 @@
 	
 	\begin{theorem}
 		If $f : X\rightarrow Y$ and $g : Y\rightarrow Z$ are continuous functions, then:
-		$$
+		\eq
 			g\circ f : X\rightarrow Z
-		$$
+		\qe
 		is also continuous.
 	\end{theorem}
 	
@@ -277,11 +240,11 @@
 	\end{theorem}
 	
 	\begin{proof}
-		These follow due to a couple of set theory identities:
-		$$
-			f^{-1}(A\cup B) = f^{-1}(A)\cup f^{-1}(B) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;
-			f^{-1}(A^c) = (f^{-1}(A))^c
-		$$
+		These follow immediately due to a couple of set theory identities:
+		\begin{align}
+			f^{-1}(A\cup B) = f^{-1}(A)\cup f^{-1}(B) &&
+			f^{-1}(A^c) = (f^{-1}(A))^c.
+		\end{align}
 	\end{proof}
 	
 	The last identity is especially useful; since we typically don't know what every open set in a topology looks like, it is much easier to prove that $f$ pulls back 
@@ -336,7 +299,7 @@
 	The first topology we will construct with these notions is the quotient topology.
 	
 	\begin{definition}[Quotient Topology]
-		Let $\{(X_\alpha, \tau_\alpha)\}$ be a collection of topological spaces, $Y$ a set, and $f_\alpha : X\alpha\rightarrow 
+		Let $\{(X_\alpha, \tau_\alpha)\}$ be a collection of topological spaces, $Y$ a set, and $f_\alpha : X_\alpha\rightarrow 
 		Y$ a map for each $\alpha$. Then, the final topology on $Y$ is called the \textbf{quotient topology}. 
 	\end{definition}
 	
@@ -350,9 +313,9 @@
 	Now, all that was a construction of a final topology. With an initial topology, the biggest difference is that our base is only 
 	\textbf{finite intersections} of preimages of base elements. For example, suppose we are putting the initial topology on 
 	$Y$, and we have maps $f_\alpha : Y\rightarrow X_\alpha$. Then a base for the initial topology is:
-	$$
-		\beta = \{\bigcap_{j = 1}^n f_{\alpha_j}^{-1}(U_j) : U_{\alpha_j}\subseteq X_{\alpha_j}\textnormal{ is open.}\}
-	$$
+	\eq
+		\beta = \left\{\bigcap_{j = 1}^n f_{\alpha_j}^{-1}(U_j) : U_{\alpha_j}\subseteq X_{\alpha_j}\textnormal{ is open.} \right\}
+	\qe
 	Feel free to justify this to yourself; this will be important later when we consider products. Finally, with initial topologies we 
 	have a nice characterization of continuous maps. There is an equivalent theorem for final topologies.
 	
@@ -378,9 +341,9 @@
 	\subsection{Disjoint Union}
 	
 	Let $X$ and $Y$ be topological spaces. Then we can put a topology on the disjoint union:
-	$$
+	\eq
 		X\sqcup Y
-	$$
+	\qe
 	by letting a base for the topology be of the form $\{U_\alpha\}\cup\{V_\beta\}$, where $\{U_\alpha\}$ are the open sets of $X$ and $\{V_\beta\}$ are the open 
 	sets of $Y$. \textit{Note the union is disjoint}; even if $X$ and $Y$ come from the same space originally and have nonempty intersection, we still must 
 	identify the elements of $X$ separately from the elements of $Y$. For example, if $X = \{1, 2, 3\}$ and $Y = \{3, 4, 5\}$, then $X\sqcup Y = \{1, 2, 3_X, 3_Y, 
@@ -389,43 +352,43 @@
 	\subsection{Product Space}
 	
 	If $X$ and $Y$ are topological spaces, we can turn their Cartesian product 
-	$$
+	\eq
 		X\times Y = \{(x, y) : x\in X, y\in Y\}
-	$$
+	\qe
 	into a topological space by specifying a base for the topology as:
-	$$
-		\{U\times V : U\subseteq X\textnormal{ open, } V\subseteq Y\textnormal{ open}\}
-	$$
+	\eq
+		\left\{U\times V : U\subseteq X\textnormal{ open, } V\subseteq Y\textnormal{ open}\right\}.
+	\qe
 	Essentially, we take products of all the open sets as our base, and then union them to get all the open sets in the topology. In the case of $\mathbb R^2 = 
 	\mathbb R\times\mathbb R$, the base we get is from the box topology; i.e. the base for $\mathbb R^2$ from the product topology is:
-	$$
-		\{(a, b)\times (c, d) : a < b, c < d\}
-	$$
+	\eq
+		\{(a, b)\times (c, d) : a < b, c < d\}.
+	\qe
 	In this topology, the unit disk $B^2$ is \textbf{not} a base element; it is an open set, however, because it is a union of open boxes. Now, we turn our attention 
 	to projection maps. Every product space comes equipped with two projection maps, 
-	$$
+	\eq
 	\begin{cases}
 		p_1 : X\times Y\rightarrow X & (x, y)\mapsto x \\
 		p_2 : X\times Y\rightarrow Y & (x, y)\mapsto y
 	\end{cases}
-	$$ 
+	\qe
 	which are naturally surjective.
 	
 	\begin{theorem}
 		If $X\times Y$ is a product space, then $p_1$ and $p_2$ are continuous and take open sets into open sets. Furthermore, \textbf{the product topology 
-		is the smallest topology for which $p_1$ and $p_2$ are continuous}.
+		is the coarsest topology for which $p_1$ and $p_2$ are continuous}.
 	\end{theorem}
 	
 	\begin{proof}
 		$p_1$ is continuous because it pulls back open $U\subseteq X$ to $U\times Y$, which is a base element. Suppose $A\subseteq X\times Y$ is open. 
 		Then
-		$$
+		\eq
 			A = \bigcup_{\alpha, \beta}U_\alpha\times V_\beta
-		$$
-		and so:
-		$$
-			p_1(A) = p_1(\bigcup_{\alpha, \beta}U_\alpha\times V_\beta) = \bigcup_\alpha U_\alpha
-		$$ 
+		\qe
+		and so
+		\eq
+			p_1(A) = p_1\left(\bigcup_{\alpha, \beta}U_\alpha\times V_\beta \right) = \bigcup_\alpha U_\alpha
+		\qe
 		is open in $X$. Suppose $\tau$ is another topology making $p_1$ and $p_2$ continuous; we will show that the product topology is contained in 
 		$\tau$. Because $p_1$ is continuous, every open set $U\subseteq X$ pulls back (via $p_1$) to $U\times Y\in \tau$, and every open set $V\subseteq 
 		Y$ pulls back (via $p_2$) to $X\times V\in\tau$. This implies that $U\times V = (U\times Y)\cap (X\times V)\in\tau$, and so the base for the product 
@@ -438,10 +401,10 @@
 	
 	\begin{proof}
 		The forward direction is trivial. Suppose the converse, that $p_1\circ f$ and $p_2\circ f$ are continuous. Let $U\times V$ be open in $X\times Y$. 
-		Then $(p_1\circ f)^{-1}(U) = f^{-1}(U\times Y)$ and $(p_2\circ f)^{-1}(V) = f^{-1}(X\times V)$ are open in $Z$, and because:
-		$$
+		Then $(p_1\circ f)^{-1}(U) = f^{-1}(U\times Y)$ and $(p_2\circ f)^{-1}(V) = f^{-1}(X\times V)$ are open in $Z$, and because
+		\eq
 			f^{-1}(U\times V) = f^{-1}((U\times Y)\cap (X\times V)) = f^{-1}(U\times Y)\cap f^{-1}(X\times V)
-		$$
+		\qe
 		is the intersection of two open sets, $f^{-1}(U\times V)$ is open as well, hence $f$ is continuous.
 	\end{proof}
 	
@@ -450,9 +413,9 @@
 	
 	\begin{definition}[Product Space]
 		Let $\{(X_\alpha, \tau_\alpha)\}_{\alpha\in A}$ be a collection of topological spaces. Let:
-		$$
-			Y = \prod_{\alpha\in A} X_\alpha := \{h : A\rightarrow\bigoplus_\alpha X_\alpha | h(\alpha)\in X_\alpha, \forall\alpha\in A\}
-		$$
+		\eq
+			Y = \prod_{\alpha\in A} X_\alpha := \left\{h : A\rightarrow\bigoplus_\alpha X_\alpha | h(\alpha)\in X_\alpha, \forall\alpha\in A \right\}
+		\qe
 		equipped with projection maps $\pi_\alpha : Y\rightarrow X_\alpha, (x_\beta)_{\beta\in A}\mapsto x_\alpha$. Then the \textbf{product topology} on $Y$ 
 		is the initial topology of $Y$ under the maps $\{\pi_\alpha\}_{\alpha\in A}$.
 	\end{definition}
@@ -460,19 +423,19 @@
 	First, note that we can view $Y$ as functions $h : A\rightarrow\bigoplus_\alpha X_\alpha$, since with each sequence $(x_\alpha)_{\alpha\in A}$, we can 
 	define $h(\alpha) := x_\alpha$ (this is a more general way to define a product than to by viewing it as a sequence of tuples). As a base for the product 
 	topology, we get \textbf{finite} intersections of preimages of open sets in each $X_\alpha$. This means that a subbase for the product topology is:
-	$$
+	\eq
 		S = \{\pi_\alpha^{-1}(U) : U\subseteq X_\alpha\textnormal{ is open.}\}
-	$$
+	\qe
 	Explicitly, the open sets for the product topology are of the form:
-	$$
+	\eq
 		\bigcap_{j = 1}^n\pi_{\alpha_j}^{-1}(U_{\alpha_j})
-	$$
+	\qe
 	where each $U_{\alpha_j}$ is open in $X_{\alpha_j}$. For an example, let $I$ be the interval $[0, 1]$ in $\mathbb R$, and let $B(I)$ denote that 
 	set of all functions $I\rightarrow I$. Then we can equivalently define $B$ as a product; for $i\in I$, define $X_i := I$. Let $X := \prod_{i\in I} X_i$. Then, there is a 
 	natural homeomorphism:
-	$$
+	\eq
 		B(I)\xrightarrow{\sim}X
-	$$
+	\qe
 	by mapping each $f\mapsto (f(i))_{i\in I}$. This product topology is interesting to consider; if we view elements of $X$ as functions $f : I\rightarrow I$, then 
 	the open sets are finite intersections of preimages of open sets in $X_i$. This means the following: fix a finite number of points $\{i_j\}_{j = 1}^n$ in $I$. 
 	For each $j$, take an open subset $U_j$ of $[0, 1]$. Then, let $\mathcal O$ be the set $\{f\in X : f(x_j) \in U_j\forall j = 1, ..., n\}$. Then $\mathcal O$ is an 
@@ -507,9 +470,9 @@
 		Let $X, Y$ be topological spaces, $A\subseteq X$, and $f : A\rightarrow Y$ a continuous function. Construct a partition $P$ on $X\sqcup Y$ by 
 		letting $P$ contain $\{x\}$ for $x\in X\setminus A$, $\{y\}$ for $y\in Y\setminus im(f)$, and $\{y\}\cup f^{-1}(\{y\})$ for $y\in im(f)$. We denote the 
 		identification space produced by $P$ by:
-		$$
+		\eq
 			X\cup_f Y
-		$$
+		\qe
 		and call $f$ the \textbf{attaching map}.
 	\end{definition}
 	
@@ -543,9 +506,9 @@
 	\begin{theorem}
 		If the above conditions are satisfied ($f$ a continuous surjection and the topology on $Y$ the largest making $f$ continuous), then $Y$ and $Y^*$ 
 		are homeomorphic by the map:
-		$$
-			f_* : Y^*\rightarrow Y \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; f_*(\{f^{-1}(y)\}) := y
-		$$
+		\begin{align}
+			f_* : Y^*\rightarrow Y && f_*(\{f^{-1}(y)\}) := y.
+		\end{align}
 	\end{theorem}
 	
 	\begin{proof}
@@ -572,9 +535,9 @@
 	\end{proof}
 	
 	As one final example, we have the relation:
-	$$
+	\eq
 		S^n\cong B^n / S^{n - 1}
-	$$
+	\qe
 	where $B^n$ is the unit ball, and we use the relations $S^n\setminus\{p\}\cong \mathbb R^n$ for any point $p$.
 
 	Now, we will move on to study topological properties that are invariant under homeomorphism; the two main properties 
@@ -589,9 +552,9 @@
 	
 	\begin{definition}[Open Cover, Subcover]
 		An \textbf{open cover} of a topological space $X$ is a collection of open sets $\{U_\alpha\}$ such that:
-		$$
-			X = \bigcup_\alpha U_\alpha
-		$$
+		\eq
+			X = \bigcup_\alpha U_\alpha.
+		\qe
 		If $\{U_\alpha\}$ and $\{V_\beta\}$ are open covers of $X$ and $\{V_\beta\}\subseteq\{U_\alpha\}$, then we say 
 		$\{V_\beta\}$ is a \textbf{subcover} of $\{U_\alpha\}$.
 	\end{definition}
@@ -607,23 +570,26 @@
 	
 	\begin{prop}
 		The continuous image of a compact set is compact. In other words, if $f : X\rightarrow Y$ is continuous and $X$ is 
-		compact, then $im(f)\subseteq Y$ is compact as well.
+		compact, then $\im(f)\subseteq Y$ is compact as well.
 	\end{prop}
 	
 	\begin{proof}
 		Assume WLOG that $f$ is surjective, and let $\{V_\alpha\}$ be an open cover of $Y$, so $Y = \bigcup_\alpha V_
 		\alpha$. Then we also have an open cover of $X$ given by $\{f^{-1}(V_\alpha)\}$, as $f$ is continuous and 
 		surjective. But $X$ is compact, so this has a finite subcover $\{f^{-1}(V_{\alpha_i})\}_{i = 1}^n$, and we have that:
-		$$
-			Y = f(X) = f(\bigcup_{i = 1}^n f^{-1}(V_{\alpha_i})) = \bigcup_{i = 1}^n f(f^{-1}(V_{\alpha_i})) = \bigcup_{i = 1}^n 
+		\eq
+			Y = f(X) = f\left( \bigcup_{i = 1}^n f^{-1}(V_{\alpha_i}) \right) = \bigcup_{i = 1}^n f \left( f^{-1}(V_{\alpha_i}) \right) = \bigcup_{i = 1}^n 
 			V_{\alpha_i}
-		$$
+		\qe
 		and so we have found a finite subcover of $\{V_\alpha\}$, and hence $Y$ is compact.
 	\end{proof}
 	
 	\begin{prop}
 		A closed subset of a compact space is compact.
 	\end{prop}
+	\begin{proof}
+		Let $C$ be a compact space, and let $A\subseteq C$ be a closed subset of $C$. This proof is almost immediate, since we can union an open cover of $A$ together with $A^c$ to get an open cover of $C$. Let $\{U_\alpha\}$ be an open cover for $A$. Then $\{U_\alpha\}\cup \{A^c\}$ is an open cover of $C$, hence has a finite subcover $\{U_i\}\cup \{A^c\}$ (this subcover need not contain $A^c$, but we write it here for convenience), and $\{U_i\}$ is an open cover of $A$, which completes the proof. 
+	\end{proof}
 	
 	However, note that the converse of this is not true, namely that there are compact subsets of a compact space which 
 	are not closed. For example, take a finite number of points and give them the indiscrete topology. Then these will 
@@ -641,11 +607,9 @@
 		\emptyset$.
 	\end{theorem}
 	
-	An example of a collection of subsets with the FIP is the tower $\{[0, \frac{1}{n}]\}_{n\in\mathbb N}$ of $\mathbb R$. 
-	This is because if we take a finite intersection, it will always be equal to the smallest interval, and if we intersect the 
-	entire family together, we will have $0$ in the intersection. 
+	An example of a collection of subsets with the FIP is the tower $\{[0, \frac{1}{n}]\}_{n\in\mathbb N}$ of $\mathbb R$. This is because if we take a finite intersection, it will always be equal to the smallest interval, and if we intersect the entire family together, we will have $0$ in the intersection. 
 		
-	Now, here are some theorems that you may recall from analysis.
+	Next, we recall some theorems that you may remember from analysis about compact spaces.
 	
 	\begin{theorem}[Bolzano-Weierstrauss]
 		An infinite subset of a compact space has a limit point.
@@ -659,9 +623,7 @@
 		A subset of $\mathbb R$ is compact iff it is closed and bounded.
 	\end{theorem}
 	
-	We will now study how compact spaces behave under products. It turns out that they act rather nicely, and 
-	compactness will be preserved under products. We will state Tychonoff's theorem, which is a very important 
-	theorem in all areas of analysis.
+	We will now study how compact spaces behave under products. It turns out that they act rather nicely, and compactness will be preserved under products. We will state Tychonoff's theorem, which is a very important theorem in all areas of analysis.
 	
 	\begin{lemma}
 		If $\{U_\alpha\}$ is a base for the topology on $X$, then $X$ is compact iff every open cover $C$ of $X$ such that 
@@ -685,10 +647,10 @@
 	addition to finite products, we can extend this to arbitrary, possibly \textbf{uncountable}, products of spaces.
 	
 	\begin{theorem}[Tychonoff]
-		Let $\{(X_\alpha, \tau_\alpha\}_\alpha$ be a collection of compact spaces. Then:
-		$$
+		Let $\{(X_\alpha, \tau_\alpha)\}_\alpha$ be a collection of compact spaces. Then:
+		\eq
 			\prod_\alpha X_\alpha
-		$$
+		\qe
 		is compact.
 	\end{theorem}
 	
@@ -743,10 +705,10 @@
 	
 	With these prerequisites, we can prove Tychonoff's theorem. Let $X = \prod_\alpha X_\alpha$. We will show that if 
 	$\mathcal C$ is any collection of closed subsets of $X$ with the FIP, then $\mathcal C\neq\emptyset$. We define:
-	$$
-		\Theta := \{D : \mathcal C\subseteq D\textnormal{ is a family of subsets of } X \textnormal{ s.t. } D \textnormal{ has 
-		the FIP.}\}
-	$$
+	\eq
+		\Theta := \left\{D : \mathcal C\subseteq D\textnormal{ is a family of subsets of } X \textnormal{ s.t. } D \textnormal{ has 
+		the FIP.} \right\}.
+	\qe
 	Note that the elements $D$ of $\Theta$ are not necessarily closed. Now, $\Theta$ form a poset by inclusion. First, 
 	show that $\Theta$ is inductively ordered. Then, we have a maximal element of $D^*$ of $\Theta$ by Zorn's Lemma.
 	Then $D^*$ satisfies:
@@ -767,20 +729,20 @@
 		Let $\{X_\alpha\}_{\alpha\in A}$ be a collection of non-empty sets. Form $\prod_\alpha X_\alpha$, and we wish to 
 		show that this set is not empty. Let $X = \bigoplus_\alpha X_\alpha$, and let $w$ be a symbol (can take it to 
 		be a set not in $\bigoplus_\alpha X_\alpha$). For each $\alpha$, set:
-		$$
-			Y_\alpha := X_\alpha\cup\{w\}
-		$$
+		\eq
+			Y_\alpha := X_\alpha\cup\{w\}.
+		\qe
 		For each $Y_\alpha$, define $\tau_\alpha$ to be $\{X_\alpha, \{w\}, Y_\alpha, \emptyset\}$. Each $(Y_\alpha, 
 		\tau_\alpha)$ is a compact space (as the topology is finite), so $\prod_\alpha Y_\alpha$ is compact. For each 
 		$\alpha$, let $C_\alpha = \pi_\alpha^{-1}(X_\alpha)$. This is closed because $X_\alpha\subseteq Y_\alpha$ is 
 		closed, and we claim that $\{C_\alpha\}_{\alpha\in A}$ has the FIP. Given $\{C_{\alpha_j}\}_{j = 1}^n$, we can 
 		choose $x_{\alpha_j}\in X_{\alpha_j}$, and let $y\in Y$ be defined as:
-		$$
+		\eq
 			y_\alpha := \begin{cases}
 				x_{\alpha_j} & \alpha = \alpha_j \\
 				w & else
 			\end{cases}
-		$$
+		\qe
 		so $y\in \bigcap_{j = 1}^n C_{\alpha_j}$, and thus $\{C_\alpha\}_{\alpha\in A}$ has the FIP. But, because 
 		$\prod_\alpha Y_\alpha$ is compact, this implies that $\bigcap_\alpha C_\alpha\neq\emptyset$. But $z\in 
 		\bigcap_\alpha C_\alpha$ has $z_\alpha\in X_\alpha$ for each $\alpha$, and hence $z\in\prod_\alpha X_\alpha$.
@@ -806,9 +768,9 @@
 		$\overline{\mathcal O_x}$ is compact. So, the set $\{\mathcal O_x\}_{x\in C}$ is an open cover for $C$, and 
 		hence has a finite subcover because $C$ is compact. Call this subcover $\{\mathcal O_{x_j}\}_{j = 1}^n$, and 
 		let:
-		$$
-			\mathcal O = \bigcup_{j = 1}^n\mathcal O_{x_j}
-		$$
+		\eq
+			\mathcal O = \bigcup_{j = 1}^n\mathcal O_{x_j}.
+		\qe
 		But, $ D := \bigcup_{j = 1}^n\overline{\mathcal O_{x_j}}$ is compact because it is a finite union of compact sets, 
 		and $\overline{\mathcal O}\subseteq D$ because $\mathcal O\subseteq D$ and $\overline{\mathcal O}$ is the 
 		smallest closed set containing $\mathcal O$. This implies that $\overline{\mathcal O}$ is compact because it 
@@ -844,10 +806,10 @@
 	
 	\begin{proof}
 		Assume $\mathbb R = A\cup B$ with $A$ and $B$ open and disjoint; note this implies they are both closed as well. Pick $x\in A, y\in B$ and assume 
-		WLOG that $x < y$. Consider the set:
-		$$
-			X := \{b\in [x, y]: [b, y]\subseteq B]\}
-		$$
+		WLOG that $x < y$. Consider the set
+		\eq
+			X := \{b\in [x, y]: [b, y]\subseteq B]\}.
+		\qe
 		Note that $y\in X$, so $X\neq\emptyset$ and $x$ gives a lower bound for $X$, so $x\leq\inf X$, hence $I := \inf X$ 
 		exists. This is a limit point of $X$ by definition, and because $X\subseteq B$, $I\in\overline B = B$, and hence $I
 		\notin A$. But $B$ is open, so $\exists\epsilon > 0$ such that $(I - \epsilon, I + \epsilon)\subseteq B\implies I-
@@ -876,9 +838,9 @@
 	
 	\begin{lemma}
 		Suppose $\{A_i\}$ is a collection of connected subspaces of $X$ such that $\bigcap_i A_i\neq\emptyset$. Then 
-		$$
+		\eq
 			\bigcup_i A_i
-		$$
+		\qe
 		is connected.
 	\end{lemma}
 	
@@ -889,9 +851,9 @@
 		$A_i\cap B$ and $A_i\cap C$ are disjoint and open in the subspace topology, and $A_i = (A_i\cap B)\cup (A_i\cap C)$, which implies that either 
 		$A_i\cap B$ or $A_i\cap C$ is the empty set. But $p\in B\cap(\bigcap_i A_i)$, hence $A_i\cap B\neq\emptyset\implies A_i\cap C = \emptyset$. 
 		This holds for each $A_i$, so
-		$$
+		\eq
 			C = \bigcup_i (A_i\cap C) = \emptyset
-		$$
+		\qe
 		and thus $\bigcup_i A_i$ is connected.
 	\end{proof}
 	
@@ -902,17 +864,17 @@
 	\begin{proof}
 		The forward direction is immediate because of the continuity of the projection maps $p_1$ and $p_2$. Suppose $X$ and $Y$ are connected. We 
 		have $\{x\}\times Y\cong Y$ and $X\times\{y\}\cong X$ for any $x\in X, y\in Y$, so these are connected. Define 
-		$$
+		\eq
 			A_{x, y} := (X\times \{y\})\cup (\{x\}\times Y)
-		$$
+		\qe
 		which is connected because these two sets intersect at $(x, y)$. Fix $y_0\in Y$. Then:
-		$$
+		\eq
 			X\times Y = \bigcup_{x\in X} A_{x, y_0}
-		$$
+		\qe
 		and these $A_{x, y_0}$ intersect at $X\times \{y_0\}$, hence $X\times Y$ is connected.
 	\end{proof}
 	
-	This gives immediate corollaries:
+	This gives immediate corollary:
 	\begin{corollary}
 		The spaces $\mathbb R^n$ and $S^n$ are connected.
 	\end{corollary}
@@ -963,9 +925,9 @@
 	\begin{definition}[Hausdorff]
 		A space $X$ is \textbf{Hausdorff} if given $x\neq y$ in $X$, we can find disjoint open neighborhoods $x\in U_x$, 
 		$y\in U_y$ such that 
-		$$
-			U_x\cap U_y = \emptyset
-		$$
+		\eq
+			U_x\cap U_y = \emptyset.
+		\qe
 	\end{definition}
 	
 	\begin{definition}[Regular]
@@ -977,9 +939,9 @@
 		Let $X$ be a topological space. We say it is \textbf{normal} if for any two disjoint closed subsets $\mathcal C_0$ 
 		and $\mathcal C_1$ of $X$, there are disjoint open sets $\mathcal O_0$ and $\mathcal O_1$ such that 
 		$\mathcal C_0\subseteq\mathcal O_0$, $\mathcal C_1\subseteq\mathcal O_1$, and:
-		$$
-			\mathcal O_0\cap\mathcal O_1 = \emptyset
-		$$
+		\eq
+			\mathcal O_0\cap\mathcal O_1 = \emptyset.
+		\qe
 	\end{definition}
 	
 	For the most part, we will be interested in Hausdorff and normal spaces. Regular spaces are a nice middle ground 
@@ -1002,12 +964,10 @@
 		Let $(X, d)$ be a metric space. Let $C_0, C_1$ be closed and disjoint subsets of $X$. For $x\in C_0$, choose 
 		$\epsilon_x > 0$ such that $B(x, \epsilon_x)\subseteq C_1^C$, and likewise for $y\in C_1$ choose $\epsilon_y > 0$ 
 		with $B(y, \epsilon_y)\subseteq C_0^C$ (as $C_0, C_1$ are closed, we can do this). Now, let:
-		$$
-			\mathcal O_0 := \bigcup_{x\in C_0} B(x, \frac{\epsilon_x}{3})
-		$$
-		$$
-			\mathcal O_1 := \bigcup_{y\in C_1} B(y, \frac{\epsilon_y}{3})
-		$$
+		\eq
+			\mathcal O_0 &:= \bigcup_{x\in C_0} B\left(x, \frac{\epsilon_x}{3} \right) \\
+			\mathcal O_1 &:= \bigcup_{y\in C_1} B\left(y, \frac{\epsilon_y}{3} \right).
+		\qe
 		Note that $\mathcal O_0$ and $\mathcal O_1$ are open and contain $C_0, C_1$. We claim that these are disjoint; 
 		let $z\in\mathcal O_0\cap\mathcal O_1$. Then, $z\in B(x, \frac{\epsilon_x}{3})$ and in $B(y, \frac{\epsilon_y}{3})$. 
 		Assume WLOG that $\epsilon_x \leq\epsilon_y$. Then $d(x, y)\leq d(x, z) + d(z, y) < \frac{\epsilon_x}{3} + 
@@ -1040,14 +1000,14 @@
 	\begin{proof}
 		We will sketch the proof for metric spaces, and I may fill in the general proof later. For any $A\subseteq X$, define 
 		$\rho_A : X\rightarrow\mathbb R$ by:
-		$$
-			\rho_A(x) := \inf\{d(x, y) : y\in A\}
-		$$
+		\eq
+			\rho_A(x) := \inf \left\{d(x, y) : y\in A \right\}
+		\qe
 		i.e. $\rho_A$ is the distance from a point to $A$. One can show that $\rho_A(x) = 0$ if and only if $x\in \overline A$. 
 		Now, let $A, B$ be closed and disjoint subsets of $X$. Define:
-		$$
-			f(x) := \frac{\rho_A(x)}{\rho_A(x) + \rho_B(x)}
-		$$
+		\eq
+			f(x) := \frac{\rho_A(x)}{\rho_A(x) + \rho_B(x)}.
+		\qe
 		Note $\rho_A(x) + \rho_B(x)$ is never zero, because this would only be the case if they both vanished. However, 
 		because they are both closed, this could vanish only if there was an element in $\overline A = A$ and $\overline B = 
 		B$, but we assumed they are disjoint, hence this sum is never 0. This implies that $f$ is continuous. We also have 
@@ -1120,15 +1080,15 @@
 		Let $x\in A^c$, and pick $z\in A$. Then we have disjoint open neighborhoods $x\in U_x$, $z\in V_z$, and let us vary 
 		$z$ throughout $A$ to get an open cover $\{V_z\}_{z\in A}$ of $A$. Then this has a finite subcover 
 		$\{V_{z_i}\}_{i = 1}^n$, and consider:
-		$$
-			U := \bigcap_{i = 1}^n U_{x_i}
-		$$
+		\eq
+			U := \bigcap_{i = 1}^n U_{x_i}.
+		\qe
 		$U$ is an open neighborhood of $x$, and we have $A\subseteq \bigcup_{i = 1}^n V_{z_i}$, and that $U\cap V_{z_i} 
 		= \emptyset$ by construction. Then:
-		$$
-			U\cap A \subseteq U\cap(\bigcup_{i = 1}^n V_{z_i}) = \bigcup_{i = 1}^n U\cap V_{z_i} = \bigcup_{i = 1}^n
-			\emptyset = \emptyset
-		$$
+		\eq
+			U\cap A \subseteq U\cap \left(\bigcup_{i = 1}^n V_{z_i} \right) = \bigcup_{i = 1}^n U\cap V_{z_i} = \bigcup_{i = 1}^n
+			\emptyset = \emptyset.
+		\qe
 		and hence we have found a neighborhood of $x$ contained in $A^c$, so $A^c$ is open.
 	\end{proof}
 	
@@ -1144,12 +1104,9 @@
 		and $y$ by open sets, i.e. we have $x\in U_y$ and $y\in V_y$ such that $U_y\cap V_y = \emptyset$. But, 
 		$\{V_y\}_{y\in A}$ is an open cover for $A$, and hence we have a finite subcover $\{V_{y_j}\}_{j = 1}^n$ for $A$. 
 		So, let:
-		$$
-			U := \bigcap_{j = 1}^n U_{y_j}
-		$$
-		$$
-			\mathcal O := \bigcup_{j = 1}^n V_{y_j}
-		$$
+		\begin{align}
+			U := \bigcap_{j = 1}^n U_{y_j} && \mathcal O := \bigcup_{j = 1}^n V_{y_j}.
+		\end{align}
 		Then $x\in U$ and $A\subseteq \mathcal O$, and both of these are open since $U$ is a finite intersection of 
 		open sets. Furthermore, these are disjoint because if $z\in U\cap\mathcal O$, then $z\in V_{y_k}$ for some 
 		$k$, but $z\in U\implies z\in U_{y_k}$ which is disjoint from $V_{y_k}$, a contradiction. Thus $U\cap
@@ -1165,12 +1122,9 @@
 		are compact. By the previous proposition, $X$ is regular, hence for each $x\in D$ we can find disjoint open 
 		subsets $\mathcal O_x$ and $U_x$ such that $x\in U_x$ and $C\subseteq\mathcal O_x$. Now, we have an 
 		open cover of $D$ given by $\{U_x\}_{x\in D}$, so we get a finite subcover $\{U_{x_j}\}_{j = 1}^n$. So, let:
-		$$
-			\mathcal O :=\bigcap_{j = 1}\mathcal O_{x_j}
-		$$
-		$$
-			U := \bigcup_{j = 1}^n U_{x_j}
-		$$
+		\begin{align}
+			\mathcal O :=\bigcap_{j = 1}\mathcal O_{x_j} && U := \bigcup_{j = 1}^n U_{x_j}.
+		\end{align}
 		Then we have $C\subseteq\mathcal O$ and $D\subseteq\mathcal U$, $U\cap\mathcal O = \emptyset$, and both 
 		of these are open because they are finite intersections and unions, hence $X$ is normal.
 	\end{proof}
@@ -1213,10 +1167,10 @@
 	\begin{definition}[Support]
 		Let $f$ be a continuous function on $X$ with values in a normed vector space $V$. Then the \textbf{support} of $f$ 
 		is:
-		$$
-			supp(f) := \overline{\{x\in X : f(x)\neq 0\}}
-		$$
-		If $supp(f)$ is compact, then we say that $f$ has \textbf{compact support}. Let $C_C(X, V)$ be the vector space of 
+		\eq
+			\supp(f) := \overline{\{x\in X : f(x)\neq 0\}}.
+		\qe
+		If $\supp(f)$ is compact, then we say that $f$ has \textbf{compact support}. Let $C_C(X, V)$ be the vector space of 
 		continuous functions of compact support.
 	\end{definition}
 	
@@ -1251,9 +1205,9 @@
 		$S\subseteq V$ is \textbf{bounded} if $\exists r\in\mathbb R$ such that $S\subseteq B(0, r)$. We say a function 
 		$f : X\rightarrow V$ is bounded if $f(X)$ is bounded. Denote by $B(X, V)$ the set of all bounded functions 
 		$X\rightarrow V$. We define a norm on $B(X, V)$ by:
-		$$
-			||f||_\infty := \sup_{x\in V} ||f(x)||
-		$$
+		\eq
+			||f||_\infty := \sup_{x\in V} ||f(x)||.
+		\qe
 	\end{definition}
 	
 	\begin{definition}[Banach Space]
@@ -1272,18 +1226,18 @@
 	\begin{proof}
 		Let $(f_n)$ be a Cauchy sequence in $B(X, V)$. Note that the sequence $(f_n(x))$ is Cauchy in $V$. For $x\in X$, 
 		we can define:
-		$$
-			f(x) := \lim f_n(x)
-		$$
+		\eq
+			f(x) := \lim f_n(x).
+		\qe
 		This is a valid definition because $V$ is a Banach space, and hence Cauchy sequences converge. We show that 
 		$f_n\rightarrow f$ with respect to $||\cdot||_\infty$. Let $\epsilon > 0$. We need to show that we can find $N\in
 		\mathbb N$ such that $||f - f_n||_\infty < \epsilon$, for each $n \geq N$. Pick $N\in\mathbb N$ such that 
 		$||f_n - f_m||_\infty < \frac{\epsilon}{2}$ for $n, m\geq N$, which exists because $(f_n)$ is Cauchy. Then for 
 		each $x\in X$, we can choose $m \geq N$ such that $||f(x) - f_m(x)|| < \frac{\epsilon}{2}$ because $f_n(x)
 		\rightarrow f(x)$. But then:
-		$$
+		\eq
 			||f_n(x) - f(x)||\leq ||f_n(x) - f_m(x)|| + ||f_m(x) + f(x)|| < \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon
-		$$
+		\qe
 		and hence we are done.
 	\end{proof}
 	
@@ -1362,32 +1316,32 @@
 	\begin{theorem}
 		Let $B(X, Y)$ be the collection of bounded functions $f : X\rightarrow Y$, for a set $X$ and a 
 		metric space $Y$. Then for $f, g\in B(X, Y)$, set:
-		$$
-			d_\infty (f, g) := \sup_{x\in X}\{d(f(x), g(x))\}
-		$$
+		\eq
+			d_\infty (f, g) := \sup_{x\in X}\{d(f(x), g(x))\}.
+		\qe
 		Then $(B(X, Y), d_\infty)$ is a metric space. If $Y$ is complete, then $B(X, Y)$ is complete.
 	\end{theorem}
 	
 	Note that $d_\infty$ is defined on $B(X, Y)$ because each of these functions are bounded. For the rest of this section, 
 	we will be working in $B(X, Y)$ with the metric $d_\infty$. Suppose that $X$ is a topological space. We again examine 
 	$B(X, Y)$ with the metric $d_\infty$. If $\tau$ is the topology on $X$, then let:
-	$$
-		C_b(X, Y) = \{f \in B(X, Y) : f \textnormal{ is closed and bounded.}\}
-	$$
+	\eq
+		C_b(X, Y) = \{f \in B(X, Y) : f \textnormal{ is closed and bounded.}\}.
+	\qe
 	Suppose that we are given $\mathcal F\subseteq C_b(X, Y)$, where $\mathcal F$ is totally bounded. Then for $\epsilon 
 	> 0$, we can find a finite number of $g_1, ..., g_n\in \mathcal F\subseteq C_b(X, Y)$ such that the balls of radius 
 	$\epsilon$ with $d_\infty$ around each $g_j$ cover $\mathcal F$. Let $x\in X$ be given. Then for each $j$, we 
 	can find $\mathcal O_j\in\tau$ such that $x, y\in\mathcal O_j\implies d(g_j(x), g_j(y)) < \epsilon$ because $g_j$ is 
 	continuous. Now, let:
-	$$
-		\mathcal O_x = \bigcap_{j = 1}^n\mathcal O_j\in\tau
-	$$
+	\eq
+		\mathcal O_x = \bigcap_{j = 1}^n\mathcal O_j\in\tau.
+	\qe
 	Then $x\in \mathcal O_x$ and if $y\in\mathcal O_x$, we have $d(g_j(x), g_j(y)) < \epsilon$ for each $j$. Let $f\in
 	\mathcal F$. Since the $g_j$ cover $\mathcal F$, we can find $g_j$ such that $d_\infty(g_j, f) < \epsilon$. So, we 
 	have:
-	$$
-		d(f(x), f(y)) \leq d(f(x), g_j(x)) + d(g_j(x), g_j(y)) + d(g_j(y), g(y)) < 3\epsilon
-	$$
+	\eq
+		d(f(x), f(y)) \leq d(f(x), g_j(x)) + d(g_j(x), g_j(y)) + d(g_j(y), g(y)) < 3\epsilon.
+	\qe
 	Rename the $\epsilon$ to $\frac{\epsilon}{3}$. So, we have shown that if $\mathcal F$ is a totally bounded family 
 	of functions in $C_b(X, Y)$ and if $x\in X$ and $\epsilon > 0$, then there is an open set $\mathcal O_x$ such 
 	that $y\in \mathcal O_x$ implies $d(f(x), f(y)) < \epsilon$ for each $f\in\mathcal F$. This $\mathcal O_x$ works for 
@@ -1401,9 +1355,7 @@
 		equicontinuous at each point in $X$, we say that $\mathcal F$ is equicontinuous.
 	\end{definition}
 	
-	Equicontinuity is essentially a generalization of continuity applied to a family of functions. It will have an important role 
-	to play with regards to total boundedness. The other definition we must make first before we can discuss that is that 
-	of pointwise boundedness.
+	Equicontinuity is essentially a generalization of continuity applied to a family of functions. It will have an important role to play with regards to total boundedness. The other definition we must make first before we can discuss that is that of pointwise boundedness.
 	
 	\begin{definition}[Pointwise totally bounded]
 		Let $\mathcal F\subseteq C_b(X, Y)$ be a family of functions. We say that $\mathcal F$ is \textbf{pointwise 
@@ -1438,26 +1390,20 @@
 
 	\begin{enumerate}
 		\item Maps respect unions, complements, intersections, and set difference:
-		$$
-			\begin{cases}
-				f^{-1}(A\cup B) = f^{-1}(A)\cup f^{-1}(B) \\
-				f^{-1}(A\cap B) = f^{-1}(A)\cap f^{-1}(B) \\
-				f^{-1}(A^c) = f^{-1}(A)^c \\
-				f^{-1}(A\setminus B) = f^{-1}(A)\setminus f^{-1}(B)
-			\end{cases}
-		$$
+		\eq
+		f^{-1}(A\cup B) &= f^{-1}(A)\cup f^{-1}(B) \\
+		f^{-1}(A\cap B) &= f^{-1}(A)\cap f^{-1}(B) \\
+		f^{-1}(A^c) &= f^{-1}(A)^c \\
+		f^{-1}(A\setminus B) &= f^{-1}(A)\setminus f^{-1}(B).
+		\qe
 		\item For any map $f$:
-		$$
-			A\subseteq f^{-1}(f(A))
-		$$
+		\eq
+			A\subseteq f^{-1}(f(A)).
+		\qe
 		and if $f$ is surjective, then we have equality:
-		$$
-			A = f^{-1}(f(A))
-		$$
-		\item \textbf{When is this true?}:
-		$$
-			f(A^c) = f(A)^c
-		$$
+		\eq
+			A = f^{-1}(f(A)).
+		\qe
 	\end{enumerate}
 
 \end{document}

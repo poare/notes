@@ -1,0 +1,396 @@
+
+\documentclass[12pt]{article}
+
+\usepackage[top=.5in, bottom=.5in, left = .5in, right=.5in, headheight=14.5pt, includeheadfoot]{geometry}
+\usepackage[final]{microtype}
+\usepackage[USenglish]{babel}
+% \usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[absolute]{textpos}
+\usepackage{csquotes}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+%\usepackage{enumerate}% http://ctan.org/pkg/enumerate
+\usepackage{wrapfig}
+\usepackage{fix-cm}
+\usepackage{changepage}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{ifthen}
+\usepackage{lipsum}
+\usepackage{bm}
+\usepackage{ulem}
+    \renewcommand{\ULthickness}{0.6pt}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{slashed}
+\usepackage{newtxtext}
+\usepackage{hyperref}
+
+% My imports which are not already loaded
+\usepackage{subcaption}
+\usepackage{tikz-cd}
+\usepackage{simpler-wick}
+
+%\numberwithin{equation}{subsection}
+    
+%\usepackage{newtxmath}
+    %\renewcommand{\thesubsection}{\alph{subsection}}
+    %\renewcommand{\theequation}{\thesection\thesubsection.\arabic{equation}}
+
+\usepackage{tikz}
+\usepackage{tikzscale}
+    \usetikzlibrary{decorations.pathreplacing}
+
+\usepackage[compat=1.1.0]{tikz-feynman}
+
+\usepackage{parskip}
+    \setlength{\parindent}{0in}
+    %\setlength{\parindent}{.25in}
+
+\usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{.85pt}
+    \renewcommand{\footrulewidth}{.6pt}
+    \pagestyle{fancy}
+    \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+    \fancyhf{}
+    \fancyhead[R]{Patrick Oare}
+    \fancyhead[C]{\fontsize{14}{16.8}\textbf{Recitation 1: Intro \& Relativity Review}}
+    \fancyhead[L]{8.323 S2022}
+    \fancyfoot[C]{\vspace*{.15in}\thepage}
+
+% PSet Sections
+\iffalse
+\usepackage[explicit]{titlesec}
+    \titleformat{\section}{\vspace*{0pt}\fontsize{16}{19.2}\selectfont}{}{0in}{\textbf{#1}{\hrule height .7pt width .75\textwidth}}
+    \titlespacing{\section}{.35in}{.5in}{\parskip}
+    \titleformat{\subsection}{\fontsize{14}{16.8}\selectfont}{}{.5in}{\textbf{\uline{#1}}}
+    \titlespacing{\subsection}{0pt}{.5in}{\parskip}
+\fi
+
+\usepackage{tcolorbox}
+    \tcbuselibrary{theorems}
+    \newtcolorbox{answerbox}{sharp corners=all, colframe=black, colback=black!5!white, boxrule=1.5pt, halign=flush center, width = 1\textwidth, valign=center}
+    \newenvironment{answer}{\begin{center}\begin{answerbox}}{\end{answerbox}\end{center}}
+
+\usepackage{pbsi}
+\usepackage{verbatim}
+\usepackage{gensymb}
+\usepackage{dsfont}
+\usepackage{relsize}
+\usepackage{xcolor}
+    %%%% Nightmode: %%%%
+    \newif\ifnightmode \nightmodefalse
+    \ifnightmode
+        \pagecolor[rgb]{0,0,0} %black
+        \color[rgb]{0.5,0.5,0.5} %grey
+    \fi
+    %%%%%%%%%%%%%%%%%%%%
+
+%\usepackage[compat=1.1.0]{tikz-feynman}
+
+
+
+%Commands:
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
+\newcommand{\Comment}[1]{\textcolor{cyan}{\textbf{#1}}}
+\newcommand{\Mark}[1]{\Comment{Here!}}
+\newcommand{\sfield}[1]{\mathbf{#1}}
+\newcommand{\Lag}{\mathcal{L}}
+\newcommand{\n}{\nonumber \\}
+
+% New definition of square root:
+% it renames \sqrt as \oldsqrt
+\let\oldsqrt\sqrt
+
+% it defines the new \sqrt in terms of the old one
+\def\sqrt{\mathpalette\DHLhksqrt}
+\def\DHLhksqrt#1#2{%
+\setbox0=\hbox{$#1\oldsqrt{#2\,}$}\dimen0=\ht0
+\advance\dimen0-0.2\ht0
+\setbox2=\hbox{\vrule height\ht0 depth -\dimen0}%
+{\box0\lower0.4pt\box2}}
+
+\pretolerance=10000
+%\counterwithin{figure}{section}
+\renewcommand{\thefigure}{(\arabic{section}\alph{subsection}.\arabic{figure})}
+
+\newcommand{\opn}{\operatorname}
+\newcommand{\fqty}{\mathopen{}\qty}
+
+% make arrow superscripts
+\DeclareFontFamily{OMS}{oasy}{\skewchar\font48 }
+\DeclareFontShape{OMS}{oasy}{m}{n}{%
+         <-5.5> oasy5     <5.5-6.5> oasy6
+      <6.5-7.5> oasy7     <7.5-8.5> oasy8
+      <8.5-9.5> oasy9     <9.5->  oasy10
+      }{}
+\DeclareFontShape{OMS}{oasy}{b}{n}{%
+       <-6> oabsy5
+      <6-8> oabsy7
+      <8->  oabsy10
+      }{}
+\DeclareSymbolFont{oasy}{OMS}{oasy}{m}{n}
+\SetSymbolFont{oasy}{bold}{OMS}{oasy}{b}{n}
+
+\newcommand*\xbar[1]{%
+   \,\hbox{%
+     \vbox{%
+       \hrule height 0.5pt % The actual bar
+       \kern1.35pt%         % Distance between bar and symbol
+       \hbox{%
+         \kern-0.2em%      % Shortening on the left side
+         \ensuremath{#1}%
+         \kern-0.2em%      % Shortening on the right side
+       }%
+     }%
+   }\,%
+}
+
+\newenvironment{myproof}[1][\proofname]{%
+  \begin{proof}[#1]$ $\par\nobreak\ignorespaces
+}{%
+  \end{proof}
+}
+
+\newtheoremstyle{mytheorem}
+{5\parskip}                % Space above
+{5\parskip}                % Space below
+{}        % Theorem body font % (default is "\upshape")
+{}                % Indent amount
+{\bfseries}       % Theorem head font % (default is \mdseries)
+{:}               % Punctuation after theorem head % default: no punctuation
+{ }               % Space after theorem head
+{\uline{\thmname{#1}\thmnumber{ (#2)}}\thmnote{ (#3)}}                % Theorem head spec
+\theoremstyle{mytheorem}
+
+\newtheorem{thm}{Theorem}[subsection]
+\renewcommand{\thethm}{\arabic{section}\alph{subsection}.\arabic{thm}}
+
+\newtheorem{lemm}{Lemma}[subsection]
+\renewcommand{\thelemm}{\arabic{section}\alph{subsection}.\arabic{lemm}}
+
+\newtheorem{prop}{Proposition}[subsection]
+\renewcommand{\theprop}{\arabic{section}\alph{subsection}.\arabic{prop}}
+
+\newtheorem{define}{Definition}[subsection]
+\renewcommand{\thedefine}{\arabic{section}\alph{subsection}.\arabic{define}}
+
+\newtheorem*{rmk}{Remark} 
+
+\usepackage{enumitem}
+\setlist{leftmargin=5.5mm}
+%\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+
+\begin{document}
+
+\section*{Welcome to QFT I!}
+
+\begin{itemize}
+
+\item \textbf{Logistics}: all of the relevant course information can be found in the syllabus posted on Canvas. Here is my \textbf{contact info}, and the relevant times and locations for recitation and office hours:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | c | c | c | c | c | c | }
+		\hline
+		TA & Email & Recitation & Recitation Location & Office Hours & OH Location \\
+		\hline
+		Patrick Oare & \href{mailto:poare@mit.edu}{poare@mit.edu} & Fridays, 2 PM & TBD & TBD & 6-415A \\
+		\hline
+	\end{tabular}
+\end{table}
+{\vspace{-5mm}I'll try to be very responsive by email, so feel free to send me emails if there's anything you want to discuss or questions you have! Please also try to use the class \textbf{Piazza} page, as I'll be monitoring that to answer questions as they crop up.}
+
+%\begin{answerbox}
+%	\textbf{Contact info:}
+%\end{answerbox}
+
+\item \textbf{Resources:} There are a lot of different textbooks out there which promise to give an ``introduction to QFT"; some of them are decent, but most are indecipherable. I'd recommend trying a few of these out in your first few weeks and seeing which ones fit your learning style better-- a lot of these books approach the same topics from different angles, and especially for a field as dense as QFT, it can be very valuable to have a few different ways to see the same problem. The main textbooks for this course are \textbf{Peskin \& Schroeder} and \textbf{Weinberg}, and I also use \textbf{Schwartz} quite a bit. I encourage you to sample them all and to find the best ones for you.
+\begin{itemize}
+	\item Peskin and Schroeder, \textit{An Introduction to Quantum Field Theory}. A well-rounded intro to QFT. Lots of detailed worked out examples (very helpful when we get to the calculation-heavy portions of the class), but can be a bit dense in places as a result.
+	\item Schwartz, \textit{Quantum Field Theory and the Standard Model}. This book is typically the primary source for the MIT QFT sequence. A good, well-written introduction to QFT that's easy to understand and ends up going quite deep into the subject. Could be more rigorous, though.
+	\item Srednicki, \textit{Quantum Field Theory}. A good introduction book to QFT. Rigorous and precise. 
+	\item Weinberg, \textit{The Quantum Theory of Fields (Vol 1)}. An interesting introduction to the subject, which is very rigorous and can be hard to read on a first pass. The information contained in this book is second to none, but the hard part can be understanding what it's telling you. 
+	\item Zee, \textit{Quantum Field Theory in a Nutshell}. A book which you'll hate during this class but enjoy once you've learned QFT (this was my first QFT book!). Written at a very high level with minimal calculations, but good for understanding the bigger picture. 
+\end{itemize}
+
+\end{itemize}
+
+\section*{Why QFT?}
+
+This is the first course in the quantum field theory sequence at MIT. It'll be taught at the graduate level, and we'll be assuming that you're familiar with special relativity and quantum mechanics. To get an idea of what QFT is and does and when it's applicable, I want to start heuristically using the 
+\begin{itemize}
+	\item $\Delta x \Delta p\gtrsim \hbar$
+\end{itemize}
+
+\section*{Index notation}
+
+\begin{itemize}
+
+	\item Continuous symmetries are implemented by \textbf{Lie groups}. The space of proper (orientation preserving) 
+	rotational symmetries in 3 dimensions is $SO(3)$. It can be formally defined as the space of all transformations of 
+	$\mathbb R^3$ which leaves the norm $r = \sqrt{x^2 + y^2 + z^2}$ invariant for all $(x, y, z)\in \mathbb R^3$ and 
+	preserves handedness. This defines the group \textit{abstractly}; to work with it, we need a \textbf{matrix 
+	representation}, which is a way to express an abstract rotation $R$ as a $d\times d$ matrix\footnote{$d$ is called the 
+	\textbf{dimension} of the representation.}. For $SO(3)$, $d = 3$ (the dimension of $\mathbb R^3$), and we write 
+	$R_{ij}$ for the $3\times 3$ matrix representing $R$. The matrices $R_{ij}$ representing $SO(3)$ are orthogonal and 
+	have determinant 1.
+	
+	\item Transformations are implemented using index notation to explicitly write out matrix and products. We will use 
+	the \textbf{Einstein summation convention}: if an index is repeated, it is assumed to be summed over. A sum on 
+	indices is called a \textbf{contraction}. For example, the action of a rotation on a vector $\vec x = (x_1, x_2, x_3)\in \mathbb R^3$ is:
+	\begin{equation}
+		x_i\mapsto \sum_j R_{ij} x_j \equiv R_{ij} x_j.
+	\end{equation}
+	
+	\item Example: Orthogonal matrices $R_{ij}$ do implement rotations because we can show they leave $x^2$ invariant:
+	\begin{equation}
+	x^2 = x_i x_i \mapsto (R_{ij} x_j) (R_{ik} x_k) = x_j \underbrace{(R^\mathrm{T})_{ji} R_{ik}}_{\textnormal{matrix 
+	product}} x_k = x_j \delta_{jk} x_k = x^2.
+	\end{equation}
+	
+	\item A \textbf{metric} is an inner product on a space, and gives us a notation of distance. In physics we represent 
+	metrics as symmetric matrices $h_{ij}$, under which the inner product of two vectors $\vec x$ and $\vec y$ is 
+	$\langle\vec x | \vec y\rangle = h_{ij} x_i y_j$ (in matrix notation, this is $\vec x^\mathrm{T} h \vec y$). The Euclidean 
+	metric on $\mathbb R^3$ is the Kronecker delta $h_{ij} = \delta_{ij}$; a rotation can instead be defined as \textbf{a 
+	transformation which preserves the metric}, which is shown in the following equation:
+	\begin{align}
+	R_{ki} \delta_{kl} R_{lj} = \delta_{ij} && (R^\mathrm{T} I R = I \textnormal{ in matrix notation})
+	\label{eq:rotational_invariance}
+	\end{align}
+\end{itemize}
+% two things: index notation, and r^2 being invariant under SO(3)
+
+\subsection*{The Lorentz Group}
+
+\begin{itemize}
+	\item Special relativity tells us that in any reference frame with coordinates $x^\mu = (t, \vec x)$, 
+	the spacetime interval $s^2 = t^2 - \vec x^2$ is invariant. $s$ is the norm of $x^\mu$ with respect to 
+	the \textbf{Minkowski metric}\footnote{\textbf{WARNING}: Whenever you read a book, check the metric! In particle physics it's conventional 
+	to use the ``mostly minus" convention, but in GR it's conventional to use the ``mostly positive" convention with $\mathrm{diag}(-1, 1, 1, 1)$. 
+	This can lead to sign errors if you're not careful.}:
+	\begin{equation}
+		g_{\mu\nu} = \mathrm{diag}(1, -1, -1, -1)
+	\end{equation}
+	The dot product between two vectors is $x\cdot y = g_{\mu\nu} x^\mu y^\nu$, so $s^2 = x\cdot x = 
+	g_{\mu\nu} x^\mu x^\nu$ is a norm squared. Greek letters $\mu\in \{0, 
+	1, 2, 3\}$ are used for spacetime indices, while Latin letters $i\in \{1, 2, 3\}$ are spatial indices.
+	
+	\item The \textbf{Lorentz group} is the set of symmetries of spacetime which preserve the metric $g_{\mu\nu}$. 
+	The total Lorentz group has 4 disconnected components: each component contains one of $\{1, P, T, PT\}$, where $P$ 
+	is parity and $T$ is time reversal. The component containing $1$ is called the \textbf{proper orthochronous} subgroup 
+	and is denoted by $SO(1, 3)$. An element $\Lambda\in SO(1, 3)$ must satisfy (just like 
+	Eq.~(\ref{eq:rotational_invariance})):
+	\begin{equation}
+		\Lambda^\alpha_{\;\;\mu} g_{\alpha\beta} \Lambda^\beta_{\;\;\nu} = g_{\mu\nu}
+		\label{eq:lorentz_metric_invariance}
+	\end{equation}
+	$SO(1, 3)$ is a 6-dimensional Lie group, meaning any Lorentz transformation can be 
+	parameterized with 6 parameters: 3 rotation angles $\theta_i$, and 3 boost parameters $\beta_i$. 
+	
+	\item Rotations or boosts purely along one axis can be written out explicitly:
+	\tiny
+	\begin{align}
+		R(\hat x, \theta_1) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & \cos\theta_1 & \sin\theta_1 \\ 0 & 0 & -\sin\theta_1 & \cos\theta_1 \end{pmatrix} 
+		&&
+		R(\hat y, \theta_2) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\theta_2 & 0 & -\sin\theta_2 \\ 0 & 0 & 1 & 0 \\ 0 & \sin\theta_2 & 0 & \cos\theta_2 \end{pmatrix} 
+		&&
+		R(\hat z, \theta_3) = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos\theta_3 & \sin\theta_3 & 0 \\ 0 & -\sin\theta_3 & \cos\theta_3 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}
+		\\
+		B(\hat x, \beta_1) = \begin{pmatrix} \cosh\beta_1 & \sinh\beta_1 & 0 & 0 \\ \sinh\beta_1 & \cosh\beta_1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} 
+		&&
+		B(\hat y, \beta_2) = \begin{pmatrix} \cosh\beta_2 & 0 & \sinh\beta_2 & 0 \\ 0 & 1 & 0 & 0 \\ \sinh\beta_2 & 0 & \cosh\beta_2 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} 
+		&& 
+		B(\hat z, \beta_3) = \begin{pmatrix} \cosh\beta_3 & 0 & 0 & \sinh\beta_3 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ \sinh\beta_3 & 0 & 0 & \cosh\beta_3 \end{pmatrix} 
+	\end{align}
+	\normalsize
+	When multiple boost or rotation parameters are nonzero, one must use a matrix exponential to write $\Lambda$ 
+	down as (we have also included an infinitesimal Lorentz transformation with $\beta_i, \theta_i << 1$):
+	\begin{equation}
+		\Lambda = \exp(i\beta_i K_i + i \theta_i J_i) = \exp\left(\frac{i}{2}\omega_{\mu\nu} \mathcal{J}^{\mu\nu}\right)\approx 1 + \frac{i}{2}\omega_{\mu\nu} \mathcal J^{\mu\nu} + \mathcal O(\omega^2)
+		\label{eq:general_lorentz}
+	\end{equation}
+	Here $K_i$ and $J_i$ are antisymmetric $4\times 4$ matrices which generate boosts and rotations\footnote{Explicitly 
+	written as matrices in Eqs. (10.14) and (10.15) of Schwartz.}:
+	\begin{align}
+		(J_i)_{jk} = -i \epsilon_{ijk} && (K_i)_{0j} = \delta_{ij} = - (K_i)_{j0}
+	\end{align}
+	and are packaged together covariantly as a \textit{tensor} of $4\times 4$ matrices $\mathcal J^{\mu\nu}$. 
+	$\omega_{\mu\nu}$ is an antisymmetric tensor which contains the parameters $\beta_i$ and $\theta_i$:
+		\begin{align}
+		\mathcal J^{\mu\nu} = \begin{pmatrix} 0 & K_1 & K_2 & K_3 \\ -K_1 & 0 & J_3 & -J_2 \\ -K_2 & -J_3 & 0 & J_1 \\ -K_3 & J_2 & -J_1 & 0 \end{pmatrix} &&
+		\omega_{\mu\nu} = \begin{pmatrix} 0 & \beta_1 & \beta_2 & \beta_3 \\ -\beta_1 & 0 & \theta_3 & -\theta_2 \\ -\beta_1 & -\theta_3 & 0 & \theta_1 \\ 
+		-\beta_3 & \theta_2 & -\theta_1 & 0 \end{pmatrix}
+	\end{align}
+
+	%\footnote{We will go over this explicitly later in the course; for now, if you're interested you can check out Eqs. (10.13) - (10.16) in Schwartz, or we can discuss it in office hours. }
+%	down as:
+%	\begin{equation}
+%		\Lambda = \exp(i\beta_i K_i + i \theta_i J_i) = \exp\left(\frac{i}{2}\omega_{\mu\nu} \mathcal{J}^{\mu\nu}\right)\approx 1 + \frac{i}{2}\omega_{\mu\nu} \mathcal J^{\mu\nu} + \mathcal O(\omega^2)
+%	\end{equation}
+%	Here $K_i$ and $J_i$ are respectively the generators of boosts and rotations:
+%	\begin{align}
+%		J_1 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & -1 \\ 0 & 0 & 1 & 0  \end{pmatrix} &&
+%		J_2 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & -1 & 0 & 0  \end{pmatrix} &&
+%		J_3 = i\begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & -1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} \\
+%		K_1 = -i\begin{pmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} && 
+%		K_2 = -i\begin{pmatrix} 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0  \end{pmatrix} &&
+%		K_3 = -i\begin{pmatrix} 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0  \end{pmatrix}
+%	\end{align}
+%	and are packaged together covariantly as a tensor of $4\times 4$ matrices $\mathcal J^{\mu\nu}$. The 
+\end{itemize}
+
+\subsection*{Tensors}
+
+\begin{itemize}
+	\item \textbf{Upper and lower indices}: Given a vector $V^\mu$, one can form its dual vector $V_\mu$ by using the 
+	metric to lower its indices, $V_\mu = g_{\mu\nu} V^\nu$. Vectors with upper indices are called \textbf{contravariant}, 
+	and vectors with lower indices are \textbf{covariant}: under Lorentz transformations $V^\mu$ and $V_\mu$ transform 
+	in a dual way to one another. Some examples we will frequently use are:
+	\begin{align}
+		x^\mu = (t, \vec x) && p^\mu = (E, \vec p) && \partial_\mu = (\partial_t, \vec \nabla)
+	\end{align}
+	Note that as an operator in QM, $p_\mu = i\partial_\mu$, since lowering an index on $p^\mu$ makes its spatial components 
+	$-\vec p$, so we reproduce $\vec p = -i\vec\nabla$. 
+	\item We can form multi-index \textbf{tensors} by combining upper and lower indices into 
+	one object $T^{\mu_1 ... \mu_k}_{\;\;\;\;\;\;\;\;\;\;\;\nu_1 ... \nu_\ell}$, which transforms under a Lorentz transformation $\Lambda$ as:
+	\begin{equation}
+		T^{\mu_1 ... \mu_k}_{\;\;\;\;\;\;\;\;\;\;\;\nu_1 ... \nu_\ell}\mapsto \Lambda^{\mu_1}_{\;\;\alpha_1} ... \Lambda^{\mu_k}_{\;\;\alpha_k} 
+		\Lambda_{\;\;\nu_1}^{\beta_1} ... \Lambda_{\;\;\nu_\ell}^{\beta_\ell} T^{\alpha_1 ... \alpha_k}_{\;\;\;\;\;\;\;\;\;\;\;\beta_1 ... \beta_\ell}.
+	\end{equation}
+	The number of indices $k + \ell$ is called the \textbf{rank} of the tensor. Covariant and contravariant vectors are 
+	rank 1 tensors. Some examples of rank 2 tensors are the metric $g_{\mu\nu}$, the stress-energy tensor $T_{\mu\nu}$, 
+	and the field strength $F_{\mu\nu}$.
+	
+	\item A quantity is \textbf{Lorentz invariant} if it is the same in all reference frames. A general rule is that to form 
+	a Lorentz invariant, every upper index you see must be contracted with a lower index, and every lower 
+	index with an upper index. Quantities like $x\cdot \partial = x^\mu\partial_\mu$, $\partial^2$, and $p^\mu \partial^\nu F_{\mu\nu}$ are 
+	Lorentz invariant. In particular, any \textbf{dot product or square of vectors is invariant}: for example, \textit{for a 
+	massive particle $p^2$ will always equal $m^2$}. 
+	
+	\item A quantity that is \textbf{Lorentz covariant} will change in different reference frames, but in a way that 
+	respects the metric (all indices must be contracted in a Lorentz invariant way), for example $\partial_\mu T^{\mu\nu}$. 
+	
+	\item FIeld theorists typically use the \textbf{Lagrangian} formulation of quantum mechanics as opposed to the \textbf{Hamiltonian} 
+	formulation. The reason this approach is nice is because it is manifestly Lorentz invariant: the Lagrangian is a Lorentz scalar, 
+	and therefore is the same in all frames. On the other hand, the Hamiltonian is like an energy of a system-- it therefore is not 
+	a Lorentz invariant, and by itself is \textit{not even Lorentz covariant}, and thus is more difficult to use in QFT when we're 
+	working with relativity. 
+	
+	%\item Example: The fact that $p^2$ is Lorentz invariant can be used to derive the dispersion relation of a massive 
+	%particle. In its rest frame, $p^\mu = (m, \vec 0)$, but in other frames $p^\mu = (E, \vec p)$. Equating $p^2$ in 
+	%each frame, we see:
+	%\begin{equation}
+	%	m^2 = E^2 - \vec p^{\,2}.
+	%\end{equation}
+\end{itemize}
+
+\subsection*{Units}
+
+
+\end{document}
