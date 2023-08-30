@@ -1,3 +1,4 @@
+%!TEX program = pdflatex
 \documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
 \usepackage[margin = 1in]{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
@@ -35,24 +36,24 @@
 \begin{document}
 \maketitle
 
+Compiling with pdflatex. Can use split screen; it seems like it compiles the document everytime I save. 
+
 The propagator is simply the inverse of the quadratic term in the Lagrangian. Let's do a few examples.
 
 \section{Abelian case (photon propagator)}
 
 After applying Fadeev-Popov to fix the gauge, we have the gauge-fixed Lagrangian:
 \begin{equation}
-	\mathcal L = -\frac{1}{4} F_{\mu\nu}F^{\mu\nu} + \overline\psi (i\gamma^\mu D_\mu - m)\psi -\frac{1}{2\xi} (\partial_\mu 
-	A^\mu)^2
+	\mathcal L = -\frac{1}{4} F_{\mu\nu}F^{\mu\nu} + \overline\psi (i\gamma^\mu D_\mu - m)\psi -\frac{1}{2\xi} {(\partial_\mu 
+	A^\mu)}^2
 \end{equation}
 We consider the parts of $\mathcal L$ which are pure gauge, and we expand them out, integrating by parts to make this more 
 compact:
-$$
-	\mathcal L_{gauge} = -\frac{1}{4} (\partial_\mu A_\nu - \partial_\nu A_\mu) (\partial^\mu A^\nu - \partial^\nu A^\mu) - 
-	\frac{1}{2\xi}(\partial_\mu A^\mu)(\partial_\nu A^\nu)
-$$
-$$
-	= \frac{1}{2} A^\mu \left(g_{\mu\nu}\partial^2 - \left(1 - \frac{1}{\xi}\right) \partial_\mu\partial_\nu\right) A^\nu
-$$
+\begin{align}\begin{split}
+	\mathcal L_{gauge} &= -\frac{1}{4} (\partial_\mu A_\nu - \partial_\nu A_\mu) (\partial^\mu A^\nu - \partial^\nu A^\mu) - 
+	\frac{1}{2\xi}(\partial_\mu A^\mu)(\partial_\nu A^\nu) \\
+	&= \frac{1}{2} A^\mu \left(g_{\mu\nu}\partial^2 - \left(1 - \frac{1}{\xi}\right) \partial_\mu\partial_\nu\right) A^\nu
+\end{split}\end{align}
 \begin{equation}
 	= \frac{1}{2}A^\mu D_{\mu\nu} A^\nu
 \end{equation}
@@ -61,7 +62,7 @@ where we have defined the operator $D_{\mu\nu}$ by:
 	D_{\mu\nu} := g_{\mu\nu}\partial^2 - \left(1 - \frac{1}{\xi}\right)\partial_\mu\partial_\nu
 \end{equation}
 
-The differential operator $D_{\mu\nu}$ is the term which we will need to invert (i.e. we need to find a Green's function for 
+The differential operator $D_{\mu\nu}$ is the term which we will need to invert (i.e.\ we need to find a Green's function for 
 $D_{\mu\nu}$) by solving the equation:
 \begin{equation}
 	D_{\mu\nu}\Pi^{\nu\alpha}(x) = \delta^\alpha_\mu \delta^4(x)
