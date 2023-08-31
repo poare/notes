@@ -1,0 +1,1110 @@
+\def \root {../../../notes_dropbox}			% path to root (/notes)
+%\def \root {/Users/theoares/Dropbox\ (MIT)/notes}
+\input{\root/template/preamble.tex}
+
+\usepackage{listings}
+
+%\usepackage{notoccite}
+\newcommand{\QCDtwo}{\mathrm{QCD}_2}
+\newcommand{\pf}{\mathrm{Pf}}
+\newcommand{\poarecomment}[1]{\textcolor{red}{#1}}
+
+% Sort bibliography in correct order
+\bibliographystyle{unsrtnat}
+\usepackage[numbers,sort&compress]{natbib}
+
+\title{2D Adjoint QCD}
+\author{Patrick Oare}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section{2D Adjoint QCD}
+
+Cite the old $\QCDtwo$ papers here:
+
+2d adjoint QCD ($\QCDtwo$) is the theory of a Majorana fermion coupled to a $SU(N)$ gauge field in 2 spacetime dimensions. This has the following action in Minkowski space:
+\begin{equation}
+	S = \int d^2x \,\Tr \left[ \frac{1}{2g^2} \, G_{\mu\nu} G^{\mu\nu} + \overline\psi ( i\gamma^\mu D_\mu - m) \psi \right]
+\end{equation}
+where $\psi = \psi^a_\alpha(x)$ is a Majorana adjoint fermion. Note here that the theory is often considered with a \textbf{massless} adjoint fermion, $m = 0$, and as will be discussed shortly, the confinement picture differs sharply when the fermion is massive or massless. 
+
+The confinement picture for this theory is the following~\cite{Komargodski:2020mxz}. For $N = 2$, calculations~\cite{TODO} have shown the following:
+\begin{itemize}
+	\item $m = 0$: Deconfining (fundamental Wilson lines have a perimeter law). This should imply that $\langle P \rangle\neq 0$, which \textbf{may be impossible to see} with lattice calculations. This is a strange result that was puzzling for a while, since having adjoint quarks should mean there is nothing to screen the charged objects (fundamental Wilson lines). However, there are modern symmetry arguments that show this is indeed the case and should make sense, \poarecomment{which I should read up on}.
+	\item $m > 0$: Confining (fundamental Wilson lines have an area law). This should imply that $\langle P \rangle = 0$. This is the sector that we can measure on the lattice; since we'll likely measure $\langle P \rangle = 0$, this means we won't be able to extrapolate results for the Polyakov loop to the massless limit. 
+\end{itemize}
+For arbitrary $N$, things are more complicated. The portion of Aleksey's paper~\cite{Cherman:2019hbq} when the four-fermion deformations are turned off should give us some knowledge about what to expect, and Ref.~\cite{Komargodski:2020mxz} also does a detailed analysis of this sector. They find that the results of the $SU(2)$ theory holds for arbitrary $N$:
+\begin{itemize}
+	\item $m = 0$: Deconfining. 
+	\item $m > 0$: Confining.
+\end{itemize}
+
+Ross and Igor have studied this theory for a lot of different cases using lightcone quantization~\cite{Dempsey:2022uie}. There are a variety of interesting results in this paper that we should think about trying to compute, including:
+\begin{itemize}
+	\item The spectrum of the theory, as a function of $N$ and the adjoint mass $m_\mathrm{adj}$. There are results here for finite $N$, and for large $N$, so it would be interesting to compare. 
+	\item The lowest lying fermionic and bosonic masses, as a function of $m_\mathrm{adj}$ (see Section 4.2 of that paper). In particular, there's a nice plot that we could try to replicate. 
+\end{itemize}
+
+John Donahue and Sergei Dubovsky have also studied this theory using string theory at large $m_\mathrm{adj}$, in Refs.~\cite{Donahue:2019adv,Donahue:2019fgn}. \poarecomment{Read these papers and investigate this}
+
+Quantities to compute:
+\begin{itemize}
+	\item Polyakov loop correlator $\langle P \rangle$. 
+	\item String tension $\sigma$ for Wilson loops in a variety of representations.
+	\item Chiral condensate $\langle\overline\psi\psi\rangle$.  
+	\item (Harder) Fermion and bosonic spectrum $\rho_f$, $\rho_b$. If this is too hard, just do low-lying states. 
+\end{itemize}
+
+Questions to ask:
+\begin{itemize}
+	\item It would be very interesting to simulate the massless theory, but we can't naively do that with a LQCD calculation. I know in the Schwinger model, there are ways to tune the lattice mass so that it better corresponds to a specific value of the continuum mass, and in particular when the continuum mass is zero using this tuning can yield a non-zero lattice mass. Is there any analog of this for 2d adjoint QCD?
+	\item What parameters (adjoint fermion mass $m_\mathrm{adj}$, gauge coupling $g$) would be the most interesting ones to look at?
+	\item Lightcone quantization vs Euclidean lattice: assuming it doesn't matter and they're both just computational ways to do it, but confirm that we can match quantities. 
+\end{itemize}
+
+\section{2D Adjoint QCD with four fermion deformations}
+
+2d adjoint QCD with four-fermion deformations is studied in Alexei's paper~\cite{Cherman:2019hbq}. The main point is that this theory is very similar to the four-fermion deformed massless Schwinger model (with even $N$), in a number of ways:
+\begin{itemize}
+	\item Adjoint QCD has a $\mathbb Z_2$ chiral symmetry when $m_q = 0$.
+	\item Adjoint QCD admits two four-fermion deformations, just like the massless Schwinger model, which are consistent with chiral symmetry. When these deformations are turned off, the theory is deconfined, but when the theory turns on, the theory confines. 
+\end{itemize}
+
+The 2d adjoint QCD theory is described by a single Majorana fermion coupled in the adjoint representation to an $SU(N)$ gauge field in 2d, with action:
+\begin{equation}
+	S = \int d^2x \left\{ \frac{1}{2g^2} \Tr\, G_{\mu\nu} G^{\mu\nu} + \Tr\, \psi^T i\gamma^\mu D_\mu \psi + \frac{c_1}{N} \Tr\, \psi_+ \psi_+ \psi_- \psi_- + \frac{c_2}{N^2} \Tr[\psi_+ \psi_-] \Tr[\psi_+ \psi_-]\right\}.
+\end{equation}
+This action is in Euclidean space, with Euclidean $\gamma$ matrices in 2d are given by
+\begin{align}
+	\gamma^1 = \sigma_1 && \gamma^2 = \sigma_3 && \gamma = i\gamma^1\gamma^2
+\end{align}
+with $\gamma$ taking the role of $\gamma_5$. For $N > 2$, there are four symmetries of the theory that are unbroken by anomalies:
+\begin{enumerate}
+	\item Center symmetry $\mathbb Z_N^{[1]}$, also just referred to as $\mathbb Z_N$ 1-form symmetry. 
+	\item Charge conjugation $\mathbb Z_2^C$, $a_{ij}^\mu\mapsto -a_{ji}^\mu, \psi_{ij}\mapsto \psi_{ji}$, with $i, j = 1, ..., N$ being color indices for the adjoint representation. In $N = 2$, this transformation reduces to global $SU(2)$ symmetry, so in this case this is not an additional symmetry. 
+	\item Fermion parity $\mathbb Z_2^F$, $\psi\mapsto -\psi$. 
+	\item Chiral symmetry $\mathbb Z_2^\chi$, $\psi\mapsto \gamma \psi$. 
+\end{enumerate}
+The important symmetry to consider is the $\mathbb Z_N^{[1]}$ 1-form symmetry, as the spontaneous breaking of this symmetry signals confinement, since the expectation value of the Polyakov loop $\langle P(x)\rangle$ is the order parameter for confinement. \textbf{If center symmetry is unbroken, then the expectation value for large Wilson loops obeys an area law, which signals that we are in the confining phase}. 
+
+Ref.~\cite{Gaiotto:2014kfa} showed that discrete 1-form symmetries in 2d are always unbroken, which would imply any system which has a 1-form symmetry must be confining, as the symmetry cannot break spontaneously. However, this paper shows that there is an exception to this conclusion when $N$ is even: in this case, a representation with $N$-ality $N / 2$ is \textbf{not confined}. This will be interesting to verify numerically. 
+
+\subsection{'t Hooft anomalies}
+
+Recall: A 't Hooft anomaly is an \textit{obstruction} to gauging a global symmetry. It is defined as a mixed anomaly between 3 global symmetries. The global symmetry survives in the quantum theory (i.e. its associated conserved current is still conserved), but it cannot be coupled to a dynamical gauge field. 
+
+The key idea in this paper is to study the mixed 't Hooft anomalies between the chiral symmetry $\mathbb Z_2^\chi$ and the other discrete symmetries. Heuristically, they find that the partition function $\mathcal Z$ transforms under $\mathbb Z_2^\chi$ as $\mathcal Z\mapsto -\mathcal Z$, TODO
+
+We will not go into the detail of how the anomalies are computed, but the important point is the 't Hooft anomaly matching conditions. Anomaly matching (Sec. 5) implies that the low-energy theory must have some combination of:
+\begin{enumerate}[a)]
+	\item Intrinsic topological order.
+	\item Gapless excitations.
+	\item Spontaneous symmetry breaking. This would lead to deconfinement and / or screening.
+\end{enumerate}
+Option (c) is the one that Alexei favored, but it would be good to have explicit verification of this. In particular, intrinsic topological order cannot appear in 2 dimensions~\cite{Chen_2011}. Option (b) is harder to exclude; it can be excluded if the 4-fermion terms are not added to the theory, but if those terms are present in the theory, it can no longer be excluded. It would be good to study this in the computation. 
+
+\section{Discussion}
+
+\subsection{What do we want to compute?}
+
+\begin{itemize}
+	\item String tension $\sigma$ as a function of $N$, for even $N$. We want to:
+	\begin{itemize}
+		\item Verify Fig. 2.
+		\item Compute $\sigma_1$, $\sigma_\mathrm{max}$.
+		\item Numerically verify $\sigma_{N/2} = 0$. 
+		\item Verify the string tension degeneracy for even $N$:
+		\begin{equation}
+			\sigma_q = \sigma_{N - q} = \sigma_{q + N/2} = \sigma_{q - N/2}.
+		\end{equation}
+	\end{itemize}
+	Computing the string tension can be done by computing the free energy of the system in the confining phase, which is done by examining the Polyakov loop correlator. We have:
+	\begin{equation}
+		C^q_2(x) \equiv \langle \Tr [P(x)^q] \Tr[ P^\dagger(0)^q] \rangle = e^{-F_q(x)}
+	\end{equation}
+	where $P(x)^q$ is a charge $q$ Polyakov loop, and $F_q(x)$ is the free energy of the system. The free energy scales as the string tension for charge $q$,
+	\begin{equation}
+		F_q(x) \sim x \beta \sigma_q,
+	\end{equation}
+	hence performing an ``effective mass" analysis with the correlator $C_2^q(x)$ will yield the string tension $\sigma_q$. 
+	
+	\item Vary $N$ and \textbf{verify the regions we expect to see the theory confine}. The general idea is that the $\mathbb Z_N^{[1]}$ center symmetry will spontaneously break to different subgroups, depending on the value of $N$. Depending on the subgroup, this will tell us which values of test charges will confine, and which ones will not. We should be able to compute the Polyakov loop in these different regimes to see if the theory is confining or not. 
+	\begin{itemize}
+		\item Even $N$: $\mathbb Z_N^{[1]}\rightarrow \mathbb Z_{N/2}^{[1]}$, which implies that test charges with $N$-ality $N / 2$ are screened, not confined. 
+		\item Odd $N$: Center symmetry is unbroken and test charges of all values confine. 
+		\item TODO: Screening vs. confining: what's the difference, and how does the difference make itself manifest?
+	\end{itemize}
+	
+	\item Chiral symmetry: \textbf{when does chiral symmetry break?} The condensate
+	\begin{equation}
+		\langle \Tr [ \psi^T i\gamma \psi ] \rangle \sim \pm\Lambda
+	\end{equation}
+	is an order parameter for the spontaneous breaking of chiral symmetry (like in 4d QCD). We can compute this and verify when chiral symmetry is broken; we expect it to be spontaneously broken for even $N$ (pg. 23), and for odd $N$ with $N = 4n + 3$ (pg. 26). For odd $N = 4n + 1$, chiral symmetry need not be spontaneously broken. 
+	
+	\item Gapless excitations in the theory. Existence of gapless excitations would imply that we don't necessarily have spontaneous center symmetry breaking; although Alexei doesn't believe it's likely, it would be good to verify numerically that there are no gapless excitations in the spectrum (pg. 22). 
+	
+	\item Spectrum: The density of states can be computed in the large $N$ limit as
+	\begin{equation}
+		\rho(E) \sim m^\alpha e^{\beta_H E}
+	\end{equation}
+	where $\alpha$ is an unknown parameter. It would be interesting to apply our spectral function tools to this, although I don't know if we would be able to really approach the large $N$ limit with lattice calculations. {\color{red}Discuss tomorrow}
+\end{itemize}
+
+\subsection{What challenges might we face?}
+
+\begin{itemize}
+	\item Simulating Majorana fermions. I have to look into this more carefully, but I believe there's some form of a sign problem associated with the computation. 
+	% https://arxiv.org/pdf/hep-lat/0108011.pdf
+	\item Simulating massless fermions. Alexei mentions in the paper that one could work with sufficiently light fermions instead and examine the behavior as $m$ gets smaller and smaller. 
+	\begin{itemize}
+		\item This shouldn't be too much of a problem, we can just do a chiral extrapolation as $am\rightarrow 0$. It would be helpful if we know how the string tension and other quantities of interest relate to $m$. 
+	\end{itemize}
+\end{itemize}
+
+\subsection{Additional questions / notes}
+
+\begin{itemize}
+	\item How does the theory change if we couple a Dirac fermion to $SU(N)$ adjoint, rather than a Majorana fermion? This would be a lot easier to implement. 
+	\item Do we have predictions for how observables like the string tensions behave when $m\rightarrow 0$? In the footnote in Eq. 25, the paper mentions that $\sigma_{N/2}\sim m \Lambda$ goes linearly with $m$. Can we predict this for the other representations, and if so, how?
+	%\item When we're computing Polyakov loop correlators, do we need to worry about the Majorana fermion? Since it's a pure gauge observable?
+	\item We should be precise when working with the base manifold: there's a section of the paper that deals with $\mathbb R\times S^1$, which approaches $\mathbb R^2$ in the infinite volume limit, but at finite $T$ there might be finite volume effects to be wary of. 
+	
+	\item Refs. to read: Igor's paper on screening vs. confinement [35], papers about the large $N$ spectrum of 2d adjoint QCD [19-22].
+	
+	\item What does David Schaich mean when he says that the sign problem goes away in the continuum limit?
+\end{itemize}
+
+\section{The Lorentz group in $d = 2$ spacetime dimensions}
+
+What do Majorana spinors look like in 2 dimensions? Here our Majorana fermion $\psi^a$ has 2 chiral components given by $\psi_+^a$ and $\psi_-^a$. The Euclidean $\gamma$ matrices\footnote{The Minkowski space $\gamma$ matrices can be found in David Tong's lecture notes~\cite{Tong_2018} and are $\gamma^0 = \sigma_1$, $\gamma^1 = i\sigma^2$, and $\gamma_5 = -\gamma^0 \gamma^1 = \sigma_3$} are the following:
+\begin{align}
+	\gamma^1 = \sigma_1 = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} && \gamma^2 = \sigma_3 = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} && \gamma_5 = i\gamma^1\gamma^2 = i\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix} = \sigma_2
+\end{align}
+We have the usual identities,
+\begin{align}
+	\{\gamma^\mu, \gamma^\nu\} = 2\delta^{\mu\nu} && \{\gamma^\mu, \gamma_5\} = 0 && \gamma_\mu^\dagger = \gamma_\mu, \gamma_5^\dagger = \gamma_5.
+\end{align}
+In this basis\footnote{Note that in this basis, the matrix $\gamma$ is not diagonal. This is the $d=2$ version of the Dirac basis, while the Weyl basis can be determined by diagonalizing $\gamma$, likely resulting in $\gamma = \sigma_3$.}, we expand the components of $\psi$ as
+\begin{equation}
+	\psi^a = \begin{pmatrix} \psi_1^a \\ \psi_2^a \end{pmatrix}.
+\end{equation}
+These are related to the chiral components $\psi_\pm^a$ by the usual projection formulas,
+\begin{align}
+	P_\pm = \frac{1}{2} (1\pm \gamma) && \psi_\pm^a = P_\pm \psi^a.
+\end{align}
+
+The other important thing to consider is charge conjugation. Charge conjugation is defined to satisfy the relation,
+\begin{equation}
+	C \gamma_\mu^T C^{-1} = -\gamma_\mu.
+\end{equation}
+The simplest way to satisfy this is by choosing
+\begin{equation}
+	C = \gamma_5 = \sigma_2.
+\end{equation}
+Note that this also satisfies $C\gamma_5 C = \gamma_5$, since $\gamma_5^2 = 1$. 
+
+{\color{red}TODO there's a decent chance that $\psi_1 = \psi_+$ and $\psi_2 = \psi_-$, figure this out}
+and a mass term $\Tr\,\psi^T \gamma \psi$ couples $\psi_1$ to $\psi_2$ and vice versa. 
+
+\section{Simulating Majorana Fermions}
+
+\href{https://core.ac.uk/download/pdf/25319765.pdf}{Here are some notes}~\cite{Montvay:2001ry} that explain the basic ideas that we will try to use. We'll work on a 2d Euclidean lattice of volume $L\times T$. 
+
+The major thing to worry about is a ``sign problem" that can be circumvented with reweighting. The idea is that when you integrate out Majorana fermions, you get a fermion Pfaffian instead of a fermion determinant. This Pfaffian can have either a positive or negative sign: the theory incurs a sign problem when the sign is negative. So, one must keep track of the sign of the Pfaffian and monitor whether or not it will yield a sign problem. Formally, when evaluating the path integral we encounter the Pfaffian after integrating out the fermionic modes:
+\begin{align}\begin{split}
+	\mathcal Z = \int DU \int d\psi e^{-S_g[U] - \frac{1}{2}\psi^T \mathcal D \psi} = \int DU\, \mathrm{Pf}[\mathcal D] e^{-S_g[U]}
+\end{split}\end{align}
+where we use the notation $\psi^T \mathcal D \psi\equiv \int d^2 x \, d^2 y \, \psi^T(x) \mathcal D(x, y) \psi(y)$. The Pfaffian is harder to treat than a determinant because it is allowed to be negative. We have $(\pf \,\mathcal D)^2 = \det\mathcal D$, so although $|\pf\,\mathcal D|$ is determined, it can be positive or negative. Since we will use the measure
+\begin{equation}
+	D\mathbb P = DU\, \pf [\mathcal D] e^{-S_g[U]}
+\end{equation}
+we will have problems if the Pfaffian is not positive. This means we have to monitor the sign of the Pfaffian as we do the calculation, in order to ensure the theory doesn't have a sign problem. 
+
+We will monitor the sign problem with a \textbf{spectral flow} method. 
+
+\subsection{Discretizations}
+
+There are a bunch of formulations of Majorana fermions that people have tried: Wilson, twisted mass, overlap, and domain-wall. The easiest one to start with is Wilson, in which the 4d case is described in hep-lat/1802.07797. Note that none of these have been done for $d = 2$ spacetime dimensions and $Q=2$-component Majorana spinors, the closest that has been simulated is $Q = 4$ in 2d (which is the $\mathcal N = 1$, $Q = 4$ supersymmetry). 
+
+Let's try Wilson fermions to start. We need to add the appropriate term to the action to cancel the doubler modes. The original 2d adjoint QCD action is:
+\begin{equation}
+	S_0 = \int d^2 x \left\{ \frac{1}{2g^2} \Tr\, G_{\mu\nu} G^{\mu\nu} + \Tr\, \psi^T i\gamma^\mu D_\mu \psi + m \Tr\, \psi^T \gamma \psi \right\}
+\end{equation}
+where $\psi$ is a two-component Majorana spinor in $d = 2$ spacetime dimensions that lives in the adjoint representation of $SU(N)$, i.e. $\psi = \psi^a t^a$, and transforms under gauge transformations $\Omega(x)\in SU(N)$ as
+\begin{equation}
+	\psi(x)\mapsto \Omega(x) \psi(x) \Omega^\dagger(x).
+\end{equation}
+We also add a mass term here, because it is likely easier to work with massive fermions and then take a chiral limit (note that $\psi^T \psi$ vanishes because $\psi$ is Grassman-valued). 
+
+Let us work with the massive fermion action. We have:
+\begin{equation}
+	S_F = \int d^2 x\, \left\{ \Tr\, \psi^T i\gamma^\mu D_\mu \psi + m\Tr\, \psi^T\gamma\psi \right\}
+\end{equation}
+We begin with a na\"ive discretization of this action. The usual action of $D_\mu$ in the adjoint representation is
+\begin{equation}
+	D_\mu \psi = \partial_\mu \psi + i [a_\mu, \psi]
+\end{equation}
+where $a_\mu$ is the gauge field. 
+
+Montvay~\cite{Montvay:2001ry} claims that the Wilson action for a single Majorana fermion (in $d = 4$) can be expanded as:
+\begin{align}\begin{split}
+	S_F^W &= \frac{1}{2} \psi^T \mathcal D \psi \\&= \frac{1}{2} \sum_x \left\{ \overline \psi^a(x) \psi^a(x) - K \sum_{\mu = 1}^4 [\overline\psi^a(x + \hat\mu) V^{ab}_\mu(x) (1 + \gamma_\mu) \psi^b(x) + \overline\psi^r(x) (V_\mu^{ab})^T (x) (1 - \gamma_\mu) \psi^b(x + \hat\mu) \right\}
+\end{split}\end{align}
+where the $V$ are the matrix elements of the link variables in the adjoint representation,
+\begin{equation}
+	V^{ab}_\mu(x) = 2\Tr[U_\mu^\dagger(x) t^a U_\mu(x) t^b] = V_\mu^{ab}(x)^*.
+\end{equation}
+We should verify this is the case in $d = 2$ dimensions by explicitly taking the na\"ive Dirac operator to momentum space and projecting out the doublers. 
+
+\poarecomment{TODO: consider doing a domain wall discretization. Also, see if it's easy to port this over to GPT}
+
+\section{Computing the Pfaffian: Rational Hybrid Monte Carlo (RHMC)}
+
+Incorporating the Pfaffian into an effective action will require the use of the identity
+\begin{equation}
+    |\mathrm{Pf}[\mathcal D]| = |\det\mathcal D|^{1/2} = (\det [\mathcal D^\dagger \mathcal D])^{1/4} \propto \int D\Phi D\Phi^\dagger \exp \left[ -\Phi^\dagger (\mathcal D^\dagger \mathcal D)^{-1/4} \Phi \right] \equiv \int D\Phi\, D\Phi^\dagger e^{-\Phi^\dagger K^{-1/4} \Phi}
+    \label{eq:pfaffian_integral}
+\end{equation}
+where here $\Phi$ and $\Phi^\dagger$ are bosonic pseudofermion fields with indices $\Phi_\alpha^a(n)$ (as the Dirac operator carries indices $\mathcal D_{\alpha\beta}^{ab}$ and $K\equiv \mathcal D^\dagger\mathcal D$. The assumption here that $|\mathrm{Pf}[\mathcal D]| = \mathrm{Pf}[\mathcal D]$ is not in general correct, and the Pfaffian can have an arbitrary phase 
+\begin{equation}
+    \mathrm{Pf}[\mathcal D[U]] = e^{i\alpha[U]} |\mathrm{Pf}[\mathcal D[U]]|
+\end{equation}
+where $\alpha[U]$ is the phase associated with the configuration $U$. One can deal with the possibility of non-zero phase by reweighting, which absorbs the phase into the denominator. The idea is to define the \textbf{phase-quenched path integral} as
+\begin{align}\begin{split}
+    \langle \mathcal O \rangle_{pq} &\equiv \frac{1}{\mathcal Z_{pq}}\int DU\, |\mathrm{Pf}[\mathcal D[U]]| e^{-S_g[U]} \mathcal O = \frac{1}{\mathcal Z_{pq}} \int DU\, D\Phi\,D\Phi^\dagger\, e^{-S_\mathrm{eff}[U, \Phi]} \mathcal O \\ 
+    \mathcal Z_{pq} &\equiv \int DU\, |\mathrm{Pf}[\mathcal D[U]]| e^{-S_g[U]} = \int DU\, D\Phi\,D\Phi^\dagger\, e^{-S_\mathrm{eff}[U, \Phi]},
+\end{split}\end{align}
+i.e. we use the norm of the Pfaffian instead of the complex Pfaffian. Here the effective action is the result of using the identity in Eq.~\eqref{eq:pfaffian_integral},
+\begin{equation}
+	S_{\mathrm{eff}}[U, \Phi] = S_g[U] + \underbrace{\Phi^\dagger K[U]^{-1/4} \Phi}_{S_F[U, \Phi]}.
+\end{equation}
+With this phase quenching, one can then evaluate a correlator as:
+\begin{equation}
+    \langle\mathcal O \rangle = \frac{\langle \mathcal O e^{i\alpha} \rangle_{pq}}{\langle e^{i\alpha} \rangle_{pq}}
+\end{equation}
+The key here is to measure the full partition function $\mathcal Z = \langle e^{i\alpha}\rangle_{pq}$ and make sure it never gets close to zero; if it does, the theory will have a sign problem! There are two ways we should monitor this:
+\begin{itemize}
+	\item Monitor $\langle e^{i\alpha}\rangle_{pq}$ on each configuration that we compute. This test should verify that we never sample configurations that would render the correlation functions intractable. However, this misses a degenerate case: if there is a small number of configurations that contributes to the path integral in a dominant fashion. The issue with this is that these configurations will never be sampled, so we will be missing their contributions to the path integral.
+	\item Use a Monte Carlo generator on the space of possible gauge field configurations to monitor $\mathrm{Pf}[\mathcal D[U]]$, and verify the phase of the Pfaffian is always close to 1. This will ensure that if there is a region of configuration space that has a low probability to be sampled in the path integral but a high contribution to the integral, then we still have a chance to sample it. 
+\end{itemize}
+
+\subsubsection{What are the necessary conditions to make this a valid Monte Carlo simulation?}
+
+The decomposition into 
+
+\subsection{The rational approximation}
+
+We'll need to use RHMC to approximate the fermion Pfaffian, then compute $\langle e^{i\alpha} \rangle_{pq}$ on each ensemble to make sure our ensemble is OK. Note that for some extra notation, we'll often use $Q$ to denote a Hermitian counterpart to the Dirac operator,
+\begin{equation}
+	Q[U] \equiv \gamma_5 \mathcal D[U].
+\end{equation}
+\poarecomment{In Arthur's notes, he only defines $Q$ for a Wilson-Dirac operator $\mathcal D$ because it is $\gamma_5$-hermitian. I should make sure that this works for the Dirac operators I am considering, both (a) a Wilson operator and (b) an overlap operator.}
+The idea behind rational HMC lies in approximating $K^{-1/4}$ as a rational function $r$:
+\begin{equation}
+	r(K) \approx K^{-1/4}. 
+\end{equation}
+The choice of this function $r$ lies at the heart of RHMC. Rational approximations typically only work well when the eigenvalues $\lambda$ of $K[U]$ fall within a given window $[\lambda_{\mathrm{low}}, \lambda_{\mathrm{high}}]$, so typically $K$ is scaled dynamically (note that $K[U]$ depends on the gauge field, so it is often scaled as a function of the configuration $U$) to make its eigenvalues fall within that range. For a given configuration $U$, its minimum and maximum eigenvalues of $K[U]$, $\lambda_\mathrm{min}(U)$ and $\lambda_\mathrm{max}(U)$, must therefore fall within the domain of convergence,
+\begin{equation}
+	\lambda_\mathrm{low} < \lambda_\mathrm{min}(U) \ll \lambda_\mathrm{max}(U) < \lambda_\mathrm{high},
+\end{equation}
+and this must be monitored as the simulation progresses to make sure no dynamical rescaling is needed. This is cheaper to monitor than the Pfaffian, and in C can be carried out using the PReconditioned Iterative Multi-Method Eigensolver (PRIMME) library~\cite{10.1145/1731022.1731031}. 
+
+The specifics of the approximation can be found in the Remez Algorithm~\cite{Clark:2006fx}, and they provide the coefficients for the following expansion of $K^{-1/4}$ in terms of $P$ partial fractions:
+\begin{equation}
+	r(K) \approx \alpha_0 + \sum_{i = 1}^P \frac{\alpha_i}{K + \beta_i}.
+	\label{eq:rational_approx}
+\end{equation}
+Note here that this is an operator-valued equation, so $\beta_i$ is really $\beta_i \mathrm{id}$, with the same shape as $K$. One must also use a similar expansion for $K^{-1/8}$ to initialize the pseudofermions $\Phi$. For a given range $[\lambda_\mathrm{low}, \lambda_\mathrm{high}]$, the Remez algorithm allows us to deterministically compute the $(\alpha_i, \beta_i)$ parameters, and provides a bound on the error of the rational approximation, provided the eigenvalues of $K[U]$ lie within the spectral bound $[\lambda_\mathrm{low}, \lambda_\mathrm{high}]$. There are also a number of other ways to express this by changing variables, as done in L\"uscher's notes~\cite{Luscher:2010ae}, which we cite for completeness:
+\begin{equation}
+	r(K) = a_0 \left( 1 + \sum_{k = 1}^P \frac{r_{2k}}{K + a_{2k}} \right) = a_0\prod_{k = 1}^P \frac{K + a_{2k - 1}}{K + a_{2k}}
+	\label{eq:zolotarev}
+\end{equation}
+Here for the first identification we have:
+\begin{align}
+	a_0\equiv \alpha_0 && a_{2k} \equiv \beta_k && r_{2k}\equiv \frac{\alpha_k}{\alpha_0}
+\end{align}
+and for the second identification, $r_{2k}$ can be related to the $a_k$ coefficients as
+\begin{equation}
+	r_{2k} = \frac{\prod_{\ell = 1}^P (-a_{2k} - a_{2\ell - 1})}{\prod_{\ell\neq k}^P (-a_{2k} - a_{2\ell})}
+\end{equation}
+The expansion of Eq.~\eqref{eq:zolotarev} is called the \textbf{Zolotarev rational approximation}. 
+
+\subsection{The explicit action}
+
+The most efficient way to deal with the Dirac operator is to exploit its sparse structure. For the 4D Wilson action case, from Montvay's paper, we have:
+\begin{align}\begin{split}
+	S_\mathrm{Wilson} &= \frac{1}{2} \sum_{x, y\in\Lambda} \overline\psi_\alpha^a(x) (\mathcal D_W)_{\alpha\beta}^{ab}(x, y) \psi_\beta^b(y) \\
+	&= \frac{1}{2}  \sum_{x\in\Lambda} \left\{ \overline\psi^a(x) \psi^a(x) - K \sum_{\mu = 1}^2 \left[ \overline\psi^a(x + \hat\mu) V_\mu^{ab}(x) (1 + \gamma_\mu) \psi^b(x) + \overline\psi^a (V^T)_\mu^{ab} (x) (1 - \gamma_\mu) \psi^b(x + \hat\mu) \right] \right\}
+\end{split}\end{align}
+For the 2d case, we can read off the Wilson-Dirac operator $\mathcal D_W$ as:
+\begin{equation}
+	(\mathcal D_W)_{\alpha\beta}^{ab}(x, y) = \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(y) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x, y + \hat\mu} + (V^T)_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x, y - \hat\mu} \right]
+	\label{eq:dirac_op_indices}
+\end{equation}
+Note here that $V_\mu^{ab}(x)$ is defined to be the gauge link in the adjoint representation,
+\begin{equation}
+	V_\mu^{ab}(x) \equiv 2\Tr[ U_\mu^\dagger(x) t^a U_\mu(x) t^b ]. 
+\end{equation}
+which satisfy the identity
+\begin{equation}
+	V_\mu^{ab}(x) = V_\mu^{ab}(x)^* = ((V_\mu^{-1})^T)^{ab}.
+\end{equation}
+The first identity can be shown by taking the conjugate of the equation and using the fact that $\{t^a\}$ are Hermitian,
+\begin{equation}
+	(V_\mu^{ab})^* = 2\Tr [ (t^b)^\dagger U_\mu^\dagger (t^a)^\dagger U_\mu] = 2\Tr [U_\mu^\dagger t^a U_\mu t^b] = V_\mu^{ab}
+\end{equation}
+The second identity results from the fact that $V$ is unitary, $V^{-1} = V^\dagger$, along with the first identity, $V = V^* = (V^\dagger)^T = (V^{-1})^T$. 
+
+
+The other identity we wish to work with is the usual one when we move sites, i.e. that $U_{-\mu}(x) = U_\mu^\dagger(x - \hat\mu)$. We have:
+\begin{align}\begin{split}
+	V_{-\mu}^{ab}(x) &= 2\Tr [U_{-\mu}^\dagger(x) t^a U_{-\mu}(x) t^b] = 2 \Tr [U_\mu(x - \hat\mu) t^a U_\mu^\dagger (x - \hat\mu) t^b] \\
+	&= 2\Tr [U_\mu^\dagger (x - \hat\mu) t^b U_\mu(x - \hat\mu) t^a] = V_\mu^{ba}(x - \hat\mu) = (V_\mu^T)^{ab}(x).
+\end{split}\end{align}
+Combining this with the fact that the adjoint links are real, we see that
+\begin{equation}
+	V_{-\mu}(x) = V_\mu^T(x - \hat\mu) = V_\mu^\dagger (x - \hat\mu)
+\end{equation}
+which is the same identity that is satisfied by the fundamental links $U_\mu(x)$. 
+
+\poarecomment{TODO Determine correct form of the operator. The above identities need to be resolved so that we can know what to do with $V^\dagger$. I think we should use this following Wilson-Dirac operator, which is likely equal to the one in the Montvay paper if we assume that $V$ are real or something.}
+Let's work with the usual form for the Wilson-Dirac operator from Gattringer and Lang~\cite{Gattringer:2010zz}, which is expressed as 
+\begin{equation}
+	(\mathcal D_W)_{\alpha\beta}^{ab}(x, y) = \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = \pm1}^2 V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y}
+\end{equation}
+with $\gamma_{-\mu}\equiv -\gamma_\mu$. This reduces down to a version of the Wilson-Dirac operator that looks like what we had previously, modulo a few signs and conjugates, but more importantly agrees with Ref.~\cite{Bergner:2022hoo}. This is because we can expand this action out and use our expression for $V_{-\mu}(x)$ to obtain:
+\begin{align}\begin{split}
+	(\mathcal D_W)_{\alpha\beta}^{ab}(x, y) &= \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + V_{-\mu}^{ab}(x) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right] \\
+	&= \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + (V_{\mu}^\dagger)^{ab}(x - \hat\mu) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right] \\
+	&= \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + (V_{\mu}^\dagger)^{ab}(y) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right]
+\end{split}\end{align}
+This is exactly the expression in Ref.~\cite{Bergner:2022hoo}. Using the identification $V = V^*$, we can also relate this quite closely to Montvay's Dirac operator. They will end up being the same up to a phase convention on the adjoint field $V$, where we take $V\rightarrow V^\dagger = V^T$ and relabel $x\leftrightarrow y$:
+\begin{align}\begin{split}
+	(D_W&)_{\alpha\beta}^{ab}(x, y) = \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + (V_{\mu}^T)^{ab}(y) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right] \\
+	&\xrightarrow{x\leftrightarrow y, V\rightarrow V^\dagger} \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ (V_\mu^T)^{ab}(y) (1 - \gamma_\mu)_{\alpha\beta} \delta_{y + \hat\mu, x} + V_{\mu}^{ab}(x) (1 + \gamma_\mu)_{\alpha\beta} \delta_{y, x + \hat\mu} \right].
+\end{split}\end{align}
+All this to say that the operators we've been studying are consistent. Let's use this form of the Wilson-Dirac operator from here on out:
+\begin{equation}
+\boxed{
+	(D_W)_{\alpha\beta}^{ab} = \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + (V_{\mu}^T)^{ab}(y) (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right]
+}
+\end{equation}
+
+We will also use the standard Wilson gauge action,
+\begin{equation}
+	S_g = \beta \sum_{x\in\Lambda}\sum_{\mu < \nu} \left( 1 - \frac{1}{N} \mathrm{Re}\, \Tr\, \mathcal P_{\mu\nu}(x) \right)
+\end{equation}
+where $\mathcal P_{\mu\nu}$ is the plaquette in direction $(\mu, \nu)$ at $x\in\Lambda$. Note that for $d = 2$, the sum is easy:
+\begin{equation}
+	S_g = \beta \sum_{x\in\Lambda} \left( 1 - \frac{1}{N} \mathrm{Re}\, \Tr\, \mathcal P(x) \right)
+\end{equation}
+where $\mathcal P(x)\equiv \mathcal P_{01}(x)$ is the only direction of plaquette that can be formed on a 2d lattice. We think about $\mathcal O(a)$ improvement for this action later. 
+
+Additionally, we want to verify that the Dirac operator is $\gamma_5$-hermitian, i.e. that
+\begin{equation}
+	\gamma_5 \mathcal D \gamma_5 = \mathcal D^\dagger \iff (\gamma_5 \mathcal D \gamma_5)_{\alpha\beta}^{ab}(x, y) = (\mathcal D^*)_{\beta\alpha}^{ba}(y, x).
+\end{equation}
+Now, $\gamma_5$-hermicity implies that we can Hermitize the Dirac operator as $Q = Q^\dagger$, where
+\begin{equation}
+	Q = \gamma_5 \mathcal D.
+\end{equation}
+However, the charge conjugation matrix is $C = \gamma_5$, so we note that $Q$ also equals $C\mathcal D$. In Montvay's notes, he comments that $M = C\mathcal D$ is a skew-symmetric matrix that has a Pfaffian, hence we also expect that
+\begin{equation}
+	Q^T = -Q.
+\end{equation}
+This should be confirmed in the test cases. Note that because 
+\begin{equation}
+	\mathcal D^\dagger \mathcal D = \mathcal D^\dagger \gamma_5^\dagger \gamma_5 \mathcal D = Q^\dagger Q
+\end{equation}
+The operator $K$ can also be considered as $K = Q^\dagger Q$, and the fermion Pfaffian should be considered as
+\begin{equation}
+	\mathrm{Pf}(\mathcal D) \longrightarrow \mathrm{Pf}(Q)
+\end{equation}
+since the Pfaffian is only defined for a skew-symmetric matrix.
+
+\poarecomment{TODO note that the $x$ and $y$ indices here are not the same as the boxed equation, I think because I was originally using a different definition}
+Let us first consider the case of the identity gauge field, where the adjoint links are the identity $V_\mu^{ab}(x) = \delta^{ab}$\footnote{Note that by the definition of the adjoint link, this is equivalent to the fundamental link field $U_\mu(x)$ being the identity as well.}. In this case, we can use the fact that $\gamma_\mu^\dagger = \gamma_\mu$, $\{\gamma^\mu, \gamma_5\} = 0$ and $\gamma_5^2 = 1$ to show that:
+\begin{align}\begin{split}
+	\gamma^5_{\rho\alpha} \mathcal D_{\alpha\beta}^{ab}(x, y) \gamma^5_{\beta \sigma} &= \delta^{ab} \gamma^5_{\rho\alpha} \left( \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ (1 - \gamma_\mu)_{\alpha\beta} \delta_{x, y + \hat\mu} + (1 + \gamma_\mu)_{\alpha\beta} \delta_{x, y - \hat\mu} \right] \right) \gamma^5_{\beta \sigma} \\
+	&= \delta^{ab} \left( \delta_{\rho\sigma} \delta_{x, y} - K\sum_{\mu = 1}^2 \left[ (1 + \gamma_\mu)_{\rho\sigma} \delta_{x, y + \hat\mu} + (1 - \gamma_\mu)_{\rho\sigma} \delta_{x, y - \hat\mu} \right] \right) \\
+	&= \delta^{ab} \left( \delta_{\rho\sigma} \delta_{x, y} - K\sum_{\mu = 1}^2 \left[ (1 + \gamma_\mu)_{\rho\sigma}^\dagger \delta_{y, x - \hat\mu} + (1 - \gamma_\mu)_{\rho\sigma}^\dagger \delta_{y, x + \hat\mu} \right] \right) \\
+	&= \mathcal D_{\sigma\rho}^{ba}(y, x)^*
+\end{split}\end{align}
+as desired (i.e. $\gamma_5$-hermiticity means that $\gamma_5 \mathcal D \gamma_5 = \mathcal D^\dagger$, where the transpose on $\mathcal D$ in $\mathcal D^\dagger$ is over \textbf{all spin, color, and spacetime indices}). 
+
+For the case of an arbitrary gauge field, this is also not too difficult:
+%\begin{align}\begin{split}
+%	\gamma^5 \mathcal D(x, y) \gamma^5 &= \gamma^5\left( 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu(x) (1_s - \gamma_\mu) \delta_{x, y + \hat\mu} + V_\mu^T(y) (1_s + \gamma_\mu) \delta_{x, y - \hat\mu} \right] \right) \gamma^5 \\
+%	&= 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu(x) (1_s + \gamma_\mu) \delta_{x, y + \hat\mu} + V_\mu^T(y) (1_s - \gamma_\mu) \delta_{x, y - \hat\mu}  \right] \\
+%	&= 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ (V_\mu^T)^\dagger(x) (1_s + \gamma_\mu)^\dagger \delta_{x, y + \hat\mu} + V_\mu^\dagger(y) (1_s - \gamma_\mu)^\dagger \delta_{x, y - \hat\mu}  \right] \\
+%	&= \left(1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu^T(x) (1_s + \gamma_\mu) \delta_{y, x - \hat\mu} + V_\mu(y) (1_s - \gamma_\mu) \delta_{y, x + \hat\mu}  \right] \right)^\dagger \\
+%	&= \left(1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu(y) (1_s - \gamma_\mu) \delta_{y, x + \hat\mu} + V_\mu^T(x) (1_s + \gamma_\mu) \delta_{y, x - \hat\mu} \right] \right)^\dagger \\
+%	&= 
+%	\label{eq:gamma5_hermiticity}
+%\end{split}\end{align}
+\begin{align}\begin{split}
+	\gamma^5 \mathcal D(x, y) \gamma^5 &= \gamma^5\left( 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu(x) (1_s - \gamma_\mu) \delta_{x + \hat\mu, y} + V_\mu^T(y) (1_s + \gamma_\mu) \delta_{x - \hat\mu, y} \right] \right) \gamma^5 \\
+	&= 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu(x) (1_s + \gamma_\mu) \delta_{x + \hat\mu, y} + V_\mu^T(y) (1_s - \gamma_\mu) \delta_{x - \hat\mu, y}  \right] \\
+	&= 1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ (V_\mu^T)^\dagger(x) (1_s + \gamma_\mu)^\dagger \delta_{x + \hat\mu, y} + V_\mu^\dagger(y) (1_s - \gamma_\mu)^\dagger \delta_{x - \hat\mu, y}  \right] \\
+	&= \left(1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu^T(x) (1_s + \gamma_\mu) \delta_{y, x + \hat\mu} + V_\mu(y) (1_s - \gamma_\mu) \delta_{y, x - \hat\mu}  \right] \right)^\dagger \\
+	&= \left(1_s 1_c \delta_{x, y} - K \sum_{\mu = 1, 2} \left[ V_\mu(y) (1_s - \gamma_\mu) \delta_{y + \hat\mu, x} + V_\mu^T(x) (1_s + \gamma_\mu) \delta_{y - \hat\mu, x} \right] \right)^\dagger \\
+	&= \mathcal D(y, x)^\dagger.
+	\label{eq:gamma5_hermiticity}
+\end{split}\end{align}
+Here note that a full $\dagger$ acts on all indices $(a, b, \alpha, \beta, x, y)$, but to avoid confusion in the above calculation (Eq.~\eqref{eq:gamma5_hermiticity}) we only use $\dagger$ to refer to the color and spin indices. 
+
+\subsection{The Dirac operator and sparse matrices}
+
+We need to treat the Dirac operator $\mathcal D$ in an efficient way; to do this, we'll use a sparse matrix data structure, since most of its entries are zero. This is clearly seen in Eq.~\eqref{eq:dirac_op_indices}, since we the $\delta_{x, y \pm \hat\mu}$ means the field only interacts with its nearest neighbors. The best way to construct the Dirac operator is therefore in blocks. Consider $\mathcal D_{\alpha\beta}^{ab}(x, y)$ as a $d_{N_c} N_s L T \times d_{N_c} N_s L T$ matrix, where :
+\begin{equation}
+	D_{ij} = \mathcal D_{\alpha\beta}^{ab}(x, y)
+\end{equation}
+where $i$ and $j$ are multi-indices encoding $(a, \alpha, x^\mu)$ and $(b, \beta, y^\mu)$, respectively. For a natural spacetime blocking, these multi-indices traverse first in color, then in spin, then in the spatial dimension, and finally in the temporal direction, as is clear in Eq.~\eqref{eq:dirac_op_indexing}. For a multi-index $(a, \alpha, x, t)$ (where here $x$ is a scalar; we have made the spacetime coordinates explicit, with $x^\mu = (x, t)$), we can flatten it with:
+\begin{equation}
+	i = a + d_{N_c} a + d_{N_c} N_s x + d_{N_c} N_s L t
+\end{equation}
+where $d_{N_c} = (N_c^1 - 1)$ is the dimension of the adjoint representation of $SU(N_c)$. Likewise, given an index $i\in \{0, 1, ..., d_{N_c} N_s L T\}$, we can get back to the original multi-index $(a, \alpha, x, t)$ with the iterative algorithm:
+\begin{lstlisting}[mathescape]
+	t $\rightarrow$ i // ($d_{N_c} N_s L$)
+	i = i - t * ($d_{N_c} N_s L$)
+	x $\rightarrow$ i // ($d_{N_c} N_s$)
+	i = i - x * ($d_{N_c} N_s$)
+	$\alpha$ $\rightarrow$ i // $d_{N_c}$
+	a $\rightarrow$ i % $d_{N_c}$
+\end{lstlisting}
+This essentially just keeps dividing out by the correct block sizes for each step in the process. 
+
+We will use the \lstinline{bsr_matrix} implementation in \lstinline{scipy}. Consider the following construction:
+\begin{lstlisting}
+    indptr = np.array([0, 2, 3, 6])
+    indices = np.array([0, 2, 2, 0, 1, 2])
+    data = np.array([1, 2, 3, 4, 5, 6]).repeat(4).reshape(6, 2, 2)
+    mat = bsr_matrix((data,indices,indptr), shape=(6, 6))
+\end{lstlisting}
+Here, \lstinline{data} is a list of 6 2D arrays (blocks), each of which are $2\times 2$ and filled with the corresponding value $1, 2, 3, 4, 5, 6$. The matrix it constructs is a $6\times 6$ matrix from these blocks $2\times 2$ blocks, given as follows:
+\begin{equation}
+	\mathrm{mat} = \begin{pmatrix} 
+		1 & 1 & 0 & 0 & 2 & 2 \\
+		1 & 1 & 0 & 0 & 2 & 2 \\
+		0 & 0 & 0 & 0 & 3 & 3 \\
+		0 & 0 & 0 & 0 & 3 & 3 \\
+		4 & 4 & 5 & 5 & 6 & 6 \\
+		4 & 4 & 5 & 5 & 6 & 6
+	\end{pmatrix}
+\end{equation}
+Here \lstinline{indptr} tells you where in \lstinline{indices} to start. For each $j$, the interval \lstinline{[indptr[j], indptr[j + 1])} tells you which parts of the data are in the $j^\mathrm{th}$ row. Concretely, the non-zero elements (or blocks, if you're blocking) of row $j$ are given by \lstinline{data[indptr[j] : indptr[j + 1]]}, with each one corresponding to column \lstinline{indices[indptr[j] : indptr[j + 1]]}. 
+
+Our implementation as an array will look like the following (here we use the example of $SU(2)$, so the adjoint indices $a\in \{0, 1, 2\}$, and the spinor indices $\alpha, \beta\in \{0, 1\}$, and let $\vec 1\equiv \hat 0 = (1, 0)$):
+\begin{equation}
+	D = 
+	\begin{pmatrix} 
+		D_{00}^{00}(\vec 0, \vec 0) & D_{00}^{01}(\vec 0, \vec 0) & D_{00}^{02}(\vec 0, \vec 0) & D_{01}^{00}(\vec 0, \vec 0) & D_{01}^{01}(\vec 0, \vec 0) & D_{01}^{02}(\vec 0, \vec 0) & D_{00}^{00}(\vec 0, \vec 1) & ... \\
+		
+		D_{00}^{10}(\vec 0, \vec 0) & D_{00}^{11}(\vec 0, \vec 0) & D_{00}^{12}(\vec 0, \vec 0) & D_{01}^{10}(\vec 0, \vec 0) & D_{01}^{11}(\vec 0, \vec 0) & D_{01}^{12}(\vec 0, \vec 0) & D_{00}^{10}(\vec 0, \vec 1) & ... \\
+		
+		D_{00}^{20}(\vec 0, \vec 0) & D_{00}^{21}(\vec 0, \vec 0) & D_{00}^{22}(\vec 0, \vec 0) & D_{01}^{20}(\vec 0, \vec 0) & D_{01}^{21}(\vec 0, \vec 0) & D_{01}^{22}(\vec 0, \vec 0) & D_{00}^{20}(\vec 0, \vec 1) & ... \\
+		
+		D_{10}^{00}(\vec 0, \vec 0) & D_{10}^{01}(\vec 0, \vec 0) & D_{10}^{02}(\vec 0, \vec 0) & D_{11}^{00}(\vec 0, \vec 0) & D_{11}^{01}(\vec 0, \vec 0) & D_{11}^{02}(\vec 0, \vec 0) & D_{10}^{00}(\vec 0, \vec 1) & ... \\
+		
+		D_{10}^{10}(\vec 0, \vec 0) & D_{10}^{11}(\vec 0, \vec 0) & D_{10}^{12}(\vec 0, \vec 0) & D_{11}^{10}(\vec 0, \vec 0) & D_{11}^{11}(\vec 0, \vec 0) & D_{11}^{12}(\vec 0, \vec 0) & D_{10}^{10}(\vec 0, \vec 1) & ... \\
+		
+		D_{10}^{20}(\vec 0, \vec 0) & D_{10}^{21}(\vec 0, \vec 0) & D_{10}^{22}(\vec 0, \vec 0) & D_{11}^{20}(\vec 0, \vec 0) & D_{11}^{21}(\vec 0, \vec 0) & D_{11}^{22}(\vec 0, \vec 0) & D_{10}^{20}(\vec 0, \vec 1) & ... \\
+		
+		D_{00}^{00}(\vec 1, \vec 0) & D_{00}^{01}(\vec 1, \vec 0) & D_{00}^{02}(\vec 1, \vec 0) & D_{01}^{00}(\vec 1, \vec 0) & D_{01}^{01}(\vec 1, \vec 0) & D_{01}^{02}(\vec 1, \vec 0) & D_{00}^{00}(\vec 1, \vec 1) & ... \\
+		... & ... & ... & ... & ... & ... & ... & ...
+	\end{pmatrix}
+	\label{eq:dirac_op_indexing}
+\end{equation}
+Note that between any two sites $x$ and $y$, we have blocks of size $(N_c^2 - 1) N_s$ (6, in our case of $N_c = 2$), given by:
+\begin{equation}
+	D_\mathrm{block}(x, y) = \begin{pmatrix}
+		D_{00}^{00} & D_{00}^{01} & D_{00}^{02} & D_{01}^{00} & D_{01}^{01} & D_{01}^{02}  \\
+		
+		D_{00}^{10} & D_{00}^{11} & D_{00}^{12} & D_{01}^{10} & D_{01}^{11} & D_{01}^{12} \\
+		
+		D_{00}^{20} & D_{00}^{21} & D_{00}^{12} & D_{01}^{20} & D_{01}^{21} & D_{01}^{22} \\
+
+		D_{10}^{00} & D_{10}^{01} & D_{10}^{02} & D_{11}^{00} & D_{11}^{01} & D_{11}^{02}  \\
+		
+		D_{10}^{10} & D_{10}^{11} & D_{10}^{12} & D_{11}^{10} & D_{11}^{11} & D_{11}^{12} \\
+		
+		D_{10}^{20} & D_{10}^{21} & D_{10}^{12} & D_{11}^{20} & D_{11}^{21} & D_{11}^{22}
+	\end{pmatrix}
+\end{equation}
+where the indices $(x, y)$ have been suppressed. 
+
+To compute the Pfaffian of $\mathcal D$, we need to consider an antisymmetric Dirac operator, since the Pfaffian is only defined for skew-symmetric matrices of even dimensionality. The way to construct such a matrix is to use the charge conjugation matrix $C$, through which the skew-symmetric Dirac operator $M = -M^T$ is defined as
+\begin{equation}
+	M =  C \mathcal D
+\end{equation}
+The charge conjugation matrix is defined through the $\gamma$-matrices as 
+\begin{equation}
+	 C^{-1} \gamma_\mu  C = -\gamma_\mu^T.
+\end{equation}
+The simplest choice for this is $C = \gamma_5$, which means that charge conjugation and chirality are the same in $d = 2$. 
+
+\subsection{Implementing RHMC}
+
+%\poarecomment{Note the gauge field of interest is the adjoint gauge field $V_\mu^{ab}(x)$, not the fundamental; however, we can still use the fundamental gauge links since $V_\mu^{ab}(x)$ are a function of $U_\mu(x)$. }
+
+\poarecomment{Important thing to consider: what gauge variables do we want to update? We have three choices: first, the fundamental gauge field $U_\mu(n)$; second, the adjoint gauge field $V_\mu^{ab}(n)$; third, the components of the fundamental, $U_\mu(n) = e^{i \omega_\mu^a(n) t^a}$}
+
+Now that we have a rational approximation to $K^{-1/4}$ (Eq.\eqref{eq:rational_approx})\footnote{Later we will see that we also need a rational approximation to $K^{+1/8}$; this is done in the same way as $K^{-1/4}$, it just requires different coefficients. }, we need to determine how to use it. We start with careful definitions of all the variables in the system. The fields we are interested in are the pseudofermion fields $\Phi(n)$, and the adjoint gauge fields and their conjugate momenta $\Pi_\mu^a(n)$:
+\poarecomment{TODO this is wrong...}
+\begin{align}
+	U_\mu(n) = U_\mu^a(n) t^a \in SU(N) && \Pi_\mu(n) = \Pi_\mu^a(n) t^a\in SU(N)
+	%V_\mu^{ab}(x) && \Pi_\mu^{ab}(x)
+\end{align}
+For HMC, we are interested in updating the system via the effective Hamiltonian,
+\begin{equation}
+	H = \frac{1}{2} \sum_{n\in\Lambda} \Tr [\Pi_\mu^2(n)] + S_\mathrm{eff}[U, \Phi] = \frac{1}{2} \sum_n \Tr [\Pi_\mu^2(n)] + S_g[U] + \Phi^\dagger K^{-1/4} \Phi.
+\end{equation}
+Note that $K$ can be defined in terms of $Q = \gamma_5 \mathcal D$, the Hermitian Dirac operator, as $Q^\dagger Q$, or as the conventional $\mathcal D^\dagger \mathcal D$ we've been using. Each field is initialized at computer time $s = 0$ as follows:
+\begin{itemize}
+	\item $\Pi_\mu(n; s = 0)$: This should have dimensions equal to the gauge field $U_\mu(x)$, since it is its conjugate momentum, and is distributed to a random Gaussian,
+	\begin{equation}
+		f(\Pi_\mu) = e^{-\mathrm{Tr}[\Pi_\mu^2]}
+	\end{equation}
+	Here $\Pi_\mu^2\equiv \sum_{n\in\Lambda} \Pi_\mu(n)^2$. The easiest way to sample these coefficients is to generate a random element of the Lie algebra $\Pi_\mu^a(n)$, and to set $\Pi_\mu(n) = \Pi_\mu^a(n) t^a$, where now $P_\mu(n)$ has fundamental gauge indices. Using basic properties of $t^a$, we have:
+	\begin{equation}
+		\Tr[\Pi_\mu^2] = \sum_{n\in\Lambda} \Tr[(\Pi_\mu^a(n) t^a)(\Pi_\mu^b(n) t^b)] = \frac{1}{2} \sum_{n\in\Lambda} (\Pi_\mu^a(n))^2.
+	\end{equation}
+	Note that the easiest way to do something like this is to initialize $\Pi_\mu(n)$ on each link, i.e. iterate over $(n, \mu)$ and generate $d_{N_c} = N_c^2 - 1$ random real numbers according to
+	\begin{equation}
+		f(\Pi_\mu(n)) = e^{-\Tr [\Pi_\mu(n)^2]} = e^{-\frac{1}{2} (\Pi_\mu^a(n))^2}
+	\end{equation}
+	i.e. generate them according to a $d_{N_c}$ dimensional normal distribution with mean 0 and covariance $1_{d_{N_c}}$. 
+	\item $U_\mu(n; s = 0)$: Either perform a \textbf{hot start} and initialize $U_\mu(n)$ to a random $SU(N)$ gauge field, or do a \textbf{cold start} and set $U_\mu(n)$ equal to the identity at each link. 
+	\item $\Phi$: The pseudofermion field is initialized to 
+	\begin{equation}
+		\Phi(n; s = 0) = K^{1/8} g(n) = r_{1/8}(K) g(n)
+	\end{equation}
+	where $g(n)$ are random vectors drawn from a $2\times (N_c^2 - 1)$-dimensional Gaussian distribution \poarecomment{TODO make sure this is correct}. The reason for this is that the pseudofermions are distributed according to
+	\begin{equation}
+		P[\Phi]\propto e^{-\Phi^\dagger K^{-1/4} \Phi}.
+	\end{equation}
+	Hence if we define 
+	\begin{align}
+		g(\Phi) = K^{-1/8}[U]\Phi && \Phi(g) = K^{1/8}[U] g
+	\end{align}
+	then we see that
+	\begin{equation}
+		\mathbb P[g] = \mathbb P[\Phi] \left( \det \frac{\partial \Phi}{\partial g} \right)^{-1} = \det\left( K^{-1/8}[U] \right) e^{-g^\dagger g}.
+	\end{equation}
+	Since $K^{1/8}[U]$ does not depend on our auxiliary variable $g$, we see that we can sample $g$ from the distribution
+	\begin{equation}
+		\mathbb P[g]\propto e^{-g^\dagger g} \sim \mathcal N
+	\end{equation}
+	where $\mathcal N$ is a Gaussian distribution, then simply transform back to $\Phi$ by
+	\begin{equation}
+		\Phi = K^{1/8} g = r_{1/8}(K) g.
+	\end{equation}
+	This is why we needed a rational approximation to $K^{1/8}$ as well as $K^{-1/4}$. 
+\end{itemize}
+
+\poarecomment{TODO make sure the factor of 1/2 is correct and all derivatives are taken correctly}
+We can derive the molecular dynamics (MD) time evolution equations from Hamilton's equations for the system, which are:
+\begin{align}
+\begin{split}
+	\delta_t \Pi_\mu(n) &= -\delta_{U_\mu(n)} H = - \frac{\delta S_g[U]}{\delta U_\mu(n)} - \frac{\delta}{\delta U_\mu(n)} \left( \Phi^\dagger K^{-1/4} \Phi \right) \\
+	\delta_t U_\mu(n) &= \delta_{\Pi_\mu(n)} H = \Pi_\mu(n). 
+\end{split}
+\end{align}
+
+\subsection{Updating with $\omega_\mu$}
+
+It is often easier to write out Hamilton's equations by updating the real coefficients in the algebra that go into computing $U_\mu(n)$. That is, we expand
+\begin{equation}
+	U_\mu(n) = \exp \left( i \omega_\mu^a t^a \right)
+\end{equation}
+for real-valued $\{\omega_\mu^a\}$, and use $\omega_\mu^a(n)$ as the dynamical variables to be updated in our system instead of $U_\mu(n)$. The conjugate momenta to $\omega_\mu^a(n)$ are defined as $P_\mu^a(n)$. We will interchangeably use the real $P_\mu^a(n)$ coefficients, which are the coordinates of the conjugate field in the Lie algebra, and an actual algebra-valued field $P_\mu(n)\in\mathfrak{su}(N_c)$, defined as
+\begin{equation}
+	P_\mu(n)\equiv P_\mu^a(n) t^a\in\mathfrak{su}(N_c).
+\end{equation}
+Note that $P_\mu(n)$ is \textbf{not conjugate} to $U_\mu(n)$, since $P_\mu$ is an element of the algebra and $U_\mu$ is an element of the group. Rather, $e^{iP_\mu(n)}$ is the conjugate variable to $U_\mu(n)$. 
+
+These equations must be integrated to perform MD evolution of the theory. To do this, we need to first compute the relevant forces that we will update our theory with, then write out the update steps. To initialize the fields, we'll initialize the pseudofermions in the same way, but the gauge fields will be initialized slightly differently:
+\begin{itemize}
+	\item $\omega_\mu^a(n; s = 0)$: Either perform a \textbf{hot start} and intialize $\omega_\mu^a(n)$ to a random field, or do a \textbf{cold start} and set $\omega_\mu(n) = 0$ completely (which corresponds to $U_\mu(n) = 1$).
+	\item $P_\mu^a(n)$: Here we want to initialize these as part of a normal distribution, \poarecomment{TODO}
+\end{itemize}
+
+We want to update the system here with the Hamiltonian (here summing on $\mu$ and $a$ is implied):
+\begin{equation}
+	H = \frac{1}{2} \sum_{n\in\Lambda} P_\mu^a(n) P_\mu^a(n) + S_\mathrm{eff}[U, \Phi] = \sum_n \Tr [P_\mu(n)^2] + S_g[U] + \Phi^\dagger K^{-1/4} \Phi.
+\end{equation}
+where note that $U$ and $K$ are functions of our ``position'' variables, $\omega_\mu^a(n)$, and the equality uses that $\Tr [t^a t^b] = \frac{1}{2} \delta^{ab}$. Hamilton's equations hence yield:
+\begin{align}\begin{split}
+	\delta_t P_\mu^a(n) &= -\delta_{\omega_\mu^a(n)} H = - \left( \frac{\delta S_g[\omega]}{\delta\omega_\mu^a(n)} + \Phi^\dagger \frac{\delta K[\omega]^{-1/4}}{\delta \omega_\mu^a(n)} \Phi \right) \equiv - F_\mu^a(n)[\omega, \Phi] \\
+	\delta_t \omega_\mu^a(n) &= \delta_{P_\mu^a(n)} H = P_\mu^a(n)
+\end{split}\end{align}
+where the derivative is the force driving the conjugate momenta update,
+\begin{equation}
+	F_\mu^a(n)[\omega, \Phi] = \frac{\delta S_g[\omega]}{\delta\omega_\mu^a(n)} + \Phi^\dagger \frac{\delta K[\omega]^{-1/4}}{\delta \omega_\mu^a(n)} \Phi \equiv (F_{g})_\mu^a(n)[\omega] + (F_\mathrm{pf})_\mu^a(n)[\omega, \Phi].
+	\label{eq:driving_force_omegamu}
+\end{equation}
+Note that these forces depend functionally on $\omega$ and $\Phi$, but in terms of indices they have an adjoint color, Lorentz, and spacetime index $(a, \mu, n)$. 
+We will compute these forces in the next section for our choices of action.
+
+We can also take these coordinates into the algebra if we wish,
+\begin{align}\begin{split}
+	\delta_t P_\mu(n) &= -\delta_{\omega_\mu(n)} H = - \left( \frac{\delta S_g[\omega]}{\delta\omega_\mu(n)} + \Phi^\dagger \frac{\delta K[\omega]^{-1/4}}{\delta \omega_\mu(n)} \Phi \right) \equiv - F_\mu(n)[\omega, \Phi] \\
+	\delta_t \omega_\mu(n) &= \delta_{P_\mu(n)} H = P_\mu(n)
+\end{split}\end{align}
+where here $P_\mu(n) = P_\mu^a(n) t^a\in\mathfrak{su}(N)$ and $\omega_\mu(n) = \omega_\mu^a(n) t^a\in\mathfrak{su}(N)$. The algebra representation is more compact in certain cases, and we will specify when this is the case. The force has the following structure,
+\begin{align}
+	(F_g)_\mu(n) = (F_g)_\mu^a(n) t^a && (F_\mathrm{pf})_\mu(n) = (F_\mathrm{pf})_\mu^a(n) t^a && 
+\end{align}
+where each force is implied to be a functional of $\omega$ or $(\omega, \Phi)$. 
+
+\section{Gauge and pseudofermion forces}
+
+\subsection{Gauge force (updating with $V_\mu^{ab}$)}
+
+We'll begin with the gauge force, since it's much easier to take a derivative of than the pseudofermion piece.
+
+\subsection{Pseudofermion force (updating with $V_\mu^{ab}$)}
+
+The difficult part here is to differentiate $\Phi^\dagger K^{-1/4} \Phi$ with respect to $U_\mu$. We use the rational approximation and apply the chain rule for Lie derivatives:
+\begin{align}\begin{split}
+	\frac{\delta}{\delta U_\mu(x)} \Phi^\dagger K^{-1/4} \Phi &= \frac{\delta}{\delta U_\mu(x)} \Phi^\dagger \left( \alpha_0 + \sum_{i = 1}^P \frac{\alpha_i}{K + \beta_i} \right) \Phi = \sum_{i = 1}^P \alpha_i \Phi^\dagger \left(  \frac{\delta}{\delta U_\mu(x)} \frac{1}{K + \beta_i} \right) \Phi \\
+	&= \sum_{i = 1}^P \alpha_i \left( (K + \beta_i)^{-1} \Phi \right)^\dagger \frac{\delta K}{\delta U_\mu(x)} \left( (K + \beta_i)^{-1} \Phi \right) \\
+	&\equiv \sum_{i = 1}^P \alpha_i \psi_i^\dagger \frac{\delta K}{\delta U_\mu(x)} \psi_i
+\end{split}\end{align}
+We see that we will need to determine two things: the Lie derivative $\delta K / \delta U_\mu(x)$, and the solution $\psi_i = (K + \beta_i)^{-1} \Phi$ to the equation $(K + \beta_i) \psi = \Phi$.
+
+Simply applying $r_{-1/4}(K)$ or $r_{1/8}(K)$ to a vector $\Phi$ requires the same inversion (i.e., to initialize the pseudofermion field as $r_{1/8}(K) \Phi$). In this case, we have:
+\begin{equation}
+	r(K) \Phi = \alpha_0 \Phi + \sum_{i =1}^P \alpha_i \underbrace{ \left( K + \beta_i \right)^{-1} \Phi }_{\psi_i}
+\end{equation}
+We have the same situation where we need to solve the equation $(K + \beta_k) \psi_i = \Phi$ (no sum on $i$) for $\psi_i = (K + \beta_i)^{-1}\Phi$. We'll solve this equation by using the built-in CG solver in \lstinline{scipy.sparse.linalg}. 
+
+To evaluate the Lie derivative, we'll work in terms of the Hermitian Dirac operator $Q = \gamma_5 \mathcal D$, as the chain rule simplifies down:
+\begin{equation}
+	\frac{\delta K}{\delta U_\mu(x)} = \frac{\delta}{\delta U_\mu(x)} (Q^\dagger Q) = \frac{\delta Q^\dagger Q}{\delta V_\nu^{ab}(y)} \frac{\delta V_\nu^{ab}(y)}{\delta U_\mu(x)} = 2 Q \frac{\delta Q}{\delta V_\nu^{ab}} \frac{\delta V_\nu^{ab}(y)}{\delta U_\mu(x)}
+\end{equation}
+Appealing to the definition of $V$, we can take the derivative with respect to $U_\mu(x)$:
+\begin{equation}
+	V_\nu^{ab}(y) = 2\Tr[ U_\nu^\dagger(y) t^a U_\nu(y) t^b],
+\end{equation}
+We see that:
+\begin{equation}
+	\frac{\delta V_\nu^{ab}(y)}{\delta U_\mu^{ij}(x)} = 2 \left( t^b U_\mu^\dagger(x) t^a \right)_{ji} \delta_{xy} \delta_{\mu\nu} \iff \frac{\delta V_\nu^{ab}(y)}{\delta U_\mu(x)} = 2 \left(t^a U_\mu(x) t^b \right)^* \delta_{xy} \delta_{\mu\nu}
+\end{equation}
+where $i, j = 1, 2, ..., N_c$ are fundamental color indices for $U_\mu$, using that $(t^a)^t = (t^a)^*$. 
+
+To differentiate $Q$, we recall the definition of the hermitian Wilson-Dirac operator as
+\begin{equation}
+	Q_{\alpha\beta}^{ab}(x, y) = \delta^{ab} \delta_{\alpha\beta} \delta_{x, y} - K \sum_{\mu = 1}^2 \left[ V_\mu^{ab}(x) [\gamma_5 (1 - \gamma_\mu)]_{\alpha\beta} \delta_{x + \hat\mu, y} + V_{\mu}^{ba}(y) [\gamma_5 (1 + \gamma_\mu)]_{\alpha\beta} \delta_{x - \hat\mu, y} \right]
+\end{equation}
+where as usual we use $V = V^*$. Let's differentiate this with respect to $V_\nu^{cd}(z)$. We have:
+\begin{align}\begin{split}
+	\frac{\delta}{\delta V_\mu^{cd}(z)} Q_{\alpha\beta}^{ab}(x, y) &= -K \sum_{\nu = 1}^2 \delta_{\mu\nu} \left[  \delta_{xz} \delta_{ca} \delta_{db} [\gamma_5(1 - \gamma_\nu)]_{\alpha\beta} \delta_{x+ \hat\nu, y} + \delta_{zy}\delta_{cb} \delta_{da} [\gamma_5(1 + \gamma_\nu)]_{\alpha\beta} \delta_{x - \hat\nu, y} \right] \\
+	&= -K \left[ \delta_{xz}  \delta_{ca} \delta_{db} (1 - \gamma_\mu)_{\alpha\beta} \delta_{x  + \hat\mu, y} + \delta_{yz}  \delta_{cb} \delta_{da} (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right].
+\end{split}\end{align}
+So, we want to contract this with $Q^\dagger$ and the derivative of $V_\mu$. Note that in terms of indices, this is:
+\begin{equation}
+	%K_{\alpha\beta}^{ab}(x, y) = \sum_z (Q^\dagger)_{\alpha\gamma}^{ac}(x, z) Q_{\gamma\beta}^{cb}(z, y) = \sum_z Q_{\gamma\alpha}^{ca}(z, x) Q_{\gamma\beta}^{cb}(z, y)
+	K_{\alpha\beta}^{ab}(x, y) = \sum_z Q_{\alpha\gamma}^{ac}(x, z) Q_{\gamma\beta}^{cb}(z, y)
+\end{equation}
+and we see the derivative looks like:
+\begin{align}\begin{split}
+	\frac{\delta }{\delta U_\mu^{ij}(z)} K_{\alpha\beta}^{ab}(x, y) &= 2 \sum_w Q_{\alpha\gamma}^{ac}(x, w) \frac{\delta Q_{\gamma\beta}^{cb}(w, y) }{\delta V_\mu^{de}(v)} \frac{\delta V_\mu^{de}(v)}{\delta U_\mu^{ij}(z)}
+\end{split}\end{align}
+The way this is typically dealt with is to absorb the conjugating spinors into $\delta K / \delta U$, i.e. to evaluate $(Q \psi_i)^\dagger$ and $\psi_i$ and put them on the left and right of the derivative. For each $i$, we have:
+\begin{align}\begin{split}
+	\psi_i^\dagger \frac{\delta K}{\delta U_\mu^{k\ell}(z)} \psi_i &=  2 \sum_{\nu, \xi} (Q\psi_i)^\dagger \frac{\delta Q}{\delta V_\nu(\xi)} \frac{\delta V_\nu(\xi)}{\delta U_\mu^{k\ell}(z)} \psi_i \\
+	&= 2 \sum_{x, y} \underbrace{\left( \sum_{x'} \left(Q(x, x')_{\alpha\beta}^{ab}(\psi_i)_\beta^b(x') \right)^\dagger \right)}_{(Q\psi_i)^\dagger(x)_\alpha^a}  \underbrace{\left( \sum_{\nu, \xi} \frac{\delta Q(x, y)}{\delta V_\nu(\xi)} \frac{\delta V_\nu(\xi)}{\delta U_\mu^{k\ell}(z)} \right)_{\alpha\beta}^{ab}}_{\equiv (\mathcal M_\mu)_{\alpha\beta;  k\ell}^{ab}(x, y; z)} \left(  \psi_i  \right)_{\beta}^{b}(y) \\
+	&= 2 \sum_{a, \alpha, x} (Q\psi_i)^\dagger (x)_\alpha^a (\mathcal M_\mu \psi_i)_{\alpha; k\ell}^a(x; z)
+\end{split}\end{align}
+where we've made the indices explicit in the second equation. Forming the spinors on the left and right sides is easy to do, just by evaluating $\psi_i$ with a shifted CG solver, then evaluating $Q\psi_i$. I'll make the sums explicit for the manipulations, because there are a lot of indices. Let's evaluate $\mathcal M_\mu$:
+\begin{align}\begin{split}
+	(\mathcal M_\mu)_{\alpha\beta; k\ell}^{ab}(x, y; z) &= \sum_{c, d, \nu} \sum_{\xi\in\Lambda} \frac{\delta Q_{\alpha\beta}^{ab}(x, y)}{\delta V_\nu^{cd}(\xi)} \frac{\delta V_\nu^{cd}(\xi)}{\delta U_\mu^{k\ell}(z)} \\
+	&= -K\sum_{c, d, \nu} \sum_{\xi\in\Lambda}  \left[ \delta_{x\xi}  \delta_{ca} \delta_{db} (1 - \gamma_\nu)_{\alpha\beta} \delta_{x  + \hat\nu, y} + \delta_{y\xi}  \delta_{cb} \delta_{da} (1 + \gamma_\nu)_{\alpha\beta} \delta_{x - \hat\nu, y} \right] \left( 2 \left( t^c U_\mu(z) t^d \right)_{\ell k} \delta_{\nu\mu} \delta_{z \xi} \right) \\
+	&= -2K \sum_{c, d} \left[ \delta_{xz} \delta_{ca} \delta_{db} (1 - \gamma_\mu)_{\alpha\beta} \delta_{x + \hat\mu, y} + \delta_{yz} \delta_{cb} \delta_{da} (1 + \gamma_\mu)_{\alpha\beta} \delta_{x - \hat\mu, y} \right] \left( t^c U_\mu(z) t^d \right)_{\ell k} \\
+	&= -2K \left[ \delta_{xz} (1 - \gamma_\mu)_{\alpha\beta} \left( t^a U_\mu(z) t^b \right)_{\ell k} \delta_{x + \hat\mu, y} + \delta_{yz} (1 + \gamma_\mu)_{\alpha\beta} \left( t^b U_\mu(z) t^a \right)_{\ell k} \delta_{x - \hat\mu, y} \right]
+\end{split}\end{align}
+So, we want to form $\mathcal M_\mu\psi$, which again has a lot of indices\footnote{Note that the indices $(\mu, z, k, \ell)$ are from the differentiation with respect to $U_\mu(z)$ (and $(k, \ell)$ are fundamental $SU(N)$ indices), so they are carried through the whole computation.}. We have:
+\begin{align}\begin{split}
+	(\mathcal M_\mu \psi_i)_{\alpha; k\ell}^{a} &(x; z) = \sum_{b, \beta} \sum_{y\in\Lambda} \mathcal M_{\alpha\beta; k\ell}^{ab; \mu}(x, y; z) (\psi_i)_\beta^b(y) \\
+	&= -2K \left[ \delta_{xz} \left( t^a U_\mu(z) t^b \right)_{\ell k} (1 - \gamma_\mu)_{\alpha\beta} (\psi_i)_\beta^b(z + \hat\mu) + \delta_{x, z + \hat\mu} \left( t^b U_\mu(z) t^a \right)_{\ell k} (1 + \gamma_\mu)_{\alpha\beta} (\psi_i)_\beta^b(z) \right]
+\end{split}\end{align}
+
+\subsection{Gauge force and $\Delta S$ (updating with $\omega_\mu^a(n)$)}
+
+Here, we need to compute the forces as derivatives in the coordinates $\omega_\mu^a(n)$, which are defined in Eq.~\eqref{eq:driving_force_omegamu}. For the gauge force, recall we use the Wilson gauge action,
+\begin{equation}
+	S_g = \beta \sum_{x\in\Lambda} \left( 1 - \frac{1}{N} \mathrm{Re}\, \Tr\, \mathcal P(x) \right) = \beta |\Lambda| - \frac{\beta}{2N} \sum_{x\in\Lambda} \Tr \left[ \mathcal P(x) + \mathcal P^\dagger(x) \right]
+\end{equation}
+where the plaquette $\mathcal P(x) = \mathcal P_{01}(x) = U_0(x) U_1(x + \hat 0) U_0^\dagger(x + \hat 1) U_1^\dagger(x)$. The derivative of this will simply be a staple in the corresponding direction that we differentiate with respect to. 
+\begin{align}\begin{split}
+	(F_g)_\mu^a(n)[\omega] = \frac{\partial S_g}{\partial \omega_\mu^a(n)} &= -\frac{\beta}{2N} \frac{\partial}{\partial \omega_\mu^a(n)} \sum_{x\in\Lambda} \Tr \left[ \mathcal P(x) + \mathcal P(x)^\dagger \right] \\
+	&= -\frac{\beta}{2N} \frac{\partial}{\partial \omega_\mu^a(n)} \sum_{x\in\Lambda} \Tr \left[ U_\rho(x) A_\rho(x) + A_\rho^\dagger(x) U_\rho^\dagger(x) \right] \\
+	&= -\frac{\beta}{2N} \Tr \left[ (it^a) U_\mu(n) A_\mu(n) + A_\mu^\dagger(n) U_\mu^\dagger(n) (-it^a) \right] \\
+	&= -\frac{i\beta}{2N} \Tr \left[ t^a U_\mu(n) A_\mu(n) - A_\mu^\dagger(n) U_\mu^\dagger(n) t^a \right]
+	\label{eq:gauge_force_omega}
+\end{split}\end{align}
+where here $A_\mu(n)$ is the staple formed from removing the link $U_\mu(n)$ from the sum on plaquettes $\sum_{x\in\Lambda} \mathcal P(x)$, which is given by Eq. 4.20 in Gattringer,
+\begin{align}\begin{split}
+	A_\mu(n) &= \left[ U_\nu(n + \hat\mu) U_{-\mu}(n + \hat\mu + \hat\nu) U_{-\nu} (n + \hat\nu) + U_{-\nu} (n + \hat\mu) U_{-\mu} (n + \hat\mu - \hat\nu) U_\nu(n - \hat\nu) \right] \bigg|_{\nu\neq \mu} \\
+	&= \left[U_\nu(n + \hat\mu) U_\mu^\dagger(n + \hat\nu) U_\nu^\dagger(n) + U_\nu^\dagger(n + \hat\mu - \hat\nu) U_\mu^\dagger(n - \hat\nu) U_\nu(n - \hat\nu) \right] \bigg|_{\nu\neq \mu}.
+\end{split}\end{align}
+
+Taking this expression to the algebra can be done with the following trick. Suppose we are expanding $c^a t^a\in\mathfrak{su}(N)$, where $c^a$ are coefficients given by $c^a = \Tr [ t^a \zeta]$, where $\zeta\in\mathfrak{su}(N)$ is some other element of the algebra. We can expand $\zeta = \zeta^b t^b$ and insert this into the expression,
+\begin{equation}
+	c^a t^a = \Tr[t^a \zeta] t^a = \Tr [\zeta^b t^a t^b] t^a = \left( \frac{1}{2} \zeta^b \delta^{ab}\right) t^a = \frac{1}{2} \zeta. 
+\end{equation}
+We see that bringing the coefficients $c^a$ back to the algebra after the trace just induces a factor of $\frac{1}{2}$. After cycling the $t^a$ factors to the front of Eq.~\eqref{eq:gauge_force_omega}, we have an expression for the algebra-valued force,
+\begin{equation}
+	(F_g)_\mu(n)[\omega] = (F_g)_\mu^a(n)[\omega] t^a = -\frac{i\beta}{4N} \left( U_\mu(n) A_\mu(n) - A_\mu^\dagger(n) U_\mu^\dagger(n) \right).
+\end{equation}
+
+We also need an expression for the change in action if we update a single link so that we can do the accept-reject step. Here we assume that we began with the initial gauge field $U$, and we updated the link at $(\mu, n)$ to $U_\mu'(n)$, so the configurations $U'$ and $U$ only differ by a single link. We have:
+\begin{align}\begin{split}
+	\Delta S_g[U, U'] &= S_g[U'] - S_g[U] \\
+	&= -\frac{\beta}{N} \mathrm{Re} \,\Tr \left[ (U_\mu'(n) - U_\mu(n)) A_\mu(n) \right] 
+\end{split}\end{align}
+where again here $U_\mu(n)$ is the updated link. 
+
+\subsection{Pseudofermion force and $\Delta S$  (updating with $\omega_\mu^a(n)$)}
+
+Here's the hard part. We need to compute the derivative of the pseudofermion action
+\begin{align}
+	S_\mathrm{pf}[\omega, \Phi] = \Phi^\dagger K[\omega]^{-1/4} \Phi &&
+	(F_\mathrm{pf})_\mu^a(n) = \Phi^\dagger \frac{\delta K[\omega]^{-1/4}}{\delta\omega_\mu^a(n)} \Phi
+\end{align}
+where recall we approximate the rational function with the Zolotarev approximation,
+\begin{equation}
+	K^{-1/4}[\omega]\Phi\approx r_{-1/4}(K[\omega]) \Phi = \alpha_0\Phi + \sum_{i = 1}^P \alpha_i (K + \beta_i)^{-1}\Phi
+\end{equation}
+Using the fact that for a Lie derivative,
+\begin{equation}
+	\frac{\partial}{\partial\omega} A^{-1} = -A^{-1} \frac{\partial A}{\partial\omega} A^{-1},
+\end{equation}
+we have
+\begin{align}\begin{split}
+	\frac{\partial}{\partial\omega_\mu^a(n)} K^{-1/4} \Phi &= \frac{\partial}{\partial\omega_\mu^a(n)} \left( \alpha_0\Phi + \sum_{i = 1}^P \alpha_i (K + \beta_i)^{-1} \Phi\right) = -\sum_{i = 1}^P \alpha_i (K + \beta_i)^{-1} \frac{\partial K}{\partial\omega_\mu^a(n)} (K + \beta_i)^{-1} \Phi.
+\end{split}\end{align}
+Now, we need to evaluate $\partial K / \partial\omega$, which can be done by exploiting the hermiticity of $Q$:
+\begin{align}\begin{split}
+	\frac{\partial K}{\partial\omega_\mu^a(n)} &= \frac{\partial}{\partial\omega_\mu^a(n)} Q^\dagger Q = \frac{\partial Q^\dagger}{\partial\omega_\mu^a(n)} Q + Q^\dagger \frac{\partial Q}{\partial\omega_\mu^a(n)} \\
+	&= \frac{\partial Q}{\partial\omega_\mu^a(n)} Q + Q^\dagger \frac{\partial Q^\dagger}{\partial\omega_\mu^a(n)} \\
+	&= 2\mathrm{Re}\left[ Q\frac{\partial Q}{\partial\omega_\mu^a(n)} \right].
+\end{split}\end{align}
+Putting this together, we have
+\begin{align}\begin{split}
+	(F_\mathrm{pf})_\mu^a(n) &= -2\sum_{i = 1}^P \alpha_i \mathrm{Re} \left[ \psi_i^\dagger Q[\omega] \frac{\partial Q[\omega]}{\partial\omega_\mu^a(n)} \psi_i \right] \\
+	&= -2\sum_{i = 1}^P \alpha_i \mathrm{Re} \left[  (Q[\omega] \psi_i )^\dagger \frac{\partial Q[\omega]}{\partial\omega_\mu^a(n)} \psi_i \right] \\
+	&= -2\sum_{i = 1}^P \alpha_i \mathrm{Re} \left[  (D[\omega] \psi_i )^\dagger \frac{\partial D[\omega]}{\partial\omega_\mu^a(n)} \psi_i \right]
+\end{split}\end{align}
+where (note that $(K+\beta_i)^{-1}$ is Hermitian)
+\begin{equation}
+	\psi_i = (K + \beta_i)^{-1} \Phi
+\end{equation}
+may be computed with a CG solver. 
+
+The remaining piece to compute is $\partial D[\omega] / \partial\omega_\mu^a(n)$. For the Wilson Dirac operator $D_W$, we will use the fact that
+\begin{align}\begin{split}
+	\frac{\partial}{\partial\omega_\mu^a(n)} V_\nu^{bc}(x) = 2 \frac{\partial}{\partial\omega_\mu^a(n)} \Tr \left( U_\nu^\dagger(x) t^b U_\nu(x) t^c \right) &= 2i \delta_{nx} \delta_{\mu\nu} \Tr \left( - t^a U_\nu^\dagger(x) t^b U_\nu(x) t^c + U_\nu^\dagger(x) t^b t^a U_\nu(x) t^c \right) \\
+	\frac{\partial}{\partial\omega_\mu^a(n)} (V_\nu^{bc})^T(y) &= 2i \delta_{ny} \delta_{\mu\nu} \Tr \left( - t^a U_\nu^\dagger(y) t^c U_\nu(y) t^b + U_\nu^\dagger(y) t^c t^a U_\nu(y) t^b \right)
+\end{split}\end{align}
+We have:
+\begin{align}\begin{split}
+	\frac{\partial }{\partial\omega_\mu^a(n)} (D_W)_{\beta\gamma}^{bc}(x, y) &= - K \sum_{\nu = 1}^2 \frac{\partial}{\partial\omega_\mu^a(n)} \left[ V_\nu^{bc}(x) (1 - \gamma_\nu)_{\beta\gamma} \delta_{x + \hat\nu, y} + (V_{\nu}^T)^{bc}(y) (1 + \gamma_\nu)_{\beta\gamma} \delta_{x - \hat\nu, y} \right] \\
+	&= 2 i K \bigg[ \delta_{nx} \Tr\left( t^c t^a U_\mu^\dagger(x) t^b U_\mu(x) - t^b t^a U_\mu(x) t^c U_\mu^\dagger(x) \right) (1 - \gamma_\mu)_{\beta\gamma} \delta_{x + \hat\mu, y} \\
+	&\hspace{1cm}+ \delta_{ny} \Tr\left( t^bt^a U_\mu^\dagger(y) t^c U_\mu(y) - t^c t^a U_\mu(y) t^b U_\mu^\dagger(y) \right) (1 + \gamma_\mu)_{\beta\gamma} \delta_{x - \hat\mu, y} \bigg]
+\end{split}\end{align}
+We can apply this to $\psi_i$ to determine
+\begin{align}\begin{split}
+	\left( \frac{\partial D}{\partial\omega_\mu^a(n)} \psi_i \right)_\beta^b(x) &= \sum_y \frac{\partial}{\partial\omega_\mu^a(n)} (D_W)_{\beta\gamma}^{bc}(x, y) \psi_\gamma^c(y) \\
+	&= 2 i K \bigg[ \delta_{nx} \Tr \left( t^a \left( U_\mu^\dagger(n) t^b U_\mu(n) t^c - U_\mu(n) t^c U_\mu^\dagger(n) t^b \right) \right) (1 - \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n + \hat\mu) \\
+	&\hspace{1cm}+ \delta_{n + \hat\mu, x} \Tr\left( t^a \left( U_\mu^\dagger(n) t^c U_\mu(n) t^b - U_\mu(n) t^b U_\mu^\dagger(n) t^c \right) \right) (1 + \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n) \bigg]
+	\label{eq:dDdw}
+\end{split}\end{align}
+We can almost simplify this down using the definition $V_\mu^{ab}(n) = 2\Tr [U_\mu^\dagger(n) t^a U_\mu(n) t^b]$, but the $t^a$ in front of the pieces inside the trace makes this impossible. However, we can simplify it a bit. We define the tensor
+\begin{align}
+	\mathcal W_\mu^{ab}\equiv U_\mu^\dagger(n) t^a U_\mu(n) t^b - U_\mu(n) t^b U_\mu^\dagger(n) t^a && \Tr\,\mathcal W_\mu^{ab} = \frac{1}{2}(V_\mu^{ab} - V_\mu^{ab}) = 0.
+\end{align}
+Note that $\mathcal W_\mu^{ab}$ also has fundamental color indices, $(\mathcal W_\mu^{ab})_{ij}(n)$. This definition allows us to simplify down our expression for $\partial D / \partial\omega$:
+\begin{align}\begin{split}
+	\left( \frac{\partial D}{\partial\omega_\mu^a(n)} \psi_i \right)_\beta^b(x)
+	&= 2 i K \bigg[ \delta_{nx} \Tr \left( t^a \mathcal W_\mu^{bc}(n) \right) (1 - \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n + \hat\mu) \\
+	&\hspace{1cm}+ \delta_{n + \hat\mu, x} \Tr\left( t^a \mathcal W_\mu^{cb}(n) \right) (1 + \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n) \bigg].
+\end{split}\end{align}
+The best way to compute this is thus to precompute the traceless quantity $\mathcal W_\mu$, then form the appropriate tensor contractions. {\color{red}TODO this should be something we can test with autodiff}
+
+%\begin{align}
+%	\mathcal V_\mu^{ab}(n) \equiv  U_\mu^\dagger(n) t^a U_\mu(n) t^b && V_\mu^{ab}(n) = 2\Tr\, \mathcal V_\mu^{ab}(n)
+%\end{align}
+%where we note that $\mathcal V_\mu^{ab}(n)$ also has fundamental color indices, $(\mathcal V_\mu^{ab})_{ij}(n)$. Note that 
+%\begin{equation}
+%	(\mathcal V^\dagger)^{ab}_\mu(n) = (V_\mu^{ba})^\dagger = t^a U_\mu^\dagger(n) t^b U_\mu(n)
+%\end{equation}
+%Unfortunately, this is not in the form of the other terms in Eq.~\eqref{eq:dDdw}, since the $\dagger$ on $U_\mu(n)$ is in the wrong place compared to the product of generators $t^a t^b$; we may have to compute them explicitly as another field instead. So, we define
+%\begin{align}
+%	\overline{\mathcal V}_\mu^{ab}(n)\equiv U_\mu(n) t^b U^\dagger_\mu(n) t^a && V_\mu^{ab} = 2\Tr\,\overline{\mathcal V}_\mu^{ab}.
+%\end{align}
+%Note that this is the same as $\overline V_\mu$, with the pieces shuffled by a few steps. They are the same under a trace, but for our purposes using them as matrices they are a bit different. We have:
+%\begin{align}\begin{split}
+%	\left( \frac{\partial D}{\partial\omega_\mu^a(n)} \psi_i \right)_\beta^b(x)
+%	&= 2 i K \bigg[ \delta_{nx} \Tr \left( t^a \left( \mathcal V_\mu^{bc}(n) - \overline{\mathcal V}_\mu^{bc}(n) \right) \right) (1 - \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n + \hat\mu) \\
+%	&\hspace{1cm}+ \delta_{n + \hat\mu, x} \Tr\left( t^a \left(  \mathcal V_\mu^{cb}(n) - \overline{\mathcal V}_\mu^{cb}(n) \right) \right) (1 + \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n) \bigg].
+%\end{split}\end{align}
+%The best way to compute this is thus to precompute the traceless quantity $\mathcal V_\mu - \overline{\mathcal V}_\mu$, then form the appropriate tensor contractions. 
+
+We conclude this calculation with a bit of bookkeeping, combining our previous results and making indices explicit:
+\begin{align}\begin{split}
+	(F_\mathrm{pf})_\mu^a(n) &= -2\sum_{i = 1}^P \alpha_i \mathrm{Re} \left[  (D[\omega] \psi_i )^\dagger \frac{\partial D[\omega]}{\partial\omega_\mu^a(n)} \psi_i \right] \\
+	&= -2\sum_{i = 1}^P \alpha_i \sum_{x} \mathrm{Re} \left[  \left((D[\omega] \psi_i )^\dagger \right)_\beta^b(x) \left( \frac{\partial D[\omega]}{\partial\omega_\mu^a(n)} \psi_i \right)_\beta^b(x) \right] \\
+	&= -4iK\sum_{i = 1}^P \alpha_i \sum_{x} \mathrm{Re} \bigg[  \left((D[\omega] \psi_i )^\dagger \right)_\beta^b(x) \bigg[ \delta_{nx} \Tr \left( t^a \mathcal W_\mu^{bc}(n) \right) (1 - \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n + \hat\mu) \\
+	&\hspace{5cm} + \delta_{n + \hat\mu, x} \Tr\left( t^a \mathcal W_\mu^{cb}(n) \right) (1 + \gamma_\mu)_{\beta\gamma} \psi_\gamma^c(n) \bigg] \bigg] .
+%	\\
+%	&= -4iK \sum_{i = 1}^P \alpha_i \mathrm{Re}\bigg[ \left((D\psi_i )^\dagger \right)^b(n) \Tr\,\left( t^a \mathcal W_\mu^{bc} (n) \right) (1 - \gamma_\mu) \psi^c(n + \hat\mu) \\ &\hspace{5cm}+ \left((D\psi_i )^\dagger \right)^b(n + \hat\mu) \Tr\left( t^a \mathcal W_\mu^{cb}(n) \right) (1 + \gamma_\mu) \psi^c(n) \bigg]
+\end{split}\end{align}
+Simplifying the sum yields the following result for the pseudofermion force:
+\begin{equation}
+\boxed{
+	\begin{split}
+		(F_\mathrm{pf})_\mu^a(n) &= -4iK \sum_{i = 1}^P \alpha_i \mathrm{Re}\bigg[ \left((D\psi_i )^\dagger \right)^b(n) \,\Tr\,\left( t^a \mathcal W_\mu^{bc} (n) \right) (1 - \gamma_\mu) \psi^c(n + \hat\mu) \\ &\hspace{3cm}+ \left((D\psi_i )^\dagger \right)^b(n + \hat\mu) \, \Tr\left( t^a \mathcal W_\mu^{cb}(n) \right) (1 + \gamma_\mu) \psi^c(n) \bigg]
+	\end{split}
+}
+\end{equation}
+
+\poarecomment{TODO we also want the change in the action if we change 1 link}
+
+\subsection{RHMC and MD evolution}
+
+Now that we've computed the pseudofermion forces, we need to do the leapfrog update. Let $\epsilon$ be the step size, and suppose we wish to perform $n$ steps. 
+
+\subsection{Computing the Pfaffian}
+
+We need to compute the Pfaffian of the skew-symmetric matrix $Q = \gamma_5\mathcal D$. The typical method to compute the Pfaffian of a large skew-symmetric matrix is to consider its LU decomposition. For a skew-symmetric matrix, one can show that the LU decomposition reduces to
+\begin{equation}
+	Q = P J P^T
+\end{equation}
+where $P$ is lower triangular (note any lower triangular matrix satisfies $P^{-1} = P^T$) and $J$ is a tridiagonal\footnote{A tridiagonal matrix is one with non-zero elements only on its diagonal, its super diagonal (elements above the diagonal) and its subdiagonal (elements below its diagonal).} matrix with trivial Pfaffian, $\pf [J] = 1$. Passing to the Pfaffian, we see that given this decomposition, this provides us with a simple way to compute $\pf [Q]$
+\begin{equation}
+	\pf [Q] = \pf [PJP^T] = \pf [P]^2 \underbrace{\pf[J]}_{1} = \det [P] = \prod_i P_{ii}
+\end{equation}
+If we know $P$, the Pfaffian of $Q$ is simply the product of the diagonal elements of $P$. The explicit algorithm, with an example performed for Wilson fermions, is laid out in Ref.~\cite{Rubow:2011dq}. 
+
+\begin{comment}
+One important caveat on $Q$ for this algorithm to work is that $Q$ \textbf{must connect adjacent components on its diagonal, for each even element of the diagonal; that is, for each even $i$, $e_{i + 1}^T Q e_i\neq 0$, where $e_i$ is the unit vector in direction $i$}. This is not the case for the naive Dirac-Wilson operator with the blocking that we've written down, since each $(x, t)$ block is proportional to $1_s \otimes 1_c$, where s means spin and c means color. Instead of blocking by spacetime coordinate, we need to change our basis to modify our blocking, since $Q_{ij}$ is only non-zero when $j$ corresponds to an adjacent site to $i$. 
+
+The easiest way to do this is to consider a permutation matrix $\mathcal P$, which has a single non-zero entry per row equal to 1, satisfying $\mathcal P^T = \mathcal P^{-1}$. Upon basis transformation by $\mathcal P$, the Pfaffian of $Q$ is unchanged up to a sign:
+\begin{align}
+	\mathcal Q\equiv \mathcal P Q \mathcal P^T && \pf[\mathcal Q] = \pf[\mathcal P Q \mathcal P^T] = \det[\mathcal P] \pf[Q] = \pm \pf[Q]
+\end{align}
+where we use that $\pf[B A B^T] = \det[B]\, \pf[A]$. The sign can be worked out as the determinant of $\mathcal P$, which is $\pm 1$. 
+
+To determine the permutation matrix to use, we need to think about the way that we've blocked our Dirac operator. We'll refer to the blocking of Eq.~\eqref{eq:dirac_op_indexing} as a \textbf{color-spin blocking}. We need to change to a \textbf{spacetime blocking}, which uses $d_{N_c}\times N_s$ blocks of size $L\times T$. This means that each block will look like the following (for example, on a $4\times 4$ lattice; each block is a $16\times 16$-dimensional matrix):
+\begin{equation}
+	D_\mathrm{block}^{\mathrm{sp}}((a, \alpha), (b, \beta)) = \begin{pmatrix}
+		D((0, 0), (0, 0)) & D((0, 0), (1, 0)) & D((0, 0), (2, 0)) & D((0, 0), (3, 0)) & D((0, 0), (0, 1)) & D((0, 0), (1, 1)) & ... & D((0, 0), (3, 3)) \\
+		D((1, 0), (0, 0)) & D((1, 0), (1, 0)) & D((1, 0), (2, 0)) & D((1, 0), (3, 0)) & D((1, 0), (0, 1)) & D((1, 0), (1, 1)) & ... & D((1, 0), (3, 3)) \\
+		D((2, 0), (0, 0)) & D((2, 0), (1, 0)) & D((2, 0), (2, 0)) & D((2, 0), (3, 0)) & D((2, 0), (0, 1)) & D((2, 0), (1, 1)) & ... & D((2, 0), (3, 3)) \\
+		D((3, 0), (0, 0)) & D((3, 0), (1, 0)) & D((3, 0), (2, 0)) & D((3, 0), (3, 0)) & D((3, 0), (0, 1)) & D((3, 0), (1, 1)) & ... & D((3, 0), (3, 3)) \\
+		D((0, 1), (0, 0)) & D((0, 1), (1, 0)) & D((0, 1), (2, 0)) & D((0, 1), (3, 0)) & D((0, 1), (0, 1)) & D((0, 1), (1, 1)) & ... & D((0, 1), (3, 3)) \\
+		... 			& ... 			   & ... 		      & ... 			& ... 			   & ...		      & ... & 				\\
+		D((3, 3), (0, 0)) & D((3, 3), (1, 0)) & D((3, 3), (2, 0)) & D((3, 3), (3, 0)) & D((3, 3), (0, 1)) & D((3, 3), (1, 1)) & ... & D((3, 3), (3, 3)) \\
+	\end{pmatrix}
+\end{equation}
+We then need a permutation matrix that will move us between the following two bases (here we are looking at a single column $d_\alpha^a(x, t)$ of the Dirac operator):
+\begin{align}
+	v_{\mathrm{spacetime}} = \begin{pmatrix} 
+		d_0^0(0, 0) \\
+		d_0^0(1, 0) \\
+		d_0^0(2, 0) \\
+		d_0^0(3, 0) \\
+		d_0^0(0, 1) \\
+		d_0^0(1, 1) \\
+		d_0^0(2, 1) \\
+		d_0^0(3, 1) \\
+		d_0^0(0, 2) \\
+		... \\
+		d_1^2(3, 3)
+	\end{pmatrix}
+	&&
+	v_{\mathrm{colspin}} = \begin{pmatrix} 
+		d_0^0(0, 0) \\
+		d_0^1(0, 0) \\
+		d_0^2(0, 0) \\
+		d_1^0(0, 0) \\
+		d_1^1(0, 0) \\
+		d_1^2(0, 0) \\
+		d_0^0(1, 0) \\
+		d_0^1(1, 0) \\
+		... \\
+		d_1^2(3, 3)
+	\end{pmatrix}
+	\label{eq:basis_vectors_perm}
+\end{align}
+i.e. we need the $(d_{N_c} N_s  L T)\times (d_{N_c} N_s  L T)$-dimensional matrix $\mathcal P$ to satisfy,
+\begin{equation}
+	v_{\mathrm{spacetime}} = \mathcal P v_{\mathrm{colspin}}.
+\end{equation}
+Let $N_\mathrm{blk}^\mathrm{cs} = d_{N_c}\times N_s$, and $N_\mathrm{blk}^\mathrm{sp} = L\times T$. We see that we need the permutation matrix:
+\begin{equation}
+	\mathcal P_{ij} = \begin{cases} 
+	1 & j = (i\% N_\mathrm{blk}^{\mathrm{sp}})\times N_\mathrm{blk}^\mathrm{sp} + (i // N_\mathrm{blk}^\mathrm{sp}) \\
+	0 & \mathrm{else}
+	\end{cases}.
+\end{equation}
+
+The above discussion works for a color-spin blocked operator assuming that the spin structure at each $(x, x)$ and $(x, x + \hat 0)$ has non-zero diagonal components (for even flattened spacetime indices). This holds for the standard Dirac operator $\mathcal D$, since $\mathcal D(x, x)$ is proportional to the identity in spinor-space. However, with our current choice of $\gamma$-matrix basis, $\gamma_5$ is off-diagonal, hence the hermitian Dirac operator $Q = \gamma_5 \mathcal D$ will not satisfy this property. So, we need to change the basis of $Q$ to one that has a diagonal spin structure. The easiest way to simplify this problem down is to just map the problem to a basis where $\gamma_5 = \sigma_2$ is diagonal. This change-of-basis in spinor space is performed with the matrix $\omega$:
+\begin{align}
+	\omega = \frac{1 - i}{2} \begin{pmatrix} i & -i \\ 1 & 1 \end{pmatrix} && \omega^{-1} = \frac{1 + i}{2} \begin{pmatrix} -i & 1 \\ i & 1 \end{pmatrix} && \det\omega = 1,
+\end{align}
+where $\omega$ has been normalized to have unit determinant. Changing our $\gamma$-matrix basis yields:
+\begin{align}
+	\gamma_5\rightarrow \omega^{-1} \gamma_5 \omega = \begin{pmatrix} -1 & 0 \\ 0 & 1 \end{pmatrix} = -\sigma_3 && \gamma^0\rightarrow \omega^{-1} \gamma_0 \omega = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix} = \sigma_2 && \gamma_1\rightarrow  \frac{1}{2} \begin{pmatrix} -1 & i \\ i & 1 \end{pmatrix} = \frac{1}{2} \left( -\sigma_3 + i\sigma_1 \right)
+\end{align}
+We can now consider using $\omega$ to change the basis on the hermitian Dirac operator. Consider the following Kronecker product of $\omega$ with the identity in color space, and with the identity in spacetime:
+\begin{equation}
+	\Omega = \underbrace{(1_{d_{N_c}}\otimes \omega)}_{\textnormal{color-spin blocked } \omega} \otimes 1_{L\times T}.
+\end{equation}
+The first Kronecker product yields a color-spin blocked $\omega$, and the second Kronecker product fills that color-spin blocked $\omega$ into an entire operator. Since we first enumerate in color, then enumerate in spin, this looks like (for example, in $d_{N_c} = 3$ for $SU(2)$),
+\begin{equation}
+	1_{d_{N_c}} \otimes \omega = \left(\frac{1 - i}{2} \right) \begin{pmatrix}
+		i 1_{d_{N_c}} & -i 1_{d_{N_c}} \\
+		1_{d_{N_c}} & 1_{d_{N_c}}
+	\end{pmatrix}
+\end{equation}
+Note that since this matrix is block diagonal with $d_{N_c} LT$ blocks, the determinant factors
+\begin{equation}
+	\det\Omega = (\det\omega)^{d_{N_c} L T} = 1
+\end{equation}
+Now, we can change the basis on $Q$ to one where $\gamma_5$ is diagonal. This should make sure the spacetime blocking discussed above has a structure with a non-zero superdiagonal, diagonal, and subdiagonal. That is, we transform
+\begin{equation}
+	Q\rightarrow \tilde{Q} \equiv \Omega^{-1} Q \Omega
+\end{equation}
+After performing this basis transformation, we can rotate $\tilde{Q}$ from the color-spin blocking into the spacetime blocking, where we consider $\tilde{\mathcal Q}$,
+\begin{equation}
+	\tilde{\mathcal Q}\equiv \mathcal P \tilde{Q} \mathcal{P}^T = \mathcal P \Omega^{-1} Q \underbrace{\Omega \mathcal P^T}_{\tilde{\mathcal P}} \equiv \tilde{\mathcal P}^{-1} Q \tilde{\mathcal P}
+\end{equation}
+The change of basis matrix we want for $Q$ is thus $\tilde{\mathcal P} = \Omega \mathcal P^T$. Note that $\tilde{\mathcal P}$ is not an orthogonal matrix, but still should implement the change of basis correctly. This $\tilde{\mathcal Q}$ is spacetime-blocked, with the correct Dirac structure such that its superdiagonal, diagonal, and subdiagonal should be non-zero and the LU decomposition algorithm can be applied. This yields:
+\begin{equation}
+	\Gamma \tilde{\mathcal Q} \Gamma^T = T \implies \pf[\tilde{\mathcal Q}] = \left(\det \Gamma \right)^{-1}
+\end{equation}
+Now we can relate this back to $\pf[Q]$ with
+\begin{equation}
+	\pf[\tilde{\mathcal Q}] = \pf[\tilde{Q}] = \det[\Omega] \pf[Q] = \pf[Q]
+\end{equation}
+hence
+\begin{equation}
+	\pf[Q] = (\det\Gamma)^{-1}.
+\end{equation}
+
+When changing between bases, note that symmetry properties of matrices may not hold in each basis. In particular, let $A$ be a skew-symmetric matrix. Then upon change of basis by a permutation matrix, $A$ is still skew-symmetric, but upon change of basis by an arbitrary matrix, $A$ is not necessarily skew symmetric. The important thing is that after transformation, $A$ is still skew-symmetric iff the change-of-basis matrix is orthogonal. For example, let $A'\equiv O A O^{-1}$ for a real change-of-basis matrix $O$. Then:
+\begin{equation}
+	(A')^T = (O A O^{-1})^T = (O^{-1})^T A^T O^T = -(O^{-1})^T A^T O^T \xrightarrow{O^{-1} = O^T} - O  A O^T = -A'.
+\end{equation}
+We see that in the case when $O$ is orthogonal ($O^T = O^{-1}$), $A'$ is still antisymmetric. Thus for the matrices above, the permutation matrix $\mathcal P$ still works to admit the desired LU decomposition for $\mathcal Q$, but the more complicated change-of-basis matrix $\tilde{\mathcal P}$ is not orthogonal, hence should not be used since the resulting $\tilde{\mathcal Q}$ is not antisymmetric. 
+
+\end{comment}
+
+So, the problem of computing $\pf[Q]$ is equivalent to determining the LU decomposition of $Q$. The algorithm to perform the LU decomposition of $Q = P J P^T$ is performed as follows. Let $p_{ij} = (P)_{ij}$ be the elements of the lower-triangular matrix $P$. The idea here is that we can simply solve a system of equations to constrain $P$, but naively this system of equations is over-determined. In order to make it a valid system of equations, we can constrain $P$ by, for each odd $i = 1, 3, 5, ..., N - 1$, setting the diagonal element and the element below it to zero:
+\begin{align}
+	p_{ii} = 1 && p_{i+1, i} = 0.
+\end{align}
+Furthermore, we also need the constraint that $p_{ij} = 0$ for each $i < j$, i.e. that $p$ is a lower-triangular matrix. So, the matrix $P$ we are aiming to construct has the following form, where $*$ denotes an undetermined value that is computed in the algorithm:
+\begin{equation}
+	P = \begin{pmatrix} 
+		1 & 0 & 0 & 0 & 0 & 0 & ... & \\
+		0 & * & 0 & 0 & 0 & 0 & ... & \\
+		* & * & 1 & 0 & 0 & 0 & ... & \\
+		* & * & 0 & * & 0 & 0 & ... & \\
+		* & * & * & * & 1 & 0 & ... & \\
+		* & * & * & * & 0 & * & ... & \\
+	\end{pmatrix}.
+\end{equation}
+We see that :
+\begin{itemize}
+	\item In odd columns $(p_{ji})_j$ with $i\in \{1, 3, 5, ..., N - 1\}$, the diagonal element $p_{ii}$ is set to 1, and the next element $p_{i+1, i}$ is set to 0. All other elements are undetermined.
+	\item The odd columns $(p_{ji})_j$ with $i\in \{2, 4, 6, ..., N\}$ are completely unspecified, up to the requirement that $P$ be a lower triangular matrix. 
+\end{itemize}
+
+The algorithm proceeds in pairs of columns. We let $\sum_{k = 1}^{m\prime}$ denote a sum over only odd values $k = 1, 3, 5, ..., m$, and we iterate over odd $i = 1, 3, 5, ..., N - 1$. For each $i = 1, 3, 5, ..., N$, we have three steps:
+\begin{enumerate}
+	\item Set the $i + 1$ (right) column. For each $j = i + 1, i + 2, ..., N$, compute:
+	\begin{equation}
+		p_{j, i + 1} = a_{ij} - \sum_{k = 1}^{i-1 \prime} \left(p_{ik} p_{j, k + 1} - p_{i, k + 1} p_{jk}\right).
+	\end{equation}
+	
+	\item If $p_{i+1, i+1}$ is zero, pivot the columns. The point of this is that in the next step, $p_{i + 1, i + 1}$ (the diagonal even element which has just been determined) may be zero. In order to prevent this, one needs to pick a column in which this is not true, and pivot the columns. To do this, we search over all the entires of $(p_{j, i+1})_j$ that have just been determined, and denote $j_\mathrm{max}$ as the index with the maximum value of this quantity:
+	\begin{equation}
+		j_\mathrm{max} = \underset{j}{\mathrm{argmax}} |p_{j, i+1}|.
+	\end{equation}
+	The idea now is to permute the columns of the matrix to swap the $j_\mathrm{max}$ row of $Q$ with the $i+1$ row of $Q$. This will guarantee that, after permutation, the matrix element $|p_{i+1,i+1}'|$ is non-zero, where $'$ denotes that this matrix has been permuted.
+	
+	Formally, let $\tau$ be the transposition $\tau = (i+1, j_\mathrm{max})$. 
+	
+	\item Set the $i$th (left) column. Note that the first two elements are already determined to be 1 and 0. For each $j = i + 2, i + 3, ..., N$, we hence compute
+	\begin{equation}
+		(-p_{i+1, i+1}) p_{ji} = a_{i+1, j} - \sum_{k = 1}^{i-2\prime} \left( p_{i+1, k} p_{j, k + 1} - p_{i + 1, k + 1} p_{jk} \right).
+	\end{equation}
+	Here we use the assumption that $p_{i+1,i+1}$ is non-zero. In the case where it is, we pivot the columns. If it turns out that $p_{i+1,i+1} = 0$ for any permutation, then it can be shown that the original matrix $A$ must be singular, hence if $A$ is antisymmetric and non-singular, then this algorithm may always be used. 
+\end{enumerate}
+From this construction, one can show that the trivial antisymmetric matrix $J$, defined component-wise for each $i\in \{0, 1, ..., N - 1\}$ as
+\begin{equation}
+	J_{i, i - (-1)^i} = -(-1)^i \implies J = \mathrm{diag}\left[ \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}, \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}, ..., \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix} \right],
+\end{equation}
+satisfies the defining relation that $Q = PJP^T$. 
+
+%we first transform $Q$ to a spacetime-blocked basis
+%\begin{equation}
+%	Q\rightarrow \mathcal Q = \mathcal P Q \mathcal P^T.
+%\end{equation}
+%This is almost what we want, but we're still in the basis where $\gamma_5$ is not diagonal. 
+
+%\poarecomment{Other attempt, not sure why it isn't working}
+%
+%The problem here is that $\gamma_5$ mixes our Dirac components, since in our basis $\gamma_5 = \sigma_2$. The solution to this is to shift all the indices by $d_{N_c}$ in the permutation matrix. Essentially, we want row 0 to start with the component $d_1^0(0, 0)$, and go from there, since now the $(\alpha, \beta) = (0, 1)$ component is non-zero in $Q$ (because of the extra $\gamma_5$), while the diagonal component $(\alpha, \beta) = (0, 0)$ is now zero. Using the same color-spin vector of Eq.~\eqref{eq:basis_vectors_perm}, we now want to find $\tilde{\mathcal P}$ satisfying
+%\begin{align}
+%	\tilde{v}_{\mathrm{spacetime}} = \begin{pmatrix} 
+%		d_1^0(0, 0) \\
+%		d_1^0(1, 0) \\
+%		d_1^0(2, 0) \\
+%		d_1^0(3, 0) \\
+%		d_1^0(0, 1) \\
+%		d_1^0(1, 1) \\
+%		d_1^0(2, 1) \\
+%		d_1^0(3, 1) \\
+%		d_1^0(0, 2) \\
+%		... \\
+%		d_0^2(3, 3)
+%	\end{pmatrix}
+%	&& \tilde{v}_\mathrm{spacetime} = \tilde{\mathcal P} v_\mathrm{colspin}.
+%\end{align}
+%The easiest way to do this is in terms of the original $\mathcal P$. Note that if we want to change bases from $v_\mathrm{spacetime}$ to $\tilde{v}_\mathrm{spacetime}$, we can simply work with a Kronecker product of $\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$:
+%\begin{align}
+%	\tilde{v}_\mathrm{spacetime} = \rho v_\mathrm{spacetime} && \rho = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \otimes 1_{d_{N_c} LT} = \begin{pmatrix} 0 & 1_{d_{N_c}LT} \\ 1_{d_{N_c}LT} & 0 \end{pmatrix}.
+%\end{align}
+%Thus to construct $\tilde{\mathcal P}$, we can simply multiply $\mathcal P$ by $\rho$:
+%\begin{equation}
+%	\tilde{\mathcal P} = \rho \mathcal P
+%\end{equation}
+
+%Since the $\alpha = 1$ component is shifted by $d_{N_c}$ in the original color-spin block with respect to the $\alpha = 0$ component, we need to shift the first half of these vectors by $d_{N_c}$, and the second half should be shifted by $-d_{N_c}$. 
+
+\section{The path forward}
+
+We want to work up to simulating Aleksey's 2d adjoint QCD theory. There are a few clear steps:
+\begin{itemize}
+	\item Write down a discretized action for the fermionic part of the theory, with interactions turned off ($c_1 = c_2 = 0$). Here we'll want to consider any of the following: Wilson, Wilson-Clover, twisted mass, domain wall, overlap. Wilson is the simplest, but it does not seem that a Wilson action with one Majorana fermion in 2d has been written down (it might not play nice with the Majorana properties). It looks like there is a no-go theorem for removing the doublers in $d = 8k, 8k + 1$ dimensions~\cite{Suzuki:2004ht}, but that shouldn't affect us in 2d. 
+	\item Use RHMC to simulate gauge field ensembles for the theory with no interactions ($c_1 = c_2 = 0$), which is standard 2d adjoint QCD. Monitor the sign of the Pfaffian using spectral flow to ensure there is no sign problem. Run this at a variety of different $N$ and see how the time scales (the Pfaffian is harder to simulate than the determinant).
+	\item Compute observables in the standard 2d adjoint QCD theory. Study confinement order parameters and chiral symmetry breaking. 
+	\item Write down and implement the overlap action for a Majorana fermion. We'll want to use this to have a semblance of chiral symmetry. 
+	\item Add four-fermion interactions to the theory and simulate the wish list. 
+\end{itemize}
+
+ obvious first step is to simulate the theory with parameters $c_1 = c_2 = 0$, i.e. with all four-fermion interactions turned off. 
+
+
+% To recompile references in a bibtex file with Texshop, use CMD + SHIFT + B
+\bibliographystyle{plain}
+\bibliography{2d_adjoint_qcd.bib}
+
+\end{document}

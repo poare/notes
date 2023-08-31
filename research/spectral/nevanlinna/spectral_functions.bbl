@@ -1,0 +1,47 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Fei et~al.(2021)Fei, Yeh, and Gull]{fei2021nevanlinna}
+Jiani Fei, Chia-Nan Yeh, and Emanuel Gull.
+\newblock Nevanlinna analytical continuation.
+\newblock \emph{Physical Review Letters}, 126\penalty0 (5):\penalty0 056402,
+  2021.
+
+\bibitem[Adamyan et~al.(2003)Adamyan, Alcober, and
+  Tkachenko]{10.1155/S1687120003212028}
+V.~M. Adamyan, J.~Alcober, and I.~M. Tkachenko.
+\newblock {Reconstruction of distributions by their moments and local
+  constraints}.
+\newblock \emph{Applied Mathematics Research eXpress}, 2003\penalty0
+  (2):\penalty0 33--70, 08 2003.
+\newblock ISSN 1687-1200.
+\newblock \doi{10.1155/S1687120003212028}.
+\newblock URL \url{https://doi.org/10.1155/S1687120003212028}.
+
+\bibitem[Galán and Nicolau(2014)]{https://doi.org/10.48550/arxiv.1405.3578}
+Nacho~Monreal Galán and Artur Nicolau.
+\newblock Extremal solutions of nevalinna-pick problems and certain classes of
+  inner functions, 2014.
+\newblock URL \url{https://arxiv.org/abs/1405.3578}.
+
+\bibitem[Garcia et~al.(2015)Garcia, Mashreghi, and
+  Ross]{https://doi.org/10.48550/arxiv.1512.05444}
+Stephan~Ramon Garcia, Javad Mashreghi, and William~T. Ross.
+\newblock Finite blaschke products: a survey.
+\newblock 2015.
+\newblock \doi{10.48550/ARXIV.1512.05444}.
+\newblock URL \url{https://arxiv.org/abs/1512.05444}.
+
+\bibitem[Garcia et~al.(2018)Garcia, Mashreghi, and
+  Ross]{blaschke_products_book}
+Stephan Garcia, Javad Mashreghi, and William Ross.
+\newblock \emph{Finite Blaschke Products and Their Connections}.
+\newblock 05 2018.
+\newblock ISBN 978-3-319-78246-1.
+\newblock \doi{10.1007/978-3-319-78247-8}.
+
+\end{thebibliography}

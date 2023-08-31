@@ -1,0 +1,117 @@
+\begin{thebibliography}{16}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Komargodski et~al.(2021)Komargodski, Ohmori, Roumpedakis, and
+  Seifnashri]{Komargodski:2020mxz}
+Zohar Komargodski, Kantaro Ohmori, Konstantinos Roumpedakis, and Sahand
+  Seifnashri.
+\newblock {Symmetries and strings of adjoint QCD$_{2}$}.
+\newblock \emph{JHEP}, 03:\penalty0 103, 2021.
+\newblock \doi{10.1007/JHEP03(2021)103}.
+
+\bibitem[Dempsey et~al.(2023)Dempsey, Klebanov, Lin, and Pufu]{Dempsey:2022uie}
+Ross Dempsey, Igor~R. Klebanov, Loki~L. Lin, and Silviu~S. Pufu.
+\newblock {Adjoint Majorana QCD$_{2}$ at finite N}.
+\newblock \emph{JHEP}, 04:\penalty0 107, 2023.
+\newblock \doi{10.1007/JHEP04(2023)107}.
+
+\bibitem[Donahue and Dubovsky(2020{\natexlab{a}})]{Donahue:2019adv}
+John~C. Donahue and Sergei Dubovsky.
+\newblock {Confining Strings, Infinite Statistics and Integrability}.
+\newblock \emph{Phys. Rev. D}, 101\penalty0 (8):\penalty0 081901,
+  2020{\natexlab{a}}.
+\newblock \doi{10.1103/PhysRevD.101.081901}.
+
+\bibitem[Donahue and Dubovsky(2020{\natexlab{b}})]{Donahue:2019fgn}
+John~C. Donahue and Sergei Dubovsky.
+\newblock {Classical Integrability of the Zigzag Model}.
+\newblock \emph{Phys. Rev. D}, 102\penalty0 (2):\penalty0 026005,
+  2020{\natexlab{b}}.
+\newblock \doi{10.1103/PhysRevD.102.026005}.
+
+\bibitem[Cherman et~al.(2020)Cherman, Jacobson, Tanizaki, and
+  \"Unsal]{Cherman:2019hbq}
+Aleksey Cherman, Theodore Jacobson, Yuya Tanizaki, and Mithat \"Unsal.
+\newblock {Anomalies, a mod 2 index, and dynamics of 2d adjoint QCD}.
+\newblock \emph{SciPost Phys.}, 8\penalty0 (5):\penalty0 072, 2020.
+\newblock \doi{10.21468/SciPostPhys.8.5.072}.
+
+\bibitem[Gaiotto et~al.(2015)Gaiotto, Kapustin, Seiberg, and
+  Willett]{Gaiotto:2014kfa}
+Davide Gaiotto, Anton Kapustin, Nathan Seiberg, and Brian Willett.
+\newblock {Generalized Global Symmetries}.
+\newblock \emph{JHEP}, 02:\penalty0 172, 2015.
+\newblock \doi{10.1007/JHEP02(2015)172}.
+
+\bibitem[Chen et~al.(2011)Chen, Gu, and Wen]{Chen_2011}
+Xie Chen, Zheng-Cheng Gu, and Xiao-Gang Wen.
+\newblock Classification of gapped symmetric phases in one-dimensional spin
+  systems.
+\newblock \emph{Physical Review B}, 83\penalty0 (3), jan 2011.
+\newblock \doi{10.1103/physrevb.83.035107}.
+\newblock URL \url{https://doi.org/10.1103%2Fphysrevb.83.035107}.
+
+\bibitem[Tong(2018)]{Tong_2018}
+David Tong.
+\newblock David tong: Lectures on gauge theory, 2018.
+\newblock URL \url{https://www.damtp.cam.ac.uk/user/tong/gaugetheory.html}.
+
+\bibitem[Montvay(2001)]{Montvay:2001ry}
+Istvan Montvay.
+\newblock {Majorana fermions on the lattice}.
+\newblock 8 2001.
+
+\bibitem[Stathopoulos and McCombs(2010)]{10.1145/1731022.1731031}
+Andreas Stathopoulos and James~R. McCombs.
+\newblock Primme: Preconditioned iterative multimethod eigensolver?methods and
+  software description.
+\newblock \emph{ACM Trans. Math. Softw.}, 37\penalty0 (2), apr 2010.
+\newblock ISSN 0098-3500.
+\newblock \doi{10.1145/1731022.1731031}.
+\newblock URL \url{https://doi.org/10.1145/1731022.1731031}.
+
+\bibitem[Clark and Kennedy(2007)]{Clark:2006fx}
+M.~A. Clark and A.~D. Kennedy.
+\newblock {Accelerating dynamical fermion computations using the rational
+  hybrid Monte Carlo (RHMC) algorithm with multiple pseudofermion fields}.
+\newblock \emph{Phys. Rev. Lett.}, 98:\penalty0 051601, 2007.
+\newblock \doi{10.1103/PhysRevLett.98.051601}.
+
+\bibitem[Luscher(2010)]{Luscher:2010ae}
+Martin Luscher.
+\newblock {Computational Strategies in Lattice QCD}.
+\newblock In \emph{{Les Houches Summer School: Session 93: Modern perspectives
+  in lattice QCD: Quantum field theory and high performance computing}}, pages
+  331--399, 2 2010.
+
+\bibitem[Gattringer and Lang(2010)]{Gattringer:2010zz}
+Christof Gattringer and Christian~B. Lang.
+\newblock \emph{{Quantum chromodynamics on the lattice}}, volume 788.
+\newblock Springer, Berlin, 2010.
+\newblock ISBN 978-3-642-01849-7, 978-3-642-01850-3.
+\newblock \doi{10.1007/978-3-642-01850-3}.
+
+\bibitem[Bergner et~al.(2022)Bergner, Lopez, Piemonte, and
+  Calero]{Bergner:2022hoo}
+Georg Bergner, Juan~Camilo Lopez, Stefano Piemonte, and Ivan~Soler Calero.
+\newblock {Lattice simulations of adjoint QCD with one Dirac overlap fermion}.
+\newblock \emph{Phys. Rev. D}, 106\penalty0 (9):\penalty0 094507, 2022.
+\newblock \doi{10.1103/PhysRevD.106.094507}.
+
+\bibitem[Rubow and Wolff(2011)]{Rubow:2011dq}
+Jurgen Rubow and Ulli Wolff.
+\newblock {A Factorization algorithm to compute Pfaffians}.
+\newblock \emph{Comput. Phys. Commun.}, 182:\penalty0 2530--2532, 2011.
+\newblock \doi{10.1016/j.cpc.2011.07.010}.
+
+\bibitem[Suzuki(2004)]{Suzuki:2004ht}
+Hiroshi Suzuki.
+\newblock {A No-go theorem for the Majorana fermion on the lattice}.
+\newblock \emph{Prog. Theor. Phys.}, 112:\penalty0 855--861, 2004.
+\newblock \doi{10.1143/PTP.112.855}.
+
+\end{thebibliography}

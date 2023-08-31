@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Analytic structure of \(\)}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Analytic definitions of Green's functions}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Finite volume spectral functions}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Ex 1: Three poles}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Generating simulation data}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Nevanlinna-Pick Inversion}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Schur Interpolation}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Optimization of N+1}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Additional constraints: sum rules}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Analytic properties of solutions to the Nevanlinna-Pick problem}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Notation of Ref. https://doi.org/10.48550/arxiv.1405.3578 \(INTERNAL NOTES ONLY\)}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.2}{Nevanlinna coefficients}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.3}{SCRATCH: Closed form for the wertevorrat}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.4}{Comparison between Ref. fei2021nevanlinna and Ref.https://doi.org/10.48550/arxiv.1405.3578}{section.4}% 15
+\BOOKMARK [1][-]{section.5}{Carlson's Theorem and Mathematical Considerations}{}% 16
+\BOOKMARK [1][-]{section.6}{Monte Carlo data and the Pick criterion}{}% 17
+\BOOKMARK [1][-]{section.7}{Results of Nevanlinna reconstructions}{}% 18
+\BOOKMARK [2][-]{subsection.7.1}{Simulated data and results}{section.7}% 19
+\BOOKMARK [2][-]{subsection.7.2}{Monte Carlo data and results}{section.7}% 20
+\BOOKMARK [1][-]{section.8}{Optimization techniques}{}% 21
+\BOOKMARK [1][-]{section*.4}{Appendices}{}% 22
+\BOOKMARK [1][-]{Appendix.1.A}{Hardy Spaces}{}% 23
+\BOOKMARK [1][-]{Appendix.1.B}{Matrix-vector notation for continued fractions}{}% 24
+\BOOKMARK [1][-]{Appendix.1.C}{Blaschke Products}{}% 25

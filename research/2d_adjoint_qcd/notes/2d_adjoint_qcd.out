@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{2D Adjoint QCD}{}% 1
+\BOOKMARK [1][-]{section.2}{2D Adjoint QCD with four fermion deformations}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{'t Hooft anomalies}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Discussion}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{What do we want to compute?}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.2}{What challenges might we face?}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.3}{Additional questions / notes}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{The Lorentz group in d = 2 spacetime dimensions}{}% 8
+\BOOKMARK [1][-]{section.5}{Simulating Majorana Fermions}{}% 9
+\BOOKMARK [2][-]{subsection.5.1}{Discretizations}{section.5}% 10
+\BOOKMARK [1][-]{section.6}{Computing the Pfaffian: Rational Hybrid Monte Carlo \(RHMC\)}{}% 11
+\BOOKMARK [2][-]{subsubsection.6.0.1}{What are the necessary conditions to make this a valid Monte Carlo simulation?}{section.6}% 12
+\BOOKMARK [2][-]{subsection.6.1}{The rational approximation}{section.6}% 13
+\BOOKMARK [2][-]{subsection.6.2}{The explicit action}{section.6}% 14
+\BOOKMARK [2][-]{subsection.6.3}{The Dirac operator and sparse matrices}{section.6}% 15
+\BOOKMARK [2][-]{subsection.6.4}{Implementing RHMC}{section.6}% 16
+\BOOKMARK [2][-]{subsection.6.5}{Updating with }{section.6}% 17
+\BOOKMARK [1][-]{section.7}{Gauge and pseudofermion forces}{}% 18
+\BOOKMARK [2][-]{subsection.7.1}{Gauge force \(updating with Vab\)}{section.7}% 19
+\BOOKMARK [2][-]{subsection.7.2}{Pseudofermion force \(updating with Vab\)}{section.7}% 20
+\BOOKMARK [2][-]{subsection.7.3}{Gauge force and S \(updating with a\(n\)\)}{section.7}% 21
+\BOOKMARK [2][-]{subsection.7.4}{Pseudofermion force and S \(updating with a\(n\)\)}{section.7}% 22
+\BOOKMARK [2][-]{subsection.7.5}{RHMC and MD evolution}{section.7}% 23
+\BOOKMARK [2][-]{subsection.7.6}{Computing the Pfaffian}{section.7}% 24
+\BOOKMARK [1][-]{section.8}{The path forward}{}% 25
